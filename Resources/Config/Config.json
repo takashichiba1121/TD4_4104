@@ -1,0 +1,16 @@
+{
+    "name": "Config",
+    "Title": "Config",
+    "WindowSize": [
+        1280,
+        720
+    ],
+    "BackGroundColor": [
+        "0x10",
+        "0x00",
+        "0x00"
+    ],
+    "VSync":true,
+    "FPS":60,
+    "FullScreen":false
+}
