@@ -17,6 +17,7 @@ LRESULT WINAPI WndProc(HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam)
 
 bool DxlibManager::Initialize(const GameConfig::Config* config)
 {
+	DxLib::SetOutApplicationLogValidFlag(false);
 	DxLib::ChangeWindowMode(true);
 	DxLib::SetWindowSizeChangeEnableFlag(FALSE,FALSE);
 	DxLib::SetMainWindowText(config->title.c_str());
