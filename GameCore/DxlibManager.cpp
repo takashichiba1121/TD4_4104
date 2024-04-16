@@ -24,6 +24,7 @@ bool DxlibManager::Initialize(const GameConfig::Config* config)
 	DxLib::SetGraphMode(config->windowWidth,config->windowHeight,32);
 	DxLib::SetWindowSizeExtendRate(1.0);
 	DxLib::SetBackgroundColor(config->backGroundColorR,config->backGroundColorG,config->backGroundColorB);
+	DxLib::WaitVSync(config->vSync);
 	DxLib::SetUseDirect3DVersion(DX_DIRECT3D_11);
 	DxLib::SetHookWinProc(WndProc);
 	DxLib::SetAlwaysRunFlag(true);
@@ -31,6 +32,7 @@ bool DxlibManager::Initialize(const GameConfig::Config* config)
 	{
 		return false;
 	}
+
 	DxLib::SetDrawScreen(DX_SCREEN_BACK);
 
 	return true;
