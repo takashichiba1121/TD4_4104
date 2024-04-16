@@ -187,6 +187,7 @@
     <ClInclude Include="ThirdParty\imgui\imgui_impl_dx11.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_impl_win32.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_internal.h" />
+    <ClInclude Include="ThirdParty\json.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
