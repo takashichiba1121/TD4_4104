@@ -35,5 +35,6 @@ private:
 	//コピーコンストラクタ・代入演算子削除
 	GameMain& operator=(const GameMain&) = delete;
 	GameMain(const GameMain&) = delete;
+
 };
 
