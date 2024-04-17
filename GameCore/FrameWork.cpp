@@ -1,4 +1,5 @@
 #include "FrameWork.h"
+#include"Input.h"
 
 void FrameWork::Initialize()
 {
@@ -27,6 +28,8 @@ void FrameWork::Finalize()
 void FrameWork::Update()
 {
 	fps_->FpsControlBegin();
+
+	Input::Instance()->Update();
 
 	imguiManager_->Bigin();
 
