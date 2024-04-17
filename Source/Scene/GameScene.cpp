@@ -5,6 +5,7 @@
 #include "imgui_impl_dx11.h"
 
 #include"DxlibInclude.h"
+#include"Input.h"
 
 void GameScene::Initialize()
 {

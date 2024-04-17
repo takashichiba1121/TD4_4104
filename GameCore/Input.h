@@ -1,4 +1,5 @@
 #pragma once
+#include<stdint.h>
 class Input
 {
 #pragma region Singleton
@@ -17,11 +18,16 @@ public:
 public:
 	void Update();
 
-	bool PushKey(int keyNumber);
+	/// <summary>
+	/// キーを押しているか？
+	/// </summary>
+	/// <param name="keyNumber"></param>
+	/// <returns></returns>
+	bool PushKey(uint16_t keyNumber);
 
-	bool TriggerKey(int keyNumber);
+	bool TriggerKey(uint16_t keyNumber);
 
-	bool OldKey(int keyNumber);
+	bool ReleaseKey(uint16_t keyNumber);
 
 private:
 	char key[ 256 ] = { 0 };;

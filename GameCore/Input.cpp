@@ -17,7 +17,7 @@ void Input::Update()
 	GetHitKeyStateAll(key);
 }
 
-bool Input::PushKey(int keyNumber)
+bool Input::PushKey(uint16_t keyNumber)
 {
 		//指定キーを押していればtrueを返す
 	if ( key[ keyNumber ] )
@@ -28,7 +28,7 @@ bool Input::PushKey(int keyNumber)
 	return false;
 }
 
-bool Input::TriggerKey(int keyNumber)
+bool Input::TriggerKey(uint16_t keyNumber)
 {
 	//指定キーを押していればtrueを返す
 	if ( key[ keyNumber ] && oldKey[ keyNumber ] == 0 )
@@ -39,10 +39,10 @@ bool Input::TriggerKey(int keyNumber)
 	return false;
 }
 
-bool Input::OldKey(int keyNumber)
+bool Input::ReleaseKey(uint16_t keyNumber)
 {
 	//指定キーを押していればtrueを返す
-	if ( oldKey[ keyNumber ] )
+	if ( key[ keyNumber ]==0 && oldKey[ keyNumber ] )
 	{
 		return true;
 	}
