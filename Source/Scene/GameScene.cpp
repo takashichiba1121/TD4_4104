@@ -10,15 +10,23 @@
 void GameScene::Initialize()
 {
 	gh = LoadGraph("Resources/Src1.bmp");
+
+	player_ = std::make_unique<Player>();
+
+	player_->Initialze();
 }
 
 void GameScene::Update()
 {
 	ImGui::ShowDemoWindow();
+
+	player_->Update();
 }
 
 void GameScene::Draw()
 {
+	player_->Draw();
+
 	DrawGraph(0,0,gh,true);
 }
 
