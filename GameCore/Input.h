@@ -30,14 +30,15 @@ public:
 	/// キーを押した瞬間
 	/// </summary>
 	bool TriggerKey(uint16_t keyNumber);
+
 	/// <summary>
 	/// キーを離した瞬間
 	/// </summary>
 	bool ReleaseKey(uint16_t keyNumber);
 
 private:
-	char key[ 256 ] = { 0 };
+	char key_[ 256 ] = { 0 };
 
-	char oldKey[ 256 ] = { 0 };
+	char oldKey_[ 256 ] = { 0 };
 };
 
