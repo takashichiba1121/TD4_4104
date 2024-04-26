@@ -186,6 +186,7 @@
     <ClInclude Include="Include\Scene\SceneFactrory.h" />
     <ClInclude Include="GameCore\SceneManager.h" />
     <ClInclude Include="Include\Util\Player.h" />
+    <ClInclude Include="Include\Util\PlayerAttack.h" />
     <ClInclude Include="ThirdParty\imgui\imconfig.h" />
     <ClInclude Include="ThirdParty\imgui\imgui.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_impl_dx11.h" />

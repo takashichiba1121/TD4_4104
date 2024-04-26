@@ -1,4 +1,6 @@
 #pragma once
+#include"PlayerAttack.h"
+#include<memory>
 class Player
 {
 public:
@@ -20,14 +22,16 @@ private:
 
 	bool isAttack_=false;
 
+	std::unique_ptr<PlayerAttack> attack;
+
 #pragma region ジャンプ用変数
 	bool onGround_ = false;
 
 	float fallSpeed_ = 0;
 
-	float gravityAcceleration_ = 0.1f;
+	float gravityAcceleration_ = 0.3f;
 
-	float StartJumpSpeed_ = -7;
+	float StartJumpSpeed_ = -14;
 #pragma endregion
 
 

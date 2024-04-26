@@ -34,9 +34,9 @@ void Player::Update()
 		onGround_ = true;
 	}
 
-	if ( Input::Instance()->PushKey(KEY_INPUT_Z) )
+	if ( Input::Instance()->PushKey(KEY_INPUT_Z)&&attack!=nullptr )
 	{
-		isAttack_ = true;
+		attack->AttackInit();
 	}
 
 	if ( onGround_ )
@@ -44,9 +44,9 @@ void Player::Update()
 		Jump();
 	}
 
-	if ( isAttack_ )
+	if ( attack != nullptr )
 	{
-		Attack();
+		attack->Attack();
 	}
 
 #ifdef _DEBUG
@@ -77,12 +77,12 @@ void Player::Jump()
 	}
 }
 
-void Player::Attack()
-{
-
-}
-
 void Player::Draw()
 {
 	DrawBox(posX_,posY_,posX_ + 20,posY_ + 60,GetColor(255,255,255),true);
+
+	if ( attack != nullptr )
+	{
+		attack->Draw();
+	}
 }
