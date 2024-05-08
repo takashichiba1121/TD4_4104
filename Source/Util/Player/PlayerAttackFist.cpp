@@ -11,7 +11,7 @@ void PlayerAttackFist::Attack()
 	{
 		AttackTime_++;
 
-		if (AttackTime_>30 )
+		if (AttackTime_>5 )
 		{
 			isAttack_ = false;
 			AttackTime_ = 0;

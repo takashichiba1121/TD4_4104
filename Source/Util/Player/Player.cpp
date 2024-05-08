@@ -23,6 +23,10 @@ void Player::Update()
 	if ( Input::Instance()->PushKey(KEY_INPUT_Z)&&attack_!=nullptr )
 	{
 		attack_->AttackInit();
+
+		speed_ = 0;
+
+		fallSpeed_ = 0;
 	}
 
 	if ( attack_ != nullptr )
