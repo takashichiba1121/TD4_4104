@@ -10,11 +10,15 @@ public:
 
 	void Jump();
 
-	void Attack();
-
 	void Draw();
 private:
-	const float cSpeed_ = 5.0f;
+	const float cSpeed_ = 0.1f;
+
+	const float cTopSpeed = 10.0f;
+
+	const float cBrake = 0.5f;
+
+	float accel = 0;
 
 	float posX_;
 
