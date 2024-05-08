@@ -8,5 +8,7 @@ public:
 	virtual void Attack() = 0;
 
 	virtual void Draw() = 0;
+
+	virtual bool GetAttack()=0;
 };
 
