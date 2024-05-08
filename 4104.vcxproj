@@ -154,6 +154,7 @@
     <ClCompile Include="GameCore\FPS.cpp" />
     <ClCompile Include="GameCore\FrameWork.cpp" />
     <ClCompile Include="GameCore\Input.cpp" />
+    <ClCompile Include="IEnemy.cpp" />
     <ClCompile Include="Source\Util\Player\PlayerAttackFist.cpp" />
     <ClCompile Include="Source\Util\GameConfig.cpp" />
     <ClCompile Include="Source\GameMain.cpp" />
@@ -171,11 +172,13 @@
     <ClCompile Include="ThirdParty\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="ThirdParty\imgui\imgui_tables.cpp" />
     <ClCompile Include="ThirdParty\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Vector2d.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameCore\AbstractSceneFactory.h" />
     <ClInclude Include="GameCore\BaseScene.h" />
     <ClInclude Include="GameCore\Input.h" />
+    <ClInclude Include="IEnemy.h" />
     <ClInclude Include="Include\Util\Core.h" />
     <ClInclude Include="GameCore\DxlibManager.h" />
     <ClInclude Include="GameCore\FPS.h" />
@@ -196,6 +199,7 @@
     <ClInclude Include="ThirdParty\imgui\imgui_impl_win32.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_internal.h" />
     <ClInclude Include="ThirdParty\json.hpp" />
+    <ClInclude Include="Vector2d.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
