@@ -15,34 +15,59 @@ void Player::Update()
 {
 	if (Input::Instance()->PushKey(KEY_INPUT_A) )
 	{
-		if (accel>=-cTopSpeed )		{
-			accel -= cSpeed_;
+		if (speed_>=-cTopSpeed_ ){
+			if (onGround_ )
+			{
+				speed_ -= cAirAcceleration_;
+			}
+			else
+			{
+				speed_ -= cAcceleration_;
+			}
 		}
 	}
-	else if(accel<0)
+	else if(speed_<0)
 	{
-			accel += cBrake;
-		if ( accel > 0 )
+		if ( onGround_ )
 		{
-			accel = 0;
+			speed_ += cAirDeccelaration_;
+		}
+		else
+		{
+			speed_ += cDeccelaration_;
+		}
+		if ( speed_ > 0 )
+		{
+			speed_ = 0;
 		}
 	}
 	if ( Input::Instance()->PushKey(KEY_INPUT_D) )
 	{
-		if ( accel <= cTopSpeed )
+		if ( onGround_ )
 		{
-			accel += cSpeed_;
+			speed_ += cAirAcceleration_;
+		}
+		else
+		{
+			speed_ += cAcceleration_;
 		}
 	}
-	else if ( accel > 0 )
+	else if ( speed_ > 0 )
 	{
-		accel -= cBrake;
-		if ( accel < 0 )
+		if ( onGround_ )
 		{
-			accel = 0;
+			speed_ -= cAirDeccelaration_;
+		}
+		else
+		{
+			speed_ -= cDeccelaration_;
+		}
+		if (speed_ < 0 )
+		{
+			speed_ = 0;
 		}
 	}
-	posX_ += accel;
+	posX_ += speed_;
 
 	if ( Input::Instance()->PushKey(KEY_INPUT_SPACE) && !onGround_)
 	{
@@ -56,9 +81,9 @@ void Player::Update()
 		onGround_ = true;
 	}
 
-	if ( Input::Instance()->PushKey(KEY_INPUT_Z)&&attack!=nullptr )
+	if ( Input::Instance()->PushKey(KEY_INPUT_Z)&&attack_!=nullptr )
 	{
-		attack->AttackInit();
+		attack_->AttackInit();
 	}
 
 	if ( onGround_ )
@@ -66,9 +91,9 @@ void Player::Update()
 		Jump();
 	}
 
-	if ( attack != nullptr )
+	if ( attack_ != nullptr )
 	{
-		attack->Attack();
+		attack_->Attack();
 	}
 
 #ifdef _DEBUG
@@ -103,8 +128,8 @@ void Player::Draw()
 {
 	DrawBox(posX_,posY_,posX_ + 20,posY_ + 60,GetColor(255,255,255),true);
 
-	if ( attack != nullptr )
+	if ( attack_ != nullptr )
 	{
-		attack->Draw();
+		attack_->Draw();
 	}
 }

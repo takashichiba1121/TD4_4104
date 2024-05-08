@@ -12,13 +12,17 @@ public:
 
 	void Draw();
 private:
-	const float cSpeed_ = 0.1f;
+	const float cTopSpeed_ = 10.0f;
 
-	const float cTopSpeed = 10.0f;
+	const float cAcceleration_ = 0.1f;
 
-	const float cBrake = 0.5f;
+	const float cAirAcceleration_ = 0.05f;
 
-	float accel = 0;
+	const float cDeccelaration_ = 0.5f;
+
+	const float cAirDeccelaration_ = 0.25f;
+
+	float speed_ = 0;
 
 	float posX_;
 
@@ -26,7 +30,7 @@ private:
 
 	bool isAttack_=false;
 
-	std::unique_ptr<PlayerAttack> attack;
+	std::unique_ptr<PlayerAttack> attack_;
 
 #pragma region ジャンプ用変数
 	bool onGround_ = false;
