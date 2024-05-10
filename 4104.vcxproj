@@ -88,7 +88,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;$(ProjectDir)\ThirdParty\imgui;$(ProjectDir)\Include\Util\Player</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;$(ProjectDir)\ThirdParty\imgui;$(ProjectDir)\Include\Util\Player</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>Core.h</PrecompiledHeaderFile>
@@ -121,7 +121,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -171,8 +171,8 @@
     <ClCompile Include="ThirdParty\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="ThirdParty\imgui\imgui_tables.cpp" />
     <ClCompile Include="ThirdParty\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="Vector2.cpp" />
-    <ClCompile Include="Vector3.cpp" />
+    <ClCompile Include="Source\Util\Math\Vector2.cpp" />
+    <ClCompile Include="Source\Util\Math\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameCore\AbstractSceneFactory.h" />
@@ -198,8 +198,8 @@
     <ClInclude Include="ThirdParty\imgui\imgui_impl_win32.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_internal.h" />
     <ClInclude Include="ThirdParty\json.hpp" />
-    <ClInclude Include="Vector2.h" />
-    <ClInclude Include="Vector3.h" />
+    <ClInclude Include="Include\Util\Math\Vector2.h" />
+    <ClInclude Include="Include\Util\Math\Vector3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
