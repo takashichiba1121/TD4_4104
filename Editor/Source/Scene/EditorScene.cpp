@@ -6,20 +6,8 @@
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
+#include "magic_enum.hpp"
 
-static ID3D11ShaderResourceView* GetImageResource11(int softimageHandle)
-{
-
-	ID3D11Device* device = static_cast< ID3D11Device* >( const_cast< void* >( GetUseDirect3D11Device() ) );
-	ID3D11DeviceContext* context = static_cast< ID3D11DeviceContext* >( const_cast< void* >( GetUseDirect3D11DeviceContext() ) );
-
-	ID3D11Texture2D* texture = ( ID3D11Texture2D* ) GetGraphID3D11Texture2D(softimageHandle);
-	// ShaderResourceViewの作成
-	ID3D11ShaderResourceView* pSRV = nullptr;
-	device->CreateShaderResourceView(texture,nullptr,&pSRV);
-
-	return pSRV;
-}
 
 void EditorScene::Initialize(int32_t screen)
 {
@@ -31,10 +19,10 @@ void EditorScene::Initialize(int32_t screen)
 	mapCenter_.x = ( mapSize_.x * blockSize_ ) / 2;
 	mapCenter_.y = ( mapSize_.y * blockSize_ ) / 2;
 
-	editorMap.resize(mapSize_.y);
-	for ( size_t i = 0; i < editorMap.size(); i++ )
+	editorMap_.resize(mapSize_.y);
+	for ( size_t i = 0; i < editorMap_.size(); i++ )
 	{
-		editorMap[ i ].resize(mapSize_.x);
+		editorMap_[ i ].resize(mapSize_.x);
 	}
 
 	noneGraphHandle_ = LoadGraph("Resource/NoneChip.png");
@@ -69,7 +57,7 @@ void EditorScene::Update()
 	{
 		if ( mouseInput_  )
 		{
-			editorMap[ editorMousePos_.y / GetBlockSize() ][ editorMousePos_.x / GetBlockSize() ] = selectChip_;
+			editorMap_[ editorMousePos_.y / GetBlockSize() ][ editorMousePos_.x / GetBlockSize() ] = selectChip_;
 		}
 	}
 
@@ -86,25 +74,20 @@ void EditorScene::Draw()
 			int32_t centerX = blockSizeHalf + blockSize_ * j;
 			int32_t centerY = blockSizeHalf + blockSize_ * i;
 
-			ChipDraw(centerX,centerY,editorMap[ i ][ j ]);
+			ChipDraw(centerX,centerY,editorMap_[ i ][ j ]);
 			DrawBoxAA(( centerX - blockSizeHalf ),( centerY - blockSizeHalf ),( centerX + blockSizeHalf ),( centerY + blockSizeHalf ),0xffffffff,false);
 		}
 	}
 
 	ChipDraw(( editorMousePos_.x / GetBlockSize() ) * 32,( editorMousePos_.y / GetBlockSize() ) * 32,selectChip_,0);
 
-	//DrawBoxAA(
-	// ( editorMousePos_.x / GetBlockSize() ) * 32,( editorMousePos_.y / GetBlockSize() ) * 32,
-	// ( editorMousePos_.x / GetBlockSize() ) * 32 + 32,( editorMousePos_.y / GetBlockSize() ) * 32 + 32
-	// ,0xffffffff,true);
 }
 
 void EditorScene::UIUpdate()
 {
-	ImGui::Begin("EditorView",nullptr,ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
 	EditorView();
-	ImGui::End();
 
+	SelectView();
 
 }
 
@@ -141,10 +124,75 @@ float2 EditorScene::GetScale()
 
 void EditorScene::EditorView()
 {
+	ImGui::Begin("EditorView",nullptr,ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
+
 	ImGui::SetWindowSize({ ( float ) VIEW_WINDOW_SIZE.x,( float ) VIEW_WINDOW_SIZE.y });
 	ImGui::SetWindowPos({ 0,0 });
 
 	ImGui::Image(pSRV_,{ ( float ) VIEW_WINDOW_SIZE.x,( float ) VIEW_WINDOW_SIZE.y });
+
+	ImGui::End();
+
+}
+
+void EditorScene::SelectView()
+{
+	ImGui::Begin("SelectView",nullptr,ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
+
+	ImGui::SetWindowSize({ ( float ) SELECT_VIEW_WINDOW_SIZE.x,( float ) SELECT_VIEW_WINDOW_SIZE.y });
+	ImGui::SetWindowPos({ ( float ) VIEW_WINDOW_SIZE.x,0 });
+
+	ImGui::End();
+
+	ImGui::Begin("Select",nullptr,ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
+
+	ImGui::SetWindowSize({ ( float ) SELECT_WINDOW_SIZE.x,( float ) SELECT_WINDOW_SIZE.y });
+	ImGui::SetWindowPos({ ( float ) VIEW_WINDOW_SIZE.x,( float ) SELECT_VIEW_WINDOW_SIZE.y });
+
+	ImGui::BeginTable("table",1,
+		ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable
+		| ImGuiTableFlags_SortMulti
+		| ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders
+		| ImGuiTableFlags_ScrollX | ImGuiTableFlags_ScrollY
+		| ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_BordersInnerH);
+
+
+	ImGui::TableHeadersRow();
+
+	std::list<TableElement>::iterator itr = chips_.begin();
+
+	for ( size_t i = 0; i < chips_.size(); i++ )
+	{
+		ImGui::TableNextRow();
+
+		ImGui::TableSetColumnIndex(0);
+		const bool item_is_selected = tableSelection.contains(itr->id);
+
+		ImGuiSelectableFlags selectable_flags = ImGuiSelectableFlags_SpanAllColumns | ImGuiSelectableFlags_AllowItemOverlap;
+		if ( ImGui::Selectable(magic_enum::enum_name(itr->index).data(),item_is_selected,selectable_flags) )
+		{
+			if ( ImGui::GetIO().KeyCtrl )
+			{
+				if ( item_is_selected )
+					tableSelection.find_erase_unsorted(itr->id);
+				else
+					tableSelection.push_back(itr->id);
+			}
+			else
+			{
+				tableSelection.clear();
+				tableSelection.push_back(itr->id);
+			}
+		}
+
+		itr++;
+	}
+
+	ImGui::EndTable();
+
+	ImGui::End();
+
+
 }
 
 void EditorScene::EditorMove()

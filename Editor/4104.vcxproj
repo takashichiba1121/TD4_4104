@@ -27,6 +27,7 @@
     <ClCompile Include="Core\ImGuiManager.cpp" />
     <ClCompile Include="Core\SceneFactrory.cpp" />
     <ClCompile Include="Core\SceneManager.cpp" />
+    <ClCompile Include="Source\Util\Graph.cpp" />
     <ClCompile Include="Source\Scene\EditorScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Source\Util\Vec2.cpp" />
@@ -41,7 +42,8 @@
     <ClInclude Include="..\ThirdParty\imgui\imstb_textedit.h" />
     <ClInclude Include="..\ThirdParty\imgui\imstb_truetype.h" />
     <ClInclude Include="..\ThirdParty\json.hpp" />
-    <ClInclude Include="Include\ChipIndex.h" />
+    <ClInclude Include="Include\Util\Graph.h" />
+    <ClInclude Include="Include\Util\ChipIndex.h" />
     <ClInclude Include="Core\AbstractSceneFactory.h" />
     <ClInclude Include="Core\BaseScene.h" />
     <ClInclude Include="Core\DxlibInclude.h" />
