@@ -37,9 +37,17 @@ void Player::Update()
 #ifdef _DEBUG
 	ImGui::Begin("player");
 
-	ImGui::Text("isJump%d",onGround_);
+	ImGui::SliderFloat("gravityAcceleration",&gravityAcceleration_,0.0f,1.0f,"%1.2f");
 
-	ImGui::Text("isAttack%d",isAttack_);
+	ImGui::SliderFloat("Acceleration",&acceleration_,0.0f,1.0f,"%1.2f");
+
+	ImGui::SliderFloat("AirAcceleration",&cAirAcceleration_,0.0f,1.0f,"%1.2f");
+
+	ImGui::SliderFloat("Deccelaration",&cDeccelaration_,0.0f,1.0f,"%1.2f");
+
+	ImGui::SliderFloat("AirDeccelaration_",&cAirDeccelaration_,0.0f,1.0f,"%1.2f");
+
+	ImGui::SliderFloat("TopSpeed",&cTopSpeed_,100.0f,0.0f,"%3.1f");
 
 	ImGui::End();
 
@@ -58,7 +66,7 @@ void Player::Move()
 			}
 			else
 			{
-				speed_ -= cAcceleration_;
+				speed_ -= acceleration_;
 			}
 		}
 	}
@@ -85,7 +93,7 @@ void Player::Move()
 		}
 		else
 		{
-			speed_ += cAcceleration_;
+			speed_ += acceleration_;
 		}
 	}
 	else if ( speed_ > 0 )
@@ -141,7 +149,7 @@ void Player::Jump()
 
 void Player::Draw()
 {
-	DrawBox(posX_,posY_,posX_ + 20,posY_ + 60,GetColor(255,255,255),true);
+	DrawBox(posX_,posY_,posX_ + 16,posY_ + 32,GetColor(255,255,255),true);
 
 	if ( attack_ != nullptr )
 	{

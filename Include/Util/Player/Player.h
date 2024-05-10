@@ -14,15 +14,15 @@ public:
 
 	void Draw();
 private:
-	const float cTopSpeed_ = 10.0f;
+	float cTopSpeed_ = 10.0f;
 
-	const float cAcceleration_ = 0.1f;
+	float acceleration_ = 0.1f;
 
-	const float cAirAcceleration_ = 0.05f;
+	float cAirAcceleration_ = 0.05f;
 
-	const float cDeccelaration_ = 0.5f;
+	float cDeccelaration_ = 1.0f;
 
-	const float cAirDeccelaration_ = 0.25f;
+	float cAirDeccelaration_ = 0.5f;
 
 	float speed_ = 0;
 
@@ -39,9 +39,9 @@ private:
 
 	float fallSpeed_ = 0;
 
-	float gravityAcceleration_ = 0.3f;
+	float gravityAcceleration_ = 0.5f;
 
-	float StartJumpSpeed_ = -14;
+	float StartJumpSpeed_ = -18;
 #pragma endregion
 
 
