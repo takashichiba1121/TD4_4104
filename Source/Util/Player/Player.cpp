@@ -149,7 +149,8 @@ void Player::Jump()
 
 void Player::Draw()
 {
-	DrawBox(posX_,posY_,posX_ + 16,posY_ + 32,GetColor(255,255,255),true);
+	DrawBox(posX_,posY_,posX_ + 35,posY_ + 61,GetColor(255,255,255),true);
+	DrawBox(posX_ + 5,posY_ + 5,posX_ + 30,posY_ + 56,GetColor(255,0,0),false);
 
 	if ( attack_ != nullptr )
 	{

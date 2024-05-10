@@ -31,11 +31,15 @@ private:
 	int2 screenOldMousePos_ = { 0,0 };
 	int2 editorMousePos_ = { 0,0 };
 
-	int32_t noneGraphHandle;
-	int32_t roadGraphHandle;
-	int32_t doorGraphHandle;
-	int32_t roomGraphHandle;
-	int32_t lockroomGraphHandle;
+	int32_t mouseInput_;
+
+	int32_t noneGraphHandle_;
+	int32_t roadGraphHandle_;
+	int32_t doorGraphHandle_;
+	int32_t roomGraphHandle_;
+	int32_t lockroomGraphHandle_;
+
+	ChipIndex selectChip_;
 
 public:
 	// BaseScene を介して継承されました
@@ -54,7 +58,7 @@ private:
 	void EditorView();
 	void EditorMove();
 	int2 GetEditorMousePos();
-	void ChipDraw(size_t x,size_t y,int8_t chip);
+	void ChipDraw(size_t x,size_t y,int8_t chip,int32_t sign = -1);
 
 	bool IsEditorMapWithin(int32_t x,int32_t y);
 

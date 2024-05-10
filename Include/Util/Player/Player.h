@@ -44,6 +44,6 @@ private:
 	float StartJumpSpeed_ = -18;
 #pragma endregion
 
-
+	
 };
 
