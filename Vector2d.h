@@ -13,11 +13,9 @@ public:
 
 
 	float GetLenge() const;
-	void VecNorm();
+	void Normalize();
 
-	Vector2d operator +();
-
-	Vector2d operator -();
+	Vector2d operator=(const Vector2d& other);
 
 	Vector2d& operator +=(const Vector2d& other);
 
@@ -25,7 +23,7 @@ public:
 
 	Vector2d& operator *=(float speed);
 
-	Vector2d& operator /=(float Lenge);
+	Vector2d& operator /=(float lenge);
 
 };
 
@@ -39,8 +37,8 @@ Vector2d operator +(const Vector2d& a,const Vector2d& b);
 
 Vector2d operator -(const Vector2d& a,const Vector2d& b);
 
-Vector2d operator *(const Vector2d& a,const float& speed);
+Vector2d operator *(const Vector2d& a, float speed);
 
-Vector2d operator *(const float& speed,const Vector2d& a);
+Vector2d operator *(float speed,const Vector2d& a);
 
-Vector2d operator /(const Vector2d& a,float Lenge);
+Vector2d operator /(const Vector2d& a,float lenge);

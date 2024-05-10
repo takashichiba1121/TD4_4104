@@ -154,7 +154,6 @@
     <ClCompile Include="GameCore\FPS.cpp" />
     <ClCompile Include="GameCore\FrameWork.cpp" />
     <ClCompile Include="GameCore\Input.cpp" />
-    <ClCompile Include="IEnemy.cpp" />
     <ClCompile Include="Source\Util\Player\PlayerAttackFist.cpp" />
     <ClCompile Include="Source\Util\GameConfig.cpp" />
     <ClCompile Include="Source\GameMain.cpp" />
@@ -178,7 +177,6 @@
     <ClInclude Include="GameCore\AbstractSceneFactory.h" />
     <ClInclude Include="GameCore\BaseScene.h" />
     <ClInclude Include="GameCore\Input.h" />
-    <ClInclude Include="IEnemy.h" />
     <ClInclude Include="Include\Util\Core.h" />
     <ClInclude Include="GameCore\DxlibManager.h" />
     <ClInclude Include="GameCore\FPS.h" />

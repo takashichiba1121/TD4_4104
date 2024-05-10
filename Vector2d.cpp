@@ -78,10 +78,10 @@ Vector2d& Vector2d::operator*=(float speed)
 	// TODO: return ステートメントをここに挿入します
 }
 
-Vector2d& Vector2d::operator/=(float Lenge)
+Vector2d& Vector2d::operator/=(float lenge)
 {
-	x /= Lenge;
-	y /= Lenge;
+	x /= lenge;
+	y /= lenge;
 	return *this;
 	// TODO: return ステートメントをここに挿入します
 }
@@ -96,16 +96,34 @@ Vector2d operator- (const Vector2d& a,const Vector2d& b)
 	return temp -= b;
 }
 
+Vector2d operator*(const Vector2d& a,float speed)
+{
+	Vector2d temp(a);
+	return temp *= speed;
+}
+
+Vector2d operator*(float speed,const Vector2d& a)
+{
+	Vector2d temp(a);
+	return temp *= speed;
+}
+
+Vector2d operator/(const Vector2d& a,float lenge)
+{
+	Vector2d temp(a);
+	return temp /= lenge;
+}
+
 Vector2d operator +(const Vector2d& a,const Vector2d& b)
 {
 	Vector2d temp(a);
 	return temp += b;
 }
 
-Vector2d operator /(Vector2d a,float Lenge)
+Vector2d operator /(Vector2d a,float lenge)
 {
 	Vector2d temp(a);
-	return temp /= Lenge;
+	return temp /= lenge;
 }
 
 Vector2d operator *(Vector2d a,float speed)
