@@ -8,6 +8,8 @@ public:
 
 	void Update();
 
+	void Move();
+
 	void Jump();
 
 	void Draw();

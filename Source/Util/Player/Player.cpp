@@ -3,20 +3,56 @@
 #include"GameConfig.h"
 #include"Input.h"
 #include"imgui.h"
+#include"PlayerAttackFist.h"
 
 void Player::Initialze()
 {
 	posX_ = GameConfig::GetGameConfig()->windowWidth/2;
 
 	posY_ = GameConfig::GetGameConfig()->windowHeight / 2;
+	
+	attack_ = std::make_unique<PlayerAttackFist>();
 }
 
 void Player::Update()
 {
-	if (Input::Instance()->PushKey(KEY_INPUT_A) )
+	if (attack_->GetAttack()==false )
 	{
-		if (speed_>=-cTopSpeed_ ){
-			if (onGround_ )
+		Move();
+	}
+	if ( Input::Instance()->PushKey(KEY_INPUT_Z)&&attack_!=nullptr )
+	{
+		attack_->AttackInit();
+
+		speed_ = 0;
+
+		fallSpeed_ = 0;
+	}
+
+	if ( attack_ != nullptr )
+	{
+		attack_->Attack();
+	}
+
+#ifdef _DEBUG
+	ImGui::Begin("player");
+
+	ImGui::Text("isJump%d",onGround_);
+
+	ImGui::Text("isAttack%d",isAttack_);
+
+	ImGui::End();
+
+#endif
+}
+
+void Player::Move()
+{
+	if ( Input::Instance()->PushKey(KEY_INPUT_A) )
+	{
+		if ( speed_ >= -cTopSpeed_ )
+		{
+			if ( onGround_ )
 			{
 				speed_ -= cAirAcceleration_;
 			}
@@ -26,7 +62,7 @@ void Player::Update()
 			}
 		}
 	}
-	else if(speed_<0)
+	else if ( speed_ < 0 )
 	{
 		if ( onGround_ )
 		{
@@ -62,14 +98,14 @@ void Player::Update()
 		{
 			speed_ -= cDeccelaration_;
 		}
-		if (speed_ < 0 )
+		if ( speed_ < 0 )
 		{
 			speed_ = 0;
 		}
 	}
 	posX_ += speed_;
 
-	if ( Input::Instance()->PushKey(KEY_INPUT_SPACE) && !onGround_)
+	if ( Input::Instance()->PushKey(KEY_INPUT_SPACE) && !onGround_ )
 	{
 		fallSpeed_ = StartJumpSpeed_;
 
@@ -81,31 +117,10 @@ void Player::Update()
 		onGround_ = true;
 	}
 
-	if ( Input::Instance()->PushKey(KEY_INPUT_Z)&&attack_!=nullptr )
-	{
-		attack_->AttackInit();
-	}
-
 	if ( onGround_ )
 	{
 		Jump();
 	}
-
-	if ( attack_ != nullptr )
-	{
-		attack_->Attack();
-	}
-
-#ifdef _DEBUG
-	ImGui::Begin("player");
-
-	ImGui::Text("isJump%d",onGround_);
-
-	ImGui::Text("isAttack%d",isAttack_);
-
-	ImGui::End();
-
-#endif
 }
 
 void Player::Jump()
