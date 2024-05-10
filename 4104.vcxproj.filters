@@ -105,11 +105,11 @@
     <ClCompile Include="Source\Util\Player\PlayerAttackFist.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
-    <ClCompile Include="IEnemy.cpp">
-      <Filter>ソース ファイル\Enemy</Filter>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>ソース ファイル\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Vector2d.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Vector3.cpp">
+      <Filter>ソース ファイル\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,11 +182,11 @@
     <ClInclude Include="Include\Util\Player\PlayerAttackFist.h">
       <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
-    <ClInclude Include="IEnemy.h">
-      <Filter>ヘッダー ファイル\Enemy</Filter>
+    <ClInclude Include="Vector2.h">
+      <Filter>ヘッダー ファイル\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2d.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Vector3.h">
+      <Filter>ヘッダー ファイル\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
