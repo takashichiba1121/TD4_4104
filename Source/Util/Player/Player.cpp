@@ -7,22 +7,22 @@
 
 void Player::Initialze()
 {
-	posX_ = GameConfig::GetGameConfig()->windowWidth/2;
+	pos_.x = GameConfig::GetGameConfig()->windowWidth / 2;
 
-	posY_ = GameConfig::GetGameConfig()->windowHeight / 2;
-	
+	pos_.y = GameConfig::GetGameConfig()->windowHeight / 2;
+
 	attack_ = std::make_unique<PlayerAttackFist>();
 }
 
 void Player::Update()
 {
-	if (attack_->GetAttack()==false )
+	if ( attack_->GetAttack() == false )
 	{
 		Move();
 	}
-	if ( Input::Instance()->PushKey(KEY_INPUT_Z)&&attack_!=nullptr )
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && attack_ != nullptr )
 	{
-		attack_->AttackInit();
+		attack_->AttackInit(pos_,direction_);
 
 		speed_ = 0;
 
@@ -37,17 +37,23 @@ void Player::Update()
 #ifdef _DEBUG
 	ImGui::Begin("player");
 
-	ImGui::SliderFloat("gravityAcceleration",&gravityAcceleration_,0.0f,1.0f,"%1.2f");
+	ImGui::Text("Jump");
+
+	ImGui::SliderFloat("JumpAcceleration",&jumpAcceleration_,0.0f,-20.0f,"%2.0f");
+
+	ImGui::SliderFloat("GravityAcceleration",&gravityAcceleration_,0.0f,1.0f,"%1.2f");
+
+	ImGui::Text("Move");
 
 	ImGui::SliderFloat("Acceleration",&acceleration_,0.0f,1.0f,"%1.2f");
 
-	ImGui::SliderFloat("AirAcceleration",&cAirAcceleration_,0.0f,1.0f,"%1.2f");
+	ImGui::SliderFloat("AirAcceleration",&airAcceleration_,0.0f,1.0f,"%1.2f");
 
-	ImGui::SliderFloat("Deccelaration",&cDeccelaration_,0.0f,1.0f,"%1.2f");
+	ImGui::SliderFloat("Deccelaration",&deccelaration_,0.0f,1.0f,"%1.2f");
 
-	ImGui::SliderFloat("AirDeccelaration_",&cAirDeccelaration_,0.0f,1.0f,"%1.2f");
+	ImGui::SliderFloat("AirDeccelaration_",&airDeccelaration_,0.0f,1.0f,"%1.2f");
 
-	ImGui::SliderFloat("TopSpeed",&cTopSpeed_,100.0f,0.0f,"%3.1f");
+	ImGui::SliderFloat("TopSpeed",&topSpeed_,200.0f,0.0f,"%2.0f");
 
 	ImGui::End();
 
@@ -58,11 +64,12 @@ void Player::Move()
 {
 	if ( Input::Instance()->PushKey(KEY_INPUT_A) )
 	{
-		if ( speed_ >= -cTopSpeed_ )
+		direction_ = false;
+		if ( speed_ >= -topSpeed_ )
 		{
 			if ( onGround_ )
 			{
-				speed_ -= cAirAcceleration_;
+				speed_ -= airAcceleration_;
 			}
 			else
 			{
@@ -74,11 +81,11 @@ void Player::Move()
 	{
 		if ( onGround_ )
 		{
-			speed_ += cAirDeccelaration_;
+			speed_ += airDeccelaration_;
 		}
 		else
 		{
-			speed_ += cDeccelaration_;
+			speed_ += deccelaration_;
 		}
 		if ( speed_ > 0 )
 		{
@@ -87,9 +94,10 @@ void Player::Move()
 	}
 	if ( Input::Instance()->PushKey(KEY_INPUT_D) )
 	{
+		direction_ = true;
 		if ( onGround_ )
 		{
-			speed_ += cAirAcceleration_;
+			speed_ += airAcceleration_;
 		}
 		else
 		{
@@ -100,27 +108,27 @@ void Player::Move()
 	{
 		if ( onGround_ )
 		{
-			speed_ -= cAirDeccelaration_;
+			speed_ -= airDeccelaration_;
 		}
 		else
 		{
-			speed_ -= cDeccelaration_;
+			speed_ -= deccelaration_;
 		}
 		if ( speed_ < 0 )
 		{
 			speed_ = 0;
 		}
 	}
-	posX_ += speed_;
+	pos_.x += speed_;
 
 	if ( Input::Instance()->PushKey(KEY_INPUT_SPACE) && !onGround_ )
 	{
-		fallSpeed_ = StartJumpSpeed_;
+		fallSpeed_ = jumpAcceleration_;
 
 		onGround_ = true;
 	}
 
-	if ( posY_ < 600 )
+	if ( pos_.y < 600 )
 	{
 		onGround_ = true;
 	}
@@ -135,22 +143,35 @@ void Player::Jump()
 {
 	fallSpeed_ += gravityAcceleration_;
 
-	posY_ += fallSpeed_;
+	pos_.y += fallSpeed_;
 
-	if (posY_>=600 )
+	if ( pos_.y >= 600 )
 	{
 		onGround_ = false;
 
 		fallSpeed_ = 0;
 
-		posY_ = 600;
+		pos_.y = 600;
 	}
 }
 
 void Player::Draw()
 {
-	DrawBox(posX_,posY_,posX_ + 35,posY_ + 61,GetColor(255,255,255),true);
-	DrawBox(posX_ + 5,posY_ + 5,posX_ + 30,posY_ + 56,GetColor(255,0,0),false);
+	float leftPos = pos_.x - size_.x / 2;
+	float rightPos = pos_.x + size_.x / 2;
+	float upPos = pos_.y - size_.y / 2;
+	float downPos = pos_.y + size_.y / 2;
+
+	DrawBox(leftPos,upPos,rightPos,downPos,GetColor(255,255,255),true);
+	DrawBox(leftPos + colisionSift_.x,upPos + colisionSift_.y,rightPos - colisionSize_.x,downPos - colisionSize_.y,GetColor(255,0,0),false);
+	if ( direction_ )
+	{
+		DrawBox(rightPos,upPos,rightPos - 5,upPos + 5,GetColor(255,0,0),true);
+	} 
+	else
+	{
+		DrawBox(leftPos,upPos,leftPos + 5,upPos + 5,GetColor(255,0,0),true);
+	}
 
 	if ( attack_ != nullptr )
 	{

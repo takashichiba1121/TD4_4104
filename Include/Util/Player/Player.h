@@ -1,4 +1,5 @@
 #pragma once
+#include"Vector2.h"
 #include"PlayerAttack.h"
 #include<memory>
 class Player
@@ -14,23 +15,33 @@ public:
 
 	void Draw();
 private:
-	float cTopSpeed_ = 10.0f;
+#pragma region 移動ステータス
+
+	float topSpeed_ = 10.0f;
 
 	float acceleration_ = 0.1f;
 
-	float cAirAcceleration_ = 0.05f;
+	float airAcceleration_ = 0.05f;
 
-	float cDeccelaration_ = 1.0f;
+	float deccelaration_ = 1.0f;
 
-	float cAirDeccelaration_ = 0.5f;
+	float airDeccelaration_ = 0.5f;
+
+#pragma endregion
+
+	bool direction_ = false;
 
 	float speed_ = 0;
 
-	float posX_;
+	Vector2 pos_;
 
-	float posY_;
+	Vector2 size_ = { 35,61 };
 
-	bool isAttack_=false;
+	Vector2 colisionSize_ = { 5,5 };
+
+	Vector2 colisionSift_ = { 5,5 };
+
+	bool isAttack_ = false;
 
 	std::unique_ptr<PlayerAttack> attack_;
 
@@ -41,9 +52,8 @@ private:
 
 	float gravityAcceleration_ = 0.5f;
 
-	float StartJumpSpeed_ = -18;
+	float jumpAcceleration_ = -18;
 #pragma endregion
 
-	
-};
 
+};

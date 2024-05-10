@@ -1,9 +1,10 @@
 #pragma once
+#include"Vector2.h"
 class PlayerAttack
 {
 public:
 
-	virtual void AttackInit() = 0;
+	virtual void AttackInit(const Vector2& playerPos,bool direction) = 0;
 
 	virtual void Attack() = 0;
 
