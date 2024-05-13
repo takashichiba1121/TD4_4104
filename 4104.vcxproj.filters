@@ -108,7 +108,10 @@
     <ClCompile Include="Source\Util\Math\Vector3.cpp">
       <Filter>ソース ファイル\Math</Filter>
     </ClCompile>
-    <ClCompile Include="IEnemy.cpp">
+    <ClCompile Include="Source\Enemy\BaseEnemy.cpp">
+      <Filter>ソース ファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\WalkEnemy.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Source\Util\Player\PlayerAttackWeapon.cpp">
@@ -197,7 +200,10 @@
     <ClInclude Include="Include\Util\Math\Vector3.h">
       <Filter>ヘッダー ファイル\Math</Filter>
     </ClInclude>
-    <ClInclude Include="IEnemy.h">
+    <ClInclude Include="Include\Enemy\BaseEnemy.h">
+      <Filter>ヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Enemy\WalkEnemy.h">
       <Filter>ヘッダー ファイル\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Include\Util\Player\PlayerAttackWeapon.h">
