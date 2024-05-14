@@ -7,9 +7,9 @@
 struct Graph
 {
 	int32_t handle;
-	ID3D11ShaderResourceView* pSRV_ = nullptr;
+	ID3D11ShaderResourceView* pSRV = nullptr;
 };
 
-static ID3D11ShaderResourceView* GetImageResource11(int softimageHandle);
+ID3D11ShaderResourceView* GetImageResource11(int softimageHandle);
 
-Graph LoadGraph(char* filepath);
+Graph Load(const char* filepath);

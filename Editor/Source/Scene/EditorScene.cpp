@@ -11,8 +11,11 @@
 
 void EditorScene::Initialize(int32_t screen)
 {
+	SetDrawValidGraphCreateFlag(TRUE);
+	screenGraph_.handle = MakeGraph(mapSize_.x * blockSize_,mapSize_.y * blockSize_);
+	screenGraph_.pSRV = GetImageResource11(screenGraph_.handle);
+	SetDrawValidGraphCreateFlag(FALSE);
 
-	pSRV_ = GetImageResource11(screen);
 	screen_ = screen;
 
 	//変える予定
@@ -25,11 +28,11 @@ void EditorScene::Initialize(int32_t screen)
 		editorMap_[ i ].resize(mapSize_.x);
 	}
 
-	noneGraphHandle_ = LoadGraph("Resource/NoneChip.png");
-	roadGraphHandle_ = LoadGraph("Resource/RoadChip.png");
-	doorGraphHandle_ = LoadGraph("Resource/DoorChip.png");
-	roomGraphHandle_ = LoadGraph("Resource/RoomChip.png");
-	lockroomGraphHandle_ = LoadGraph("Resource/LockroomChip.png");
+	noneGraphHandle_ = Load("Resource/NoneChip.png");
+	roadGraphHandle_ = Load("Resource/RoadChip.png");
+	doorGraphHandle_ = Load("Resource/DoorChip.png");
+	roomGraphHandle_ = Load("Resource/RoomChip.png");
+	lockroomGraphHandle_ = Load("Resource/LockroomChip.png");
 }
 
 void EditorScene::Update()
@@ -42,8 +45,8 @@ void EditorScene::Update()
 	scale_.x += 0.1f * mouseWheelRotVol;
 	scale_.y += 0.1f * mouseWheelRotVol;
 
-	max(scale_.x,scale_.x,0.0000001f);
-	max(scale_.y,scale_.y,0.0000001f);
+	scale_.x = max(scale_.x,0.0000001f);
+	scale_.y = max(scale_.y,0.0000001f);
 
 	GetMousePoint(&screenMousePos_.x,&screenMousePos_.y);
 
@@ -51,11 +54,9 @@ void EditorScene::Update()
 
 	editorMousePos_ = GetEditorMousePos();
 
-	selectChip_ = ChipIndex::ROAD;
-
 	if ( IsEditorMapWithin(editorMousePos_.x / GetBlockSize(),editorMousePos_.y / GetBlockSize()) )
 	{
-		if ( mouseInput_  )
+		if ( mouseInput_ )
 		{
 			editorMap_[ editorMousePos_.y / GetBlockSize() ][ editorMousePos_.x / GetBlockSize() ] = selectChip_;
 		}
@@ -65,6 +66,9 @@ void EditorScene::Update()
 
 void EditorScene::Draw()
 {
+	SetDrawScreen(screenGraph_.handle);
+	ClearDrawScreen();
+
 	int32_t blockSizeHalf = blockSize_ / 2;
 
 	for ( size_t i = 0; i < mapSize_.y; i++ )
@@ -75,19 +79,22 @@ void EditorScene::Draw()
 			int32_t centerY = blockSizeHalf + blockSize_ * i;
 
 			ChipDraw(centerX,centerY,editorMap_[ i ][ j ]);
-			DrawBoxAA(( centerX - blockSizeHalf ),( centerY - blockSizeHalf ),( centerX + blockSizeHalf ),( centerY + blockSizeHalf ),0xffffffff,false);
+			DrawBoxAA(( centerX - blockSizeHalf ) * scale_.x,( centerY - blockSizeHalf ) * scale_.y,( centerX + blockSizeHalf ) * scale_.x,( centerY + blockSizeHalf ) * scale_.y,0xffffffff,false);
 		}
 	}
 
 	ChipDraw(( editorMousePos_.x / GetBlockSize() ) * 32,( editorMousePos_.y / GetBlockSize() ) * 32,selectChip_,0);
 
+	SetDrawScreen(DX_SCREEN_BACK);
 }
 
 void EditorScene::UIUpdate()
 {
 	EditorView();
 
-	SelectView();
+	//SelectView();
+
+	//MenuView();
 
 }
 
@@ -129,7 +136,13 @@ void EditorScene::EditorView()
 	ImGui::SetWindowSize({ ( float ) VIEW_WINDOW_SIZE.x,( float ) VIEW_WINDOW_SIZE.y });
 	ImGui::SetWindowPos({ 0,0 });
 
-	ImGui::Image(pSRV_,{ ( float ) VIEW_WINDOW_SIZE.x,( float ) VIEW_WINDOW_SIZE.y });
+	ImGui::SetCursorPos(
+		{
+			( ImGui::GetWindowSize().x - ( mapSize_.x * blockSize_ ) ) * 0.5f ,
+			( ImGui::GetWindowSize().y - ( mapSize_.y * blockSize_ ) ) * 0.5f
+		});
+
+	ImGui::Image(screenGraph_.pSRV,{ mapSize_.x * blockSize_,mapSize_.y * blockSize_ });
 
 	ImGui::End();
 
@@ -141,6 +154,8 @@ void EditorScene::SelectView()
 
 	ImGui::SetWindowSize({ ( float ) SELECT_VIEW_WINDOW_SIZE.x,( float ) SELECT_VIEW_WINDOW_SIZE.y });
 	ImGui::SetWindowPos({ ( float ) VIEW_WINDOW_SIZE.x,0 });
+
+	SelectDraw(selectChip_);
 
 	ImGui::End();
 
@@ -182,6 +197,8 @@ void EditorScene::SelectView()
 			{
 				tableSelection.clear();
 				tableSelection.push_back(itr->id);
+
+				selectChip_ = ( ChipIndex ) tableSelection[ 0 ];
 			}
 		}
 
@@ -191,8 +208,27 @@ void EditorScene::SelectView()
 	ImGui::EndTable();
 
 	ImGui::End();
+}
 
+void EditorScene::MenuView()
+{
+	ImGui::Begin("MenuView",nullptr,ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
 
+	ImGui::SetWindowSize({ ( float ) SELECT_VIEW_WINDOW_SIZE.x,( float ) SELECT_VIEW_WINDOW_SIZE.y + SELECT_WINDOW_SIZE.y });
+	ImGui::SetWindowPos({ ( float ) VIEW_WINDOW_SIZE.x + SELECT_VIEW_WINDOW_SIZE.x ,0 });
+
+	ImGui::InputInt2("MapSize",tmpSize.data);
+	if ( ImGui::Button("New") )
+	{
+		New();
+	}
+
+	ImGui::Button("Reset");
+	ImGui::Button("Export");
+	ImGui::Button("Load");
+	ImGui::Button("ChangeMode");
+
+	ImGui::End();
 }
 
 void EditorScene::EditorMove()
@@ -238,19 +274,91 @@ void EditorScene::ChipDraw(size_t x,size_t y,int8_t chip,int32_t sign)
 	switch ( chip )
 	{
 	case NONE:
-		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),noneGraphHandle_,true);
+		DrawRotaGraph3(
+			x * scale_.x + ( blockSizeHalf_ * sign ),y * scale_.y + ( blockSizeHalf_ * sign ),
+			0,0,
+			scale_.x,scale_.y,
+			0,noneGraphHandle_.handle,true);
 		break;
 	case ROAD:
-		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),roadGraphHandle_,true);
+		DrawRotaGraph3(
+			x * scale_.x + ( blockSizeHalf_ * sign ),y * scale_.y + ( blockSizeHalf_ * sign ),
+			0,0,
+			scale_.x,scale_.y,
+			0,roadGraphHandle_.handle,true);
 		break;
 	case DOOR:
-		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),doorGraphHandle_,true);
+		DrawRotaGraph3(
+			x * scale_.x + ( blockSizeHalf_ * sign ),y * scale_.y + ( blockSizeHalf_ * sign ),
+			0,0,
+			scale_.x,scale_.y,
+			0,doorGraphHandle_.handle,true);
 		break;
 	case ROOM:
-		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),roomGraphHandle_,true);
+		DrawRotaGraph3(
+			x * scale_.x + ( blockSizeHalf_ * sign ),y * scale_.y + ( blockSizeHalf_ * sign ),
+			0,0,
+			scale_.x,scale_.y,
+			0,roomGraphHandle_.handle,true);
 		break;
 	case LOCK_ROOM:
-		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),lockroomGraphHandle_,true);
+		DrawRotaGraph3(
+			x * scale_.x + ( blockSizeHalf_ * sign ),y * scale_.y + ( blockSizeHalf_ * sign ),
+			0,0,
+			scale_.x,scale_.y,
+			0,lockroomGraphHandle_.handle,true);
+		break;
+	default:
+		break;
+	}
+}
+
+void EditorScene::New()
+{
+	for ( size_t i = 0; i < mapSize_.y; i++ )
+	{
+		editorMap_[ i ].clear();
+	}
+	editorMap_.clear();
+
+	mapSize_ = tmpSize;
+
+	mapCenter_.x = ( mapSize_.x * blockSize_ ) / 2;
+	mapCenter_.y = ( mapSize_.y * blockSize_ ) / 2;
+
+	editorMap_.resize(mapSize_.y);
+	for ( size_t i = 0; i < editorMap_.size(); i++ )
+	{
+		editorMap_[ i ].resize(mapSize_.x);
+	}
+
+	DxLib::DeleteGraph(screenGraph_.handle);
+	screenGraph_.pSRV->Release();
+
+	SetDrawValidGraphCreateFlag(TRUE);
+	screenGraph_.handle = MakeGraph(mapSize_.x * blockSize_,mapSize_.y * blockSize_);
+	screenGraph_.pSRV = GetImageResource11(screenGraph_.handle);
+	SetDrawValidGraphCreateFlag(FALSE);
+}
+
+void EditorScene::SelectDraw(ChipIndex chip)
+{
+	switch ( chip )
+	{
+	case NONE:
+		ImGui::Image(noneGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
+		break;
+	case ROAD:
+		ImGui::Image(roadGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
+		break;
+	case DOOR:
+		ImGui::Image(doorGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
+		break;
+	case ROOM:
+		ImGui::Image(roomGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
+		break;
+	case LOCK_ROOM:
+		ImGui::Image(lockroomGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
 		break;
 	default:
 		break;

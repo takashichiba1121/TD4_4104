@@ -1,6 +1,6 @@
 #include "Graph.h"
 
-#include<DxLib.h>
+#include<DxlibInclude.h>
 
 ID3D11ShaderResourceView* GetImageResource11(int softimageHandle)
 {
@@ -16,7 +16,10 @@ ID3D11ShaderResourceView* GetImageResource11(int softimageHandle)
 	return pSRV;
 }
 
-Graph LoadGraph(char* filepath)
+Graph Load(const char* filepath)
 {
-	return Graph();
+	Graph ret;
+	ret.handle = LoadGraph(filepath);
+	ret.pSRV = GetImageResource11(ret.handle);
+	return ret;
 }

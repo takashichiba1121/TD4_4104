@@ -32,11 +32,12 @@ private:
 	const  float2 INIT_SCALE = { 1280.0f / 854.0f, 720.0f / 480.0f };
 
 	std::vector<std::vector<int8_t>>editorMap_;
-	std::list<TableElement>chips_ = { {0,ChipIndex::NONE },{1,ChipIndex::ROAD},{2,ChipIndex::LOCK_ROOM} };
+	std::list<TableElement>chips_ = { {ChipIndex::NONE,ChipIndex::NONE },{ChipIndex::ROAD,ChipIndex::ROAD},{ChipIndex::ROOM,ChipIndex::ROOM},{ChipIndex::LOCK_ROOM,ChipIndex::LOCK_ROOM} };
 	ImVector<int8_t>tableSelection;
-	ID3D11ShaderResourceView* pSRV_ = nullptr;
+	Graph screenGraph_;
 	int32_t screen_;
 	int2 mapSize_ = { 10 ,10 };
+	int2 tmpSize = mapSize_;
 	float blockSize_ = 32;
 	float blockSizeHalf_ = blockSize_/2;
 	float2 scale_ = { 1280.0f / 854.0f,  720.0f / 480.0f };
@@ -74,9 +75,13 @@ private:
 
 	void EditorView();
 	void SelectView();
+	void MenuView();
 	void EditorMove();
 	int2 GetEditorMousePos();
 	void ChipDraw(size_t x,size_t y,int8_t chip,int32_t sign = -1);
+	void SelectDraw(ChipIndex chip);
+
+	void New();
 
 	bool IsEditorMapWithin(int32_t x,int32_t y);
 

@@ -12,8 +12,18 @@ class int2
 {
 public:
 
-	int x;
-	int y;
+	union
+	{
+		struct
+		{
+			int x;
+			int y;
+		};
+
+		int data[ 2 ];
+	};
+
+
 
 	int2& operator+=(const int2& v);
 	int2& operator-=(const int2& v);

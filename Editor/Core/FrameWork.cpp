@@ -30,15 +30,12 @@ void FrameWork::PostUpdate()
 
 void FrameWork::EditorDraw()
 {
-	dxlibManager_->ClearScreen();
 	sceneManager_->Draw();
-	dxlibManager_->ShotScreen();
 	dxlibManager_->ClearScreen();
 
-	sceneManager_->ProcessingDraw();
-	dxlibManager_->ShotScreen();
+	//sceneManager_->ProcessingDraw();
 	dxlibManager_->ClearScreen();
-	dxlibManager_->RefreshDirect3D();
+	//dxlibManager_->RefreshDirect3D();
 }
 
 bool FrameWork::UserEndRequst()
