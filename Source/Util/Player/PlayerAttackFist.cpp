@@ -2,11 +2,14 @@
 #include"DxlibInclude.h"
 void PlayerAttackFist::AttackInit(const Vector2& playerPos,bool direction)
 {
-	isAttack_=true;
+	if (isAttack_==false)
+	{
+		isAttack_ = true;
 
-	playerPos_ = playerPos;
+		playerPos_ = playerPos;
 
-	direction_ = direction;
+		direction_ = direction;
+	}
 }
 
 void PlayerAttackFist::Attack()

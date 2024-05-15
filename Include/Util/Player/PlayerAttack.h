@@ -1,5 +1,6 @@
 #pragma once
 #include"Vector2.h"
+#include<memory>
 class PlayerAttack
 {
 public:
@@ -11,5 +12,7 @@ public:
 	virtual void Draw() = 0;
 
 	virtual bool GetAttack()=0;
+
+	virtual uint32_t GetInterval()=0;
 };
 

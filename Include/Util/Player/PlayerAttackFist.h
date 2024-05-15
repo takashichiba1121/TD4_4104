@@ -12,6 +12,8 @@ public:
 
 	bool GetAttack() override {return isAttack_;}
 
+	uint32_t GetInterval() override {return interval;}
+
 private:
 	bool isAttack_ = false;
 
@@ -24,5 +26,7 @@ private:
 	bool direction_;
 
 	Vector2 colisionSize_ = { 50,61 };
+
+	const uint32_t interval = 20;
 };
 

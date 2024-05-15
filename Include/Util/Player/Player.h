@@ -14,18 +14,23 @@ public:
 	void Jump();
 
 	void Draw();
+
+private:
+
+	void Load();
+
 private:
 #pragma region 移動ステータス
 
-	float topSpeed_ = 10.0f;
+	float topSpeed_ = 0;
 
-	float acceleration_ = 0.1f;
+	float acceleration_ = 0;
 
-	float airAcceleration_ = 0.05f;
+	float airAcceleration_ = 0;
 
-	float deccelaration_ = 1.0f;
+	float deccelaration_ = 1;
 
-	float airDeccelaration_ = 0.5f;
+	float airDeccelaration_ = 0;
 
 #pragma endregion
 
@@ -43,6 +48,8 @@ private:
 
 	bool isAttack_ = false;
 
+	uint32_t attackInterval_=0;
+
 	std::unique_ptr<PlayerAttack> attack_;
 
 #pragma region ジャンプ用変数
@@ -50,9 +57,9 @@ private:
 
 	float fallSpeed_ = 0;
 
-	float gravityAcceleration_ = 0.5f;
+	float gravityAcceleration_ = 0;
 
-	float jumpAcceleration_ = -18;
+	float jumpAcceleration_ = 0;
 #pragma endregion
 
 
