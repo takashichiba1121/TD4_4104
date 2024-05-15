@@ -34,14 +34,6 @@ void Vector2::Normalize()
 	y = y / vecLen;
 }
 
-Vector2 Vector2::operator=(const Vector2& other)
-{
-	Vector2 ret;
-	ret.x = other.x;
-	ret.y = other.y;
-	return ret;
-}
-
 Vector2 GetVector2d(const Vector2& startVec,const Vector2& endVec)
 {
 	return Vector2(endVec,startVec);
