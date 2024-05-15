@@ -49,6 +49,9 @@ private:
 	int2 screenOldMousePos_ = { 0,0 };
 	int2 editorMousePos_ = { 0,0 };
 
+	float2 uv1 = {0,0};
+	float2 uv2 = {1,1};
+
 	int32_t mouseInput_;
 
 	Graph noneGraphHandle_;

@@ -42,6 +42,7 @@
     <ClInclude Include="..\ThirdParty\imgui\imstb_textedit.h" />
     <ClInclude Include="..\ThirdParty\imgui\imstb_truetype.h" />
     <ClInclude Include="..\ThirdParty\json.hpp" />
+    <ClInclude Include="..\ThirdParty\magic_enum.hpp" />
     <ClInclude Include="Include\Util\Graph.h" />
     <ClInclude Include="Include\Util\ChipIndex.h" />
     <ClInclude Include="Core\AbstractSceneFactory.h" />

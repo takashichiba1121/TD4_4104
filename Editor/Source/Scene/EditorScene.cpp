@@ -1,7 +1,6 @@
 #include "EditorScene.h"
 
 #include"DxlibInclude.h"
-#include"DxLib.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
@@ -42,11 +41,25 @@ void EditorScene::Update()
 
 	int mouseWheelRotVol = GetMouseWheelRotVol();
 
-	scale_.x += 0.1f * mouseWheelRotVol;
-	scale_.y += 0.1f * mouseWheelRotVol;
+	uv1.x += 0.01f * mouseWheelRotVol;
+	uv1.y += 0.01f * mouseWheelRotVol;
+	uv2.x += 0.01f * -mouseWheelRotVol;
+	uv2.y += 0.01f * -mouseWheelRotVol;
 
-	scale_.x = max(scale_.x,0.0000001f);
-	scale_.y = max(scale_.y,0.0000001f);
+	uv1.x = min(uv1.x,0.5f);
+	uv1.y = min(uv1.y,0.5f);
+	uv2.x = min(uv2.x,1.0f);
+	uv2.y = min(uv2.y,1.0f);
+
+	uv1.x = max(uv1.x,0.0001f);
+	uv1.y = max(uv1.y,0.0001f);
+	uv2.x = max(uv2.x,0.5f);
+	uv2.y = max(uv2.y,0.5f);
+
+	uv1.x = fabs(uv1.x);
+	uv1.y = fabs(uv1.y);
+	uv2.x = fabs(uv2.x);
+	uv2.y = fabs(uv2.y);
 
 	GetMousePoint(&screenMousePos_.x,&screenMousePos_.y);
 
@@ -79,7 +92,7 @@ void EditorScene::Draw()
 			int32_t centerY = blockSizeHalf + blockSize_ * i;
 
 			ChipDraw(centerX,centerY,editorMap_[ i ][ j ]);
-			DrawBoxAA(( centerX - blockSizeHalf ) * scale_.x,( centerY - blockSizeHalf ) * scale_.y,( centerX + blockSizeHalf ) * scale_.x,( centerY + blockSizeHalf ) * scale_.y,0xffffffff,false);
+			DrawBoxAA(( centerX - blockSizeHalf ),( centerY - blockSizeHalf ),( centerX + blockSizeHalf ),( centerY + blockSizeHalf ),0xffffffff,false);
 		}
 	}
 
@@ -103,6 +116,10 @@ void EditorScene::UIDraw()
 {
 	DrawFormatString(0,650,255,"%d,%d",editorMousePos_.x,editorMousePos_.y);
 	DrawFormatString(0,670,255,"%d,%d,%d",editorMousePos_.x / GetBlockSize(),editorMousePos_.y / GetBlockSize(),( int ) GetBlockSize());
+
+	DrawFormatString(0,690,255,"%f,%f",uv1.x,uv1.y);
+	DrawFormatString(0,710,255,"%f,%f",uv2.x,uv2.y);
+
 }
 
 void EditorScene::SpriteDraw()
@@ -142,7 +159,7 @@ void EditorScene::EditorView()
 			( ImGui::GetWindowSize().y - ( mapSize_.y * blockSize_ ) ) * 0.5f
 		});
 
-	ImGui::Image(screenGraph_.pSRV,{ mapSize_.x * blockSize_,mapSize_.y * blockSize_ });
+	ImGui::Image(screenGraph_.pSRV,{ mapSize_.x * blockSize_,mapSize_.y * blockSize_ },{ uv1.x,uv1.y },{ uv2.x,uv2.y });
 
 	ImGui::End();
 
@@ -274,39 +291,19 @@ void EditorScene::ChipDraw(size_t x,size_t y,int8_t chip,int32_t sign)
 	switch ( chip )
 	{
 	case NONE:
-		DrawRotaGraph3(
-			x * scale_.x + ( blockSizeHalf_ * sign ),y * scale_.y + ( blockSizeHalf_ * sign ),
-			0,0,
-			scale_.x,scale_.y,
-			0,noneGraphHandle_.handle,true);
+		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),noneGraphHandle_.handle,true);
 		break;
 	case ROAD:
-		DrawRotaGraph3(
-			x * scale_.x + ( blockSizeHalf_ * sign ),y * scale_.y + ( blockSizeHalf_ * sign ),
-			0,0,
-			scale_.x,scale_.y,
-			0,roadGraphHandle_.handle,true);
+		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),roadGraphHandle_.handle,true);
 		break;
 	case DOOR:
-		DrawRotaGraph3(
-			x * scale_.x + ( blockSizeHalf_ * sign ),y * scale_.y + ( blockSizeHalf_ * sign ),
-			0,0,
-			scale_.x,scale_.y,
-			0,doorGraphHandle_.handle,true);
+		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),doorGraphHandle_.handle,true);
 		break;
 	case ROOM:
-		DrawRotaGraph3(
-			x * scale_.x + ( blockSizeHalf_ * sign ),y * scale_.y + ( blockSizeHalf_ * sign ),
-			0,0,
-			scale_.x,scale_.y,
-			0,roomGraphHandle_.handle,true);
+		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),roomGraphHandle_.handle,true);
 		break;
 	case LOCK_ROOM:
-		DrawRotaGraph3(
-			x * scale_.x + ( blockSizeHalf_ * sign ),y * scale_.y + ( blockSizeHalf_ * sign ),
-			0,0,
-			scale_.x,scale_.y,
-			0,lockroomGraphHandle_.handle,true);
+		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),lockroomGraphHandle_.handle,true);
 		break;
 	default:
 		break;
@@ -332,7 +329,7 @@ void EditorScene::New()
 		editorMap_[ i ].resize(mapSize_.x);
 	}
 
-	DxLib::DeleteGraph(screenGraph_.handle);
+	DeleteGraph(screenGraph_.handle);
 	screenGraph_.pSRV->Release();
 
 	SetDrawValidGraphCreateFlag(TRUE);
