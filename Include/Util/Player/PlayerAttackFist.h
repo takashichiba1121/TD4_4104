@@ -21,12 +21,10 @@ private:
 
 	const float lastAttackTime_ = 10;
 
-	Vector2 playerPos_;
-
-	bool direction_;
+	Vector2 attackPos = {0,0};
 
 	Vector2 colisionSize_ = { 50,61 };
 
-	const uint32_t interval = 20;
+	const uint32_t interval = 30;
 };
 

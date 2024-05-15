@@ -2,6 +2,7 @@
 #include"Vector2.h"
 #include"PlayerAttack.h"
 #include<memory>
+#include<string>
 class Player
 {
 public:
@@ -12,6 +13,10 @@ public:
 	void Move();
 
 	void Jump();
+
+	void Attack();
+
+	void ChangeAttack(std::string AttackName);
 
 	void Draw();
 

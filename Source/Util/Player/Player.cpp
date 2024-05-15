@@ -15,12 +15,12 @@ void Player::Initialze()
 
 	pos_.y = GameConfig::GetGameConfig()->windowHeight / 2;
 
-	attack_ = std::make_unique<PlayerAttackFist>();
+	ChangeAttack("Fist");
 }
 
 void Player::Update()
 {
-	if ( attackInterval_>0)
+	if ( attackInterval_ > 0 )
 	{
 		attackInterval_--;
 	}
@@ -29,21 +29,8 @@ void Player::Update()
 	{
 		Move();
 	}
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && attack_ != nullptr&&attackInterval_==0)
-	{
-		attack_->AttackInit(pos_,direction_);
 
-		speed_ = 0;
-
-		fallSpeed_ = 0;
-
-		attackInterval_ = attack_->GetInterval();
-	}
-
-	if ( attack_ != nullptr )
-	{
-		attack_->Attack();
-	}
+	Attack();
 
 #ifdef _DEBUG
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_1) )
@@ -73,6 +60,11 @@ void Player::Update()
 	ImGui::SliderFloat("TopSpeed",&topSpeed_,200.0f,0.0f,"%2.0f");
 
 	ImGui::Text("attackInterval %d",attackInterval_);
+
+	//if ( ImGui::Button("save") )
+	//{
+	//	
+	//}
 
 	ImGui::End();
 
@@ -171,6 +163,33 @@ void Player::Jump()
 		fallSpeed_ = 0;
 
 		pos_.y = 600;
+	}
+}
+
+void Player::Attack()
+{
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && attack_ != nullptr && attackInterval_ == 0 )
+	{
+		attack_->AttackInit(pos_,direction_);
+
+		speed_ = 0;
+
+		fallSpeed_ = 0;
+
+		attackInterval_ = attack_->GetInterval();
+	}
+
+	if ( attack_ != nullptr )
+	{
+		attack_->Attack();
+	}
+}
+
+void Player::ChangeAttack(std::string attackName)
+{
+	if (attackName=="Fist" )
+	{
+		attack_ = std::make_unique<PlayerAttackFist>();
 	}
 }
 
