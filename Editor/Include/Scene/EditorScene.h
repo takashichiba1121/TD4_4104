@@ -22,6 +22,8 @@ private:
 	};
 
 
+
+
 private:
 	const int32_t BAR_SIZE = 16;
 	const int2 VIEW_WINDOW_SIZE = { 854 + BAR_SIZE,480 + BAR_SIZE };
@@ -41,16 +43,22 @@ private:
 	float blockSize_ = 32;
 	float blockSizeHalf_ = blockSize_/2;
 	float2 scale_ = { 1280.0f / 854.0f,  720.0f / 480.0f };
+	float2 editorViewCenter;
 	
 	int2 mapCenter_ = { 0,0 };
 	int2 screenPos_ = { 0,0 };
 
 	int2 screenMousePos_ = { 0,0 };
 	int2 screenOldMousePos_ = { 0,0 };
-	int2 editorMousePos_ = { 0,0 };
+	float2 editorMousePos_ = { 0,0 };
 
-	float2 uv1 = {0,0};
-	float2 uv2 = {1,1};
+	float2 scaleUV1_ = {0,0};
+	float2 scaleUV2_ = { 1,1 };
+
+	float2 moveUV_ = { 0,0 };
+
+	UV screenUV;
+	UV oldScreenUV;
 
 	int32_t mouseInput_;
 
@@ -80,7 +88,7 @@ private:
 	void SelectView();
 	void MenuView();
 	void EditorMove();
-	int2 GetEditorMousePos();
+	float2 GetEditorMousePos();
 	void ChipDraw(size_t x,size_t y,int8_t chip,int32_t sign = -1);
 	void SelectDraw(ChipIndex chip);
 
