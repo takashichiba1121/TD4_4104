@@ -23,7 +23,7 @@ void EditorScene::Initialize(int32_t screen)
 
 	editorMap_.resize(mapSize_.y);
 	for ( size_t i = 0; i < editorMap_.size(); i++ )
-	{
+	
 		editorMap_[ i ].resize(mapSize_.x);
 	}
 
@@ -41,39 +41,49 @@ void EditorScene::Update()
 
 	int mouseWheelRotVol = GetMouseWheelRotVol();
 
-	uv1.x += 0.01f * mouseWheelRotVol;
-	uv1.y += 0.01f * mouseWheelRotVol;
-	uv2.x += 0.01f * -mouseWheelRotVol;
-	uv2.y += 0.01f * -mouseWheelRotVol;
+	scaleUV1_.x += 0.01f * mouseWheelRotVol;
+	scaleUV1_.y += 0.01f * mouseWheelRotVol;
+	scaleUV2_.x += 0.01f * -mouseWheelRotVol;
+	scaleUV2_.y += 0.01f * -mouseWheelRotVol;
 
-	uv1.x = min(uv1.x,0.5f);
-	uv1.y = min(uv1.y,0.5f);
-	uv2.x = min(uv2.x,1.0f);
-	uv2.y = min(uv2.y,1.0f);
+	scaleUV1_ = Min(scaleUV1_,0.5f);
+	scaleUV2_ = Min(scaleUV2_,1.0f);
 
-	uv1.x = max(uv1.x,0.0001f);
-	uv1.y = max(uv1.y,0.0001f);
-	uv2.x = max(uv2.x,0.5f);
-	uv2.y = max(uv2.y,0.5f);
-
-	uv1.x = fabs(uv1.x);
-	uv1.y = fabs(uv1.y);
-	uv2.x = fabs(uv2.x);
-	uv2.y = fabs(uv2.y);
+	scaleUV1_ = Max(scaleUV1_,0.0001f);
+	scaleUV2_ = Max(scaleUV2_,0.5f);
 
 	GetMousePoint(&screenMousePos_.x,&screenMousePos_.y);
 
 	EditorMove();
 
+	oldScreenUV = screenUV;
+
+	screenUV.min = scaleUV1_ + moveUV_;
+	screenUV.max = scaleUV2_ + moveUV_;
+
+	if ( screenUV.min.x < 0 || screenUV.max.x>1.0f )
+	{
+		screenUV.min.x = oldScreenUV.min.x;
+		screenUV.max.x = oldScreenUV.max.x;
+	}
+
+	if ( screenUV.min.y < 0 || screenUV.max.y>1.0f )
+	{
+		screenUV.min.y = oldScreenUV.min.y;
+		screenUV.max.y = oldScreenUV.max.y;
+	}
+
 	editorMousePos_ = GetEditorMousePos();
 
-	if ( IsEditorMapWithin(editorMousePos_.x / GetBlockSize(),editorMousePos_.y / GetBlockSize()) )
-	{
-		if ( mouseInput_ )
-		{
-			editorMap_[ editorMousePos_.y / GetBlockSize() ][ editorMousePos_.x / GetBlockSize() ] = selectChip_;
-		}
-	}
+	
+
+	//if ( IsEditorMapWithin(editorMousePos_.x / GetBlockSize(),editorMousePos_.y / GetBlockSize()) )
+	//{
+	//	if ( mouseInput_ )
+	//	{
+	//		editorMap_[ editorMousePos_.y / GetBlockSize() ][ editorMousePos_.x / GetBlockSize() ] = selectChip_;
+	//	}
+	//}
 
 }
 
@@ -96,7 +106,7 @@ void EditorScene::Draw()
 		}
 	}
 
-	ChipDraw(( editorMousePos_.x / GetBlockSize() ) * 32,( editorMousePos_.y / GetBlockSize() ) * 32,selectChip_,0);
+	//ChipDraw(( editorMousePos_.x / GetBlockSize() ) * 32,( editorMousePos_.y / GetBlockSize() ) * 32,selectChip_,0);
 
 	SetDrawScreen(DX_SCREEN_BACK);
 }
@@ -114,11 +124,15 @@ void EditorScene::UIUpdate()
 
 void EditorScene::UIDraw()
 {
-	DrawFormatString(0,650,255,"%d,%d",editorMousePos_.x,editorMousePos_.y);
-	DrawFormatString(0,670,255,"%d,%d,%d",editorMousePos_.x / GetBlockSize(),editorMousePos_.y / GetBlockSize(),( int ) GetBlockSize());
+	DrawFormatString(0,550,255,"%f,%f",editorMousePos_.x,editorMousePos_.y);
+	//DrawFormatString(0,570,255,"%d,%d,%d",editorMousePos_.x / GetBlockSize(),editorMousePos_.y / GetBlockSize(),( int ) GetBlockSize());
 
-	DrawFormatString(0,690,255,"%f,%f",uv1.x,uv1.y);
-	DrawFormatString(0,710,255,"%f,%f",uv2.x,uv2.y);
+	DrawFormatString(0,590,255,"%f,%f",scaleUV1_.x,scaleUV1_.y);
+	DrawFormatString(0,610,255,"%f,%f",scaleUV2_.x,scaleUV2_.y);
+	DrawFormatString(0,630,255,"%f,%f",moveUV_.x,moveUV_.y);
+
+	DrawFormatString(0,650,255,"%f,%f",moveUV_.x + scaleUV1_.x,moveUV_.y + scaleUV1_.y);
+	DrawFormatString(0,670,255,"%f,%f",moveUV_.x + scaleUV2_.x,moveUV_.y + scaleUV2_.y);
 
 }
 
@@ -153,13 +167,15 @@ void EditorScene::EditorView()
 	ImGui::SetWindowSize({ ( float ) VIEW_WINDOW_SIZE.x,( float ) VIEW_WINDOW_SIZE.y });
 	ImGui::SetWindowPos({ 0,0 });
 
-	ImGui::SetCursorPos(
-		{
+	editorViewCenter =
+	{
 			( ImGui::GetWindowSize().x - ( mapSize_.x * blockSize_ ) ) * 0.5f ,
 			( ImGui::GetWindowSize().y - ( mapSize_.y * blockSize_ ) ) * 0.5f
-		});
+	};
 
-	ImGui::Image(screenGraph_.pSRV,{ mapSize_.x * blockSize_,mapSize_.y * blockSize_ },{ uv1.x,uv1.y },{ uv2.x,uv2.y });
+	ImGui::SetCursorPos(editorViewCenter);
+
+	ImGui::Image(screenGraph_.pSRV,{ mapSize_.x * blockSize_,mapSize_.y * blockSize_ },screenUV.min,screenUV.max);
 
 	ImGui::End();
 
@@ -254,30 +270,35 @@ void EditorScene::EditorMove()
 	{
 		int2 mouseMove = screenOldMousePos_ - screenMousePos_;
 
-		screenPos_ += mouseMove;
+		moveUV_.x += ( float ) mouseMove.x / 1000;
+		moveUV_.y += ( float ) mouseMove.y / 1000;
 	}
 }
 
-int2 EditorScene::GetEditorMousePos()
+float2 EditorScene::GetEditorMousePos()
 {
-	int2 ret{};
+	float2 ret{};
 
 	float2 sca = GetScale();
 
 	int2 mapHalfSize =
 	{
-		blockSize_ * mapSize_.x / 2 * sca.x ,
-		blockSize_ * mapSize_.y / 2 * sca.y
+		blockSize_ * mapSize_.x / 2 ,
+		blockSize_ * mapSize_.y / 2
 	};
 
 	int2 editorScreenPos =
 	{
-		VIEW_WINDOW_SIZE_HALF.x - mapHalfSize.x - screenPos_.x ,
-		VIEW_WINDOW_SIZE_HALF.y - mapHalfSize.x - screenPos_.y
+		VIEW_WINDOW_SIZE_HALF.x - mapHalfSize.x ,
+		VIEW_WINDOW_SIZE_HALF.y - mapHalfSize.x
 	};
 
-	ret.x = -( int ) ( editorScreenPos.x - screenMousePos_.x );
-	ret.y = -( int ) ( editorScreenPos.y - screenMousePos_.y );
+	ret.x = abs(( int ) ( editorScreenPos.x - screenMousePos_.x ));
+	ret.y = -abs(( int ) ( editorScreenPos.y - screenMousePos_.y ));
+
+	ret.x /= mapSize_.x * blockSize_;
+	ret.y /= mapSize_.y * blockSize_;
+
 	return ret;
 }
 
