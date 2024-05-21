@@ -11,21 +11,23 @@
 void EditorScene::Initialize(int32_t screen)
 {
 	SetDrawValidGraphCreateFlag(TRUE);
-	screenGraph_.handle = MakeGraph(mapSize_.x * blockSize_,mapSize_.y * blockSize_);
+	screenGraph_.handle = MakeGraph(mapBlockSize_.x * blockSize_,mapBlockSize_.y * blockSize_);
 	screenGraph_.pSRV = GetImageResource11(screenGraph_.handle);
 	SetDrawValidGraphCreateFlag(FALSE);
 
 	screen_ = screen;
 
 	//変える予定
-	mapCenter_.x = ( mapSize_.x * blockSize_ ) / 2;
-	mapCenter_.y = ( mapSize_.y * blockSize_ ) / 2;
+	mapCenter_.x = ( mapBlockSize_.x * blockSize_ ) / 2;
+	mapCenter_.y = ( mapBlockSize_.y * blockSize_ ) / 2;
 
-	editorMap_.resize(mapSize_.y);
+	editorMap_.resize(mapBlockSize_.y);
 	for ( size_t i = 0; i < editorMap_.size(); i++ )
-	
-		editorMap_[ i ].resize(mapSize_.x);
+	{
+		editorMap_[ i ].resize(mapBlockSize_.x);
 	}
+
+	editorMapSize = { mapBlockSize_.x * ( int ) blockSize_ ,mapBlockSize_.y * ( int ) blockSize_ };
 
 	noneGraphHandle_ = Load("Resource/NoneChip.png");
 	roadGraphHandle_ = Load("Resource/RoadChip.png");
@@ -39,43 +41,15 @@ void EditorScene::Update()
 	screenOldMousePos_ = screenMousePos_;
 	mouseInput_ = GetMouseInput();
 
-	int mouseWheelRotVol = GetMouseWheelRotVol();
-
-	scaleUV1_.x += 0.01f * mouseWheelRotVol;
-	scaleUV1_.y += 0.01f * mouseWheelRotVol;
-	scaleUV2_.x += 0.01f * -mouseWheelRotVol;
-	scaleUV2_.y += 0.01f * -mouseWheelRotVol;
-
-	scaleUV1_ = Min(scaleUV1_,0.5f);
-	scaleUV2_ = Min(scaleUV2_,1.0f);
-
-	scaleUV1_ = Max(scaleUV1_,0.0001f);
-	scaleUV2_ = Max(scaleUV2_,0.5f);
-
 	GetMousePoint(&screenMousePos_.x,&screenMousePos_.y);
-
-	EditorMove();
 
 	oldScreenUV = screenUV;
 
-	screenUV.min = scaleUV1_ + moveUV_;
-	screenUV.max = scaleUV2_ + moveUV_;
+	EditorScale();
 
-	if ( screenUV.min.x < 0 || screenUV.max.x>1.0f )
-	{
-		screenUV.min.x = oldScreenUV.min.x;
-		screenUV.max.x = oldScreenUV.max.x;
-	}
-
-	if ( screenUV.min.y < 0 || screenUV.max.y>1.0f )
-	{
-		screenUV.min.y = oldScreenUV.min.y;
-		screenUV.max.y = oldScreenUV.max.y;
-	}
+	EditorMove();
 
 	editorMousePos_ = GetEditorMousePos();
-
-	
 
 	//if ( IsEditorMapWithin(editorMousePos_.x / GetBlockSize(),editorMousePos_.y / GetBlockSize()) )
 	//{
@@ -94,9 +68,9 @@ void EditorScene::Draw()
 
 	int32_t blockSizeHalf = blockSize_ / 2;
 
-	for ( size_t i = 0; i < mapSize_.y; i++ )
+	for ( size_t i = 0; i < mapBlockSize_.y; i++ )
 	{
-		for ( size_t j = 0; j < mapSize_.x; j++ )
+		for ( size_t j = 0; j < mapBlockSize_.x; j++ )
 		{
 			int32_t centerX = blockSizeHalf + blockSize_ * j;
 			int32_t centerY = blockSizeHalf + blockSize_ * i;
@@ -124,7 +98,7 @@ void EditorScene::UIUpdate()
 
 void EditorScene::UIDraw()
 {
-	DrawFormatString(0,550,255,"%f,%f",editorMousePos_.x,editorMousePos_.y);
+	DrawFormatString(0,550,255,"%d,%d",editorMousePos_.x,editorMousePos_.y);
 	//DrawFormatString(0,570,255,"%d,%d,%d",editorMousePos_.x / GetBlockSize(),editorMousePos_.y / GetBlockSize(),( int ) GetBlockSize());
 
 	DrawFormatString(0,590,255,"%f,%f",scaleUV1_.x,scaleUV1_.y);
@@ -169,13 +143,13 @@ void EditorScene::EditorView()
 
 	editorViewCenter =
 	{
-			( ImGui::GetWindowSize().x - ( mapSize_.x * blockSize_ ) ) * 0.5f ,
-			( ImGui::GetWindowSize().y - ( mapSize_.y * blockSize_ ) ) * 0.5f
+			( ImGui::GetWindowSize().x - ( mapBlockSize_.x * blockSize_ ) ) * 0.5f ,
+			( ImGui::GetWindowSize().y - ( mapBlockSize_.y * blockSize_ ) ) * 0.5f
 	};
 
 	ImGui::SetCursorPos(editorViewCenter);
 
-	ImGui::Image(screenGraph_.pSRV,{ mapSize_.x * blockSize_,mapSize_.y * blockSize_ },screenUV.min,screenUV.max);
+	ImGui::Image(screenGraph_.pSRV,{ mapBlockSize_.x * blockSize_,mapBlockSize_.y * blockSize_ },screenUV.min,screenUV.max);
 
 	ImGui::End();
 
@@ -250,7 +224,7 @@ void EditorScene::MenuView()
 	ImGui::SetWindowSize({ ( float ) SELECT_VIEW_WINDOW_SIZE.x,( float ) SELECT_VIEW_WINDOW_SIZE.y + SELECT_WINDOW_SIZE.y });
 	ImGui::SetWindowPos({ ( float ) VIEW_WINDOW_SIZE.x + SELECT_VIEW_WINDOW_SIZE.x ,0 });
 
-	ImGui::InputInt2("MapSize",tmpSize.data);
+	ImGui::InputInt2("MapSize",tmpBlockSize.data);
 	if ( ImGui::Button("New") )
 	{
 		New();
@@ -272,19 +246,68 @@ void EditorScene::EditorMove()
 
 		moveUV_.x += ( float ) mouseMove.x / 1000;
 		moveUV_.y += ( float ) mouseMove.y / 1000;
+
+		screenUV.min = scaleUV1_ + moveUV_;
+		screenUV.max = scaleUV2_ + moveUV_;
+
+		if ( screenUV.min.x < 0 || screenUV.max.x>1.0f )
+		{
+			screenUV.min.x = oldScreenUV.min.x;
+			screenUV.max.x = oldScreenUV.max.x;
+		}
+
+		if ( screenUV.min.y < 0 || screenUV.max.y>1.0f )
+		{
+			screenUV.min.y = oldScreenUV.min.y;
+			screenUV.max.y = oldScreenUV.max.y;
+		}
 	}
 }
 
-float2 EditorScene::GetEditorMousePos()
+void EditorScene::EditorScale()
 {
-	float2 ret{};
+	int mouseWheelRotVol = GetMouseWheelRotVol();
 
+	if ( mouseWheelRotVol != 0 )
+	{
+		scaleUV1_.x += 0.01f * mouseWheelRotVol;
+		scaleUV1_.y += 0.01f * mouseWheelRotVol;
+		scaleUV2_.x += 0.01f * -mouseWheelRotVol;
+		scaleUV2_.y += 0.01f * -mouseWheelRotVol;
+
+		scaleUV1_ = Min(scaleUV1_,0.5f);
+		scaleUV2_ = Min(scaleUV2_,1.0f);
+
+		scaleUV1_ = Max(scaleUV1_,0.0001f);
+		scaleUV2_ = Max(scaleUV2_,0.5f);
+
+		screenUV.min = scaleUV1_ + moveUV_;
+		screenUV.max = scaleUV2_ + moveUV_;
+
+		if ( screenUV.min.x < 0 || screenUV.max.x>1.0f )
+		{
+			screenUV.min.x = oldScreenUV.min.x;
+			screenUV.max.x = oldScreenUV.max.x;
+		}
+
+		if ( screenUV.min.y < 0 || screenUV.max.y>1.0f )
+		{
+			screenUV.min.y = oldScreenUV.min.y;
+			screenUV.max.y = oldScreenUV.max.y;
+		}
+	}
+}
+
+int2 EditorScene::GetEditorMousePos()
+{
+	int2 ret{};
+	float2 rate;
 	float2 sca = GetScale();
 
 	int2 mapHalfSize =
 	{
-		blockSize_ * mapSize_.x / 2 ,
-		blockSize_ * mapSize_.y / 2
+		 blockSize_ * float(mapBlockSize_.x) / 2 ,
+		 blockSize_ * float(mapBlockSize_.y) / 2
 	};
 
 	int2 editorScreenPos =
@@ -293,18 +316,36 @@ float2 EditorScene::GetEditorMousePos()
 		VIEW_WINDOW_SIZE_HALF.y - mapHalfSize.x
 	};
 
-	ret.x = abs(( int ) ( editorScreenPos.x - screenMousePos_.x ));
-	ret.y = -abs(( int ) ( editorScreenPos.y - screenMousePos_.y ));
+	float2 minUvScreenPos =
+	{
+		mapBlockSize_.x * blockSize_ * screenUV.min.x,
+		mapBlockSize_.y * blockSize_ * screenUV.min.y,
+	};
 
-	ret.x /= mapSize_.x * blockSize_;
-	ret.y /= mapSize_.y * blockSize_;
+	float2 maxUvScreenPos =
+	{
+		mapBlockSize_.x * blockSize_ * screenUV.max.x,
+		mapBlockSize_.y * blockSize_ * screenUV.max.y,
+	};
+
+	rate.x = -( editorScreenPos.x - screenMousePos_.x );
+	rate.y = -( editorScreenPos.y - screenMousePos_.y );
+
+	rate.x /= mapBlockSize_.x * blockSize_;
+	rate.y /= mapBlockSize_.y * blockSize_;
+
+	rate.y = Lerp(minUvScreenPos.y,maxUvScreenPos.y,rate.y);
+	rate.x = Lerp(minUvScreenPos.x,maxUvScreenPos.x,rate.x);
+
+	ret.x = int(rate.x / blockSize_);
+	ret.y = int(rate.y / blockSize_);
 
 	return ret;
 }
 
 bool EditorScene::IsEditorMapWithin(int32_t x,int32_t y)
 {
-	return x >= 0 && y >= 0 && x < mapSize_.x && y < mapSize_.y;
+	return x >= 0 && y >= 0 && x < mapBlockSize_.x && y < mapBlockSize_.y;
 }
 
 void EditorScene::ChipDraw(size_t x,size_t y,int8_t chip,int32_t sign)
@@ -333,28 +374,28 @@ void EditorScene::ChipDraw(size_t x,size_t y,int8_t chip,int32_t sign)
 
 void EditorScene::New()
 {
-	for ( size_t i = 0; i < mapSize_.y; i++ )
+	for ( size_t i = 0; i < mapBlockSize_.y; i++ )
 	{
 		editorMap_[ i ].clear();
 	}
 	editorMap_.clear();
 
-	mapSize_ = tmpSize;
+	mapBlockSize_ = tmpBlockSize;
 
-	mapCenter_.x = ( mapSize_.x * blockSize_ ) / 2;
-	mapCenter_.y = ( mapSize_.y * blockSize_ ) / 2;
+	mapCenter_.x = ( mapBlockSize_.x * blockSize_ ) / 2;
+	mapCenter_.y = ( mapBlockSize_.y * blockSize_ ) / 2;
 
-	editorMap_.resize(mapSize_.y);
+	editorMap_.resize(mapBlockSize_.y);
 	for ( size_t i = 0; i < editorMap_.size(); i++ )
 	{
-		editorMap_[ i ].resize(mapSize_.x);
+		editorMap_[ i ].resize(mapBlockSize_.x);
 	}
 
 	DeleteGraph(screenGraph_.handle);
 	screenGraph_.pSRV->Release();
 
 	SetDrawValidGraphCreateFlag(TRUE);
-	screenGraph_.handle = MakeGraph(mapSize_.x * blockSize_,mapSize_.y * blockSize_);
+	screenGraph_.handle = MakeGraph(mapBlockSize_.x * blockSize_,mapBlockSize_.y * blockSize_);
 	screenGraph_.pSRV = GetImageResource11(screenGraph_.handle);
 	SetDrawValidGraphCreateFlag(FALSE);
 }
