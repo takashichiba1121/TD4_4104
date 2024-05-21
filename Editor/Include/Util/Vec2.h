@@ -17,6 +17,9 @@ public:
 
 const float2 operator+(const float2& v1,const float2& v2);
 
+float2 Lerp(const float2& v1,const float2& v2,float t);
+
+float Lerp(float v1,float v2,float t);
 
 float2 Min(const float2& v1,const float2& v2);
 float2 Min(const float2& v1,float f);

@@ -38,6 +38,21 @@ const float2 operator+(const float2& v1,const float2& v2)
 	return tmp += v2;
 }
 
+float2 Lerp(const float2& v1,const float2& v2,float t)
+{
+	float2 ret;
+	ret.x = v1.x + ( v2.x - v1.x ) * t;
+	ret.y = v1.y + ( v2.y - v1.y ) * t;
+	return ret;
+}
+
+float Lerp(float v1,float v2,float t)
+{
+	float ret;
+	ret = v1 + ( v2 - v1 ) * t;
+	return ret;
+}
+
 float2 Min(const float2& v1,const float2& v2)
 {
 	return float2(std::min(v1.x,v2.x),std::min(v1.y,v2.y));

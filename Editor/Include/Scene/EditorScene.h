@@ -38,19 +38,20 @@ private:
 	ImVector<int8_t>tableSelection;
 	Graph screenGraph_;
 	int32_t screen_;
-	int2 mapSize_ = { 10 ,10 };
-	int2 tmpSize = mapSize_;
+	int2 mapBlockSize_ = { 10 ,10 };
+	int2 tmpBlockSize = mapBlockSize_;
 	float blockSize_ = 32;
 	float blockSizeHalf_ = blockSize_/2;
 	float2 scale_ = { 1280.0f / 854.0f,  720.0f / 480.0f };
 	float2 editorViewCenter;
+	int2 editorMapSize;
 	
 	int2 mapCenter_ = { 0,0 };
 	int2 screenPos_ = { 0,0 };
 
 	int2 screenMousePos_ = { 0,0 };
 	int2 screenOldMousePos_ = { 0,0 };
-	float2 editorMousePos_ = { 0,0 };
+	int2 editorMousePos_ = { 0,0 };
 
 	float2 scaleUV1_ = {0,0};
 	float2 scaleUV2_ = { 1,1 };
@@ -88,12 +89,13 @@ private:
 	void SelectView();
 	void MenuView();
 	void EditorMove();
-	float2 GetEditorMousePos();
+	void EditorScale();
+	int2 GetEditorMousePos();
 	void ChipDraw(size_t x,size_t y,int8_t chip,int32_t sign = -1);
 	void SelectDraw(ChipIndex chip);
 
 	void New();
-
+	
 	bool IsEditorMapWithin(int32_t x,int32_t y);
 
 };
