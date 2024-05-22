@@ -23,7 +23,7 @@ private:
 
 	Vector2 attackPos = {0,0};
 
-	Vector2 colisionSize_ = { 50,61 };
+	Vector2 colisionSize_ = { 100,80 };
 
 	const uint32_t interval = 30;
 };

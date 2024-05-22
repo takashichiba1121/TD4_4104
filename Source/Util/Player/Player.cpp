@@ -4,6 +4,7 @@
 #include"Input.h"
 #include"imgui.h"
 #include"PlayerAttackFist.h"
+#include"PlayerAttackWeapon.h"
 #include"json.hpp"
 #include <fstream>
 
@@ -20,6 +21,7 @@ void Player::Initialze()
 
 void Player::Update()
 {
+
 	if ( attackInterval_ > 0 )
 	{
 		attackInterval_--;
@@ -33,6 +35,15 @@ void Player::Update()
 	Attack();
 
 #ifdef _DEBUG
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_2) )
+	{
+		ChangeAttack("Fist");
+	}
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_3) )
+	{
+		ChangeAttack("Weapon");
+	}
+
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_1) )
 	{
 		Load();
@@ -190,6 +201,10 @@ void Player::ChangeAttack(std::string attackName)
 	if (attackName=="Fist" )
 	{
 		attack_ = std::make_unique<PlayerAttackFist>();
+	}
+	if ( attackName == "Weapon" )
+	{
+		attack_ = std::make_unique<PlayerAttackWeapon>();
 	}
 }
 
