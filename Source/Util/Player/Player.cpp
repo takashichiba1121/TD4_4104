@@ -5,6 +5,7 @@
 #include"imgui.h"
 #include"PlayerAttackFist.h"
 #include"PlayerAttackWeapon.h"
+#include"PlayerBulletManager.h"
 #include"json.hpp"
 #include <fstream>
 
@@ -194,6 +195,8 @@ void Player::Attack()
 	{
 		attack_->Attack();
 	}
+
+	PlayerBulletManager::Instance()->Update();
 }
 
 void Player::ChangeAttack(std::string attackName)
