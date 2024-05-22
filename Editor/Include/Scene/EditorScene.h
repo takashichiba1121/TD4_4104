@@ -34,7 +34,7 @@ private:
 	const  float2 INIT_SCALE = { 1280.0f / 854.0f, 720.0f / 480.0f };
 
 	std::vector<std::vector<int8_t>>editorMap_;
-	std::list<TableElement>chips_ = { {ChipIndex::NONE,ChipIndex::NONE },{ChipIndex::ROAD,ChipIndex::ROAD},{ChipIndex::ROOM,ChipIndex::ROOM},{ChipIndex::LOCK_ROOM,ChipIndex::LOCK_ROOM} };
+	std::list<TableElement>chips_ = { {ChipIndex::NONE,ChipIndex::NONE },{ChipIndex::ROAD,ChipIndex::ROAD},{ChipIndex::ROOM,ChipIndex::ROOM},{ChipIndex::LOCK_ROOM,ChipIndex::LOCK_ROOM},{ChipIndex::WALL,ChipIndex::WALL} };
 	ImVector<int8_t>tableSelection;
 	Graph screenGraph_;
 	int32_t screen_;
@@ -68,6 +68,7 @@ private:
 	Graph doorGraphHandle_;
 	Graph roomGraphHandle_;
 	Graph lockroomGraphHandle_;
+	Graph wallGraphHandle_;
 
 	ChipIndex selectChip_;
 
