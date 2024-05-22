@@ -34,6 +34,7 @@ void EditorScene::Initialize(int32_t screen)
 	doorGraphHandle_ = Load("Resource/DoorChip.png");
 	roomGraphHandle_ = Load("Resource/RoomChip.png");
 	lockroomGraphHandle_ = Load("Resource/LockroomChip.png");
+	wallGraphHandle_ = Load("Resource/WallChip.png");
 }
 
 void EditorScene::Update()
@@ -51,13 +52,13 @@ void EditorScene::Update()
 
 	editorMousePos_ = GetEditorMousePos();
 
-	//if ( IsEditorMapWithin(editorMousePos_.x / GetBlockSize(),editorMousePos_.y / GetBlockSize()) )
-	//{
-	//	if ( mouseInput_ )
-	//	{
-	//		editorMap_[ editorMousePos_.y / GetBlockSize() ][ editorMousePos_.x / GetBlockSize() ] = selectChip_;
-	//	}
-	//}
+	if ( IsEditorMapWithin(editorMousePos_.x ,editorMousePos_.y) )
+	{
+		if ( mouseInput_ )
+		{
+			editorMap_[ editorMousePos_.y  ][ editorMousePos_.x  ] = selectChip_;
+		}
+	}
 
 }
 
@@ -80,7 +81,12 @@ void EditorScene::Draw()
 		}
 	}
 
-	//ChipDraw(( editorMousePos_.x / GetBlockSize() ) * 32,( editorMousePos_.y / GetBlockSize() ) * 32,selectChip_,0);
+	{
+		int32_t centerX = blockSizeHalf + blockSize_ * editorMousePos_.x;
+		int32_t centerY = blockSizeHalf + blockSize_ * editorMousePos_.y;
+
+		ChipDraw(( centerX - blockSizeHalf ),( centerY - blockSizeHalf ),selectChip_,0);
+	}
 
 	SetDrawScreen(DX_SCREEN_BACK);
 }
@@ -89,9 +95,9 @@ void EditorScene::UIUpdate()
 {
 	EditorView();
 
-	//SelectView();
+	SelectView();
 
-	//MenuView();
+	MenuView();
 
 }
 
@@ -367,6 +373,9 @@ void EditorScene::ChipDraw(size_t x,size_t y,int8_t chip,int32_t sign)
 	case LOCK_ROOM:
 		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),lockroomGraphHandle_.handle,true);
 		break;
+	case WALL:
+		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),wallGraphHandle_.handle,true);
+		break;
 	default:
 		break;
 	}
@@ -418,6 +427,9 @@ void EditorScene::SelectDraw(ChipIndex chip)
 		break;
 	case LOCK_ROOM:
 		ImGui::Image(lockroomGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
+		break;
+	case WALL:
+		ImGui::Image(wallGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
 		break;
 	default:
 		break;
