@@ -6,6 +6,7 @@
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 #include "magic_enum.hpp"
+#include "json.hpp"
 
 
 void EditorScene::Initialize(int32_t screen)
@@ -237,7 +238,21 @@ void EditorScene::MenuView()
 	}
 
 	ImGui::Button("Reset");
-	ImGui::Button("Export");
+
+	
+	ImGui::InputText("name",textBuff,_countof(textBuff));
+
+	mapName_.clear();
+	mapName_ = textBuff;
+
+	if ( ImGui::Button("Export") )
+	{
+		if ( !mapName_.empty() )
+		{
+			Export();
+		}
+	}
+
 	ImGui::Button("Load");
 	ImGui::Button("ChangeMode");
 
@@ -407,6 +422,21 @@ void EditorScene::New()
 	screenGraph_.handle = MakeGraph(mapBlockSize_.x * blockSize_,mapBlockSize_.y * blockSize_);
 	screenGraph_.pSRV = GetImageResource11(screenGraph_.handle);
 	SetDrawValidGraphCreateFlag(FALSE);
+}
+
+void EditorScene::Export()
+{
+	nlohmann::json data;
+	data[ "name" ] = mapName_;
+	for ( size_t i = 0; i < mapBlockSize_.y; i++ )
+	{
+		for ( size_t j = 0; j < mapBlockSize_.x; j++ )
+		{
+			data[ "map" ].push_back(editorMap_[ i ][ j ]);
+		}
+	}
+
+	data.dump();
 }
 
 void EditorScene::SelectDraw(ChipIndex chip)
