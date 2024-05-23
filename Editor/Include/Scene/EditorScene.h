@@ -36,6 +36,8 @@ private:
 	std::vector<std::vector<int8_t>>editorMap_;
 	std::list<TableElement>chips_ = { {ChipIndex::NONE,ChipIndex::NONE },{ChipIndex::ROAD,ChipIndex::ROAD},{ChipIndex::ROOM,ChipIndex::ROOM},{ChipIndex::LOCK_ROOM,ChipIndex::LOCK_ROOM},{ChipIndex::WALL,ChipIndex::WALL} };
 	ImVector<int8_t>tableSelection;
+	char textBuff[ 256 ];
+	std::string mapName_;
 	Graph screenGraph_;
 	int32_t screen_;
 	int2 mapBlockSize_ = { 10 ,10 };
@@ -96,7 +98,7 @@ private:
 	void SelectDraw(ChipIndex chip);
 
 	void New();
-	
+	void Export();
 	bool IsEditorMapWithin(int32_t x,int32_t y);
 
 };
