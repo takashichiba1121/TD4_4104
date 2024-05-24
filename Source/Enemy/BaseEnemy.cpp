@@ -7,6 +7,10 @@ void BaseEnemy::Damage(int damage)
 
 bool BaseEnemy::IsLive()
 {
+	if ( hp_ <= 0 )
+	{
+		islive_ = false;
+	}
 	return islive_;
 }
 

@@ -8,7 +8,8 @@ void WalkEnemy::Initialize()
 
 void WalkEnemy::Update()
 {
-
+	velocity.Normalize();
+	pos_ += velocity * speed;
 
 }
 
