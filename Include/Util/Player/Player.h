@@ -12,7 +12,11 @@ public:
 
 	void Move();
 
+	void JumpStart();
+
 	void Jump();
+
+	void Falling();
 
 	void Attack();
 
@@ -60,11 +64,15 @@ private:
 #pragma region ジャンプ用変数
 	bool onGround_ = false;
 
+	bool isJump_=false;
+
 	float fallSpeed_ = 0;
 
 	float gravityAcceleration_ = 0;
 
 	float jumpAcceleration_ = 0;
+
+	float jumpInitialVelocity_ = 0;
 #pragma endregion
 
 

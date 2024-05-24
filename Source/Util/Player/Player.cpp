@@ -57,21 +57,23 @@ void Player::Update()
 
 	ImGui::SliderFloat("JumpAcceleration",&jumpAcceleration_,0.0f,-20.0f,"%2.0f");
 
-	ImGui::SliderFloat("GravityAcceleration",&gravityAcceleration_,0.0f,1.0f,"%1.2f");
+	ImGui::SliderFloat("GravityAcceleration",&gravityAcceleration_,0.0f,5.0f,"%1.1f");
 
 	ImGui::Text("Move");
 
-	ImGui::SliderFloat("Acceleration",&acceleration_,0.0f,1.0f,"%1.2f");
+	ImGui::SliderFloat("Acceleration",&acceleration_,0.0f,100.0f,"%3.0f");
 
-	ImGui::SliderFloat("AirAcceleration",&airAcceleration_,0.0f,1.0f,"%1.2f");
+	ImGui::SliderFloat("AirAcceleration",&airAcceleration_,0.0f,100.0f,"%3.0f");
 
-	ImGui::SliderFloat("Deccelaration",&deccelaration_,0.0f,1.0f,"%1.2f");
+	ImGui::SliderFloat("Deccelaration",&deccelaration_,0.0f,100.0f,"%3.0f");
 
-	ImGui::SliderFloat("AirDeccelaration_",&airDeccelaration_,0.0f,1.0f,"%1.2f");
+	ImGui::SliderFloat("AirDeccelaration_",&airDeccelaration_,0.0f,100.0f,"%3.0f");
 
 	ImGui::SliderFloat("TopSpeed",&topSpeed_,200.0f,0.0f,"%2.0f");
 
 	ImGui::Text("attackInterval %d",attackInterval_);
+
+	ImGui::Text("speed %f",speed_);
 
 	//if ( ImGui::Button("save") )
 	//{
@@ -88,27 +90,31 @@ void Player::Move()
 	if ( Input::Instance()->PushKey(KEY_INPUT_A) )
 	{
 		direction_ = false;
-		if ( speed_ >= -topSpeed_ )
+		if ( speed_ > -topSpeed_ )
 		{
 			if ( onGround_ )
 			{
-				speed_ -= airAcceleration_;
+				speed_ -= airAcceleration_/60.0f;
 			}
 			else
 			{
-				speed_ -= acceleration_;
+				speed_ -= acceleration_/60.0f;
 			}
+		}
+		else
+		{
+			speed_ = -topSpeed_;
 		}
 	}
 	else if ( speed_ < 0 )
 	{
 		if ( onGround_ )
 		{
-			speed_ += airDeccelaration_;
+			speed_ += airDeccelaration_ / 60.0f;
 		}
 		else
 		{
-			speed_ += deccelaration_;
+			speed_ += deccelaration_ / 60.0f;
 		}
 		if ( speed_ > 0 )
 		{
@@ -118,24 +124,31 @@ void Player::Move()
 	if ( Input::Instance()->PushKey(KEY_INPUT_D) )
 	{
 		direction_ = true;
-		if ( onGround_ )
+		if ( speed_ < topSpeed_ )
 		{
-			speed_ += airAcceleration_;
+			if ( onGround_ )
+			{
+				speed_ += airAcceleration_/60.0f;
+			}
+			else
+			{
+				speed_ += acceleration_/60.0f;
+			}
 		}
 		else
 		{
-			speed_ += acceleration_;
+			speed_ = topSpeed_;
 		}
 	}
 	else if ( speed_ > 0 )
 	{
 		if ( onGround_ )
 		{
-			speed_ -= airDeccelaration_;
+			speed_ -= airDeccelaration_ / 60.0f;
 		}
 		else
 		{
-			speed_ -= deccelaration_;
+			speed_ -= deccelaration_ / 60.0f;
 		}
 		if ( speed_ < 0 )
 		{
@@ -144,11 +157,11 @@ void Player::Move()
 	}
 	pos_.x += speed_;
 
-	if ( Input::Instance()->PushKey(KEY_INPUT_SPACE) && !onGround_ )
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) && !onGround_ )
 	{
 		fallSpeed_ = jumpAcceleration_;
 
-		onGround_ = true;
+		JumpStart();
 	}
 
 	if ( pos_.y < 600 )
@@ -158,11 +171,42 @@ void Player::Move()
 
 	if ( onGround_ )
 	{
-		Jump();
+		if (isJump_ )
+		{
+			Jump();
+		}
+		else
+		{
+			Falling();
+		}
 	}
 }
 
+void Player::JumpStart()
+{
+	onGround_ = true;
+
+	isJump_ = true;
+
+	fallSpeed_ += jumpInitialVelocity_;
+}
+
 void Player::Jump()
+{
+	fallSpeed_ += jumpAcceleration_;
+
+	pos_.y += fallSpeed_;
+
+	if ( Input::Instance()->ReleaseKey(KEY_INPUT_SPACE)||fallSpeed_>=0)
+	{
+		isJump_ = false;
+		
+		fallSpeed_/=5;
+	}
+
+}
+
+void Player::Falling()
 {
 	fallSpeed_ += gravityAcceleration_;
 
@@ -267,4 +311,5 @@ void Player::Load()
 	airDeccelaration_ = jsonObject[ "AirDeccelaration" ];
 	gravityAcceleration_ = jsonObject[ "GravityAcceleration" ];
 	jumpAcceleration_ = jsonObject[ "JumpAcceleration" ];
+	jumpInitialVelocity_ = jsonObject[ "JumpInitialVelocity" ];
 }
