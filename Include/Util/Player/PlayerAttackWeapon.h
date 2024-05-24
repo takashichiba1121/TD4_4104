@@ -23,12 +23,12 @@ private:
 
 	float AttackTime_ = 0;
 
-	const float lastAttackTime_ = 30;
+	const float lastAttackTime_ = 1;
 
 	Vector2 attackPos = { 0,0 };
 
 	Vector2 colisionSize_ = { 200,50 };
 
-	const uint32_t interval = 90;
+	const uint32_t interval = 30;
 };
 

@@ -213,6 +213,8 @@ void Player::ChangeAttack(std::string attackName)
 
 void Player::Draw()
 {
+	PlayerBulletManager::Instance()->Draw();
+
 	float leftPos = pos_.x - size_.x / 2;
 	float rightPos = pos_.x + size_.x / 2;
 	float upPos = pos_.y - size_.y / 2;

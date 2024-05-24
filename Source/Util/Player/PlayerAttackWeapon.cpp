@@ -8,25 +8,18 @@ void PlayerAttackWeapon::AttackInit(const Vector2& playerPos,bool direction)
 	{
 		isAttack_ = true;
 
-		if ( direction )
-		{
-			attackPos = { playerPos.x + colisionSize_.x / 2,playerPos.y };
-		}
-		else
-		{
-			attackPos = { playerPos.x - colisionSize_.x / 2,playerPos.y };
-		}
-
 		std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
 
 		if ( direction )
 		{
-			newBullet->Initialize({1,0},playerPos,60);
+			newBullet->Initialize({10,0},playerPos,60);
 		}
 		else
 		{
-			newBullet->Initialize({-1,0},playerPos,60);
+			newBullet->Initialize({-10,0},playerPos,60);
 		}
+
+		PlayerBulletManager::Instance()->AddBullet(std::move(newBullet));
 	}
 }
 
@@ -47,8 +40,5 @@ void PlayerAttackWeapon::Attack()
 
 void PlayerAttackWeapon::Draw()
 {
-	if ( isAttack_ )
-	{
-		DrawBox(attackPos.x - colisionSize_.x / 2,attackPos.y - colisionSize_.y / 2,attackPos.x + colisionSize_.x / 2,attackPos.y + colisionSize_.y / 2,GetColor(0,255,0),false);
-	}
+
 }

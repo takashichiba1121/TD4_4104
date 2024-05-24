@@ -4,6 +4,8 @@
 
 void PlayerBullet::Initialize(Vector2 velocity,Vector2 position,uint32_t life)
 {
+	velocity_ = velocity;
+
 	position_ = position;
 
 	life_ = life;
@@ -28,7 +30,7 @@ void PlayerBullet::Attack()
 
 void PlayerBullet::Draw()
 {
-	DrawBox(position_.x,position_.y,position_.x+5,position_.y+5,GetColor(255,0,0),true);
+	DrawBox(position_.x-10,position_.y-10,position_.x+10,position_.y+10,GetColor(255,0,0),true);
 }
 
 void PlayerBullet::OnCollision()
