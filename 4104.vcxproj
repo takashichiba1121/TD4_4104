@@ -154,6 +154,7 @@
     <ClCompile Include="GameCore\FPS.cpp" />
     <ClCompile Include="GameCore\FrameWork.cpp" />
     <ClCompile Include="GameCore\Input.cpp" />
+    <ClCompile Include="Include\Util\Player\PlayerBullet.cpp" />
     <ClCompile Include="Source\Util\Player\PlayerAttackFist.cpp" />
     <ClCompile Include="Source\Util\GameConfig.cpp" />
     <ClCompile Include="Source\GameMain.cpp" />
@@ -163,6 +164,8 @@
     <ClCompile Include="Source\Scene\SceneFactrory.cpp" />
     <ClCompile Include="GameCore\SceneManager.cpp" />
     <ClCompile Include="Source\Util\Player\Player.cpp" />
+    <ClCompile Include="Source\Util\Player\PlayerAttackWeapon.cpp" />
+    <ClCompile Include="Source\Util\Player\PlayerBulletManager.cpp" />
     <ClCompile Include="ThirdParty\imgui\imgui.cpp" />
     <ClCompile Include="ThirdParty\imgui\imgui_demo.cpp" />
     <ClCompile Include="ThirdParty\imgui\imgui_draw.cpp" />
@@ -191,6 +194,9 @@
     <ClInclude Include="Include\Util\Player\Player.h" />
     <ClInclude Include="Include\Util\Player\PlayerAttack.h" />
     <ClInclude Include="Include\Util\Player\PlayerAttackFist.h" />
+    <ClInclude Include="Include\Util\Player\PlayerAttackWeapon.h" />
+    <ClInclude Include="Include\Util\Player\PlayerBullet.h" />
+    <ClInclude Include="Include\Util\Player\PlayerBulletManager.h" />
     <ClInclude Include="ThirdParty\imgui\imconfig.h" />
     <ClInclude Include="ThirdParty\imgui\imgui.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_impl_dx11.h" />
