@@ -259,10 +259,10 @@ void Player::Draw()
 {
 	PlayerBulletManager::Instance()->Draw();
 
-	float leftPos = pos_.x - size_.x / 2;
-	float rightPos = pos_.x + size_.x / 2;
-	float upPos = pos_.y - size_.y / 2;
-	float downPos = pos_.y + size_.y / 2;
+	float leftPos = pos_.x - drawSize_.x / 2;
+	float rightPos = pos_.x + drawSize_.x / 2;
+	float upPos = pos_.y - drawSize_.y / 2;
+	float downPos = pos_.y + drawSize_.y / 2;
 
 	DrawBox(leftPos,upPos,rightPos,downPos,GetColor(255,255,255),true);
 	DrawBox(leftPos + colisionSift_.x,upPos + colisionSift_.y,rightPos - colisionSize_.x,downPos - colisionSize_.y,GetColor(255,0,0),false);

@@ -12,7 +12,7 @@ public:
 
 	bool GetAttack() override {return isAttack_;}
 
-	uint32_t GetInterval() override {return interval;}
+	uint32_t GetInterval() override {return interval_;}
 
 private:
 	bool isAttack_ = false;
@@ -21,10 +21,10 @@ private:
 
 	const float lastAttackTime_ = 10;
 
-	Vector2 attackPos = {0,0};
+	Vector2 attackPos_ = {0,0};
 
 	Vector2 colisionSize_ = { 100,80 };
 
-	const uint32_t interval = 30;
+	const uint32_t interval_ = 30;
 };
 
