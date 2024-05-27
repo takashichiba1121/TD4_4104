@@ -10,7 +10,7 @@ void WalkEnemy::Update()
 {
 	velocity.Normalize();
 	pos_ += velocity * speed;
-
+	pos_ += gravity;
 }
 
 void WalkEnemy::Draw()
