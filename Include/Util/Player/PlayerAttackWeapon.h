@@ -15,7 +15,7 @@ public:
 	}
 
 	uint32_t GetInterval() override {
-		return interval;
+		return interval_;
 	}
 
 private:
@@ -25,10 +25,10 @@ private:
 
 	const float lastAttackTime_ = 1;
 
-	Vector2 attackPos = { 0,0 };
+	Vector2 attackPos_ = { 0,0 };
 
 	Vector2 colisionSize_ = { 200,50 };
 
-	const uint32_t interval = 30;
+	const uint32_t interval_ = 30;
 };
 

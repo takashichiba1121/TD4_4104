@@ -8,11 +8,11 @@ void PlayerAttackFist::AttackInit(const Vector2& playerPos,bool direction)
 
 		if ( direction )
 		{
-			attackPos = {playerPos.x + colisionSize_.x/2,playerPos.y};
+			attackPos_ = {playerPos.x + colisionSize_.x/2,playerPos.y};
 		}
 		else
 		{
-			attackPos = { playerPos.x - colisionSize_.x/2,playerPos.y };
+			attackPos_ = { playerPos.x - colisionSize_.x/2,playerPos.y };
 		}
 	}
 }
@@ -36,6 +36,6 @@ void PlayerAttackFist::Draw()
 {
 	if ( isAttack_ )
 	{
-			DrawBox(attackPos.x-colisionSize_.x/2,attackPos.y - colisionSize_.y/2,attackPos.x + colisionSize_.x/2,attackPos.y + colisionSize_.y/2,GetColor(0,255,0),false);
+			DrawBox(attackPos_.x-colisionSize_.x/2,attackPos_.y - colisionSize_.y/2,attackPos_.x + colisionSize_.x/2,attackPos_.y + colisionSize_.y/2,GetColor(0,255,0),false);
 	}
 }

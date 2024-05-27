@@ -49,7 +49,7 @@ private:
 
 	Vector2 pos_;
 
-	Vector2 size_ = { 35,61 };
+	Vector2 drawSize_ = { 35,61 };
 
 	Vector2 colisionSize_ = { 5,5 };
 
@@ -60,6 +60,10 @@ private:
 	uint32_t attackInterval_=0;
 
 	std::unique_ptr<PlayerAttack> attack_;
+
+	int32_t hp_;
+
+	int32_t maxHp_=10;
 
 #pragma region ジャンプ用変数
 	bool onGround_ = false;
