@@ -14,7 +14,7 @@ protected:
 	bool islive_;
 	Vector2 pos_;
 	Vector2 hitboxSize_;
-	Vector2 drawSize_;
+	Vector2 drawSize_ = { 35,61 };
 public:
 	virtual void Initialize() = 0;
 	virtual void Update() = 0;
