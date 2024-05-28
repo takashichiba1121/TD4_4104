@@ -6,7 +6,7 @@
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 #include "magic_enum.hpp"
-#include "json.hpp"
+#include<fstream>
 
 
 void EditorScene::Initialize(int32_t screen)
@@ -53,11 +53,11 @@ void EditorScene::Update()
 
 	editorMousePos_ = GetEditorMousePos();
 
-	if ( IsEditorMapWithin(editorMousePos_.x ,editorMousePos_.y) )
+	if ( IsEditorMapWithin(editorMousePos_.x,editorMousePos_.y) )
 	{
 		if ( mouseInput_ )
 		{
-			editorMap_[ editorMousePos_.y  ][ editorMousePos_.x  ] = selectChip_;
+			editorMap_[ editorMousePos_.y ][ editorMousePos_.x ].chip = selectChip_;
 		}
 	}
 
@@ -77,7 +77,7 @@ void EditorScene::Draw()
 			int32_t centerX = blockSizeHalf + blockSize_ * j;
 			int32_t centerY = blockSizeHalf + blockSize_ * i;
 
-			ChipDraw(centerX,centerY,editorMap_[ i ][ j ]);
+			ChipDraw(centerX,centerY,editorMap_[ i ][ j ].chip);
 			DrawBoxAA(( centerX - blockSizeHalf ),( centerY - blockSizeHalf ),( centerX + blockSizeHalf ),( centerY + blockSizeHalf ),0xffffffff,false);
 		}
 	}
@@ -239,7 +239,7 @@ void EditorScene::MenuView()
 
 	ImGui::Button("Reset");
 
-	
+
 	ImGui::InputText("name",textBuff,_countof(textBuff));
 
 	mapName_.clear();
@@ -283,6 +283,107 @@ void EditorScene::EditorMove()
 			screenUV.max.y = oldScreenUV.max.y;
 		}
 	}
+}
+
+void EditorScene::RoomSearch(RoomSetting& roomSetting,int32_t x,int32_t y,nlohmann::json& jsonData)
+{
+	const std::array<int2,4>WEYS = { {{-1,0,},{0,-1},{1,0,},{0,1}} };
+
+	enum weys
+	{
+		RIGHT = 2,
+		LEFT = 0,
+		DOWN = 3,
+		UP = 1
+	};
+
+	int2 localPos = { x,y };
+	roomSetting.leftTop = localPos;
+	weys wey = RIGHT;
+	localPos += WEYS[ UP ];
+	//localPos += WEYS[ RIGHT ];
+	int2 size = {};
+
+	while ( true )
+	{
+		if ( editorMap_[ localPos.y ][ localPos.x ].chip == ChipIndex::DOOR )
+		{
+			roomSetting.doors.push_back({ localPos.x - x,localPos.y - y });
+		}
+
+		if ( wey == UP )
+		{
+			if ( editorMap_[ localPos.y ][ localPos.x + 1 ].chip == ChipIndex::LOCK_ROOM && roomSetting.lock ||
+				 editorMap_[ localPos.y ][ localPos.x + 1 ].chip == ChipIndex::ROOM && !roomSetting.lock )
+			{
+				localPos += WEYS[ wey ];
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		switch ( wey )
+		{
+		case RIGHT:
+			if ( editorMap_[ localPos.y + 1 ][ localPos.x ].chip == ChipIndex::LOCK_ROOM && roomSetting.lock ||
+				 editorMap_[ localPos.y + 1 ][ localPos.x ].chip == ChipIndex::ROOM && !roomSetting.lock )
+			{
+				localPos += WEYS[ wey ];
+				size.x++;
+			}
+			else
+			{
+				wey = DOWN;
+				localPos += WEYS[ wey ];
+			}
+
+			break;
+		case DOWN:
+
+			if ( editorMap_[ localPos.y ][ localPos.x - 1 ].chip == ChipIndex::LOCK_ROOM && roomSetting.lock ||
+				 editorMap_[ localPos.y ][ localPos.x - 1 ].chip == ChipIndex::ROOM && !roomSetting.lock )
+			{
+				localPos += WEYS[ wey ];
+				size.y++;
+			}
+			else
+			{
+				wey = LEFT;
+				localPos += WEYS[ wey ];
+			}
+			break;
+		case LEFT:
+			if ( editorMap_[ localPos.y - 1 ][ localPos.x ].chip == ChipIndex::LOCK_ROOM && roomSetting.lock ||
+				 editorMap_[ localPos.y - 1 ][ localPos.x ].chip == ChipIndex::ROOM && !roomSetting.lock )
+			{
+				localPos += WEYS[ wey ];
+			}
+			else
+			{
+				wey = UP;
+				localPos += WEYS[ wey ];
+			}
+			break;
+		}
+
+		jsonData[ "Map" ].push_back(editorMap_[ localPos.y ][ localPos.x ].chip);
+
+		editorMap_[ localPos.y ][ localPos.x ].out = true;
+	}
+
+	for ( size_t i = y; i < y + size.y; i++ )
+	{
+		for ( size_t j = x; j < x + size.x; j++ )
+		{
+			jsonData[ "Map" ].push_back(editorMap_[ i ][ j ].chip);
+
+			editorMap_[ i ][ j ].out = true;
+		}
+	}
+
+	roomSetting.size = size;
 }
 
 void EditorScene::EditorScale()
@@ -427,16 +528,64 @@ void EditorScene::New()
 void EditorScene::Export()
 {
 	nlohmann::json data;
-	data[ "name" ] = mapName_;
+
+	data[ "0_Name" ] = mapName_;
+	data[ "1_Size" ].push_back({ mapBlockSize_.x, mapBlockSize_.y });
+	data[ "2_RoomNum" ].push_back(roomSettings_.size());
+
 	for ( size_t i = 0; i < mapBlockSize_.y; i++ )
 	{
 		for ( size_t j = 0; j < mapBlockSize_.x; j++ )
 		{
-			data[ "map" ].push_back(editorMap_[ i ][ j ]);
+			if ( !editorMap_[ i ][ j ].out )
+			{
+				if ( editorMap_[ i ][ j ].chip == ChipIndex::ROOM || editorMap_[ i ][ j ].chip == ChipIndex::LOCK_ROOM )
+				{
+					RoomSetting roomSetting;
+
+					if ( editorMap_[ i ][ j ].chip == ChipIndex::ROOM )
+					{
+						roomSetting.lock = false;
+					}
+					else
+					{
+						roomSetting.lock = true;
+					}
+
+					RoomSearch(roomSetting,j,i,data);
+
+					roomSettings_.push_back(roomSetting);
+				}
+				else
+				{
+					data[ "Map" ].push_back(editorMap_[ i ][ j ].chip);
+				}
+
+				editorMap_[ i ][ j ].out = true;
+			}
+
 		}
 	}
 
-	data.dump();
+	for ( size_t i = 0; i < roomSettings_.size(); i++ )
+	{
+		data[ "3_RoomSettings" ].emplace_back();
+		data[ "3_RoomSettings" ][ i ].push_back({ "Look",roomSettings_[ i ].lock });
+		data[ "3_RoomSettings" ][ i ].push_back({ "LeftTop",{roomSettings_[ i ].leftTop.x,roomSettings_[ i ].leftTop.y} });
+		data[ "3_RoomSettings" ][ i ].push_back({ "Size",{roomSettings_[ i ].size.x,roomSettings_[ i ].size.y});
+
+		for ( size_t j = 0; j < roomSettings_[ i ].doors.size(); j++ )
+		{
+			data[ "3_RoomSettings" ][i].push_back({ "Doors" ,{ roomSettings_[ i ].doors[ j ].x,roomSettings_[ i ].doors[ j ].y } });
+		}
+	}
+
+	std::ofstream file;
+	std::string path = "Export/Map/";
+	file.open(path + mapName_ + ".json");
+	file << data.dump();
+	file.close();
+	file.close();
 }
 
 void EditorScene::SelectDraw(ChipIndex chip)
