@@ -2,14 +2,15 @@
 #include "BaseScene.h"
 
 #include<d3d11.h>
-#include<Vec2.h>
-
 #include<vector>
 #include<list>
 #include<imgui.h>
+#include "json.hpp"
 
+#include<Vec2.h>
 #include"ChipIndex.h"
 #include"Graph.h"
+#include<string>
 
 class EditorScene : public BaseScene
 {
@@ -21,7 +22,19 @@ private:
 		ChipIndex index;
 	};
 
+	struct MapIndex
+	{
+		int8_t chip;
+		bool out;
+	};
 
+	struct RoomSetting
+	{
+		bool lock;
+		int2 leftTop;
+		int2 size;
+		std::vector<int2>doors;
+	};
 
 
 private:
@@ -33,8 +46,16 @@ private:
 	const int2 WINDOW_SIZE = {1280,720};
 	const  float2 INIT_SCALE = { 1280.0f / 854.0f, 720.0f / 480.0f };
 
-	std::vector<std::vector<int8_t>>editorMap_;
-	std::list<TableElement>chips_ = { {ChipIndex::NONE,ChipIndex::NONE },{ChipIndex::ROAD,ChipIndex::ROAD},{ChipIndex::ROOM,ChipIndex::ROOM},{ChipIndex::LOCK_ROOM,ChipIndex::LOCK_ROOM},{ChipIndex::WALL,ChipIndex::WALL} };
+	std::vector<std::vector<MapIndex>>editorMap_;
+	std::vector<RoomSetting>roomSettings_;
+	std::list<TableElement>chips_ =
+	{
+		{ChipIndex::NONE,ChipIndex::NONE },
+		{ChipIndex::ROAD,ChipIndex::ROAD},
+		{ChipIndex::DOOR,ChipIndex::DOOR},
+		{ChipIndex::ROOM,ChipIndex::ROOM},
+		{ChipIndex::LOCK_ROOM,ChipIndex::LOCK_ROOM},
+		{ChipIndex::WALL,ChipIndex::WALL} };
 	ImVector<int8_t>tableSelection;
 	char textBuff[ 256 ];
 	std::string mapName_;
@@ -100,6 +121,8 @@ private:
 	void New();
 	void Export();
 	bool IsEditorMapWithin(int32_t x,int32_t y);
+
+	void RoomSearch(RoomSetting& roomSetting,int32_t x,int32_t y,nlohmann::json& jsonData);
 
 };
 
