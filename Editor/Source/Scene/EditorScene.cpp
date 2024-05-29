@@ -368,7 +368,10 @@ void EditorScene::RoomSearch(RoomSetting& roomSetting,int32_t x,int32_t y,nlohma
 			break;
 		}
 
-		jsonData[ "Map" ].push_back(editorMap_[ localPos.y ][ localPos.x ].chip);
+		if ( editorMap_[ localPos.y ][ localPos.x ].chip == ChipIndex::DOOR )
+		{
+			jsonData[ "Map" ].push_back(0);
+		}
 
 		editorMap_[ localPos.y ][ localPos.x ].out = true;
 	}
@@ -377,7 +380,7 @@ void EditorScene::RoomSearch(RoomSetting& roomSetting,int32_t x,int32_t y,nlohma
 	{
 		for ( size_t j = x; j < x + size.x; j++ )
 		{
-			jsonData[ "Map" ].push_back(editorMap_[ i ][ j ].chip);
+			jsonData[ "Map" ].push_back(0);
 
 			editorMap_[ i ][ j ].out = true;
 		}
@@ -531,7 +534,7 @@ void EditorScene::Export()
 
 	data[ "0_Name" ] = mapName_;
 	data[ "1_Size" ].push_back({ mapBlockSize_.x, mapBlockSize_.y });
-	data[ "2_RoomNum" ].push_back(roomSettings_.size());
+
 
 	for ( size_t i = 0; i < mapBlockSize_.y; i++ )
 	{
@@ -569,16 +572,44 @@ void EditorScene::Export()
 
 	for ( size_t i = 0; i < roomSettings_.size(); i++ )
 	{
-		data[ "3_RoomSettings" ].emplace_back();
-		data[ "3_RoomSettings" ][ i ].push_back({ "Look",roomSettings_[ i ].lock });
-		data[ "3_RoomSettings" ][ i ].push_back({ "LeftTop",{roomSettings_[ i ].leftTop.x,roomSettings_[ i ].leftTop.y} });
-		data[ "3_RoomSettings" ][ i ].push_back({ "Size",{roomSettings_[ i ].size.x,roomSettings_[ i ].size.y});
+		nlohmann::json roomSetting;
+		roomSetting[ "Look" ] = roomSettings_[ i ].lock;
+		roomSetting[ "LeftTop" ] = { roomSettings_[ i ].leftTop.x,roomSettings_[ i ].leftTop.y };
+		roomSetting[ "Size" ] = { roomSettings_[ i ].size.x,roomSettings_[ i ].size.y };
+		roomSetting[ "DoorsNum" ] = roomSettings_[ i ].doors.size();
 
 		for ( size_t j = 0; j < roomSettings_[ i ].doors.size(); j++ )
 		{
-			data[ "3_RoomSettings" ][i].push_back({ "Doors" ,{ roomSettings_[ i ].doors[ j ].x,roomSettings_[ i ].doors[ j ].y } });
+			roomSetting[ "Doors" ].push_back({ roomSettings_[ i ].doors[ j ].x,roomSettings_[ i ].doors[ j ].y });
 		}
+
+		std::string roomName;
+
+		if ( roomSettings_[ i ].lock )
+		{
+			roomName += "Lock@";
+		}
+		else
+		{
+			roomName += "NoLock@";
+		}
+
+		roomName += std::to_string(roomSettings_[ i ].size.x) + '_' + std::to_string(roomSettings_[ i ].size.y) + '@';
+
+
+		for ( size_t j = 0; j < roomSettings_[ i ].doors.size()-1; j++ )
+		{
+			roomName += std::to_string(roomSettings_[ i ].doors[ j ].x) + '_' + std::to_string(roomSettings_[ i ].doors[ j ].y)+':';
+		}
+
+		roomName += std::to_string(roomSettings_[ i ].doors.back().x) + '_' + std::to_string(roomSettings_[ i ].doors.back().y);
+
+		roomSetting[ "RoomName" ] = roomName;
+
+		data[ "3_RoomSettings" ].push_back(roomSetting);
 	}
+
+	data[ "2_RoomNum" ].push_back(roomSettings_.size());
 
 	std::ofstream file;
 	std::string path = "Export/Map/";
