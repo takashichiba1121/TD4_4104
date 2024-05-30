@@ -10,11 +10,8 @@ public:
 	Vector2(float _x,float _y);
 	Vector2(const Vector2& start,const Vector2& end);
 
-
-
 	float GetLenge() const;
 	void Normalize();
-
 
 	Vector2& operator +=(const Vector2& other);
 

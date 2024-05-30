@@ -1,47 +1,41 @@
 #include "EditorScene.h"
 
 #include"DxlibInclude.h"
-#include"DxLib.h"
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
+#include "magic_enum.hpp"
+#include<fstream>
 
-static ID3D11ShaderResourceView* GetImageResource11(int softimageHandle)
-{
-
-	ID3D11Device* device = static_cast< ID3D11Device* >( const_cast< void* >( GetUseDirect3D11Device() ) );
-	ID3D11DeviceContext* context = static_cast< ID3D11DeviceContext* >( const_cast< void* >( GetUseDirect3D11DeviceContext() ) );
-
-	ID3D11Texture2D* texture = ( ID3D11Texture2D* ) GetGraphID3D11Texture2D(softimageHandle);
-	// ShaderResourceViewの作成
-	ID3D11ShaderResourceView* pSRV = nullptr;
-	device->CreateShaderResourceView(texture,nullptr,&pSRV);
-
-	return pSRV;
-}
 
 void EditorScene::Initialize(int32_t screen)
 {
+	SetDrawValidGraphCreateFlag(TRUE);
+	screenGraph_.handle = MakeGraph(mapBlockSize_.x * blockSize_,mapBlockSize_.y * blockSize_);
+	screenGraph_.pSRV = GetImageResource11(screenGraph_.handle);
+	SetDrawValidGraphCreateFlag(FALSE);
 
-	pSRV_ = GetImageResource11(screen);
 	screen_ = screen;
 
 	//変える予定
-	mapCenter_.x = ( mapSize_.x * blockSize_ ) / 2;
-	mapCenter_.y = ( mapSize_.y * blockSize_ ) / 2;
+	mapCenter_.x = ( mapBlockSize_.x * blockSize_ ) / 2;
+	mapCenter_.y = ( mapBlockSize_.y * blockSize_ ) / 2;
 
-	editorMap.resize(mapSize_.y);
-	for ( size_t i = 0; i < editorMap.size(); i++ )
+	editorMap_.resize(mapBlockSize_.y);
+	for ( size_t i = 0; i < editorMap_.size(); i++ )
 	{
-		editorMap[ i ].resize(mapSize_.x);
+		editorMap_[ i ].resize(mapBlockSize_.x);
 	}
 
-	noneGraphHandle_ = LoadGraph("Resource/NoneChip.png");
-	roadGraphHandle_ = LoadGraph("Resource/RoadChip.png");
-	doorGraphHandle_ = LoadGraph("Resource/DoorChip.png");
-	roomGraphHandle_ = LoadGraph("Resource/RoomChip.png");
-	lockroomGraphHandle_ = LoadGraph("Resource/LockroomChip.png");
+	editorMapSize = { mapBlockSize_.x * ( int ) blockSize_ ,mapBlockSize_.y * ( int ) blockSize_ };
+
+	noneGraphHandle_ = Load("Resource/NoneChip.png");
+	roadGraphHandle_ = Load("Resource/RoadChip.png");
+	doorGraphHandle_ = Load("Resource/DoorChip.png");
+	roomGraphHandle_ = Load("Resource/RoomChip.png");
+	lockroomGraphHandle_ = Load("Resource/LockroomChip.png");
+	wallGraphHandle_ = Load("Resource/WallChip.png");
 }
 
 void EditorScene::Update()
@@ -49,27 +43,21 @@ void EditorScene::Update()
 	screenOldMousePos_ = screenMousePos_;
 	mouseInput_ = GetMouseInput();
 
-	int mouseWheelRotVol = GetMouseWheelRotVol();
-
-	scale_.x += 0.1f * mouseWheelRotVol;
-	scale_.y += 0.1f * mouseWheelRotVol;
-
-	max(scale_.x,scale_.x,0.0000001f);
-	max(scale_.y,scale_.y,0.0000001f);
-
 	GetMousePoint(&screenMousePos_.x,&screenMousePos_.y);
+
+	oldScreenUV = screenUV;
+
+	EditorScale();
 
 	EditorMove();
 
 	editorMousePos_ = GetEditorMousePos();
 
-	selectChip_ = ChipIndex::ROAD;
-
-	if ( IsEditorMapWithin(editorMousePos_.x / GetBlockSize(),editorMousePos_.y / GetBlockSize()) )
+	if ( IsEditorMapWithin(editorMousePos_.x,editorMousePos_.y) )
 	{
-		if ( mouseInput_  )
+		if ( mouseInput_ )
 		{
-			editorMap[ editorMousePos_.y / GetBlockSize() ][ editorMousePos_.x / GetBlockSize() ] = selectChip_;
+			editorMap_[ editorMousePos_.y ][ editorMousePos_.x ].chip = selectChip_;
 		}
 	}
 
@@ -77,42 +65,56 @@ void EditorScene::Update()
 
 void EditorScene::Draw()
 {
+	SetDrawScreen(screenGraph_.handle);
+	ClearDrawScreen();
+
 	int32_t blockSizeHalf = blockSize_ / 2;
 
-	for ( size_t i = 0; i < mapSize_.y; i++ )
+	for ( size_t i = 0; i < mapBlockSize_.y; i++ )
 	{
-		for ( size_t j = 0; j < mapSize_.x; j++ )
+		for ( size_t j = 0; j < mapBlockSize_.x; j++ )
 		{
 			int32_t centerX = blockSizeHalf + blockSize_ * j;
 			int32_t centerY = blockSizeHalf + blockSize_ * i;
 
-			ChipDraw(centerX,centerY,editorMap[ i ][ j ]);
+			ChipDraw(centerX,centerY,editorMap_[ i ][ j ].chip);
 			DrawBoxAA(( centerX - blockSizeHalf ),( centerY - blockSizeHalf ),( centerX + blockSizeHalf ),( centerY + blockSizeHalf ),0xffffffff,false);
 		}
 	}
 
-	ChipDraw(( editorMousePos_.x / GetBlockSize() ) * 32,( editorMousePos_.y / GetBlockSize() ) * 32,selectChip_,0);
+	{
+		int32_t centerX = blockSizeHalf + blockSize_ * editorMousePos_.x;
+		int32_t centerY = blockSizeHalf + blockSize_ * editorMousePos_.y;
 
-	//DrawBoxAA(
-	// ( editorMousePos_.x / GetBlockSize() ) * 32,( editorMousePos_.y / GetBlockSize() ) * 32,
-	// ( editorMousePos_.x / GetBlockSize() ) * 32 + 32,( editorMousePos_.y / GetBlockSize() ) * 32 + 32
-	// ,0xffffffff,true);
+		ChipDraw(( centerX - blockSizeHalf ),( centerY - blockSizeHalf ),selectChip_,0);
+	}
+
+	SetDrawScreen(DX_SCREEN_BACK);
 }
 
 void EditorScene::UIUpdate()
 {
-	ImGui::Begin("EditorView",nullptr,ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
 	EditorView();
-	ImGui::End();
 
+	SelectView();
+
+	MenuView();
 
 }
 
 
 void EditorScene::UIDraw()
 {
-	DrawFormatString(0,650,255,"%d,%d",editorMousePos_.x,editorMousePos_.y);
-	DrawFormatString(0,670,255,"%d,%d,%d",editorMousePos_.x / GetBlockSize(),editorMousePos_.y / GetBlockSize(),( int ) GetBlockSize());
+	DrawFormatString(0,550,255,"%d,%d",editorMousePos_.x,editorMousePos_.y);
+	//DrawFormatString(0,570,255,"%d,%d,%d",editorMousePos_.x / GetBlockSize(),editorMousePos_.y / GetBlockSize(),( int ) GetBlockSize());
+
+	DrawFormatString(0,590,255,"%f,%f",scaleUV1_.x,scaleUV1_.y);
+	DrawFormatString(0,610,255,"%f,%f",scaleUV2_.x,scaleUV2_.y);
+	DrawFormatString(0,630,255,"%f,%f",moveUV_.x,moveUV_.y);
+
+	DrawFormatString(0,650,255,"%f,%f",moveUV_.x + scaleUV1_.x,moveUV_.y + scaleUV1_.y);
+	DrawFormatString(0,670,255,"%f,%f",moveUV_.x + scaleUV2_.x,moveUV_.y + scaleUV2_.y);
+
 }
 
 void EditorScene::SpriteDraw()
@@ -141,10 +143,120 @@ float2 EditorScene::GetScale()
 
 void EditorScene::EditorView()
 {
+	ImGui::Begin("EditorView",nullptr,ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
+
 	ImGui::SetWindowSize({ ( float ) VIEW_WINDOW_SIZE.x,( float ) VIEW_WINDOW_SIZE.y });
 	ImGui::SetWindowPos({ 0,0 });
 
-	ImGui::Image(pSRV_,{ ( float ) VIEW_WINDOW_SIZE.x,( float ) VIEW_WINDOW_SIZE.y });
+	editorViewCenter =
+	{
+			( ImGui::GetWindowSize().x - ( mapBlockSize_.x * blockSize_ ) ) * 0.5f ,
+			( ImGui::GetWindowSize().y - ( mapBlockSize_.y * blockSize_ ) ) * 0.5f
+	};
+
+	ImGui::SetCursorPos(editorViewCenter);
+
+	ImGui::Image(screenGraph_.pSRV,{ mapBlockSize_.x * blockSize_,mapBlockSize_.y * blockSize_ },screenUV.min,screenUV.max);
+
+	ImGui::End();
+
+}
+
+void EditorScene::SelectView()
+{
+	ImGui::Begin("SelectView",nullptr,ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
+
+	ImGui::SetWindowSize({ ( float ) SELECT_VIEW_WINDOW_SIZE.x,( float ) SELECT_VIEW_WINDOW_SIZE.y });
+	ImGui::SetWindowPos({ ( float ) VIEW_WINDOW_SIZE.x,0 });
+
+	SelectDraw(selectChip_);
+
+	ImGui::End();
+
+	ImGui::Begin("Select",nullptr,ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
+
+	ImGui::SetWindowSize({ ( float ) SELECT_WINDOW_SIZE.x,( float ) SELECT_WINDOW_SIZE.y });
+	ImGui::SetWindowPos({ ( float ) VIEW_WINDOW_SIZE.x,( float ) SELECT_VIEW_WINDOW_SIZE.y });
+
+	ImGui::BeginTable("table",1,
+		ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable
+		| ImGuiTableFlags_SortMulti
+		| ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders
+		| ImGuiTableFlags_ScrollX | ImGuiTableFlags_ScrollY
+		| ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_BordersInnerH);
+
+
+	ImGui::TableHeadersRow();
+
+	std::list<TableElement>::iterator itr = chips_.begin();
+
+	for ( size_t i = 0; i < chips_.size(); i++ )
+	{
+		ImGui::TableNextRow();
+
+		ImGui::TableSetColumnIndex(0);
+		const bool item_is_selected = tableSelection.contains(itr->id);
+
+		ImGuiSelectableFlags selectable_flags = ImGuiSelectableFlags_SpanAllColumns | ImGuiSelectableFlags_AllowItemOverlap;
+		if ( ImGui::Selectable(magic_enum::enum_name(itr->index).data(),item_is_selected,selectable_flags) )
+		{
+			if ( ImGui::GetIO().KeyCtrl )
+			{
+				if ( item_is_selected )
+					tableSelection.find_erase_unsorted(itr->id);
+				else
+					tableSelection.push_back(itr->id);
+			}
+			else
+			{
+				tableSelection.clear();
+				tableSelection.push_back(itr->id);
+
+				selectChip_ = ( ChipIndex ) tableSelection[ 0 ];
+			}
+		}
+
+		itr++;
+	}
+
+	ImGui::EndTable();
+
+	ImGui::End();
+}
+
+void EditorScene::MenuView()
+{
+	ImGui::Begin("MenuView",nullptr,ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
+
+	ImGui::SetWindowSize({ ( float ) SELECT_VIEW_WINDOW_SIZE.x,( float ) SELECT_VIEW_WINDOW_SIZE.y + SELECT_WINDOW_SIZE.y });
+	ImGui::SetWindowPos({ ( float ) VIEW_WINDOW_SIZE.x + SELECT_VIEW_WINDOW_SIZE.x ,0 });
+
+	ImGui::InputInt2("MapSize",tmpBlockSize.data);
+	if ( ImGui::Button("New") )
+	{
+		New();
+	}
+
+	ImGui::Button("Reset");
+
+
+	ImGui::InputText("name",textBuff,_countof(textBuff));
+
+	mapName_.clear();
+	mapName_ = textBuff;
+
+	if ( ImGui::Button("Export") )
+	{
+		if ( !mapName_.empty() )
+		{
+			Export();
+		}
+	}
+
+	ImGui::Button("Load");
+	ImGui::Button("ChangeMode");
+
+	ImGui::End();
 }
 
 void EditorScene::EditorMove()
@@ -153,36 +265,212 @@ void EditorScene::EditorMove()
 	{
 		int2 mouseMove = screenOldMousePos_ - screenMousePos_;
 
-		screenPos_ += mouseMove;
+		moveUV_.x += ( float ) mouseMove.x / 1000;
+		moveUV_.y += ( float ) mouseMove.y / 1000;
+
+		screenUV.min = scaleUV1_ + moveUV_;
+		screenUV.max = scaleUV2_ + moveUV_;
+
+		if ( screenUV.min.x < 0 || screenUV.max.x>1.0f )
+		{
+			screenUV.min.x = oldScreenUV.min.x;
+			screenUV.max.x = oldScreenUV.max.x;
+		}
+
+		if ( screenUV.min.y < 0 || screenUV.max.y>1.0f )
+		{
+			screenUV.min.y = oldScreenUV.min.y;
+			screenUV.max.y = oldScreenUV.max.y;
+		}
+	}
+}
+
+void EditorScene::RoomSearch(RoomSetting& roomSetting,int32_t x,int32_t y,nlohmann::json& jsonData)
+{
+	const std::array<int2,4>WEYS = { {{-1,0,},{0,-1},{1,0,},{0,1}} };
+
+	enum weys
+	{
+		RIGHT = 2,
+		LEFT = 0,
+		DOWN = 3,
+		UP = 1
+	};
+
+	int2 localPos = { x,y };
+	roomSetting.leftTop = localPos;
+	weys wey = RIGHT;
+	localPos += WEYS[ UP ];
+	//localPos += WEYS[ RIGHT ];
+	int2 size = {};
+
+	while ( true )
+	{
+		if ( editorMap_[ localPos.y ][ localPos.x ].chip == ChipIndex::DOOR )
+		{
+			roomSetting.doors.push_back({ localPos.x - x,localPos.y - y });
+		}
+
+		if ( wey == UP )
+		{
+			if ( editorMap_[ localPos.y ][ localPos.x + 1 ].chip == ChipIndex::LOCK_ROOM && roomSetting.lock ||
+				 editorMap_[ localPos.y ][ localPos.x + 1 ].chip == ChipIndex::ROOM && !roomSetting.lock )
+			{
+				localPos += WEYS[ wey ];
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		switch ( wey )
+		{
+		case RIGHT:
+			if ( editorMap_[ localPos.y + 1 ][ localPos.x ].chip == ChipIndex::LOCK_ROOM && roomSetting.lock ||
+				 editorMap_[ localPos.y + 1 ][ localPos.x ].chip == ChipIndex::ROOM && !roomSetting.lock )
+			{
+				localPos += WEYS[ wey ];
+				size.x++;
+			}
+			else
+			{
+				wey = DOWN;
+				localPos += WEYS[ wey ];
+			}
+
+			break;
+		case DOWN:
+
+			if ( editorMap_[ localPos.y ][ localPos.x - 1 ].chip == ChipIndex::LOCK_ROOM && roomSetting.lock ||
+				 editorMap_[ localPos.y ][ localPos.x - 1 ].chip == ChipIndex::ROOM && !roomSetting.lock )
+			{
+				localPos += WEYS[ wey ];
+				size.y++;
+			}
+			else
+			{
+				wey = LEFT;
+				localPos += WEYS[ wey ];
+			}
+			break;
+		case LEFT:
+			if ( editorMap_[ localPos.y - 1 ][ localPos.x ].chip == ChipIndex::LOCK_ROOM && roomSetting.lock ||
+				 editorMap_[ localPos.y - 1 ][ localPos.x ].chip == ChipIndex::ROOM && !roomSetting.lock )
+			{
+				localPos += WEYS[ wey ];
+			}
+			else
+			{
+				wey = UP;
+				localPos += WEYS[ wey ];
+			}
+			break;
+		}
+
+		if ( editorMap_[ localPos.y ][ localPos.x ].chip == ChipIndex::DOOR )
+		{
+			jsonData[ "Map" ].push_back(0);
+		}
+
+		editorMap_[ localPos.y ][ localPos.x ].out = true;
+	}
+
+	for ( size_t i = y; i < y + size.y; i++ )
+	{
+		for ( size_t j = x; j < x + size.x; j++ )
+		{
+			jsonData[ "Map" ].push_back(0);
+
+			editorMap_[ i ][ j ].out = true;
+		}
+	}
+
+	roomSetting.size = size;
+}
+
+void EditorScene::EditorScale()
+{
+	int mouseWheelRotVol = GetMouseWheelRotVol();
+
+	if ( mouseWheelRotVol != 0 )
+	{
+		scaleUV1_.x += 0.01f * mouseWheelRotVol;
+		scaleUV1_.y += 0.01f * mouseWheelRotVol;
+		scaleUV2_.x += 0.01f * -mouseWheelRotVol;
+		scaleUV2_.y += 0.01f * -mouseWheelRotVol;
+
+		scaleUV1_ = Min(scaleUV1_,0.5f);
+		scaleUV2_ = Min(scaleUV2_,1.0f);
+
+		scaleUV1_ = Max(scaleUV1_,0.0001f);
+		scaleUV2_ = Max(scaleUV2_,0.5f);
+
+		screenUV.min = scaleUV1_ + moveUV_;
+		screenUV.max = scaleUV2_ + moveUV_;
+
+		if ( screenUV.min.x < 0 || screenUV.max.x>1.0f )
+		{
+			screenUV.min.x = oldScreenUV.min.x;
+			screenUV.max.x = oldScreenUV.max.x;
+		}
+
+		if ( screenUV.min.y < 0 || screenUV.max.y>1.0f )
+		{
+			screenUV.min.y = oldScreenUV.min.y;
+			screenUV.max.y = oldScreenUV.max.y;
+		}
 	}
 }
 
 int2 EditorScene::GetEditorMousePos()
 {
 	int2 ret{};
-
+	float2 rate;
 	float2 sca = GetScale();
 
 	int2 mapHalfSize =
 	{
-		blockSize_ * mapSize_.x / 2 * sca.x ,
-		blockSize_ * mapSize_.y / 2 * sca.y
+		 blockSize_ * float(mapBlockSize_.x) / 2 ,
+		 blockSize_ * float(mapBlockSize_.y) / 2
 	};
 
 	int2 editorScreenPos =
 	{
-		VIEW_WINDOW_SIZE_HALF.x - mapHalfSize.x - screenPos_.x ,
-		VIEW_WINDOW_SIZE_HALF.y - mapHalfSize.x - screenPos_.y
+		VIEW_WINDOW_SIZE_HALF.x - mapHalfSize.x ,
+		VIEW_WINDOW_SIZE_HALF.y - mapHalfSize.x
 	};
 
-	ret.x = -( int ) ( editorScreenPos.x - screenMousePos_.x );
-	ret.y = -( int ) ( editorScreenPos.y - screenMousePos_.y );
+	float2 minUvScreenPos =
+	{
+		mapBlockSize_.x * blockSize_ * screenUV.min.x,
+		mapBlockSize_.y * blockSize_ * screenUV.min.y,
+	};
+
+	float2 maxUvScreenPos =
+	{
+		mapBlockSize_.x * blockSize_ * screenUV.max.x,
+		mapBlockSize_.y * blockSize_ * screenUV.max.y,
+	};
+
+	rate.x = -( editorScreenPos.x - screenMousePos_.x );
+	rate.y = -( editorScreenPos.y - screenMousePos_.y );
+
+	rate.x /= mapBlockSize_.x * blockSize_;
+	rate.y /= mapBlockSize_.y * blockSize_;
+
+	rate.y = Lerp(minUvScreenPos.y,maxUvScreenPos.y,rate.y);
+	rate.x = Lerp(minUvScreenPos.x,maxUvScreenPos.x,rate.x);
+
+	ret.x = int(rate.x / blockSize_);
+	ret.y = int(rate.y / blockSize_);
+
 	return ret;
 }
 
 bool EditorScene::IsEditorMapWithin(int32_t x,int32_t y)
 {
-	return x >= 0 && y >= 0 && x < mapSize_.x && y < mapSize_.y;
+	return x >= 0 && y >= 0 && x < mapBlockSize_.x && y < mapBlockSize_.y;
 }
 
 void EditorScene::ChipDraw(size_t x,size_t y,int8_t chip,int32_t sign)
@@ -190,19 +478,168 @@ void EditorScene::ChipDraw(size_t x,size_t y,int8_t chip,int32_t sign)
 	switch ( chip )
 	{
 	case NONE:
-		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),noneGraphHandle_,true);
+		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),noneGraphHandle_.handle,true);
 		break;
 	case ROAD:
-		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),roadGraphHandle_,true);
+		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),roadGraphHandle_.handle,true);
 		break;
 	case DOOR:
-		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),doorGraphHandle_,true);
+		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),doorGraphHandle_.handle,true);
 		break;
 	case ROOM:
-		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),roomGraphHandle_,true);
+		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),roomGraphHandle_.handle,true);
 		break;
 	case LOCK_ROOM:
-		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),lockroomGraphHandle_,true);
+		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),lockroomGraphHandle_.handle,true);
+		break;
+	case WALL:
+		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),wallGraphHandle_.handle,true);
+		break;
+	default:
+		break;
+	}
+}
+
+void EditorScene::New()
+{
+	for ( size_t i = 0; i < mapBlockSize_.y; i++ )
+	{
+		editorMap_[ i ].clear();
+	}
+	editorMap_.clear();
+
+	mapBlockSize_ = tmpBlockSize;
+
+	mapCenter_.x = ( mapBlockSize_.x * blockSize_ ) / 2;
+	mapCenter_.y = ( mapBlockSize_.y * blockSize_ ) / 2;
+
+	editorMap_.resize(mapBlockSize_.y);
+	for ( size_t i = 0; i < editorMap_.size(); i++ )
+	{
+		editorMap_[ i ].resize(mapBlockSize_.x);
+	}
+
+	DeleteGraph(screenGraph_.handle);
+	screenGraph_.pSRV->Release();
+
+	SetDrawValidGraphCreateFlag(TRUE);
+	screenGraph_.handle = MakeGraph(mapBlockSize_.x * blockSize_,mapBlockSize_.y * blockSize_);
+	screenGraph_.pSRV = GetImageResource11(screenGraph_.handle);
+	SetDrawValidGraphCreateFlag(FALSE);
+}
+
+void EditorScene::Export()
+{
+	nlohmann::json data;
+
+	data[ "0_Name" ] = mapName_;
+	data[ "1_Size" ].push_back({ mapBlockSize_.x, mapBlockSize_.y });
+
+
+	for ( size_t i = 0; i < mapBlockSize_.y; i++ )
+	{
+		for ( size_t j = 0; j < mapBlockSize_.x; j++ )
+		{
+			if ( !editorMap_[ i ][ j ].out )
+			{
+				if ( editorMap_[ i ][ j ].chip == ChipIndex::ROOM || editorMap_[ i ][ j ].chip == ChipIndex::LOCK_ROOM )
+				{
+					RoomSetting roomSetting;
+
+					if ( editorMap_[ i ][ j ].chip == ChipIndex::ROOM )
+					{
+						roomSetting.lock = false;
+					}
+					else
+					{
+						roomSetting.lock = true;
+					}
+
+					RoomSearch(roomSetting,j,i,data);
+
+					roomSettings_.push_back(roomSetting);
+				}
+				else
+				{
+					data[ "Map" ].push_back(editorMap_[ i ][ j ].chip);
+				}
+
+				editorMap_[ i ][ j ].out = true;
+			}
+
+		}
+	}
+
+	for ( size_t i = 0; i < roomSettings_.size(); i++ )
+	{
+		nlohmann::json roomSetting;
+		roomSetting[ "Look" ] = roomSettings_[ i ].lock;
+		roomSetting[ "LeftTop" ] = { roomSettings_[ i ].leftTop.x,roomSettings_[ i ].leftTop.y };
+		roomSetting[ "Size" ] = { roomSettings_[ i ].size.x,roomSettings_[ i ].size.y };
+		roomSetting[ "DoorsNum" ] = roomSettings_[ i ].doors.size();
+
+		for ( size_t j = 0; j < roomSettings_[ i ].doors.size(); j++ )
+		{
+			roomSetting[ "Doors" ].push_back({ roomSettings_[ i ].doors[ j ].x,roomSettings_[ i ].doors[ j ].y });
+		}
+
+		std::string roomName;
+
+		if ( roomSettings_[ i ].lock )
+		{
+			roomName += "Lock@";
+		}
+		else
+		{
+			roomName += "NoLock@";
+		}
+
+		roomName += std::to_string(roomSettings_[ i ].size.x) + '_' + std::to_string(roomSettings_[ i ].size.y) + '@';
+
+
+		for ( size_t j = 0; j < roomSettings_[ i ].doors.size()-1; j++ )
+		{
+			roomName += std::to_string(roomSettings_[ i ].doors[ j ].x) + '_' + std::to_string(roomSettings_[ i ].doors[ j ].y)+':';
+		}
+
+		roomName += std::to_string(roomSettings_[ i ].doors.back().x) + '_' + std::to_string(roomSettings_[ i ].doors.back().y);
+
+		roomSetting[ "RoomName" ] = roomName;
+
+		data[ "3_RoomSettings" ].push_back(roomSetting);
+	}
+
+	data[ "2_RoomNum" ].push_back(roomSettings_.size());
+
+	std::ofstream file;
+	std::string path = "Export/Map/";
+	file.open(path + mapName_ + ".json");
+	file << data.dump();
+	file.close();
+	file.close();
+}
+
+void EditorScene::SelectDraw(ChipIndex chip)
+{
+	switch ( chip )
+	{
+	case NONE:
+		ImGui::Image(noneGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
+		break;
+	case ROAD:
+		ImGui::Image(roadGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
+		break;
+	case DOOR:
+		ImGui::Image(doorGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
+		break;
+	case ROOM:
+		ImGui::Image(roomGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
+		break;
+	case LOCK_ROOM:
+		ImGui::Image(lockroomGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
+		break;
+	case WALL:
+		ImGui::Image(wallGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
 		break;
 	default:
 		break;

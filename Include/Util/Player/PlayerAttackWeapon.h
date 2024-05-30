@@ -1,6 +1,6 @@
 #pragma once
 #include "PlayerAttack.h"
-class PlayerAttackFist :
+class PlayerAttackWeapon :
     public PlayerAttack
 {
 public:
@@ -10,20 +10,24 @@ public:
 
 	void Draw() override;
 
-	bool GetAttack() override {return isAttack_;}
+	bool GetAttack() override {
+		return isAttack_;
+	}
 
-	uint32_t GetInterval() override {return interval;}
+	uint32_t GetInterval() override {
+		return interval;
+	}
 
 private:
 	bool isAttack_ = false;
 
 	float AttackTime_ = 0;
 
-	const float lastAttackTime_ = 10;
+	const float lastAttackTime_ = 1;
 
-	Vector2 attackPos = {0,0};
+	Vector2 attackPos = { 0,0 };
 
-	Vector2 colisionSize_ = { 100,80 };
+	Vector2 colisionSize_ = { 200,50 };
 
 	const uint32_t interval = 30;
 };

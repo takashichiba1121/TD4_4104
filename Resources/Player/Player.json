@@ -1,0 +1,11 @@
+{
+    "name": "Player",
+    "JumpInitialVelocity":-18.0,
+    "JumpAcceleration":0.5,
+    "GravityAcceleration":1.0,
+    "Acceleration":32.0,
+    "AirAcceleration":16.0,
+    "Deccelaration":48.0,
+    "AirDeccelaration":24.0,
+    "TopSpeed":8.0
+}
