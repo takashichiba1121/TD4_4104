@@ -12,13 +12,13 @@ private:
 
 	bool direction_;
 
-	const float LAST_ATTACK_TIME_ = 10;
+	const float LAST_ATTACK_TIME_ = 3;
 
 	const Vector2 ATTACK_POS_ = { 15,0 };
 
 	const Vector2 COLISION_SIZE_ = { 30,60 };
 
-	const uint32_t INTERVAL_ = 30;
+	const uint32_t INTERVAL_ = 10;
 
 	const AttackType TYPE_ = AttackType::Small;
 
