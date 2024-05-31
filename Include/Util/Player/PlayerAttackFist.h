@@ -3,6 +3,25 @@
 class PlayerAttackFist :
     public PlayerAttack
 {
+private:
+	bool isAttack_ = false;
+
+	float AttackTime_ = 0;
+
+	Vector2 playerPos_;
+
+	bool direction_;
+
+	const float LAST_ATTACK_TIME_ = 10;
+
+	const Vector2 ATTACK_POS_ = { 15,0 };
+
+	const Vector2 COLISION_SIZE_ = { 30,60 };
+
+	const uint32_t INTERVAL_ = 30;
+
+	const AttackType TYPE_ = AttackType::Small;
+
 public:
 	void AttackInit(const Vector2& playerPos,bool direction) override;
 
@@ -12,23 +31,8 @@ public:
 
 	bool GetAttack() override {return isAttack_;}
 
-	uint32_t GetInterval() override {return interval_;}
+	uint32_t GetInterval() override {return INTERVAL_;}
 
-	AttackType GetType() override {return type_;}
-
-private:
-	bool isAttack_ = false;
-
-	float AttackTime_ = 0;
-
-	const float lastAttackTime_ = 10;
-
-	Vector2 attackPos_ = {0,0};
-
-	Vector2 colisionSize_ = { 100,80 };
-
-	const uint32_t interval_ = 30;
-
-	const AttackType type_ = AttackType::Small;
+	AttackType GetType() override {return TYPE_;}
 };
 

@@ -5,29 +5,6 @@
 #include<string>
 class Player
 {
-public:
-	void Initialze();
-
-	void Update();
-
-	void Move();
-
-	void JumpStart();
-
-	void Jump();
-
-	void Falling();
-
-	void Attack();
-
-	void ChangeAttack(std::string AttackName);
-
-	void Draw();
-
-private:
-
-	void Load();
-
 private:
 #pragma region 移動ステータス
 
@@ -57,19 +34,19 @@ private:
 
 	bool isAttack_ = false;
 
-	uint32_t attackInterval_=0;
+	uint32_t attackInterval_ = 0;
 
 	std::unique_ptr<PlayerAttack> attackZ_;
 
 	std::unique_ptr<PlayerAttack> attackX_;
 	int32_t hp_;
 
-	int32_t maxHp_=10;
+	int32_t maxHp_ = 10;
 
 #pragma region ジャンプ用変数
 	bool onGround_ = false;
 
-	bool isJump_=false;
+	bool isJump_ = false;
 
 	float fallSpeed_ = 0;
 
@@ -80,5 +57,27 @@ private:
 	float jumpInitialVelocity_ = 0;
 #pragma endregion
 
+public:
+	void Initialze();
+
+	void Update();
+
+	void Move();
+
+	void JumpStart();
+
+	void Jump();
+
+	void Falling();
+
+	void Attack();
+
+	void ChangeAttack(std::string AttackName);
+
+	void Draw();
+
+private:
+
+	void Load();
 
 };

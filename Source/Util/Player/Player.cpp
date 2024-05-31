@@ -38,26 +38,19 @@ void Player::Update()
 	Attack();
 
 #ifdef _DEBUG
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_2) )
-	{
-		ChangeAttack("Fist");
-	}
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_3) )
-	{
-		ChangeAttack("Weapon");
-	}
 
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_1) )
+	ImGui::Begin("PlayerStatus");
+
+	if ( ImGui::Button("Load") )
 	{
 		Load();
 	}
 
-
-	ImGui::Begin("player");
-
 	ImGui::Text("Jump");
 
-	ImGui::SliderFloat("JumpAcceleration",&jumpAcceleration_,0.0f,-20.0f,"%2.0f");
+	ImGui::SliderFloat("JumpInitialVelocity",&jumpInitialVelocity_,0.0f,-20.0f,"%2.0f");
+
+	ImGui::SliderFloat("JumpAcceleration",&jumpAcceleration_,0.0f,20.0f,"%2.1f");
 
 	ImGui::SliderFloat("GravityAcceleration",&gravityAcceleration_,0.0f,5.0f,"%1.1f");
 
@@ -71,16 +64,21 @@ void Player::Update()
 
 	ImGui::SliderFloat("AirDeccelaration_",&airDeccelaration_,0.0f,100.0f,"%3.0f");
 
-	ImGui::SliderFloat("TopSpeed",&topSpeed_,200.0f,0.0f,"%2.0f");
+	ImGui::SliderFloat("TopSpeed",&topSpeed_,0.0f,200.0f,"%3.0f");
 
-	ImGui::Text("attackInterval %d",attackInterval_);
+	ImGui::Text("SmallAttatck");
 
-	ImGui::Text("speed %f",speed_);
+	if ( ImGui::Button("Fist") )
+	{
+		ChangeAttack("Fist");
+	}
 
-	//if ( ImGui::Button("save") )
-	//{
-	//	
-	//}
+	ImGui::Text("BigAttatck");
+
+	if ( ImGui::Button("Weapon") )
+	{
+		ChangeAttack("Weapon");
+	}
 
 	ImGui::End();
 
@@ -161,8 +159,6 @@ void Player::Move()
 
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) && !onGround_ )
 	{
-		fallSpeed_ = jumpAcceleration_;
-
 		JumpStart();
 	}
 
