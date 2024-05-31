@@ -18,6 +18,8 @@ void Player::Initialze()
 	pos_.y = GameConfig::GetGameConfig()->windowHeight / 2;
 
 	ChangeAttack("Fist");
+
+	ChangeAttack("Weapon");
 }
 
 void Player::Update()
@@ -28,7 +30,7 @@ void Player::Update()
 		attackInterval_--;
 	}
 
-	if ( attack_->GetAttack() == false )
+	if ( attackZ_->GetAttack() == false&& attackX_->GetAttack() == false )
 	{
 		Move();
 	}
@@ -36,26 +38,19 @@ void Player::Update()
 	Attack();
 
 #ifdef _DEBUG
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_2) )
-	{
-		ChangeAttack("Fist");
-	}
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_3) )
-	{
-		ChangeAttack("Weapon");
-	}
 
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_1) )
+	ImGui::Begin("PlayerStatus");
+
+	if ( ImGui::Button("Load") )
 	{
 		Load();
 	}
 
-
-	ImGui::Begin("player");
-
 	ImGui::Text("Jump");
 
-	ImGui::SliderFloat("JumpAcceleration",&jumpAcceleration_,0.0f,-20.0f,"%2.0f");
+	ImGui::SliderFloat("JumpInitialVelocity",&jumpInitialVelocity_,0.0f,-20.0f,"%2.0f");
+
+	ImGui::SliderFloat("JumpAcceleration",&jumpAcceleration_,0.0f,20.0f,"%2.1f");
 
 	ImGui::SliderFloat("GravityAcceleration",&gravityAcceleration_,0.0f,5.0f,"%1.1f");
 
@@ -69,16 +64,21 @@ void Player::Update()
 
 	ImGui::SliderFloat("AirDeccelaration_",&airDeccelaration_,0.0f,100.0f,"%3.0f");
 
-	ImGui::SliderFloat("TopSpeed",&topSpeed_,200.0f,0.0f,"%2.0f");
+	ImGui::SliderFloat("TopSpeed",&topSpeed_,0.0f,200.0f,"%3.0f");
 
-	ImGui::Text("attackInterval %d",attackInterval_);
+	ImGui::Text("SmallAttatck");
 
-	ImGui::Text("speed %f",speed_);
+	if ( ImGui::Button("Fist") )
+	{
+		ChangeAttack("Fist");
+	}
 
-	//if ( ImGui::Button("save") )
-	//{
-	//	
-	//}
+	ImGui::Text("BigAttatck");
+
+	if ( ImGui::Button("Weapon") )
+	{
+		ChangeAttack("Weapon");
+	}
 
 	ImGui::End();
 
@@ -90,20 +90,20 @@ void Player::Move()
 	if ( Input::Instance()->PushKey(KEY_INPUT_A) )
 	{
 		direction_ = false;
-		if ( speed_ > -topSpeed_ )
+		if ( speed_ > -topSpeed_*changeSpd_)
 		{
 			if ( onGround_ )
 			{
-				speed_ -= airAcceleration_/60.0f;
+				speed_ -= (airAcceleration_ * changeSpd_ ) /60.0f;
 			}
 			else
 			{
-				speed_ -= acceleration_/60.0f;
+				speed_ -= (acceleration_*changeSpd_)/60.0f;
 			}
 		}
 		else
 		{
-			speed_ = -topSpeed_;
+			speed_ = -topSpeed_ * changeSpd_;
 		}
 	}
 	else if ( speed_ < 0 )
@@ -124,20 +124,20 @@ void Player::Move()
 	if ( Input::Instance()->PushKey(KEY_INPUT_D) )
 	{
 		direction_ = true;
-		if ( speed_ < topSpeed_ )
+		if ( speed_ < topSpeed_ *changeSpd_ )
 		{
 			if ( onGround_ )
 			{
-				speed_ += airAcceleration_/60.0f;
+				speed_ += ( airAcceleration_ * changeSpd_ ) / 60.0f;
 			}
 			else
 			{
-				speed_ += acceleration_/60.0f;
+				speed_ += ( acceleration_ * changeSpd_ ) / 60.0f;
 			}
 		}
 		else
 		{
-			speed_ = topSpeed_;
+			speed_ = topSpeed_ * changeSpd_;
 		}
 	}
 	else if ( speed_ > 0 )
@@ -156,11 +156,9 @@ void Player::Move()
 		}
 	}
 	pos_.x += speed_;
-
+	
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) && !onGround_ )
 	{
-		fallSpeed_ = jumpAcceleration_;
-
 		JumpStart();
 	}
 
@@ -201,7 +199,7 @@ void Player::Jump()
 	{
 		isJump_ = false;
 		
-		fallSpeed_/=5;
+		fallSpeed_/=3;
 	}
 
 }
@@ -224,48 +222,122 @@ void Player::Falling()
 
 void Player::Attack()
 {
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && attack_ != nullptr && attackInterval_ == 0 )
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && attackZ_ != nullptr && attackInterval_ == 0 )
 	{
-		attack_->AttackInit(pos_,direction_);
+		attackZ_->AttackInit(pos_,direction_);
 
 		speed_ = 0;
 
 		fallSpeed_ = 0;
 
-		attackInterval_ = attack_->GetInterval();
+		attackInterval_ = attackZ_->GetInterval();
 	}
 
-	if ( attack_ != nullptr )
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && attackX_ != nullptr && attackInterval_ == 0 )
 	{
-		attack_->Attack();
+		attackX_->AttackInit(pos_,direction_);
+
+		speed_ = 0;
+
+		fallSpeed_ = 0;
+
+		attackInterval_ = attackX_->GetInterval();
+	}
+
+	if ( attackZ_ != nullptr )
+	{
+		attackZ_->Attack();
+	}
+
+	if ( attackX_ != nullptr )
+	{
+		attackX_->Attack();
 	}
 
 	PlayerBulletManager::Instance()->Update();
 }
 
+float Player::IsDamage()
+{
+	float Damage=0;
+
+	if ( attackX_->GetAttack())
+	{
+		  Damage=attackX_->GetPow() * changePow_;
+
+		return Damage;
+	}
+	else
+	{
+		Damage = attackZ_->GetPow() * changePow_;
+
+		return Damage;
+	}
+}
+void Player::OnCollsionEnemy(int32_t Damage)
+{
+	hp_ -= Damage * changeDef_;
+
+}
 void Player::ChangeAttack(std::string attackName)
 {
-	if (attackName=="Fist" )
+
+	std::unique_ptr<PlayerAttack> newAttack_;
+	if ( attackName == "Fist" )
 	{
-		attack_ = std::make_unique<PlayerAttackFist>();
+		newAttack_ = std::make_unique<PlayerAttackFist>();
 	}
 	if ( attackName == "Weapon" )
 	{
-		attack_ = std::make_unique<PlayerAttackWeapon>();
+		newAttack_ = std::make_unique<PlayerAttackWeapon>();
 	}
+
+	if (newAttack_->GetType() == PlayerAttack::AttackType::Big )
+	{
+		attackX_ = std::move(newAttack_);
+	}
+	else
+	{
+		attackZ_ = std::move(newAttack_);
+	}
+}
+
+void Player::AddSpd(int spd)
+{
+	changeSpd_ += spd/100.0f;
+}
+
+void Player::AddPow(int pow)
+{
+	changePow_ += pow/100.0f;
+}
+
+void Player::AddDef(int def)
+{
+	changeDef_ += def/100.0f;
+}
+
+void Player::AddMaxHp(int maxHp)
+{
+	changeMaxHp_ += maxHp / 100.0f;
+}
+
+void Player::AddCost(int cost)
+{
+	nowCost += cost;
 }
 
 void Player::Draw()
 {
 	PlayerBulletManager::Instance()->Draw();
 
-	float leftPos = pos_.x - size_.x / 2;
-	float rightPos = pos_.x + size_.x / 2;
-	float upPos = pos_.y - size_.y / 2;
-	float downPos = pos_.y + size_.y / 2;
+	float leftPos = pos_.x - drawSize_.x / 2;
+	float rightPos = pos_.x + drawSize_.x / 2;
+	float upPos = pos_.y - drawSize_.y / 2;
+	float downPos = pos_.y + drawSize_.y / 2;
 
 	DrawBox(leftPos,upPos,rightPos,downPos,GetColor(255,255,255),true);
-	DrawBox(leftPos + colisionSift_.x,upPos + colisionSift_.y,rightPos - colisionSize_.x,downPos - colisionSize_.y,GetColor(255,0,0),false);
+	DrawBox(pos_.x - colisionSize_.x / 2,pos_.y - colisionSize_.y / 2,pos_.x + colisionSize_.x/2,pos_.y + colisionSize_.y/2,GetColor(255,0,0),false);
 	if ( direction_ )
 	{
 		DrawBox(rightPos,upPos,rightPos - 5,upPos + 5,GetColor(255,0,0),true);
@@ -275,9 +347,14 @@ void Player::Draw()
 		DrawBox(leftPos,upPos,leftPos + 5,upPos + 5,GetColor(255,0,0),true);
 	}
 
-	if ( attack_ != nullptr )
+	if ( attackZ_ != nullptr )
 	{
-		attack_->Draw();
+		attackZ_->Draw();
+	}
+
+	if ( attackX_ != nullptr )
+	{
+		attackX_->Draw();
 	}
 }
 

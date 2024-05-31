@@ -16,6 +16,8 @@ public:
 
 	static PlayerBulletManager* Instance();
 #pragma endregion
+private:
+	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 public:
 
 	void Update();
@@ -31,8 +33,5 @@ public:
 	std::list<std::unique_ptr<PlayerBullet>>& GetBullets() {
 		return bullets_;
 	}
-private:
-	std::list<std::unique_ptr<PlayerBullet>> bullets_;
-
 };
 
