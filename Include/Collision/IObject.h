@@ -49,7 +49,7 @@ private:
 	Vector2* center_;
 	Vector2 r_;
 	Vector2 speed_;
-	OnDir dir_;
+	uint8_t dir_;
 protected:
 
 	void* userData_;

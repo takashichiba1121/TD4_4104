@@ -96,23 +96,26 @@ void CollisionManager::Update()
 
 	for ( auto itr : mapChipObjects_ )
 	{
+		itr->dir_ = 0;
+
 		if ( LeftCollision(itr) )
 		{
-			itr->dir_ = OnDir::LEFT;
+			itr->dir_ |= 0b1 << OnDir::LEFT;
 		}
+
 		if ( RightCollision(itr) )
 		{
-			itr->dir_ = OnDir::RIGHT;
+			itr->dir_ |= 0b1 << OnDir::RIGHT;
 		}
 
 		if ( TopCollision(itr) )
 		{
-			itr->dir_ = OnDir::UP;
+			itr->dir_ |= 0b1 << OnDir::UP;
 		}
 
 		if ( DownCollision(itr) )
 		{
-			itr->dir_ = OnDir::BOTTOM;
+			itr->dir_ |= 0b1 << OnDir::BOTTOM;
 		}
 	}
 }
