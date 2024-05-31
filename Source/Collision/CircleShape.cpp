@@ -2,7 +2,7 @@
 
 CircleShape::CircleShape()
 {
-	type_ = ShapeType::CIRCLE;
+	type_ = ShapeType::S_CIRCLE;
 }
 
 const Vector2& CircleShape::GetCenter() const

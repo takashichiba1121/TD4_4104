@@ -44,6 +44,51 @@ const CollisionInfo& IObject::GetCollisionInfo() const
 	return collisionInfo_;
 }
 
+bool IObject::IsMapChipObject() const
+{
+	return mapChipObject_;
+}
+
+void IObject::SetMapChipCenter(Vector2* center)
+{
+	center_ = center;
+}
+
+void IObject::SetMapChipRadius(const Vector2& r)
+{
+	r_ = r;
+}
+
+const Vector2& IObject::GetMapChipRadius() const
+{
+	return r_;
+}
+
+void IObject::SetMapChipSpeed(const Vector2& speed)
+{
+	speed_ = speed;
+}
+
+const Vector2& IObject::GetMapChipSpeed() const
+{
+	return speed_;
+}
+
+uint8_t IObject::GetOnDir()
+{
+	return dir_;
+}
+
+void IObject::MapChipObjectEnable()
+{
+	mapChipObject_ = true;
+}
+
+void IObject::MapChipObjectDisable()
+{
+	mapChipObject_ = false;
+}
+
 void IObject::Update()
 {
 	collisionInfo_.object = nullptr;
