@@ -2,7 +2,7 @@
 
 RectShape::RectShape()
 {
-	type_ = ShapeType::RECT;
+	type_ = ShapeType::S_RECT;
 }
 
 void RectShape::SetCenter(const Vector2& center)

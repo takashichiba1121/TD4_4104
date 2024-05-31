@@ -82,7 +82,10 @@ public:
 	void SetMapChipSpeed(const Vector2& r);
 	const Vector2& GetMapChipSpeed()const;
 
-	OnDir GetOnDir();
+	uint8_t GetOnDir();
+
+	void MapChipObjectEnable();
+	void MapChipObjectDisable();
 
 private:
 

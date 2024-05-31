@@ -1,6 +1,8 @@
 #include "CollisionManager.h"
 #include"Collision.h"
 
+#include<limits>
+
 void CollisionManager::AddObject(IObject* object)
 {
 	objects_.push_front(object);
@@ -23,13 +25,7 @@ void CollisionManager::RemoveObject(IObject* object)
 
 void CollisionManager::SetMapChip(const std::vector<std::vector<uint8_t>>& mapChip)
 {
-	for ( size_t i = 0; i < mapChip.size(); i++ )
-	{
-		for ( size_t j = 0; j < mapChip[ i ].size(); j++ )
-		{
-			mapChip_[ i ][ j ] = mapChip[ i ][ j ];
-		}
-	}
+	mapChip_ = mapChip;
 }
 
 void CollisionManager::Update()
@@ -51,7 +47,7 @@ void CollisionManager::Update()
 
 			if ( CheckCollisionPair(objectA,objectB) )
 			{
-				if ( objectA->GetShapeType() == ShapeType::CIRCLE && objectB->GetShapeType() == ShapeType::CIRCLE )
+				if ( objectA->GetShapeType() == ShapeType::S_CIRCLE && objectB->GetShapeType() == ShapeType::S_CIRCLE )
 				{
 					CircleShape* circleA = dynamic_cast< CircleShape* >( objectA->GetShape() );
 					CircleShape* circleB = dynamic_cast< CircleShape* >( objectB->GetShape() );
@@ -71,7 +67,7 @@ void CollisionManager::Update()
 
 					}
 				}
-				else if ( objectA->GetShapeType() == ShapeType::RECT && objectB->GetShapeType() == ShapeType::RECT )
+				else if ( objectA->GetShapeType() == ShapeType::S_RECT && objectB->GetShapeType() == ShapeType::S_RECT )
 				{
 					RectShape* rectA = dynamic_cast< RectShape* >( objectA->GetShape() );
 					RectShape* rectB = dynamic_cast< RectShape* >( objectB->GetShape() );
@@ -98,26 +94,43 @@ void CollisionManager::Update()
 	{
 		itr->dir_ = 0;
 
-		if ( LeftCollision(itr) )
+		if ( itr->speed_.x < 0 )
 		{
-			itr->dir_ |= 0b1 << OnDir::LEFT;
+			if ( LeftCollision(itr) )
+			{
+				itr->dir_ |= 0b1 << 0b1 << OnDir::LEFT;
+			}
+		}
+		else
+		{
+			if ( RightCollision(itr) )
+			{
+				itr->dir_ |= 0b1 << OnDir::RIGHT;
+			}
 		}
 
-		if ( RightCollision(itr) )
+		if ( itr->speed_.y < 0 )
 		{
-			itr->dir_ |= 0b1 << OnDir::RIGHT;
+			if ( TopCollision(itr) )
+			{
+				itr->dir_ |= 0b1 << OnDir::UP;
+			}
+		}
+		else
+		{
+			if ( DownCollision(itr) )
+			{
+				itr->dir_ |= 0b1 << OnDir::BOTTOM;
+			}
 		}
 
-		if ( TopCollision(itr) )
-		{
-			itr->dir_ |= 0b1 << OnDir::UP;
-		}
-
-		if ( DownCollision(itr) )
-		{
-			itr->dir_ |= 0b1 << OnDir::BOTTOM;
-		}
 	}
+}
+
+CollisionManager* CollisionManager::GetInstance()
+{
+	static CollisionManager instance;
+	return &instance;
 }
 
 bool CollisionManager::CheckCollisionPair(IObject* objectA,IObject* objectB)

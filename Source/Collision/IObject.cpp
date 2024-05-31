@@ -74,9 +74,19 @@ const Vector2& IObject::GetMapChipSpeed() const
 	return speed_;
 }
 
-OnDir IObject::GetOnDir()
+uint8_t IObject::GetOnDir()
 {
 	return dir_;
+}
+
+void IObject::MapChipObjectEnable()
+{
+	mapChipObject_ = true;
+}
+
+void IObject::MapChipObjectDisable()
+{
+	mapChipObject_ = false;
 }
 
 void IObject::Update()

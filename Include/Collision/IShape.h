@@ -3,8 +3,8 @@
 
 enum ShapeType
 {
-	CIRCLE,
-	RECT,
+	S_CIRCLE,
+	S_RECT,
 
 	SHAPE_TYPE_NUM
 };

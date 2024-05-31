@@ -23,6 +23,8 @@ public:
 
 	void Update();
 
+	static CollisionManager* GetInstance();
+
 private:
 
 	bool CheckCollisionPair(IObject* objectA,IObject* objectB);
@@ -32,5 +34,8 @@ private:
 	bool LeftCollision(IObject* object);
 	bool RightCollision(IObject* object);
 
+
+	CollisionManager() = default;
+	~CollisionManager() = default;
 };
 

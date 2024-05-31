@@ -7,9 +7,14 @@
 #include"DxlibInclude.h"
 #include"Input.h"
 
+#include<DxLib.h>
+
+
+
 void GameScene::Initialize()
 {
-	gh = LoadGraph("Resources/Src1.bmp");
+
+	CollisionManager::GetInstance()->SetMapChip(testMap);
 
 	player_ = std::make_unique<Player>();
 
@@ -20,14 +25,24 @@ void GameScene::Update()
 {
 	ImGui::ShowDemoWindow();
 
+	CollisionManager::GetInstance()->Update();
+
 	player_->Update();
 }
 
 void GameScene::Draw()
 {
+	for ( size_t i = 0; i < testMap.size(); i++ )
+	{
+		for ( size_t j = 0; j < testMap[ i ].size(); j++ )
+		{
+			if ( testMap[ i ][ j ] )
+			{
+				DrawBox(16 + j * 32 - 16,16 + i * 32 - 16,16 + j * 32 + 16,16 + i * 32 + 16,GetColor(255,255,255),true);
+			}
+		}
+	}
 	player_->Draw();
-
-	DrawGraph(0,0,gh,true);
 }
 
 void GameScene::SpriteDraw()
