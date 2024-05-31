@@ -261,11 +261,11 @@ void Player::Draw()
 
 	float leftPos = pos_.x - size_.x / 2;
 	float rightPos = pos_.x + size_.x / 2;
-	float upPos = pos_.y - size_.y / 2;
-	float downPos = pos_.y + size_.y / 2;
+	float upPos = pos_.y - object.r_.y / 2;
+	float downPos = pos_.y + object.r_.y / 2;
 
 	DrawBox(leftPos,upPos,rightPos,downPos,GetColor(255,255,255),true);
-	DrawBox(leftPos + colisionSift_.x,upPos + colisionSift_.y,rightPos - colisionSize_.x,downPos - colisionSize_.y,GetColor(255,0,0),false);
+	DrawBox(leftPos + colisionSift_.x,upPos + colisionSift_.y,rightPos - colisionSize_.x,downPos - colisionobject.r_.y,GetColor(255,0,0),false);
 	if ( direction_ )
 	{
 		DrawBox(rightPos,upPos,rightPos - 5,upPos + 5,GetColor(255,0,0),true);

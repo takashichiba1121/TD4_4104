@@ -30,7 +30,7 @@ void PlayerBullet::Attack()
 
 void PlayerBullet::Draw()
 {
-	DrawBox(position_.x-10,position_.y-10,position_.x+10,position_.y+10,GetColor(255,0,0),true);
+	DrawBox(object.center_->x-10,position_.y-10,object.center_->x+10,position_.y+10,GetColor(255,0,0),true);
 }
 
 void PlayerBullet::OnCollision()

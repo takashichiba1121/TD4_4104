@@ -136,10 +136,10 @@
       <Filter>ソース ファイル\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Source\Collision\CollisionManager.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Source\Collision\Collision.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

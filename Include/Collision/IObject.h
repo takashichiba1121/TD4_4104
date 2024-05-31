@@ -1,7 +1,25 @@
 #pragma once
 #include<memory>
 #include"IShape.h"
+#include<Vector2.h>
 
+enum ChipIndex : uint8_t
+{
+	NONE,
+	ROAD,
+	DOOR,
+	ROOM,
+	LOCK_ROOM,
+	WALL
+};
+
+enum OnDir
+{
+	LEFT,
+	RIGHT,
+	UP,
+	BOTTOM
+};
 
 class IObject;
 
@@ -27,6 +45,11 @@ private:
 
 	CollisionInfo collisionInfo_;
 
+	bool mapChipObject_ = false;
+	Vector2* center_;
+	Vector2 r_;
+	Vector2 speed_;
+	OnDir dir_;
 protected:
 
 	void* userData_;
@@ -48,6 +71,18 @@ public:
 	IShape* GetShape()const;
 
 	const CollisionInfo& GetCollisionInfo()const;
+
+	bool IsMapChipObject() const;
+
+	void SetMapChipCenter(Vector2* center);
+
+	void SetMapChipRadius(const Vector2& r);
+	const Vector2& GetMapChipRadius()const;
+
+	void SetMapChipSpeed(const Vector2& r);
+	const Vector2& GetMapChipSpeed()const;
+
+	OnDir GetOnDir();
 
 private:
 

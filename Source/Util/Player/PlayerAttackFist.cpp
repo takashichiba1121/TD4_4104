@@ -36,6 +36,6 @@ void PlayerAttackFist::Draw()
 {
 	if ( isAttack_ )
 	{
-			DrawBox(attackPos.x-colisionSize_.x/2,attackPos.y - colisionSize_.y/2,attackPos.x + colisionSize_.x/2,attackPos.y + colisionSize_.y/2,GetColor(0,255,0),false);
+			DrawBox(attackPos.x-colisionSize_.x/2,attackPos.y - colisionobject.r_.y/2,attackPos.x + colisionSize_.x/2,attackPos.y + colisionobject.r_.y/2,GetColor(0,255,0),false);
 	}
 }
