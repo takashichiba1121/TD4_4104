@@ -18,6 +18,8 @@ void Player::Initialze()
 	pos_.y = GameConfig::GetGameConfig()->windowHeight / 2;
 
 	ChangeAttack("Fist");
+
+	ChangeAttack("Weapon");
 }
 
 void Player::Update()
@@ -28,7 +30,7 @@ void Player::Update()
 		attackInterval_--;
 	}
 
-	if ( attack_->GetAttack() == false )
+	if ( attackZ_->GetAttack() == false&& attackX_->GetAttack() == false )
 	{
 		Move();
 	}
@@ -224,20 +226,36 @@ void Player::Falling()
 
 void Player::Attack()
 {
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && attack_ != nullptr && attackInterval_ == 0 )
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && attackZ_ != nullptr && attackInterval_ == 0 )
 	{
-		attack_->AttackInit(pos_,direction_);
+		attackZ_->AttackInit(pos_,direction_);
 
 		speed_ = 0;
 
 		fallSpeed_ = 0;
 
-		attackInterval_ = attack_->GetInterval();
+		attackInterval_ = attackZ_->GetInterval();
 	}
 
-	if ( attack_ != nullptr )
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && attackX_ != nullptr && attackInterval_ == 0 )
 	{
-		attack_->Attack();
+		attackX_->AttackInit(pos_,direction_);
+
+		speed_ = 0;
+
+		fallSpeed_ = 0;
+
+		attackInterval_ = attackX_->GetInterval();
+	}
+
+	if ( attackZ_ != nullptr )
+	{
+		attackZ_->Attack();
+	}
+
+	if ( attackX_ != nullptr )
+	{
+		attackX_->Attack();
 	}
 
 	PlayerBulletManager::Instance()->Update();
@@ -245,13 +263,24 @@ void Player::Attack()
 
 void Player::ChangeAttack(std::string attackName)
 {
-	if (attackName=="Fist" )
+
+	std::unique_ptr<PlayerAttack> newAttack_;
+	if ( attackName == "Fist" )
 	{
-		attack_ = std::make_unique<PlayerAttackFist>();
+		newAttack_ = std::make_unique<PlayerAttackFist>();
 	}
 	if ( attackName == "Weapon" )
 	{
-		attack_ = std::make_unique<PlayerAttackWeapon>();
+		newAttack_ = std::make_unique<PlayerAttackWeapon>();
+	}
+
+	if (newAttack_->GetType() == PlayerAttack::AttackType::Big )
+	{
+		attackX_ = std::move(newAttack_);
+	}
+	else
+	{
+		attackZ_ = std::move(newAttack_);
 	}
 }
 
@@ -275,9 +304,14 @@ void Player::Draw()
 		DrawBox(leftPos,upPos,leftPos + 5,upPos + 5,GetColor(255,0,0),true);
 	}
 
-	if ( attack_ != nullptr )
+	if ( attackZ_ != nullptr )
 	{
-		attack_->Draw();
+		attackZ_->Draw();
+	}
+
+	if ( attackX_ != nullptr )
+	{
+		attackX_->Draw();
 	}
 }
 

@@ -59,8 +59,9 @@ private:
 
 	uint32_t attackInterval_=0;
 
-	std::unique_ptr<PlayerAttack> attack_;
+	std::unique_ptr<PlayerAttack> attackZ_;
 
+	std::unique_ptr<PlayerAttack> attackX_;
 	int32_t hp_;
 
 	int32_t maxHp_=10;
