@@ -34,6 +34,12 @@
     <Filter Include="ソース ファイル\Math">
       <UniqueIdentifier>{8f74865f-088f-4f75-8ed7-5205610bf1d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Collision">
+      <UniqueIdentifier>{fa9be737-b1cf-4eb8-adf0-3d19861ca439}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Collision">
+      <UniqueIdentifier>{52e3dfaa-c62c-40de-9d37-ca7e55789659}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
@@ -122,6 +128,24 @@
     </ClCompile>
     <ClCompile Include="Include\Util\Player\PlayerBullet.cpp">
       <Filter>ソース ファイル\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision\IShape.cpp">
+      <Filter>ソース ファイル\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision\IObject.cpp">
+      <Filter>ソース ファイル\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision\CircleShape.cpp">
+      <Filter>ソース ファイル\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision\RectShape.cpp">
+      <Filter>ソース ファイル\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision\CollisionManager.cpp">
+      <Filter>ソース ファイル\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collision\Collision.cpp">
+      <Filter>ソース ファイル\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +238,27 @@
     </ClInclude>
     <ClInclude Include="Include\Util\Player\PlayerBullet.h">
       <Filter>ヘッダー ファイル\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Collision\IObject.h">
+      <Filter>ヘッダー ファイル\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Collision\IShape.h">
+      <Filter>ヘッダー ファイル\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Collision\CircleShape.h">
+      <Filter>ヘッダー ファイル\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Collision\RectShape.h">
+      <Filter>ヘッダー ファイル\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Collision\Collision.h">
+      <Filter>ヘッダー ファイル\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Collision\CollisionConfig.h">
+      <Filter>ヘッダー ファイル\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Collision\CollisionManager.h">
+      <Filter>ヘッダー ファイル\Collision</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
