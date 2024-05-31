@@ -6,7 +6,9 @@
 class Player
 {
 private:
-#pragma region 移動ステータス
+#pragma region ステータス
+
+	//移動
 
 	float topSpeed_ = 0;
 
@@ -18,6 +20,28 @@ private:
 
 	float airDeccelaration_ = 0;
 
+	//戦闘
+
+	//ジャンプ
+
+	float gravityAcceleration_ = 0;
+
+	float jumpAcceleration_ = 0;
+
+	float jumpInitialVelocity_ = 0;
+
+#pragma endregion
+
+#pragma region 変更ステータス
+	float changeSpd_=1;
+
+	float changePow_=1;
+
+	float changeDef_=1;
+
+	float changeMaxHp_=1;
+
+	int32_t nowCost=0;
 #pragma endregion
 
 	bool direction_ = false;
@@ -26,9 +50,9 @@ private:
 
 	Vector2 pos_;
 
-	Vector2 drawSize_ = { 35,61 };
+	Vector2 drawSize_ = { 34,60 };
 
-	Vector2 colisionSize_ = { 5,5 };
+	Vector2 colisionSize_ = { 29,55 };
 
 	Vector2 colisionSift_ = { 5,5 };
 
@@ -39,23 +63,16 @@ private:
 	std::unique_ptr<PlayerAttack> attackZ_;
 
 	std::unique_ptr<PlayerAttack> attackX_;
-	int32_t hp_;
 
-	int32_t maxHp_ = 10;
+	int32_t maxHp_ = 100;
 
-#pragma region ジャンプ用変数
+	int32_t hp_ = maxHp_;
+
 	bool onGround_ = false;
 
 	bool isJump_ = false;
 
 	float fallSpeed_ = 0;
-
-	float gravityAcceleration_ = 0;
-
-	float jumpAcceleration_ = 0;
-
-	float jumpInitialVelocity_ = 0;
-#pragma endregion
 
 public:
 	void Initialze();
@@ -72,7 +89,21 @@ public:
 
 	void Attack();
 
+	float IsDamage();
+
+	void OnCollsionEnemy(int32_t Damage);
+
 	void ChangeAttack(std::string AttackName);
+
+	void AddSpd(int32_t spd);
+
+	void AddPow(int32_t pow);
+
+	void AddDef(int32_t def);
+
+	void AddMaxHp(int32_t maxHp);
+
+	void AddCost(int32_t cost);
 
 	void Draw();
 
