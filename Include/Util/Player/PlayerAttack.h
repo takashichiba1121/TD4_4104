@@ -24,5 +24,7 @@ public:
 	virtual uint32_t GetInterval()=0;
 
 	virtual AttackType GetType() = 0;
+
+	virtual float GetPow()=0;
 };
 

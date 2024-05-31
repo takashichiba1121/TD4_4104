@@ -90,20 +90,20 @@ void Player::Move()
 	if ( Input::Instance()->PushKey(KEY_INPUT_A) )
 	{
 		direction_ = false;
-		if ( speed_ > -topSpeed_ )
+		if ( speed_ > -topSpeed_*changeSpd_)
 		{
 			if ( onGround_ )
 			{
-				speed_ -= airAcceleration_/60.0f;
+				speed_ -= (airAcceleration_ * changeSpd_ ) /60.0f;
 			}
 			else
 			{
-				speed_ -= acceleration_/60.0f;
+				speed_ -= (acceleration_*changeSpd_)/60.0f;
 			}
 		}
 		else
 		{
-			speed_ = -topSpeed_;
+			speed_ = -topSpeed_ * changeSpd_;
 		}
 	}
 	else if ( speed_ < 0 )
@@ -124,20 +124,20 @@ void Player::Move()
 	if ( Input::Instance()->PushKey(KEY_INPUT_D) )
 	{
 		direction_ = true;
-		if ( speed_ < topSpeed_ )
+		if ( speed_ < topSpeed_ *changeSpd_ )
 		{
 			if ( onGround_ )
 			{
-				speed_ += airAcceleration_/60.0f;
+				speed_ += ( airAcceleration_ * changeSpd_ ) / 60.0f;
 			}
 			else
 			{
-				speed_ += acceleration_/60.0f;
+				speed_ += ( acceleration_ * changeSpd_ ) / 60.0f;
 			}
 		}
 		else
 		{
-			speed_ = topSpeed_;
+			speed_ = topSpeed_ * changeSpd_;
 		}
 	}
 	else if ( speed_ > 0 )
@@ -156,7 +156,7 @@ void Player::Move()
 		}
 	}
 	pos_.x += speed_;
-
+	
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) && !onGround_ )
 	{
 		JumpStart();
@@ -199,7 +199,7 @@ void Player::Jump()
 	{
 		isJump_ = false;
 		
-		fallSpeed_/=5;
+		fallSpeed_/=3;
 	}
 
 }
@@ -257,6 +257,28 @@ void Player::Attack()
 	PlayerBulletManager::Instance()->Update();
 }
 
+float Player::IsDamage()
+{
+	float Damage=0;
+
+	if ( attackX_->GetAttack())
+	{
+		  Damage=attackX_->GetPow() * changePow_;
+
+		return Damage;
+	}
+	else
+	{
+		Damage = attackZ_->GetPow() * changePow_;
+
+		return Damage;
+	}
+}
+void Player::OnCollsionEnemy(int32_t Damage)
+{
+	hp_ -= Damage * changeDef_;
+
+}
 void Player::ChangeAttack(std::string attackName)
 {
 
@@ -280,6 +302,31 @@ void Player::ChangeAttack(std::string attackName)
 	}
 }
 
+void Player::AddSpd(int spd)
+{
+	changeSpd_ += spd/100.0f;
+}
+
+void Player::AddPow(int pow)
+{
+	changePow_ += pow/100.0f;
+}
+
+void Player::AddDef(int def)
+{
+	changeDef_ += def/100.0f;
+}
+
+void Player::AddMaxHp(int maxHp)
+{
+	changeMaxHp_ += maxHp / 100.0f;
+}
+
+void Player::AddCost(int cost)
+{
+	nowCost += cost;
+}
+
 void Player::Draw()
 {
 	PlayerBulletManager::Instance()->Draw();
@@ -290,7 +337,7 @@ void Player::Draw()
 	float downPos = pos_.y + drawSize_.y / 2;
 
 	DrawBox(leftPos,upPos,rightPos,downPos,GetColor(255,255,255),true);
-	DrawBox(leftPos + colisionSift_.x,upPos + colisionSift_.y,rightPos - colisionSize_.x,downPos - colisionSize_.y,GetColor(255,0,0),false);
+	DrawBox(pos_.x - colisionSize_.x / 2,pos_.y - colisionSize_.y / 2,pos_.x + colisionSize_.x/2,pos_.y + colisionSize_.y/2,GetColor(255,0,0),false);
 	if ( direction_ )
 	{
 		DrawBox(rightPos,upPos,rightPos - 5,upPos + 5,GetColor(255,0,0),true);

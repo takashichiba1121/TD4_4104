@@ -22,6 +22,8 @@ private:
 
 	const AttackType TYPE_ = AttackType::Small;
 
+	const float Pow = 5;
+
 public:
 	void AttackInit(const Vector2& playerPos,bool direction) override;
 
@@ -34,5 +36,9 @@ public:
 	uint32_t GetInterval() override {return INTERVAL_;}
 
 	AttackType GetType() override {return TYPE_;}
+
+	float GetPow() override {
+		return Pow;
+	}
 };
 

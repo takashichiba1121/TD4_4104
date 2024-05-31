@@ -18,6 +18,8 @@ private:
 
 	const AttackType TYPE_ = AttackType::Big;
 
+	const float Pow = 0;
+
 public:
 	void AttackInit(const Vector2& playerPos,bool direction) override;
 
@@ -35,6 +37,10 @@ public:
 
 	AttackType GetType() override {
 		return TYPE_;
+	}
+
+	float GetPow() override {
+		return Pow;
 	}
 };
 
