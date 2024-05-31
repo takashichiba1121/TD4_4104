@@ -157,7 +157,6 @@
     <ClCompile Include="GameCore\FrameWork.cpp" />
     <ClCompile Include="GameCore\Input.cpp" />
     <ClCompile Include="Include\Util\Player\PlayerBullet.cpp" />
-    <ClCompile Include="IEnemy.cpp" />
     <ClCompile Include="Source\Enemy\BaseEnemy.cpp" />
     <ClCompile Include="Source\Util\Player\PlayerAttackFist.cpp" />
     <ClCompile Include="Source\Util\GameConfig.cpp" />

@@ -17,9 +17,9 @@ void Player::Initialze()
 
 	pos_.y = GameConfig::GetGameConfig()->windowHeight / 2;
 
-	ChangeAttack("Fist");
+	ChangeAttackZ("Fist");
 
-	ChangeAttack("Weapon");
+	ChangeAttackX("Weapon");
 }
 
 void Player::Update()
@@ -66,20 +66,6 @@ void Player::Update()
 
 	ImGui::SliderFloat("TopSpeed",&topSpeed_,0.0f,200.0f,"%3.0f");
 
-	ImGui::Text("SmallAttatck");
-
-	if ( ImGui::Button("Fist") )
-	{
-		ChangeAttack("Fist");
-	}
-
-	ImGui::Text("BigAttatck");
-
-	if ( ImGui::Button("Weapon") )
-	{
-		ChangeAttack("Weapon");
-	}
-
 	ImGui::End();
 
 #endif
@@ -94,11 +80,11 @@ void Player::Move()
 		{
 			if ( onGround_ )
 			{
-				speed_ -= (airAcceleration_ * changeSpd_ ) /60.0f;
+				speed_ -= ( airAcceleration_ * changeSpd_ ) /GameConfig::GetGameConfig()->fps;
 			}
 			else
 			{
-				speed_ -= (acceleration_*changeSpd_)/60.0f;
+				speed_ -= (acceleration_*changeSpd_) / GameConfig::GetGameConfig()->fps;
 			}
 		}
 		else
@@ -110,11 +96,11 @@ void Player::Move()
 	{
 		if ( onGround_ )
 		{
-			speed_ += airDeccelaration_ / 60.0f;
+			speed_ += airDeccelaration_ /GameConfig::GetGameConfig()->fps;
 		}
 		else
 		{
-			speed_ += deccelaration_ / 60.0f;
+			speed_ += deccelaration_ /GameConfig::GetGameConfig()->fps;
 		}
 		if ( speed_ > 0 )
 		{
@@ -128,11 +114,11 @@ void Player::Move()
 		{
 			if ( onGround_ )
 			{
-				speed_ += ( airAcceleration_ * changeSpd_ ) / 60.0f;
+				speed_ += ( airAcceleration_ * changeSpd_ ) / GameConfig::GetGameConfig()->fps;
 			}
 			else
 			{
-				speed_ += ( acceleration_ * changeSpd_ ) / 60.0f;
+				speed_ += ( acceleration_ * changeSpd_ ) / GameConfig::GetGameConfig()->fps;
 			}
 		}
 		else
@@ -144,11 +130,11 @@ void Player::Move()
 	{
 		if ( onGround_ )
 		{
-			speed_ -= airDeccelaration_ / 60.0f;
+			speed_ -= airDeccelaration_ / GameConfig::GetGameConfig()->fps;
 		}
 		else
 		{
-			speed_ -= deccelaration_ / 60.0f;
+			speed_ -= deccelaration_ / GameConfig::GetGameConfig()->fps;
 		}
 		if ( speed_ < 0 )
 		{
@@ -279,50 +265,51 @@ void Player::OnCollsionEnemy(int32_t Damage)
 	hp_ -= Damage * changeDef_;
 
 }
-void Player::ChangeAttack(std::string attackName)
+void Player::ChangeAttackZ(std::string attackName)
 {
-
-	std::unique_ptr<PlayerAttack> newAttack_;
 	if ( attackName == "Fist" )
 	{
-		newAttack_ = std::make_unique<PlayerAttackFist>();
+		attackZ_ = std::make_unique<PlayerAttackFist>();
 	}
 	if ( attackName == "Weapon" )
 	{
-		newAttack_ = std::make_unique<PlayerAttackWeapon>();
+		attackZ_ = std::make_unique<PlayerAttackWeapon>();
 	}
+}
 
-	if (newAttack_->GetType() == PlayerAttack::AttackType::Big )
+void Player::ChangeAttackX(std::string attackName)
+{
+	if ( attackName == "Fist" )
 	{
-		attackX_ = std::move(newAttack_);
+		attackX_ = std::make_unique<PlayerAttackFist>();
 	}
-	else
+	if ( attackName == "Weapon" )
 	{
-		attackZ_ = std::move(newAttack_);
+		attackX_ = std::make_unique<PlayerAttackWeapon>();
 	}
 }
 
-void Player::AddSpd(int spd)
+void Player::AddSpd(int32_t spd)
 {
-	changeSpd_ += spd/100.0f;
+	changeSpd_ += float(spd)/100.0f;//パーセントを実数値に戻す
 }
 
-void Player::AddPow(int pow)
+void Player::AddPow(int32_t pow)
 {
-	changePow_ += pow/100.0f;
+	changePow_ += float(pow)/100.0f;
 }
 
-void Player::AddDef(int def)
+void Player::AddDef(int32_t def)
 {
-	changeDef_ += def/100.0f;
+	changeDef_ += float(def)/100.0f;
 }
 
-void Player::AddMaxHp(int maxHp)
+void Player::AddMaxHp(int32_t maxHp)
 {
-	changeMaxHp_ += maxHp / 100.0f;
+	changeMaxHp_ += float(maxHp) / 100.0f;
 }
 
-void Player::AddCost(int cost)
+void Player::AddCost(int32_t cost)
 {
 	nowCost += cost;
 }
@@ -338,6 +325,7 @@ void Player::Draw()
 
 	DrawBox(leftPos,upPos,rightPos,downPos,GetColor(255,255,255),true);
 	DrawBox(pos_.x - colisionSize_.x / 2,pos_.y - colisionSize_.y / 2,pos_.x + colisionSize_.x/2,pos_.y + colisionSize_.y/2,GetColor(255,0,0),false);
+	//向いてる方向の視覚化
 	if ( direction_ )
 	{
 		DrawBox(rightPos,upPos,rightPos - 5,upPos + 5,GetColor(255,0,0),true);

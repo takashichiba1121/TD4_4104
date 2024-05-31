@@ -93,7 +93,9 @@ public:
 
 	void OnCollsionEnemy(int32_t Damage);
 
-	void ChangeAttack(std::string AttackName);
+	void ChangeAttackZ(std::string attackName);
+
+	void ChangeAttackX(std::string attackName);
 
 	void AddSpd(int32_t spd);
 
