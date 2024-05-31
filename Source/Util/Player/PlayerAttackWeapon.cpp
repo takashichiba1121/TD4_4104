@@ -29,7 +29,7 @@ void PlayerAttackWeapon::Attack()
 	{
 		AttackTime_++;
 
-		if ( AttackTime_ > lastAttackTime_ )
+		if ( AttackTime_ > LAST_ATTACK_TIME_ )
 		{
 			isAttack_ = false;
 			AttackTime_ = 0;

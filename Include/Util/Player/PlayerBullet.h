@@ -11,6 +11,23 @@ public:
 		Attack,
 		Delete,
 	};
+
+protected:
+	Vector2 position_;
+	//速度
+	Vector2 velocity_;
+	//デスタイマー
+	uint32_t life_;
+	//デスフラグ
+	bool isDead_ = false;
+
+		//弾のチャージ時間
+	uint32_t chageTime_ = 60;
+
+	uint32_t chageTimer_ = 0;
+
+	Phase phase_ = Phase::Charge;
+
 public:
 
 	///<summary>
@@ -45,27 +62,9 @@ public:
 		return isDead_;
 	}
 
-	void SetPhase(Phase phase);
-
 	void SetChageTime(uint32_t Time) {
 		chageTime_ = Time;
 	}
-
-protected:
-	Vector2 position_;
-	//速度
-	Vector2 velocity_;
-	//デスタイマー
-	uint32_t life_;
-	//デスフラグ
-	bool isDead_ = false;
-
-		//弾のチャージ時間
-	uint32_t chageTime_ = 60;
-
-	uint32_t chageTimer_ = 0;
-
-	Phase phase_ = Phase::Charge;
 
 };
 
