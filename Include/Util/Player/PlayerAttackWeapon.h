@@ -18,6 +18,10 @@ public:
 		return interval_;
 	}
 
+	AttackType GetType() override {
+		return type_;
+	}
+
 private:
 	bool isAttack_ = false;
 
@@ -30,5 +34,7 @@ private:
 	Vector2 colisionSize_ = { 200,50 };
 
 	const uint32_t interval_ = 30;
+
+	const AttackType type_ = AttackType::Big;
 };
 
