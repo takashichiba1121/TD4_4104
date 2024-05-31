@@ -2,6 +2,9 @@
 #include<memory>
 #include"IShape.h"
 
+
+class IObject;
+
 struct CollisionInfo
 {
 	IObject* object = nullptr;
