@@ -17,8 +17,11 @@ void GameScene::Initialize()
 	CollisionManager::GetInstance()->SetMapChip(testMap);
 
 	player_ = std::make_unique<Player>();
-
 	player_->Initialze();
+
+	mapChip_ = std::make_unique<MapChip>();
+	mapChip_->Initialize();
+	mapChip_->MapLoad("Resources/t.json");
 }
 
 void GameScene::Update()
@@ -43,6 +46,8 @@ void GameScene::Draw()
 		}
 	}
 	player_->Draw();
+
+	mapChip_->Draw({0,0});
 }
 
 void GameScene::SpriteDraw()

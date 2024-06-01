@@ -7,6 +7,7 @@
 #include "imgui_impl_dx11.h"
 #include "magic_enum.hpp"
 #include<fstream>
+#include<sstream>
 
 
 void EditorScene::Initialize(int32_t screen)
@@ -36,6 +37,49 @@ void EditorScene::Initialize(int32_t screen)
 	roomGraphHandle_ = Load("Resource/RoomChip.png");
 	lockroomGraphHandle_ = Load("Resource/LockroomChip.png");
 	wallGraphHandle_ = Load("Resource/WallChip.png");
+
+	{
+		auto files = GetFilesName("Export/Room");
+
+		for ( auto& file : files )
+		{
+			Rooms room;
+			room.name = file;
+
+			auto roomFiles = GetFilesName("Export/Room/" + file);
+			for ( auto& roomFile : roomFiles )
+			{
+				FileTableElement element;
+				element.value = roomFile;
+				element.id = RandId();
+				element.filePath = "Export/Room/" + file + roomFile + ".json";
+				element.directoryPath = "Export/Room/" + file;
+				room.roomFiles.push_back(element);
+			}
+
+			GenerateRoomExample(room.name,room.example);
+
+			FileTableElement element = { 0,{"example"} };
+			room.roomFiles.push_back(element);
+
+			rooms_.push_back(room);
+		}
+	}
+
+	{
+		std::list<std::string> tmp = GetFilesName("Export/Map");
+
+		mapFileName_.clear();
+		for ( std::string name : tmp )
+		{
+			FileTableElement element;
+			element.value = name;
+			element.id = RandId();
+			element.filePath = "Export/Map" + name + ".json";
+			element.directoryPath = "Export/Map";
+			mapFileName_.push_back(element);
+		}
+	}
 }
 
 void EditorScene::Update()
@@ -99,6 +143,10 @@ void EditorScene::UIUpdate()
 	SelectView();
 
 	MenuView();
+
+	MapSelectView();
+
+	RoomSelectView();
 
 }
 
@@ -188,7 +236,7 @@ void EditorScene::SelectView()
 
 	ImGui::TableHeadersRow();
 
-	std::list<TableElement>::iterator itr = chips_.begin();
+	std::list<ChipTableElement>::iterator itr = chips_.begin();
 
 	for ( size_t i = 0; i < chips_.size(); i++ )
 	{
@@ -198,22 +246,12 @@ void EditorScene::SelectView()
 		const bool item_is_selected = tableSelection.contains(itr->id);
 
 		ImGuiSelectableFlags selectable_flags = ImGuiSelectableFlags_SpanAllColumns | ImGuiSelectableFlags_AllowItemOverlap;
-		if ( ImGui::Selectable(magic_enum::enum_name(itr->index).data(),item_is_selected,selectable_flags) )
+		if ( ImGui::Selectable(magic_enum::enum_name(itr->value).data(),item_is_selected,selectable_flags) )
 		{
-			if ( ImGui::GetIO().KeyCtrl )
-			{
-				if ( item_is_selected )
-					tableSelection.find_erase_unsorted(itr->id);
-				else
-					tableSelection.push_back(itr->id);
-			}
-			else
-			{
-				tableSelection.clear();
-				tableSelection.push_back(itr->id);
+			tableSelection.clear();
+			tableSelection.push_back(itr->id);
 
-				selectChip_ = ( ChipIndex ) tableSelection[ 0 ];
-			}
+			selectChip_ = ( ChipIndex ) tableSelection[ 0 ];
 		}
 
 		itr++;
@@ -228,7 +266,7 @@ void EditorScene::MenuView()
 {
 	ImGui::Begin("MenuView",nullptr,ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
 
-	ImGui::SetWindowSize({ ( float ) SELECT_VIEW_WINDOW_SIZE.x,( float ) SELECT_VIEW_WINDOW_SIZE.y + SELECT_WINDOW_SIZE.y });
+	ImGui::SetWindowSize({ ( float ) SELECT_VIEW_WINDOW_SIZE.x,( float ) SELECT_VIEW_WINDOW_SIZE.y });
 	ImGui::SetWindowPos({ ( float ) VIEW_WINDOW_SIZE.x + SELECT_VIEW_WINDOW_SIZE.x ,0 });
 
 	ImGui::InputInt2("MapSize",tmpBlockSize.data);
@@ -237,8 +275,10 @@ void EditorScene::MenuView()
 		New();
 	}
 
-	ImGui::Button("Reset");
-
+	if ( ImGui::Button("Reset") )
+	{
+		Reset();
+	}
 
 	ImGui::InputText("name",textBuff,_countof(textBuff));
 
@@ -253,8 +293,10 @@ void EditorScene::MenuView()
 		}
 	}
 
-	ImGui::Button("Load");
-	ImGui::Button("ChangeMode");
+	if ( ImGui::Button("Load") )
+	{
+		LoadFile();
+	}
 
 	ImGui::End();
 }
@@ -283,6 +325,146 @@ void EditorScene::EditorMove()
 			screenUV.max.y = oldScreenUV.max.y;
 		}
 	}
+}
+
+void EditorScene::MapSelectView()
+{
+
+	ImGui::Begin("MapSelectView",nullptr,ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
+
+	ImGui::SetWindowSize({ ( float ) MAP_SELECT_WINDOW_SIZE.x,( float ) MAP_SELECT_WINDOW_SIZE.y });
+	ImGui::SetWindowPos({ ( float ) VIEW_WINDOW_SIZE.x + SELECT_VIEW_WINDOW_SIZE.x ,float(SELECT_VIEW_WINDOW_SIZE.y) });
+
+	ImGui::BeginTable("table2",1,
+	ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable
+	| ImGuiTableFlags_SortMulti
+	| ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders
+	| ImGuiTableFlags_ScrollX | ImGuiTableFlags_ScrollY
+	| ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_BordersInnerH);
+
+
+	ImGui::TableHeadersRow();
+
+	for ( auto itr = mapFileName_.begin(); itr != mapFileName_.end(); itr++ )
+	{
+		ImGui::TableNextRow();
+
+		ImGui::TableSetColumnIndex(0);
+		const bool item_is_selected = mapsOrRoomsTableSelection.contains(itr->id);
+
+		ImGuiSelectableFlags selectable_flags = ImGuiSelectableFlags_SpanAllColumns | ImGuiSelectableFlags_AllowItemOverlap;
+		if ( ImGui::Selectable(itr->value.data(),item_is_selected,selectable_flags) )
+		{
+			mapsOrRoomsTableSelection.clear();
+			mapsOrRoomsTableSelection.push_back(itr->id);
+			selectFile_ = *itr;
+			mode_ = EditMode::MAP;
+		}
+	}
+	ImGui::EndTable();
+
+	ImGui::End();
+}
+
+int32_t EditorScene::RandId()
+{
+	std::random_device rnd;
+	std::mt19937 mt(rnd());
+
+	int32_t ret = mt();
+	while ( randNums_.find(ret) != randNums_.end() )
+	{
+		ret = mt();
+	}
+
+	randNums_.insert(ret);
+
+	return ret;
+}
+
+void EditorScene::RoomSelectView()
+{
+	ImGui::Begin("RoomSelectView",nullptr,ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar);
+
+	ImGui::SetWindowSize({ ( float ) ROOM_SELECT_WINDOW_SIZE.x,( float ) ROOM_SELECT_WINDOW_SIZE.y });
+	ImGui::SetWindowPos({ ( float ) VIEW_WINDOW_SIZE.x + SELECT_VIEW_WINDOW_SIZE.x ,float(SELECT_VIEW_WINDOW_SIZE.y + MAP_SELECT_WINDOW_SIZE.y) });
+
+	for ( auto& room : rooms_ )
+	{
+		if ( ImGui::TreeNode(room.name.c_str()) )
+		{
+			ImGui::BeginTable(( room.name + "table" ).c_str(),1,
+			ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable
+			| ImGuiTableFlags_SortMulti
+			| ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders
+			| ImGuiTableFlags_ScrollX | ImGuiTableFlags_ScrollY
+			| ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_BordersInnerH);
+
+			ImGui::TableHeadersRow();
+
+			for ( auto itr = room.roomFiles.begin(); itr != room.roomFiles.end(); itr++ )
+			{
+				ImGui::TableNextRow();
+
+				ImGui::TableSetColumnIndex(0);
+				const bool item_is_selected = mapsOrRoomsTableSelection.contains(itr->id);
+
+				ImGuiSelectableFlags selectable_flags = ImGuiSelectableFlags_SpanAllColumns | ImGuiSelectableFlags_AllowItemOverlap;
+				if ( ImGui::Selectable(itr->value.data(),item_is_selected,selectable_flags) )
+				{
+					mapsOrRoomsTableSelection.clear();
+					mapsOrRoomsTableSelection.push_back(itr->id);
+					selectFile_ = *itr;
+					mode_ = EditMode::ROOM;
+					selectRooms_ = room;
+				}
+			}
+
+			ImGui::EndTable();
+
+			ImGui::TreePop();
+		}
+	}
+
+	ImGui::End();
+}
+
+void EditorScene::GenerateRoomExample(const std::string& path,std::vector<std::vector<uint8_t>>& example)
+{
+	std::vector<std::string>settings = Split(path,'@');
+
+	char w = settings[ 1 ].data()[ 0 ],h = settings[ 1 ].data()[ 2 ];
+	int2 size = { atoi(&w),atoi(&h) };
+	size.x += 2;
+	size.y += 2;
+	example.resize(size.y);
+	for ( size_t i = 0; i < example.size(); i++ )
+	{
+		example[ i ].resize(size.x);
+
+		for ( size_t j = 0; j < size.x; j++ )
+		{
+			if ( i == 0 || i == ( size.y - 1 ) || j == 0 || j == ( size.x - 1 ) )
+			{
+				example[ i ][ j ] = ChipIndex::WALL;
+			}
+		}
+	}
+
+	std::vector<std::string>rooms = Split(settings[ 2 ],'$');
+
+	std::array<std::string,2> nums;
+	int2 roomDoor{};
+	for ( auto& room : rooms )
+	{
+		nums = NumSplit(room);
+		roomDoor.x = atoi(nums[ 0 ].data());
+		roomDoor.y = atoi(nums[ 1 ].data());
+
+		example[ 1 + roomDoor.y ][ 1 + roomDoor.x ] = ChipIndex::DOOR;
+
+	}
+
 }
 
 void EditorScene::RoomSearch(RoomSetting& roomSetting,int32_t x,int32_t y,nlohmann::json& jsonData)
@@ -500,125 +682,6 @@ void EditorScene::ChipDraw(size_t x,size_t y,int8_t chip,int32_t sign)
 	}
 }
 
-void EditorScene::New()
-{
-	for ( size_t i = 0; i < mapBlockSize_.y; i++ )
-	{
-		editorMap_[ i ].clear();
-	}
-	editorMap_.clear();
-
-	mapBlockSize_ = tmpBlockSize;
-
-	mapCenter_.x = ( mapBlockSize_.x * blockSize_ ) / 2;
-	mapCenter_.y = ( mapBlockSize_.y * blockSize_ ) / 2;
-
-	editorMap_.resize(mapBlockSize_.y);
-	for ( size_t i = 0; i < editorMap_.size(); i++ )
-	{
-		editorMap_[ i ].resize(mapBlockSize_.x);
-	}
-
-	DeleteGraph(screenGraph_.handle);
-	screenGraph_.pSRV->Release();
-
-	SetDrawValidGraphCreateFlag(TRUE);
-	screenGraph_.handle = MakeGraph(mapBlockSize_.x * blockSize_,mapBlockSize_.y * blockSize_);
-	screenGraph_.pSRV = GetImageResource11(screenGraph_.handle);
-	SetDrawValidGraphCreateFlag(FALSE);
-}
-
-void EditorScene::Export()
-{
-	nlohmann::json data;
-
-	data[ "0_Name" ] = mapName_;
-	data[ "1_Size" ].push_back({ mapBlockSize_.x, mapBlockSize_.y });
-
-
-	for ( size_t i = 0; i < mapBlockSize_.y; i++ )
-	{
-		for ( size_t j = 0; j < mapBlockSize_.x; j++ )
-		{
-			if ( !editorMap_[ i ][ j ].out )
-			{
-				if ( editorMap_[ i ][ j ].chip == ChipIndex::ROOM || editorMap_[ i ][ j ].chip == ChipIndex::LOCK_ROOM )
-				{
-					RoomSetting roomSetting;
-
-					if ( editorMap_[ i ][ j ].chip == ChipIndex::ROOM )
-					{
-						roomSetting.lock = false;
-					}
-					else
-					{
-						roomSetting.lock = true;
-					}
-
-					RoomSearch(roomSetting,j,i,data);
-
-					roomSettings_.push_back(roomSetting);
-				}
-				else
-				{
-					data[ "Map" ].push_back(editorMap_[ i ][ j ].chip);
-				}
-
-				editorMap_[ i ][ j ].out = true;
-			}
-
-		}
-	}
-
-	for ( size_t i = 0; i < roomSettings_.size(); i++ )
-	{
-		nlohmann::json roomSetting;
-		roomSetting[ "Look" ] = roomSettings_[ i ].lock;
-		roomSetting[ "LeftTop" ] = { roomSettings_[ i ].leftTop.x,roomSettings_[ i ].leftTop.y };
-		roomSetting[ "Size" ] = { roomSettings_[ i ].size.x,roomSettings_[ i ].size.y };
-		roomSetting[ "DoorsNum" ] = roomSettings_[ i ].doors.size();
-
-		for ( size_t j = 0; j < roomSettings_[ i ].doors.size(); j++ )
-		{
-			roomSetting[ "Doors" ].push_back({ roomSettings_[ i ].doors[ j ].x,roomSettings_[ i ].doors[ j ].y });
-		}
-
-		std::string roomName;
-
-		if ( roomSettings_[ i ].lock )
-		{
-			roomName += "Lock@";
-		}
-		else
-		{
-			roomName += "NoLock@";
-		}
-
-		roomName += std::to_string(roomSettings_[ i ].size.x) + '_' + std::to_string(roomSettings_[ i ].size.y) + '@';
-
-
-		for ( size_t j = 0; j < roomSettings_[ i ].doors.size()-1; j++ )
-		{
-			roomName += std::to_string(roomSettings_[ i ].doors[ j ].x) + '_' + std::to_string(roomSettings_[ i ].doors[ j ].y)+':';
-		}
-
-		roomName += std::to_string(roomSettings_[ i ].doors.back().x) + '_' + std::to_string(roomSettings_[ i ].doors.back().y);
-
-		roomSetting[ "RoomName" ] = roomName;
-
-		data[ "3_RoomSettings" ].push_back(roomSetting);
-	}
-
-	data[ "2_RoomNum" ].push_back(roomSettings_.size());
-
-	std::ofstream file;
-	std::string path = "Export/Map/";
-	file.open(path + mapName_ + ".json");
-	file << data.dump();
-	file.close();
-	file.close();
-}
-
 void EditorScene::SelectDraw(ChipIndex chip)
 {
 	switch ( chip )
@@ -653,4 +716,312 @@ void EditorScene::ProcessingDraw()
 		mapCenter_.x + screenPos_.x,mapCenter_.y + screenPos_.y,
 		scale_.x,scale_.y,
 		0,screen_,true);
+}
+
+void EditorScene::New()
+{
+	for ( size_t i = 0; i < mapBlockSize_.y; i++ )
+	{
+		editorMap_[ i ].clear();
+	}
+	editorMap_.clear();
+
+	mapBlockSize_ = tmpBlockSize;
+
+	mapCenter_.x = ( mapBlockSize_.x * blockSize_ ) / 2;
+	mapCenter_.y = ( mapBlockSize_.y * blockSize_ ) / 2;
+
+	editorMap_.resize(mapBlockSize_.y);
+	for ( size_t i = 0; i < editorMap_.size(); i++ )
+	{
+		editorMap_[ i ].resize(mapBlockSize_.x);
+	}
+
+	DeleteGraph(screenGraph_.handle);
+	screenGraph_.pSRV->Release();
+
+	SetDrawValidGraphCreateFlag(TRUE);
+	screenGraph_.handle = MakeGraph(mapBlockSize_.x * blockSize_,mapBlockSize_.y * blockSize_);
+	screenGraph_.pSRV = GetImageResource11(screenGraph_.handle);
+	SetDrawValidGraphCreateFlag(FALSE);
+}
+
+void EditorScene::Export()
+{
+	nlohmann::json data;
+
+	if ( mode_ == EditMode::MAP )
+	{
+		data[ "0_Name" ] = mapName_;
+		data[ "1_Size" ].push_back({ mapBlockSize_.x, mapBlockSize_.y });
+
+		for ( size_t i = 0; i < mapBlockSize_.y; i++ )
+		{
+			for ( size_t j = 0; j < mapBlockSize_.x; j++ )
+			{
+				if ( !editorMap_[ i ][ j ].out )
+				{
+					if ( editorMap_[ i ][ j ].chip == ChipIndex::ROOM || editorMap_[ i ][ j ].chip == ChipIndex::LOCK_ROOM )
+					{
+						RoomSetting roomSetting;
+
+						if ( editorMap_[ i ][ j ].chip == ChipIndex::ROOM )
+						{
+							roomSetting.lock = false;
+						}
+						else
+						{
+							roomSetting.lock = true;
+						}
+
+						RoomSearch(roomSetting,j,i,data);
+
+						roomSettings_.push_back(roomSetting);
+					}
+					else
+					{
+						data[ "Map" ].push_back(editorMap_[ i ][ j ].chip);
+					}
+
+					editorMap_[ i ][ j ].out = true;
+				}
+
+			}
+		}
+
+		for ( size_t i = 0; i < roomSettings_.size(); i++ )
+		{
+			nlohmann::json roomSetting;
+			roomSetting[ "Look" ] = roomSettings_[ i ].lock;
+			roomSetting[ "LeftTop" ] = { roomSettings_[ i ].leftTop.x,roomSettings_[ i ].leftTop.y };
+			roomSetting[ "Size" ] = { roomSettings_[ i ].size.x,roomSettings_[ i ].size.y };
+			roomSetting[ "DoorsNum" ] = roomSettings_[ i ].doors.size();
+
+			for ( size_t j = 0; j < roomSettings_[ i ].doors.size(); j++ )
+			{
+				roomSetting[ "Doors" ].push_back({ roomSettings_[ i ].doors[ j ].x,roomSettings_[ i ].doors[ j ].y });
+			}
+
+			std::string roomName;
+
+			if ( roomSettings_[ i ].lock )
+			{
+				roomName += "Lock@";
+			}
+			else
+			{
+				roomName += "NoLock@";
+			}
+
+			roomName += std::to_string(roomSettings_[ i ].size.x) + '_' + std::to_string(roomSettings_[ i ].size.y) + '@';
+
+			std::filesystem::create_directory("Export/Room/" + roomName);
+
+			for ( size_t j = 0; j < roomSettings_[ i ].doors.size() - 1; j++ )
+			{
+				roomName += std::to_string(roomSettings_[ i ].doors[ j ].x) + '_' + std::to_string(roomSettings_[ i ].doors[ j ].y) + '$';
+			}
+
+			roomName += std::to_string(roomSettings_[ i ].doors.back().x) + '_' + std::to_string(roomSettings_[ i ].doors.back().y);
+
+			roomSetting[ "RoomName" ] = roomName;
+
+			data[ "3_RoomSettings" ].push_back(roomSetting);
+		}
+
+		data[ "2_RoomNum" ].push_back(roomSettings_.size());
+
+		std::ofstream file;
+		file.open(selectFile_.directoryPath + '/' + mapName_ + ".json");
+		file << data.dump();
+		file.close();
+	}
+	else
+	{
+		data[ "0_Name" ] = mapName_;
+		data[ "1_Size" ].push_back({ mapBlockSize_.x, mapBlockSize_.y });
+		for ( size_t i = 0; i < mapBlockSize_.y; i++ )
+		{
+			for ( size_t j = 0; j < mapBlockSize_.x; j++ )
+			{
+				if ( !editorMap_[ i ][ j ].out )
+				{
+					data[ "Room" ].push_back(editorMap_[ i ][ j ].chip);
+					editorMap_[ i ][ j ].out = true;
+				}
+
+			}
+		}
+		std::ofstream file;
+		file.open(selectFile_.directoryPath + '/' + mapName_ + ".json");
+		file << data.dump();
+		file.close();
+	}
+}
+
+void EditorScene::LoadFile()
+{
+	loadFile_ = selectFile_;
+
+	if ( mode_ == EditMode::ROOM )
+	{
+		loadRooms_ = selectRooms_;
+	}
+	for ( size_t i = 0; i < mapBlockSize_.y; i++ )
+	{
+		editorMap_[ i ].clear();
+	}
+	editorMap_.clear();
+
+	if ( mode_ == EditMode::ROOM && loadFile_.value == "example" )
+	{
+		editorMap_.resize(loadRooms_.example.size());
+
+		for ( size_t i = 0; i < loadRooms_.example.size(); i++ )
+		{
+			editorMap_[ i ].resize(loadRooms_.example[i ] .size());
+
+			for ( size_t j = 0; j < loadRooms_.example[ i ].size(); j++ )
+			{
+				editorMap_[ i ][ j ].chip = loadRooms_.example[ i ][ j ];
+			}
+		}
+
+		mapBlockSize_ = { int32_t(loadRooms_.example[ 0 ].size()) ,int32_t(loadRooms_.example.size()) };
+
+	}
+	else
+	{
+
+		std::fstream file;
+		file.open(selectFile_.filePath);
+		if ( file.fail() )
+		{
+			assert(0);
+		}
+
+		nlohmann::json jsonData;
+		file >> jsonData;
+		file.close();
+		editorMap_.resize(jsonData[ "1_Size" ][ 0 ][ 1 ]);
+		for ( size_t i = 0; i < editorMap_.size(); i++ )
+		{
+			editorMap_[ i ].resize(jsonData[ "1_Size" ][ 0 ][ 0 ]);
+		}
+
+		size_t index = 0;
+		for ( size_t i = 0; i < editorMap_.size(); i++ )
+		{
+			for ( size_t j = 0; j < editorMap_[ i ].size(); j++ )
+			{
+				editorMap_[ i ][ j ].chip = jsonData[ "Room" ][ index ];
+				editorMap_[ i ][ j ].out = false;
+				index++;
+			}
+		}
+
+		mapBlockSize_ = { jsonData[ "1_Size" ][ 0 ][ 0 ] ,jsonData[ "1_Size" ][ 0 ][ 1 ] };
+	}
+
+	mapCenter_.x = ( mapBlockSize_.x * blockSize_ ) / 2;
+	mapCenter_.y = ( mapBlockSize_.y * blockSize_ ) / 2;
+
+	DeleteGraph(screenGraph_.handle);
+	screenGraph_.pSRV->Release();
+
+	SetDrawValidGraphCreateFlag(TRUE);
+	screenGraph_.handle = MakeGraph(mapBlockSize_.x * blockSize_,mapBlockSize_.y * blockSize_);
+	screenGraph_.pSRV = GetImageResource11(screenGraph_.handle);
+	SetDrawValidGraphCreateFlag(FALSE);
+}
+
+void EditorScene::Reset()
+{
+	if ( mode_ == EditMode::MAP )
+	{
+		for ( size_t i = 0; i < mapBlockSize_.y; i++ )
+		{
+			for ( size_t j = 0; j < mapBlockSize_.x; j++ )
+			{
+				editorMap_[ i ][ j ].out = false;
+				editorMap_[ i ][ j ].chip = 0;
+			}
+		}
+	}
+	else
+	{
+		for ( size_t i = 0; i < mapBlockSize_.y; i++ )
+		{
+			for ( size_t j = 0; j < mapBlockSize_.x; j++ )
+			{
+				editorMap_[ i ][ j ].out = false;
+				editorMap_[ i ][ j ].chip = loadRooms_.example[ i ][ j ];
+
+			}
+		}
+	}
+}
+
+std::list<std::string> GetFilesName(const std::string& path)
+{
+	std::list<std::string>ret;
+
+	auto dir_it = std::filesystem::directory_iterator(path);
+
+	for ( auto& p : dir_it )
+	{
+		ret.push_back(p.path().filename().stem().string());
+	}
+
+	return ret;
+}
+
+std::vector<std::string> Split(const std::string& str,char del)
+{
+	int first = 0;
+	int last = str.find_first_of(del);
+
+	std::vector<std::string> result;
+
+	while ( first < str.size() )
+	{
+		std::string subStr(str,first,last - first);
+
+		result.push_back(subStr);
+
+		first = last + 1;
+		last = str.find_first_of(del,first);
+
+		if ( last == std::string::npos )
+		{
+			last = str.size();
+		}
+	}
+
+	return result;
+}
+
+std::array<std::string,2> NumSplit(const std::string& str)
+{
+	int first = 0;
+	int last = str.find_first_of('_');
+
+	std::array<std::string,2> result;
+
+	for ( size_t i = 0; i < 2; i++ )
+	{
+		std::string subStr(str,first,last - first);
+
+		result[ i ] = subStr;
+
+		first = last + 1;
+		last = str.find_first_of('_',first);
+
+		if ( last == std::string::npos )
+		{
+			last = str.size();
+		}
+	}
+
+	return result;
 }

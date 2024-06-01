@@ -7,6 +7,8 @@
 
 #include"CollisionManager.h"
 
+#include"MapChip.h"
+
 class GameScene : public BaseScene
 {
 private:
@@ -38,6 +40,8 @@ private:
 	};
 
 	std::unique_ptr<Player> player_;
+
+	std::unique_ptr<MapChip>mapChip_;
 
 public:
 	void Initialize() override;

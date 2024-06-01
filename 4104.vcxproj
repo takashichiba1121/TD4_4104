@@ -105,6 +105,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Util\MapChip.cpp" />
     <ClCompile Include="Source\Collision\CircleShape.cpp" />
     <ClCompile Include="Source\Collision\CollisionManager.cpp" />
     <ClCompile Include="Source\Collision\Collision.cpp" />
@@ -145,6 +146,7 @@
     <ClCompile Include="Source\Enemy\WalkEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Util\ChipIndex.h" />
     <ClInclude Include="Include\Collision\CircleShape.h" />
     <ClInclude Include="Include\Collision\CollisionConfig.h" />
     <ClInclude Include="Include\Collision\CollisionManager.h" />
@@ -173,6 +175,7 @@
     <ClInclude Include="Include\Collision\IObject.h" />
     <ClInclude Include="Include\Collision\IShape.h" />
     <ClInclude Include="Include\Collision\RectShape.h" />
+    <ClInclude Include="Include\Util\MapChip.h" />
     <ClInclude Include="ThirdParty\imgui\imconfig.h" />
     <ClInclude Include="ThirdParty\imgui\imgui.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_impl_dx11.h" />
