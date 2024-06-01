@@ -3,9 +3,10 @@
 #include "BaseEnemy.h"
 class FlyEnemy :public BaseEnemy
 {
-	Vector2 speed;
-	Vector2 velocity;
-	int64_t attackTime;
+	Vector2 speed_;
+	Vector2 velocity_;
+	int64_t attackTime_;
+	bool isAttack_;
 public:
 
 	void Initialize() override;

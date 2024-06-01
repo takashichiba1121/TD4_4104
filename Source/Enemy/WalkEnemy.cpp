@@ -10,9 +10,9 @@ void WalkEnemy::Initialize()
 	
 
 	CollisionManager::GetInstance()->AddObject(this);
-	gravity = { 0,1 };
-	speed = 3;
-	velocity = { 1,0 };
+	gravity_ = { 0,1 };
+	speed_ = 3;
+	velocity_ = { 1,0 };
 	pos_ = { 100,100 };
 	islive_ = true;
 }
@@ -25,22 +25,22 @@ void WalkEnemy::Update()
 void WalkEnemy::Move()
 {
 	if ( !islive_ ) return;
-	velocity.Normalize();
+	velocity_.Normalize();
 
-	gravity.y += 0.5f;
-	gravity.y = max(gravity.y,4);
+	gravity_.y += 0.5f;
+	gravity_.y = max(gravity_.y,4);
 
 	if ( GetOnDir() & 0b1 << OnDir::RIGHT | OnDir::LEFT)
 	{
-		velocity *= -1;
+		velocity_ *= -1;
 	}
 
 	if ( GetOnDir() & 0b1 << OnDir::BOTTOM )
 	{
-		gravity = { 0,0 };
+		gravity_ = { 0,0 };
 	}
 
-	SetMapChipSpeed({ velocity * speed,gravity });
+	SetMapChipSpeed({ velocity_ * speed_,gravity_ });
 
 }
 

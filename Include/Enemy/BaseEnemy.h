@@ -16,6 +16,7 @@ protected:
 	Vector2 pos_;
 	Vector2 hitboxSize_;
 	Vector2 drawSize_ = { 35,61 };
+	IObject* playerPosPtr_;
 public:
 	virtual void Initialize() = 0;
 	virtual void Update() = 0;
@@ -27,5 +28,6 @@ public:
 	Vector2 GetDrawSize();
 	int32_t GetHp();
 	void SetPos(Vector2 pos);
+	void SetPlayer(IObject* playerPtr);
 };
 
