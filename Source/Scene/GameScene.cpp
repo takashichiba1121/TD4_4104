@@ -17,9 +17,9 @@ void GameScene::Initialize()
 	CollisionManager::GetInstance()->SetMapChip(testMap);
 
 	player_ = std::make_unique<Player>();
+	enemys_ = std::make_unique<EnemyManager>();
 	player_->Initialze();
-	testenemy_ = std::make_unique<WalkEnemy>();
-	testenemy_->Initialize();
+	enemys_->Initialize();
 }
 
 void GameScene::Update()
@@ -27,11 +27,9 @@ void GameScene::Update()
 	//ImGui::ShowDemoWindow();
 
 	player_->Update();
+	enemys_->Update();
 
 	CollisionManager::GetInstance()->Update();
-
-	player_->Update();
-	testenemy_->Update();
 }
 
 void GameScene::Draw()
@@ -47,8 +45,7 @@ void GameScene::Draw()
 		}
 	}
 	player_->Draw();
-	testenemy_->Draw();
-
+	enemys_->Draw();
 }
 
 void GameScene::SpriteDraw()

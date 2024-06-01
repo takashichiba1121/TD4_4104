@@ -105,6 +105,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Source\Enemy\FlyEnemy.cpp" />
     <ClCompile Include="Source\Base\BaseObject.cpp" />
     <ClCompile Include="Source\Collision\CircleShape.cpp" />
@@ -147,6 +148,7 @@
     <ClCompile Include="Source\Enemy\WalkEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Enemy\EnemyManager.h" />
     <ClInclude Include="Include\Base\BaseObject.h" />
     <ClInclude Include="Include\Enemy\FlyEnemy.h" />
     <ClInclude Include="Include\Collision\CircleShape.h" />

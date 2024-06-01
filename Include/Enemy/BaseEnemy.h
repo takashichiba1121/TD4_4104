@@ -13,5 +13,6 @@ protected:
 public:
 	virtual void Move() {};
 	virtual void Attack() {};
+	void SetPos(Vector2 pos);
 };
 

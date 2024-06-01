@@ -29,6 +29,5 @@ public:
 	Vector2 GetDrawSize();
 	int32_t GetHp();
 	Vector2 GetPos();
-
 };
 
