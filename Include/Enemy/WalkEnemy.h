@@ -2,8 +2,7 @@
 #include "BaseEnemy.h"
 class WalkEnemy:public BaseEnemy
 {
-	int32_t speed_;
-	Vector2 velocity_;
+private:
 	Vector2 gravity_;
 public:
 

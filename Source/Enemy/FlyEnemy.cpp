@@ -11,10 +11,11 @@ void FlyEnemy::Initialize()
 
 
 	CollisionManager::GetInstance()->AddObject(this);
-	speed_.x = 3;
+	speed_ = 3;
 	velocity_ = { 1,0 };
 	pos_ = { 100,100 };
 	islive_ = true;
+	attackTime_ = ATTACK_INTERVAL;
 }
 
 void FlyEnemy::Update()
@@ -26,6 +27,7 @@ void FlyEnemy::Update()
 	else
 	{
 		Move();
+		attackTime_--;
 		if ( attackTime_ <= 0 )
 		{
 			isAttack_ = true;
@@ -38,8 +40,6 @@ void FlyEnemy::Move()
 	if ( !islive_ ) return;
 	if ( !playerPosPtr_ ) return;
 	velocity_.Normalize();
-
-	//if( )
 	if ( GetOnDir() & 0b1 << OnDir::RIGHT | OnDir::LEFT )
 	{
 		velocity_ *= -1;
@@ -47,15 +47,16 @@ void FlyEnemy::Move()
 
 	if ( GetOnDir() & 0b1 << OnDir::BOTTOM )
 	{
-		speed_.y = 0;
+		velocity_.y = 0;
 	}
 
-	SetMapChipSpeed({ velocity_.x * speed_.x,velocity_.y * speed_.y });
+	SetMapChipSpeed({ velocity_.x * speed_,velocity_.y * speed_ });
 
 }
 
 void FlyEnemy::Attack()
 {
+
 }
 
 void FlyEnemy::Draw()
