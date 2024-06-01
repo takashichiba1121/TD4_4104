@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseEnemy.h"
+
 class WalkEnemy:public BaseEnemy
 {
 	int32_t speed;
