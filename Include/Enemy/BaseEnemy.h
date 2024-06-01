@@ -26,5 +26,6 @@ public:
 	Vector2 GetHitBoxSize();
 	Vector2 GetDrawSize();
 	int32_t GetHp();
+	void SetPos(Vector2 pos);
 };
 

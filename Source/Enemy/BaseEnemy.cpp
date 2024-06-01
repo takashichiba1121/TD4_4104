@@ -28,3 +28,8 @@ int BaseEnemy::GetHp()
 {
 	return hp_;
 }
+
+void BaseEnemy::SetPos(Vector2 pos)
+{
+	pos_ = pos;
+}

@@ -20,6 +20,9 @@ void GameScene::Initialize()
 	player_->Initialze();
 	testenemy_ = std::make_unique<WalkEnemy>();
 	testenemy_->Initialize();
+	testenemy2_ = std::make_unique<WalkEnemy>();
+	testenemy2_->Initialize();
+	testenemy2_->SetPos({ 300,100 });
 }
 
 void GameScene::Update()
@@ -30,6 +33,7 @@ void GameScene::Update()
 
 	player_->Update();
 	testenemy_->Update();
+	testenemy2_->Update();
 }
 
 void GameScene::Draw()
@@ -46,6 +50,7 @@ void GameScene::Draw()
 	}
 	player_->Draw();
 	testenemy_->Draw();
+	testenemy2_->Draw();
 
 }
 
