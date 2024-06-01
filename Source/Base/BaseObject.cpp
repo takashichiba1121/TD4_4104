@@ -3,7 +3,6 @@ void BaseObject::Damage(int32_t damage)
 {
 	hp_ -= damage;
 }
-
 bool BaseObject::IsLive()
 {
 	if ( hp_ <= 0 )
@@ -23,7 +22,13 @@ Vector2 BaseObject::GetDrawSize()
 	return drawSize_;
 }
 
+
 int BaseObject::GetHp()
 {
 	return hp_;
+}
+
+Vector2 BaseObject::GetPos()
+{
+	return pos_;
 }

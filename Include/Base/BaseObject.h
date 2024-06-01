@@ -16,6 +16,10 @@ protected:
 	Vector2 pos_;
 	Vector2 hitboxSize_;
 	Vector2 drawSize_ = { 35,61 };
+	RectShape* rectShape_;
+	CircleShape* circleShape_;
+	int32_t speed_;
+	Vector2 velocity_;
 public:
 	virtual void Initialize() = 0;
 	virtual void Update() = 0;
