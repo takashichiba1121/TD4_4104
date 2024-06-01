@@ -3,8 +3,9 @@
 #include <string>
 #include <stdint.h>
 #include "Vector2.h"
+#include "IObject.h"
 
-class BaseEnemy
+class BaseEnemy: public IObject
 {
 protected:
 	std::string tag_;

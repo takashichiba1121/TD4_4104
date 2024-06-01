@@ -9,6 +9,8 @@ public:
 
 	void Initialize() override;
 	void Update() override;
+	void Move();
+	void Attack();
 	void Draw() override;
 };
 
