@@ -3,7 +3,10 @@
 #include <string>
 #include <stdint.h>
 #include "Vector2.h"
-class BaseObject
+#include "IObject.h"
+#include "RectShape.h"
+#include "CircleShape.h"
+class BaseObject:public IObject
 {
 protected:
 
