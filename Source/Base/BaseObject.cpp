@@ -32,8 +32,3 @@ Vector2 BaseObject::GetPos()
 {
 	return pos_;
 }
-
-IShape* BaseObject::GetShape() const
-{
-	return shape_;
-}
