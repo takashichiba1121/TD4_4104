@@ -16,7 +16,6 @@ protected:
 	Vector2 pos_;
 	Vector2 hitboxSize_;
 	Vector2 drawSize_ = { 35,61 };
-	IShape* shape_;
 	int32_t speed_;
 	Vector2 velocity_;
 public:
@@ -30,7 +29,6 @@ public:
 	Vector2 GetDrawSize();
 	int32_t GetHp();
 	Vector2 GetPos();
-	IShape* GetShape() const;
 
 };
 
