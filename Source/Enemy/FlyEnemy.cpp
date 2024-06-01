@@ -1,50 +1,65 @@
-#include "WalkEnemy.h"
+#include "FlyEnemy.h"
 #include"DxlibInclude.h"
 #include "CollisionManager.h"
-void WalkEnemy::Initialize()
+
+void FlyEnemy::Initialize()
 {
 
 	MapChipObjectEnable();
 	SetMapChipCenter(&pos_);
 	SetMapChipRadius({ drawSize_.x / 2,drawSize_.y / 2 });
-	
+
 
 	CollisionManager::GetInstance()->AddObject(this);
-	gravity_ = { 0,1 };
 	speed_ = 3;
 	velocity_ = { 1,0 };
 	pos_ = { 100,100 };
 	islive_ = true;
+	attackTime_ = ATTACK_INTERVAL;
 }
 
-void WalkEnemy::Update()
+void FlyEnemy::Update()
 {
-	Move();
+	if ( isAttack_ )
+	{
+		Attack();
+	}
+	else
+	{
+		Move();
+		attackTime_--;
+		if ( attackTime_ <= 0 )
+		{
+			isAttack_ = true;
+		}
+	}
 }
 
-void WalkEnemy::Move()
+void FlyEnemy::Move()
 {
 	if ( !islive_ ) return;
+	if ( !playerPosPtr_ ) return;
 	velocity_.Normalize();
-
-	gravity_.y += 0.5f;
-	gravity_.y = max(gravity_.y,4);
-
-	if ( GetOnDir() & 0b1 << OnDir::RIGHT | OnDir::LEFT)
+	if ( GetOnDir() & 0b1 << OnDir::RIGHT | OnDir::LEFT )
 	{
 		velocity_ *= -1;
 	}
 
 	if ( GetOnDir() & 0b1 << OnDir::BOTTOM )
 	{
-		gravity_ = { 0,0 };
+		velocity_.y = 0;
 	}
 
-	SetMapChipSpeed({ velocity_ * speed_,gravity_ });
+	SetMapChipSpeed({ velocity_.x * speed_,velocity_.y * speed_ });
 
 }
 
-void WalkEnemy::Draw()
+void FlyEnemy::Attack()
+{
+
+}
+
+void FlyEnemy::Draw()
 {
 	if ( !islive_ ) return;
 	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2,
