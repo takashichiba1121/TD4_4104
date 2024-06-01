@@ -18,6 +18,7 @@ void EnemyManager::Pop()
 		{
 			unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
 			temp->Initialize();
+			temp->SetPlayerPtr(playerptr);
 			temp->SetPos({ GetRand(850) + 50.f,100.f });
 			enemylist_.push_back(move(temp));
 		}

@@ -14,6 +14,7 @@ private:
 
 	void Pop();
 public:
+	BaseObject* playerptr;
 	void Initialize();
 	void Update();
 	void Draw();

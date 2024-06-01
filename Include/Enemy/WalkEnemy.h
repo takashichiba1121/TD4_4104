@@ -12,5 +12,6 @@ public:
 	void Update() override;
 	void Move() override;
 	void Draw() override;
+	void OnCollision() override;
 };
 

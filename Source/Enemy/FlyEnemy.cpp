@@ -1,6 +1,7 @@
 #include "FlyEnemy.h"
 #include"DxlibInclude.h"
 #include "CollisionManager.h"
+#include "Util.h"
 
 void FlyEnemy::Initialize()
 {
@@ -15,7 +16,29 @@ void FlyEnemy::Initialize()
 	velocity_ = { 1,0 };
 	pos_ = { 100,100 };
 	islive_ = true;
-	attackTime_ = ATTACK_INTERVAL;
+	attackIntervalTime_ = ATTACK_INTERVAL;
+
+
+	MapChipObjectEnable();
+	SetMapChipCenter(&pos_);
+	SetMapChipRadius({ drawSize_.x / 2,drawSize_.y / 2 });
+	speed_ = GetRand(4) + 1;
+	if ( GetRand(2) >= 2 )
+	{
+		velocity_ = { 1,0 };
+	}
+	else
+	{
+		velocity_ = { -1,0 };
+	}
+	islive_ = true;
+	shape_ = new RectShape();
+	shape_->SetRadius(drawSize_ / 2);
+	SetShape(shape_);
+	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
+	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
+	CollisionManager::GetInstance()->AddObject(this);
+	attackPower_ = 1;
 }
 
 void FlyEnemy::Update()
@@ -27,10 +50,14 @@ void FlyEnemy::Update()
 	else
 	{
 		Move();
-		attackTime_--;
-		if ( attackTime_ <= 0 )
+		attackIntervalTime_--;
+		if ( attackTimer_ <= 0 )
 		{
 			isAttack_ = true;
+			targetPos_ = playerPtr_->GetPos();
+			attackIntervalTime_ = ATTACK_INTERVAL;
+			attackTimer_ = 0;
+			attackBeforePos_ = pos_;
 		}
 	}
 }
@@ -38,7 +65,7 @@ void FlyEnemy::Update()
 void FlyEnemy::Move()
 {
 	if ( !islive_ ) return;
-	if ( !playerPosPtr_ ) return;
+	if ( !playerPtr_ ) return;
 	velocity_.Normalize();
 	if ( GetOnDir() & 0b1 << OnDir::RIGHT | OnDir::LEFT )
 	{
@@ -56,7 +83,27 @@ void FlyEnemy::Move()
 
 void FlyEnemy::Attack()
 {
+	velocity_ = GetVector2d(pos_,targetPos_);
+	attackTimer_++;
+	if ( pos_.y <= targetPos_.y )
+	{
+		velocity_.y *= -1;
+		attackTimer_ = 0;
+	}
+	if ( velocity_.y > 0 )
+	{
+		speed_ = InQuad(0.f,5.f,ATTACK_TIME,attackTimer_);
+	}
+	else
+	{
+		speed_ = OutQuad(0.f,5.f,ATTACK_TIME,attackTimer_);
+	}
+	if ( pos_.y >= attackBeforePos_.y )
+	{
+		isAttack_ = false;
+	}
 
+	velocity_.Normalize();
 }
 
 void FlyEnemy::Draw()

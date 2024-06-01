@@ -1,6 +1,7 @@
 #include "WalkEnemy.h"
 #include"DxlibInclude.h"
 #include "CollisionManager.h"
+#include "Player.h"
 
 using namespace std;
 void WalkEnemy::Initialize()
@@ -28,6 +29,7 @@ void WalkEnemy::Initialize()
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
 	CollisionManager::GetInstance()->AddObject(this);
+	attackPower_ = 1;
 }
 
 void WalkEnemy::Update()
@@ -64,4 +66,12 @@ void WalkEnemy::Draw()
 	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2,
 		pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,0),true);
 
+}
+
+void WalkEnemy::OnCollision()
+{
+	if ( GetCollisionInfo().object->GetCollisionAttribute() & COLLISION_ATTRIBUTE_PLAYRE )
+	{
+		dynamic_cast< Player* >( GetCollisionInfo().object )->OnCollsionEnemy(attackPower_);
+	}
 }
