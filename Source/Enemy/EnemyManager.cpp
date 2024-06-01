@@ -18,14 +18,14 @@ void EnemyManager::Pop()
 		{
 			unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
 			temp->Initialize();
-			temp->SetPos({ GetRand(450) + 50.f,100.f });
+			temp->SetPos({ GetRand(850) + 50.f,100.f });
 			enemylist_.push_back(move(temp));
 		}
 		else
 		{
 			unique_ptr<WalkEnemy> temp = make_unique<WalkEnemy>();
 			temp->Initialize();
-			temp->SetPos({ GetRand(450) + 50.f,100.f });
+			temp->SetPos({ GetRand(850) + 50.f,100.f });
 			enemylist_.push_back(move(temp));
 		}
 	}
