@@ -26,6 +26,8 @@ void GameScene::Update()
 {
 	//ImGui::ShowDemoWindow();
 
+	player_->Update();
+
 	CollisionManager::GetInstance()->Update();
 
 	player_->Update();

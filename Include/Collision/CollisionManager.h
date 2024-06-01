@@ -3,6 +3,7 @@
 #include<vector>
 
 #include"IObject.h"
+#include<CollisionConfig.h>
 
 class CollisionManager
 {
