@@ -17,7 +17,7 @@ void GameScene::Initialize()
 	CollisionManager::GetInstance()->SetMapChip(testMap);
 
 	player_ = std::make_unique<Player>();
-	player_->Initialze();
+	player_->Initialize();
 	testenemy_ = std::make_unique<WalkEnemy>();
 	testenemy_->Initialize();
 }
@@ -25,8 +25,6 @@ void GameScene::Initialize()
 void GameScene::Update()
 {
 	//ImGui::ShowDemoWindow();
-
-	player_->Update();
 
 	CollisionManager::GetInstance()->Update();
 

@@ -1,9 +1,11 @@
 #pragma once
 #include"Vector2.h"
 #include"PlayerAttack.h"
+#include"CircleShape.h"
 #include<memory>
 #include<string>
-class Player
+#include"BaseObject.h"
+class Player:public BaseObject
 {
 private:
 #pragma region ステータス
@@ -46,27 +48,19 @@ private:
 
 	bool direction_ = false;
 
-	float speed_ = 0;
-
-	Vector2 pos_;
-
-	Vector2 drawSize_ = { 34,60 };
-
-	Vector2 colisionSize_ = { 29,55 };
-
 	Vector2 colisionSift_ = { 5,5 };
 
 	bool isAttack_ = false;
 
 	uint32_t attackInterval_ = 0;
 
+	CircleShape* shape_;
+
 	std::unique_ptr<PlayerAttack> attackZ_;
 
 	std::unique_ptr<PlayerAttack> attackX_;
 
 	int32_t maxHp_ = 100;
-
-	int32_t hp_ = maxHp_;
 
 	bool onGround_ = false;
 
@@ -75,9 +69,9 @@ private:
 	float fallSpeed_ = 0;
 
 public:
-	void Initialze();
+	void Initialize() override;
 
-	void Update();
+	void Update() override;
 
 	void Move();
 
@@ -91,7 +85,7 @@ public:
 
 	float IsDamage();
 
-	void OnCollsionEnemy(int32_t Damage);
+	void Damage(int32_t Damage) override;
 
 	void ChangeAttackZ(std::string attackName);
 
@@ -107,7 +101,7 @@ public:
 
 	void AddCost(int32_t cost);
 
-	void Draw();
+	void Draw() override;
 
 private:
 
