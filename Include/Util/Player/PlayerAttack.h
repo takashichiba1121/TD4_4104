@@ -5,6 +5,14 @@ class PlayerAttack
 {
 public:
 
+	enum class AttackType
+	{
+		Small,
+		Big,
+	};
+
+public:
+
 	virtual void AttackInit(const Vector2& playerPos,bool direction) = 0;
 
 	virtual void Attack() = 0;

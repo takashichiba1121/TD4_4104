@@ -7,27 +7,48 @@
 #include"DxlibInclude.h"
 #include"Input.h"
 
+#include<DxLib.h>
+
+
+
 void GameScene::Initialize()
 {
-	gh = LoadGraph("Resources/Src1.bmp");
+
+	CollisionManager::GetInstance()->SetMapChip(testMap);
 
 	player_ = std::make_unique<Player>();
-
 	player_->Initialze();
+	testenemy_ = std::make_unique<WalkEnemy>();
+	testenemy_->Initialize();
 }
 
 void GameScene::Update()
 {
-	ImGui::ShowDemoWindow();
+	//ImGui::ShowDemoWindow();
 
 	player_->Update();
+
+	CollisionManager::GetInstance()->Update();
+
+	player_->Update();
+	testenemy_->Update();
 }
 
 void GameScene::Draw()
 {
+	for ( size_t i = 0; i < testMap.size(); i++ )
+	{
+		for ( size_t j = 0; j < testMap[ i ].size(); j++ )
+		{
+			if ( testMap[ i ][ j ] )
+			{
+				DrawBox(16 + j * 32 - 16,16 + i * 32 - 16,16 + j * 32 + 16,16 + i * 32 + 16,GetColor(255,255,255),true);
+			}
+		}
+	}
 	player_->Draw();
+	testenemy_->Draw();
 
-	DrawGraph(0,0,gh,true);
 }
 
 void GameScene::SpriteDraw()
