@@ -45,6 +45,7 @@ private:
 	struct MapIndex
 	{
 		int8_t chip;
+		bool room;
 		bool out;
 	};
 
@@ -75,6 +76,7 @@ private:
 	const int2 VIEW_WINDOW_SIZE_HALF = { VIEW_WINDOW_SIZE.x / 2,VIEW_WINDOW_SIZE.y / 2 };
 	const int2 WINDOW_SIZE = { 1280,720 };
 	const  float2 INIT_SCALE = { 1280.0f / 854.0f, 720.0f / 480.0f };
+	const float2 MAX_EDITOR_MAP_SIZE = { 800.0f ,550.0f};
 
 	std::unordered_set<int32_t>randNums_;
 
@@ -91,7 +93,8 @@ private:
 		{ChipIndex::WALL,ChipIndex::WALL} };
 	std::list<FileTableElement>mapFileName_;
 	std::list<FileTableElement>roomFileName_;
-	EditMode mode_;
+	EditMode selectMode_;
+	EditMode mode_= EditMode::MAP;
 	FileTableElement selectFile_;
 	FileTableElement loadFile_;
 	Rooms selectRooms_;
@@ -118,12 +121,12 @@ private:
 	int2 screenOldMousePos_ = { 0,0 };
 	int2 editorMousePos_ = { 0,0 };
 
-	float2 scaleUV1_ = { 0,0 };
-	float2 scaleUV2_ = { 1,1 };
+	float2 scaleUV1_ = { 0.0001f,0.0001f };
+	float2 scaleUV2_ = { 1.0f,1.0f };
 
 	float2 moveUV_ = { 0,0 };
 
-	UV screenUV;
+	UV screenUV = { { 0.0001f,0.0001f },{ 1.0f,1.0f } };
 	UV oldScreenUV;
 
 	int32_t mouseInput_;
@@ -136,6 +139,8 @@ private:
 	Graph wallGraphHandle_;
 
 	ChipIndex selectChip_;
+
+	float2 mouseUvPos_;
 
 public:
 	// BaseScene を介して継承されました
@@ -158,7 +163,7 @@ private:
 	void RoomSelectView();
 	void EditorMove();
 	void EditorScale();
-	int2 GetEditorMousePos();
+	int2 GetEditorMousePos(float2* rte =nullptr);
 	void ChipDraw(size_t x,size_t y,int8_t chip,int32_t sign = -1);
 	void SelectDraw(ChipIndex chip);
 	void GenerateRoomExample(const std::string& path,std::vector<std::vector<uint8_t>>&example);
@@ -171,7 +176,7 @@ private:
 
 	bool IsEditorMapWithin(int32_t x,int32_t y);
 
-	void RoomSearch(RoomSetting& roomSetting,int32_t x,int32_t y,nlohmann::json& jsonData);
+	void RoomSearch(RoomSetting& roomSetting,int32_t x,int32_t y,nlohmann::ordered_json& jsonData);
 
 	int32_t RandId();
 };
