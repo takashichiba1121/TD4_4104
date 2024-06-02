@@ -14,6 +14,7 @@ public:
 	virtual void Move() {};
 	virtual void Attack() {};
 	void SetPos(Vector2 pos);
+	void SetVelocity(Vector2 velocity);
 	void SetPlayerPtr(BaseObject* ptr);
 };
 

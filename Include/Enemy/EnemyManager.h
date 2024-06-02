@@ -7,14 +7,15 @@
 class EnemyManager
 {
 private:
-	std::list<std::unique_ptr<BaseEnemy>> enemylist_;
+	static std::list<std::unique_ptr<BaseEnemy>> enemylist_;
 	int32_t popTime_;
 	const int32_t POP_INTERVAL = 30;
 	const int32_t MAX_ENEMY_NUM = 10;
 
-	void Pop();
+	void Pop();//自動ランダム生成
 public:
-	BaseObject* playerptr;
+	static void SetEnemyPOP(std::string enemyType,Vector2 pos,Vector2 Velocity);//指定生成
+	static BaseObject* playerptr;
 	void Initialize();
 	void Update();
 	void Draw();

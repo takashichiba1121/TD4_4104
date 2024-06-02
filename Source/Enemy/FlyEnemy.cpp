@@ -51,7 +51,7 @@ void FlyEnemy::Update()
 	{
 		Move();
 		attackIntervalTime_--;
-		if ( attackTimer_ <= 0 )
+		if ( attackTimer_ <= 0 && playerPtr_)
 		{
 			isAttack_ = true;
 			targetPos_ = playerPtr_->GetPos();
@@ -65,7 +65,6 @@ void FlyEnemy::Update()
 void FlyEnemy::Move()
 {
 	if ( !islive_ ) return;
-	if ( !playerPtr_ ) return;
 	velocity_.Normalize();
 	if ( GetOnDir() & 0b1 << OnDir::RIGHT | OnDir::LEFT )
 	{
