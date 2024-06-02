@@ -257,20 +257,6 @@ float Player::IsDamage()
 	{
 		Damage = attackZ_->GetPow() * changePow_;
 
-float Player::IsDamage()
-{
-	float Damage=0;
-
-	if ( attackX_->GetAttack())
-	{
-		  Damage=attackX_->GetPow() * changePow_;
-
-		return Damage;
-	}
-	else
-	{
-		Damage = attackZ_->GetPow() * changePow_;
-
 		return Damage;
 	}
 }
