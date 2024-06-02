@@ -177,7 +177,7 @@ void Player::Move()
 	}
 
 
-	if ( GetOnDir() & 0b1 << OnDir::BOTTOM )
+	if ( !(GetOnDir() & 0b1 << OnDir::BOTTOM) )
 	{
 		onGround_ = true;
 	}
