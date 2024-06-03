@@ -16,8 +16,6 @@ private:
 
 	const uint32_t INTERVAL_ = 30;
 
-	const AttackType TYPE_ = AttackType::Big;
-
 	const float Pow = 0;
 
 public:
@@ -33,10 +31,6 @@ public:
 
 	uint32_t GetInterval() override {
 		return INTERVAL_;
-	}
-
-	AttackType GetType() override {
-		return TYPE_;
 	}
 
 	float GetPow() override {

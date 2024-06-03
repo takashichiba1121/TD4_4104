@@ -9,17 +9,40 @@
 #include"json.hpp"
 #include <fstream>
 
-void Player::Initialze()
+#include"CollisionManager.h"
+
+void Player::Initialize()
 {
-	Load();
+	hitboxSize_ = { 28,54 };
+
+	drawSize_ = { 34,60 };
 
 	pos_.x = GameConfig::GetGameConfig()->windowWidth / 2;
 
 	pos_.y = GameConfig::GetGameConfig()->windowHeight / 2;
 
-	ChangeAttack("Fist");
+	Load();
 
-	ChangeAttack("Weapon");
+	ChangeAttackZ("Fist");
+
+	ChangeAttackX("Weapon");
+
+	hp_ = maxHp_;
+
+	islive_ = true;
+
+	MapChipObjectEnable();
+	SetMapChipCenter(&pos_);
+	SetMapChipRadius({ drawSize_.x / 2,drawSize_.y / 2 });
+
+	shape_ = new CircleShape();
+	shape_->SetRadius(drawSize_.y / 2);
+
+	SetShape(shape_);
+	SetCollisionAttribute(COLLISION_ATTRIBUTE_PLAYRE);
+	SetCollisionMask(~COLLISION_ATTRIBUTE_PLAYRE);
+
+	CollisionManager::GetInstance()->AddObject(this);
 }
 
 void Player::Update()
@@ -66,19 +89,11 @@ void Player::Update()
 
 	ImGui::SliderFloat("TopSpeed",&topSpeed_,0.0f,200.0f,"%3.0f");
 
-	ImGui::Text("SmallAttatck");
+	ImGui::End();
 
-	if ( ImGui::Button("Fist") )
-	{
-		ChangeAttack("Fist");
-	}
+	ImGui::Begin("PlayerSituation");
 
-	ImGui::Text("BigAttatck");
-
-	if ( ImGui::Button("Weapon") )
-	{
-		ChangeAttack("Weapon");
-	}
+	ImGui::Text("vec:%f,%f",velocity_.x,velocity_.y);
 
 	ImGui::End();
 
@@ -90,79 +105,79 @@ void Player::Move()
 	if ( Input::Instance()->PushKey(KEY_INPUT_A) )
 	{
 		direction_ = false;
-		if ( speed_ > -topSpeed_*changeSpd_)
+		if ( velocity_.x > -topSpeed_*changeSpd_)
 		{
 			if ( onGround_ )
 			{
-				speed_ -= (airAcceleration_ * changeSpd_ ) /60.0f;
+				velocity_.x -= ( airAcceleration_ * changeSpd_ ) /GameConfig::GetGameConfig()->fps;
 			}
 			else
 			{
-				speed_ -= (acceleration_*changeSpd_)/60.0f;
+				velocity_.x -= (acceleration_*changeSpd_) / GameConfig::GetGameConfig()->fps;
 			}
 		}
 		else
 		{
-			speed_ = -topSpeed_ * changeSpd_;
+			velocity_.x = -topSpeed_ * changeSpd_;
 		}
 	}
-	else if ( speed_ < 0 )
+	else if ( velocity_.x < 0 )
 	{
 		if ( onGround_ )
 		{
-			speed_ += airDeccelaration_ / 60.0f;
+			velocity_.x += airDeccelaration_ /GameConfig::GetGameConfig()->fps;
 		}
 		else
 		{
-			speed_ += deccelaration_ / 60.0f;
+			velocity_.x += deccelaration_ /GameConfig::GetGameConfig()->fps;
 		}
-		if ( speed_ > 0 )
+		if ( velocity_.x > 0 )
 		{
-			speed_ = 0;
+			velocity_.x = 0;
 		}
 	}
 	if ( Input::Instance()->PushKey(KEY_INPUT_D) )
 	{
 		direction_ = true;
-		if ( speed_ < topSpeed_ *changeSpd_ )
+		if ( velocity_.x < topSpeed_ *changeSpd_ )
 		{
 			if ( onGround_ )
 			{
-				speed_ += ( airAcceleration_ * changeSpd_ ) / 60.0f;
+				velocity_.x += ( airAcceleration_ * changeSpd_ ) / GameConfig::GetGameConfig()->fps;
 			}
 			else
 			{
-				speed_ += ( acceleration_ * changeSpd_ ) / 60.0f;
+				velocity_.x += ( acceleration_ * changeSpd_ ) / GameConfig::GetGameConfig()->fps;
 			}
 		}
 		else
 		{
-			speed_ = topSpeed_ * changeSpd_;
+			velocity_.x = topSpeed_ * changeSpd_;
 		}
 	}
-	else if ( speed_ > 0 )
+	else if ( velocity_.x > 0 )
 	{
 		if ( onGround_ )
 		{
-			speed_ -= airDeccelaration_ / 60.0f;
+			velocity_.x -= airDeccelaration_ / GameConfig::GetGameConfig()->fps;
 		}
 		else
 		{
-			speed_ -= deccelaration_ / 60.0f;
+			velocity_.x -= deccelaration_ / GameConfig::GetGameConfig()->fps;
 		}
-		if ( speed_ < 0 )
+		if ( velocity_.x < 0 )
 		{
-			speed_ = 0;
+			velocity_.x = 0;
 		}
 	}
-	pos_.x += speed_;
 	
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) && !onGround_ )
 	{
 		JumpStart();
 	}
 
-	if ( pos_.y < 600 )
+
+	if ( !(GetOnDir() & 0b1 << OnDir::BOTTOM) )
 	{
 		onGround_ = true;
 	}
@@ -178,6 +193,10 @@ void Player::Move()
 			Falling();
 		}
 	}
+
+	SetMapChipSpeed(velocity_);
+
+	shape_->SetCenter(pos_);
 }
 
 void Player::JumpStart()
@@ -186,37 +205,32 @@ void Player::JumpStart()
 
 	isJump_ = true;
 
-	fallSpeed_ += jumpInitialVelocity_;
+	velocity_.y += jumpInitialVelocity_;
 }
 
 void Player::Jump()
 {
-	fallSpeed_ += jumpAcceleration_;
+	velocity_.y += jumpAcceleration_;
 
-	pos_.y += fallSpeed_;
-
-	if ( Input::Instance()->ReleaseKey(KEY_INPUT_SPACE)||fallSpeed_>=0)
+	if ( Input::Instance()->ReleaseKey(KEY_INPUT_SPACE)|| velocity_.y >=0)
 	{
 		isJump_ = false;
 		
-		fallSpeed_/=3;
+		velocity_.y /=3;
 	}
 
 }
 
 void Player::Falling()
 {
-	fallSpeed_ += gravityAcceleration_;
+	velocity_.y += gravityAcceleration_;
 
-	pos_.y += fallSpeed_;
-
-	if ( pos_.y >= 600 )
+	if ( GetOnDir() & 0b1 << OnDir::BOTTOM )
 	{
 		onGround_ = false;
 
-		fallSpeed_ = 0;
+		velocity_.y = 0;
 
-		pos_.y = 600;
 	}
 }
 
@@ -226,9 +240,7 @@ void Player::Attack()
 	{
 		attackZ_->AttackInit(pos_,direction_);
 
-		speed_ = 0;
-
-		fallSpeed_ = 0;
+		velocity_ = { 0,0 };
 
 		attackInterval_ = attackZ_->GetInterval();
 	}
@@ -237,9 +249,7 @@ void Player::Attack()
 	{
 		attackX_->AttackInit(pos_,direction_);
 
-		speed_ = 0;
-
-		fallSpeed_ = 0;
+		velocity_ = { 0,0 };
 
 		attackInterval_ = attackX_->GetInterval();
 	}
@@ -274,55 +284,56 @@ float Player::IsDamage()
 		return Damage;
 	}
 }
-void Player::OnCollsionEnemy(int32_t Damage)
+void Player::Damage(int32_t Damage)
 {
 	hp_ -= Damage * changeDef_;
 
 }
-void Player::ChangeAttack(std::string attackName)
+void Player::ChangeAttackZ(std::string attackName)
 {
-
-	std::unique_ptr<PlayerAttack> newAttack_;
 	if ( attackName == "Fist" )
 	{
-		newAttack_ = std::make_unique<PlayerAttackFist>();
+		attackZ_ = std::make_unique<PlayerAttackFist>();
 	}
 	if ( attackName == "Weapon" )
 	{
-		newAttack_ = std::make_unique<PlayerAttackWeapon>();
+		attackZ_ = std::make_unique<PlayerAttackWeapon>();
 	}
+}
 
-	if (newAttack_->GetType() == PlayerAttack::AttackType::Big )
+void Player::ChangeAttackX(std::string attackName)
+{
+	if ( attackName == "Fist" )
 	{
-		attackX_ = std::move(newAttack_);
+		attackX_ = std::make_unique<PlayerAttackFist>();
 	}
-	else
+	if ( attackName == "Weapon" )
 	{
-		attackZ_ = std::move(newAttack_);
+		attackX_ = std::make_unique<PlayerAttackWeapon>();
 	}
 }
 
-void Player::AddSpd(int spd)
+void Player::AddSpd(int32_t spd)
 {
-	changeSpd_ += spd/100.0f;
+	changeSpd_ += float(spd)/100.0f;//パーセントを実数値に戻す
 }
 
-void Player::AddPow(int pow)
+void Player::AddPow(int32_t pow)
 {
-	changePow_ += pow/100.0f;
+	changePow_ += float(pow)/100.0f;
 }
 
-void Player::AddDef(int def)
+void Player::AddDef(int32_t def)
 {
-	changeDef_ += def/100.0f;
+	changeDef_ += float(def)/100.0f;
 }
 
-void Player::AddMaxHp(int maxHp)
+void Player::AddMaxHp(int32_t maxHp)
 {
-	changeMaxHp_ += maxHp / 100.0f;
+	changeMaxHp_ += float(maxHp) / 100.0f;
 }
 
-void Player::AddCost(int cost)
+void Player::AddCost(int32_t cost)
 {
 	nowCost += cost;
 }
@@ -337,7 +348,8 @@ void Player::Draw()
 	float downPos = pos_.y + drawSize_.y / 2;
 
 	DrawBox(leftPos,upPos,rightPos,downPos,GetColor(255,255,255),true);
-	DrawBox(pos_.x - colisionSize_.x / 2,pos_.y - colisionSize_.y / 2,pos_.x + colisionSize_.x/2,pos_.y + colisionSize_.y/2,GetColor(255,0,0),false);
+	DrawBox(pos_.x - hitboxSize_.x / 2,pos_.y - hitboxSize_.y / 2,pos_.x + hitboxSize_.x/2,pos_.y + hitboxSize_.y/2,GetColor(255,0,0),false);
+	//向いてる方向の視覚化
 	if ( direction_ )
 	{
 		DrawBox(rightPos,upPos,rightPos - 5,upPos + 5,GetColor(255,0,0),true);

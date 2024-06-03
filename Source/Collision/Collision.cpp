@@ -8,7 +8,7 @@ bool Collision::Circle2Circle(const CircleShape& circleA,const CircleShape& circ
 
 	float lenge = vec.GetLenge();
 
-	if ( lenge < circleA.GetRadius() + circleB.GetRadius() )
+	if ( lenge > circleA.GetRadius() + circleB.GetRadius() )
 	{
 		return false;
 	}

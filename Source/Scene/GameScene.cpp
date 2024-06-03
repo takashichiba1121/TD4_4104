@@ -16,27 +16,33 @@ void GameScene::Initialize()
 	player_ = std::make_unique<Player>();
 	player_->Initialze();
 
+	testenemy_ = std::make_unique<WalkEnemy>();
+	testenemy_->Initialize();
+	
 	mapChip_ = std::make_unique<MapChip>();
 	mapChip_->Initialize();
 	mapChip_->MapLoad("Resources/Export/Map/TestMap.json");
 
 	CollisionManager::GetInstance()->SetMapChip(mapChip_->GetMapChip());
+
 }
 
 void GameScene::Update()
 {
-	ImGui::ShowDemoWindow();
+	//ImGui::ShowDemoWindow();
 
 	CollisionManager::GetInstance()->Update();
 
 	player_->Update();
+	testenemy_->Update();
 }
 
 void GameScene::Draw()
 {
-	player_->Draw();
-
 	mapChip_->Draw({0,0});
+	
+	player_->Draw();
+	testenemy_->Draw();
 }
 
 void GameScene::SpriteDraw()
