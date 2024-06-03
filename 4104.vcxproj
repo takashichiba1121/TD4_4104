@@ -107,6 +107,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Source\Enemy\FlyEnemy.cpp" />
     <ClCompile Include="Source\Base\BaseObject.cpp" />
     <ClCompile Include="Source\Collision\CircleShape.cpp" />
@@ -148,8 +149,10 @@
     <ClCompile Include="Source\Util\Math\Vector2.cpp" />
     <ClCompile Include="Source\Util\Math\Vector3.cpp" />
     <ClCompile Include="Source\Enemy\WalkEnemy.cpp" />
+    <ClCompile Include="Source\Util\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Enemy\EnemyManager.h" />
     <ClInclude Include="Include\Base\BaseObject.h" />
     <ClInclude Include="Include\Enemy\FlyEnemy.h" />
     <ClInclude Include="Include\Collision\CircleShape.h" />
@@ -189,6 +192,7 @@
     <ClInclude Include="Include\Util\Math\Vector2.h" />
     <ClInclude Include="Include\Util\Math\Vector3.h" />
     <ClInclude Include="Include\Enemy\WalkEnemy.h" />
+    <ClInclude Include="Include\Util\Util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

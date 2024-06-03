@@ -16,7 +16,7 @@ protected:
 	Vector2 pos_;
 	Vector2 hitboxSize_;
 	Vector2 drawSize_ = { 35,61 };
-	int32_t speed_;
+	float speed_;
 	Vector2 velocity_;
 public:
 	virtual void Initialize() = 0;
@@ -29,6 +29,5 @@ public:
 	Vector2 GetDrawSize();
 	int32_t GetHp();
 	Vector2 GetPos();
-
 };
 
