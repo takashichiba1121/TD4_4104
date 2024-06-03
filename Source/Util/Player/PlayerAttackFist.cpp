@@ -37,7 +37,7 @@ void PlayerAttackFist::Draw()
 	}
 	else
 	{
-		DrawPos = { playerPos_.x - ATTACK_POS_.x - COLISION_SIZE_.x / 2,playerPos_.y- ATTACK_POS_.y };
+		DrawPos = { playerPos_.x - ATTACK_POS_.x - COLISION_SIZE_.x / 2,playerPos_.y+ ATTACK_POS_.y };
 	}
 
 	if ( isAttack_ )

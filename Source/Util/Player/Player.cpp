@@ -102,7 +102,7 @@ void Player::Update()
 
 void Player::Move()
 {
-	if ( Input::Instance()->PushKey(KEY_INPUT_A) )
+	if ( Input::Instance()->PushKey(KEY_INPUT_LEFT) )
 	{
 		direction_ = false;
 		if ( velocity_.x > -topSpeed_*changeSpd_)
@@ -136,7 +136,7 @@ void Player::Move()
 			velocity_.x = 0;
 		}
 	}
-	if ( Input::Instance()->PushKey(KEY_INPUT_D) )
+	if ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) )
 	{
 		direction_ = true;
 		if ( velocity_.x < topSpeed_ *changeSpd_ )
@@ -171,7 +171,7 @@ void Player::Move()
 		}
 	}
 	
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) && !onGround_ )
+	if ( Input::Instance()->PushKey(KEY_INPUT_SPACE) && !onGround_ )
 	{
 		JumpStart();
 	}
