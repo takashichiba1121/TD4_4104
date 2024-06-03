@@ -99,14 +99,14 @@ private:
 	FileTableElement* loadFile_;
 	Rooms* selectRooms_;
 	Rooms* loadRooms_;
-
+	
 	ImVector<int8_t>tableSelection;
 	ImVector<int32_t>mapsOrRoomsTableSelection;
 	char textBuff[ 256 ];
 	std::string mapName_;
 	Graph screenGraph_;
 	int32_t screen_;
-	int2 mapBlockSize_ = { 10 ,10 };
+	int2 mapBlockSize_ = { 40 ,22 };
 	int2 tmpBlockSize = mapBlockSize_;
 	float blockSize_ = 32;
 	float blockSizeHalf_ = blockSize_ / 2;

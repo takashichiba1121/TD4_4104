@@ -23,6 +23,9 @@ public:
 
 	const std::vector < std::vector<uint8_t>>& GetMapChip()const;
 
+	uint8_t GetPosElement(int32_t x,int32_t y)const;
+	uint8_t GetNumOfArrayElement(int32_t x,int32_t y)const;
+
 	void Draw(const Vector2& screenPos);
 
 	void RoomInstallation(const std::string& directoryPath,const Vector2& leftTop);

@@ -86,6 +86,16 @@ const std::vector<std::vector<uint8_t>>& MapChip::GetMapChip() const
 	return map_;
 }
 
+uint8_t MapChip::GetPosElement(int32_t x, int32_t y)const
+{
+	return map_[y / BLOCK_SIZE][x / BLOCK_SIZE];
+}
+
+uint8_t MapChip::GetNumOfArrayElement(int32_t x, int32_t y) const
+{
+	return map_[y][x];
+}
+
 void MapChip::Draw(const Vector2& screenPos)
 {
 	for ( size_t i = 0; i < map_.size(); i++ )
