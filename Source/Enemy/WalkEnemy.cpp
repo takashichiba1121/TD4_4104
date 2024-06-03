@@ -72,6 +72,6 @@ void WalkEnemy::OnCollision()
 {
 	if ( GetCollisionInfo().object->GetCollisionAttribute() & COLLISION_ATTRIBUTE_PLAYRE )
 	{
-		dynamic_cast< Player* >( GetCollisionInfo().object )->OnCollsionEnemy(attackPower_);
+		dynamic_cast< Player* >( GetCollisionInfo().object )->Damage(attackPower_);
 	}
 }

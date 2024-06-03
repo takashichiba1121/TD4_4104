@@ -10,8 +10,9 @@ private:
 	Vector2 targetPos_;
 	Vector2 attackBeforePos_;
 	bool isAttack_;
+	bool back_;
 	const int64_t ATTACK_INTERVAL = 120;
-	const int64_t ATTACK_TIME = 15;
+	const int64_t ATTACK_TIME = 10;
 	RectShape* shape_;
 public:
 

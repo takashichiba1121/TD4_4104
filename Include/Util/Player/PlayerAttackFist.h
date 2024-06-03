@@ -20,8 +20,6 @@ private:
 
 	const uint32_t INTERVAL_ = 10;
 
-	const AttackType TYPE_ = AttackType::Small;
-
 	const float Pow = 5;
 
 public:
@@ -34,8 +32,6 @@ public:
 	bool GetAttack() override {return isAttack_;}
 
 	uint32_t GetInterval() override {return INTERVAL_;}
-
-	AttackType GetType() override {return TYPE_;}
 
 	float GetPow() override {
 		return Pow;

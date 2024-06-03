@@ -12,9 +12,8 @@ void FlyEnemy::Initialize()
 
 
 	CollisionManager::GetInstance()->AddObject(this);
-	speed_ = 3;
+	speed_ = 1;
 	velocity_ = { 1,0 };
-	pos_ = { 100,100 };
 	islive_ = true;
 	attackIntervalTime_ = ATTACK_INTERVAL;
 
@@ -22,7 +21,7 @@ void FlyEnemy::Initialize()
 	MapChipObjectEnable();
 	SetMapChipCenter(&pos_);
 	SetMapChipRadius({ drawSize_.x / 2,drawSize_.y / 2 });
-	speed_ = GetRand(4) + 1;
+
 	if ( GetRand(2) >= 2 )
 	{
 		velocity_ = { 1,0 };
@@ -49,10 +48,10 @@ void FlyEnemy::Update()
 	}
 	else
 	{
-		Move();
 		attackIntervalTime_--;
-		if ( attackTimer_ <= 0 && playerPtr_)
+		if ( attackIntervalTime_ <= 0 && playerPtr_)
 		{
+			back_ = false;
 			isAttack_ = true;
 			targetPos_ = playerPtr_->GetPos();
 			attackIntervalTime_ = ATTACK_INTERVAL;
@@ -60,6 +59,9 @@ void FlyEnemy::Update()
 			attackBeforePos_ = pos_;
 		}
 	}
+
+	Move();
+
 }
 
 void FlyEnemy::Move()
@@ -68,41 +70,50 @@ void FlyEnemy::Move()
 	velocity_.Normalize();
 	if ( GetOnDir() & 0b1 << OnDir::RIGHT | OnDir::LEFT )
 	{
-		velocity_ *= -1;
+		velocity_.x *= -1;
 	}
 
-	if ( GetOnDir() & 0b1 << OnDir::BOTTOM )
+	if ( GetOnDir() & 0b1 << OnDir::BOTTOM && !isAttack_)
 	{
 		velocity_.y = 0;
 	}
-
 	SetMapChipSpeed({ velocity_.x * speed_,velocity_.y * speed_ });
+	
 
 }
 
 void FlyEnemy::Attack()
 {
-	velocity_ = GetVector2d(pos_,targetPos_);
-	attackTimer_++;
-	if ( pos_.y <= targetPos_.y )
+	if ( !back_ )
 	{
-		velocity_.y *= -1;
+		velocity_ = GetVector2d(targetPos_,pos_);
+	}
+	if ( ATTACK_TIME >= attackTimer_ )
+	{
+		attackTimer_++;
+	}
+	if ( GetOnDir() & 0b1 << OnDir::BOTTOM && !back_)
+	{
+		velocity_.y = -1;
+		back_ = true;
 		attackTimer_ = 0;
 	}
 	if ( velocity_.y > 0 )
 	{
-		speed_ = InQuad(0.f,5.f,ATTACK_TIME,attackTimer_);
+		speed_ = InQuad(0.f,6.f,ATTACK_TIME,attackTimer_);
 	}
 	else
 	{
 		speed_ = OutQuad(0.f,5.f,ATTACK_TIME,attackTimer_);
 	}
-	if ( pos_.y >= attackBeforePos_.y )
+	if ( pos_.y <= attackBeforePos_.y && velocity_.y < 0  )
 	{
 		isAttack_ = false;
+		velocity_.y = 0.f;
+		speed_ = GetRand(4) + 1;
 	}
 
-	velocity_.Normalize();
+
 }
 
 void FlyEnemy::Draw()
@@ -110,5 +121,4 @@ void FlyEnemy::Draw()
 	if ( !islive_ ) return;
 	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2,
 		pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,0),true);
-
 }

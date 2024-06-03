@@ -18,8 +18,9 @@ void GameScene::Initialize()
 
 	player_ = std::make_unique<Player>();
 	enemys_ = std::make_unique<EnemyManager>();
-	player_->Initialze();
+	player_->Initialize();
 	enemys_->Initialize();
+	enemys_->playerptr = player_.get();
 }
 
 void GameScene::Update()
