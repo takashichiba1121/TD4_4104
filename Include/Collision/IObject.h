@@ -3,15 +3,7 @@
 #include"IShape.h"
 #include<Vector2.h>
 
-enum ChipIndex : uint8_t
-{
-	NONE,
-	ROAD,
-	DOOR,
-	ROOM,
-	LOCK_ROOM,
-	WALL
-};
+#include"ChipIndex.h"
 
 enum OnDir
 {
