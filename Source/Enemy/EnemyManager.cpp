@@ -54,6 +54,11 @@ void EnemyManager::SetEnemyPOP(std::string enemyType,Vector2 pos,Vector2 Velocit
 	}
 }
 
+void EnemyManager::SetPlayerPtr(BaseObject* playerPtr)
+{
+	playerPtr_ = playerPtr;
+}
+
 void EnemyManager::Update()
 {
 	Pop();
