@@ -9,17 +9,40 @@
 #include"json.hpp"
 #include <fstream>
 
-void Player::Initialze()
+#include"CollisionManager.h"
+
+void Player::Initialize()
 {
-	Load();
+	hitboxSize_ = { 28,54 };
+
+	drawSize_ = { 34,60 };
 
 	pos_.x = GameConfig::GetGameConfig()->windowWidth / 2;
 
 	pos_.y = GameConfig::GetGameConfig()->windowHeight / 2;
 
+	Load();
+
 	ChangeAttackZ("Fist");
 
 	ChangeAttackX("Weapon");
+
+	hp_ = maxHp_;
+
+	islive_ = true;
+
+	MapChipObjectEnable();
+	SetMapChipCenter(&pos_);
+	SetMapChipRadius({ drawSize_.x / 2,drawSize_.y / 2 });
+
+	shape_ = new CircleShape();
+	shape_->SetRadius(drawSize_.y / 2);
+
+	SetShape(shape_);
+	SetCollisionAttribute(COLLISION_ATTRIBUTE_PLAYRE);
+	SetCollisionMask(~COLLISION_ATTRIBUTE_PLAYRE);
+
+	CollisionManager::GetInstance()->AddObject(this);
 }
 
 void Player::Update()
@@ -68,6 +91,12 @@ void Player::Update()
 
 	ImGui::End();
 
+	ImGui::Begin("PlayerSituation");
+
+	ImGui::Text("vec:%f,%f",velocity_.x,velocity_.y);
+
+	ImGui::End();
+
 #endif
 }
 
@@ -76,79 +105,79 @@ void Player::Move()
 	if ( Input::Instance()->PushKey(KEY_INPUT_A) )
 	{
 		direction_ = false;
-		if ( speed_ > -topSpeed_*changeSpd_)
+		if ( velocity_.x > -topSpeed_*changeSpd_)
 		{
 			if ( onGround_ )
 			{
-				speed_ -= ( airAcceleration_ * changeSpd_ ) /GameConfig::GetGameConfig()->fps;
+				velocity_.x -= ( airAcceleration_ * changeSpd_ ) /GameConfig::GetGameConfig()->fps;
 			}
 			else
 			{
-				speed_ -= (acceleration_*changeSpd_) / GameConfig::GetGameConfig()->fps;
+				velocity_.x -= (acceleration_*changeSpd_) / GameConfig::GetGameConfig()->fps;
 			}
 		}
 		else
 		{
-			speed_ = -topSpeed_ * changeSpd_;
+			velocity_.x = -topSpeed_ * changeSpd_;
 		}
 	}
-	else if ( speed_ < 0 )
+	else if ( velocity_.x < 0 )
 	{
 		if ( onGround_ )
 		{
-			speed_ += airDeccelaration_ /GameConfig::GetGameConfig()->fps;
+			velocity_.x += airDeccelaration_ /GameConfig::GetGameConfig()->fps;
 		}
 		else
 		{
-			speed_ += deccelaration_ /GameConfig::GetGameConfig()->fps;
+			velocity_.x += deccelaration_ /GameConfig::GetGameConfig()->fps;
 		}
-		if ( speed_ > 0 )
+		if ( velocity_.x > 0 )
 		{
-			speed_ = 0;
+			velocity_.x = 0;
 		}
 	}
 	if ( Input::Instance()->PushKey(KEY_INPUT_D) )
 	{
 		direction_ = true;
-		if ( speed_ < topSpeed_ *changeSpd_ )
+		if ( velocity_.x < topSpeed_ *changeSpd_ )
 		{
 			if ( onGround_ )
 			{
-				speed_ += ( airAcceleration_ * changeSpd_ ) / GameConfig::GetGameConfig()->fps;
+				velocity_.x += ( airAcceleration_ * changeSpd_ ) / GameConfig::GetGameConfig()->fps;
 			}
 			else
 			{
-				speed_ += ( acceleration_ * changeSpd_ ) / GameConfig::GetGameConfig()->fps;
+				velocity_.x += ( acceleration_ * changeSpd_ ) / GameConfig::GetGameConfig()->fps;
 			}
 		}
 		else
 		{
-			speed_ = topSpeed_ * changeSpd_;
+			velocity_.x = topSpeed_ * changeSpd_;
 		}
 	}
-	else if ( speed_ > 0 )
+	else if ( velocity_.x > 0 )
 	{
 		if ( onGround_ )
 		{
-			speed_ -= airDeccelaration_ / GameConfig::GetGameConfig()->fps;
+			velocity_.x -= airDeccelaration_ / GameConfig::GetGameConfig()->fps;
 		}
 		else
 		{
-			speed_ -= deccelaration_ / GameConfig::GetGameConfig()->fps;
+			velocity_.x -= deccelaration_ / GameConfig::GetGameConfig()->fps;
 		}
-		if ( speed_ < 0 )
+		if ( velocity_.x < 0 )
 		{
-			speed_ = 0;
+			velocity_.x = 0;
 		}
 	}
-	pos_.x += speed_;
 	
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) && !onGround_ )
 	{
 		JumpStart();
 	}
 
-	if ( pos_.y < 600 )
+
+	if ( !(GetOnDir() & 0b1 << OnDir::BOTTOM) )
 	{
 		onGround_ = true;
 	}
@@ -164,6 +193,10 @@ void Player::Move()
 			Falling();
 		}
 	}
+
+	SetMapChipSpeed(velocity_);
+
+	shape_->SetCenter(pos_);
 }
 
 void Player::JumpStart()
@@ -172,37 +205,32 @@ void Player::JumpStart()
 
 	isJump_ = true;
 
-	fallSpeed_ += jumpInitialVelocity_;
+	velocity_.y += jumpInitialVelocity_;
 }
 
 void Player::Jump()
 {
-	fallSpeed_ += jumpAcceleration_;
+	velocity_.y += jumpAcceleration_;
 
-	pos_.y += fallSpeed_;
-
-	if ( Input::Instance()->ReleaseKey(KEY_INPUT_SPACE)||fallSpeed_>=0)
+	if ( Input::Instance()->ReleaseKey(KEY_INPUT_SPACE)|| velocity_.y >=0)
 	{
 		isJump_ = false;
 		
-		fallSpeed_/=3;
+		velocity_.y /=3;
 	}
 
 }
 
 void Player::Falling()
 {
-	fallSpeed_ += gravityAcceleration_;
+	velocity_.y += gravityAcceleration_;
 
-	pos_.y += fallSpeed_;
-
-	if ( pos_.y >= 600 )
+	if ( GetOnDir() & 0b1 << OnDir::BOTTOM )
 	{
 		onGround_ = false;
 
-		fallSpeed_ = 0;
+		velocity_.y = 0;
 
-		pos_.y = 600;
 	}
 }
 
@@ -212,9 +240,7 @@ void Player::Attack()
 	{
 		attackZ_->AttackInit(pos_,direction_);
 
-		speed_ = 0;
-
-		fallSpeed_ = 0;
+		velocity_ = { 0,0 };
 
 		attackInterval_ = attackZ_->GetInterval();
 	}
@@ -223,9 +249,7 @@ void Player::Attack()
 	{
 		attackX_->AttackInit(pos_,direction_);
 
-		speed_ = 0;
-
-		fallSpeed_ = 0;
+		velocity_ = { 0,0 };
 
 		attackInterval_ = attackX_->GetInterval();
 	}
@@ -260,7 +284,7 @@ float Player::IsDamage()
 		return Damage;
 	}
 }
-void Player::OnCollsionEnemy(int32_t Damage)
+void Player::Damage(int32_t Damage)
 {
 	hp_ -= Damage * changeDef_;
 
@@ -324,7 +348,7 @@ void Player::Draw()
 	float downPos = pos_.y + drawSize_.y / 2;
 
 	DrawBox(leftPos,upPos,rightPos,downPos,GetColor(255,255,255),true);
-	DrawBox(pos_.x - colisionSize_.x / 2,pos_.y - colisionSize_.y / 2,pos_.x + colisionSize_.x/2,pos_.y + colisionSize_.y/2,GetColor(255,0,0),false);
+	DrawBox(pos_.x - hitboxSize_.x / 2,pos_.y - hitboxSize_.y / 2,pos_.x + hitboxSize_.x/2,pos_.y + hitboxSize_.y/2,GetColor(255,0,0),false);
 	//向いてる方向の視覚化
 	if ( direction_ )
 	{

@@ -9,7 +9,7 @@ void WalkEnemy::Initialize()
 	SetMapChipRadius({ drawSize_.x / 2,drawSize_.y / 2 });
 	
 
-	CollisionManager::GetInstance()->AddObject(this);
+	//CollisionManager::GetInstance()->AddObject(this);
 	gravity_ = { 0,1 };
 	speed_ = 3;
 	velocity_ = { 1,0 };
