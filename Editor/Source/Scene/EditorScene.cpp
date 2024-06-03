@@ -31,7 +31,7 @@ void EditorScene::Initialize(int32_t screen)
 
 	if ( mapBlockSize_.x > mapBlockSize_.y )
 	{
-		float aspectRatio = static_cast<float>( mapBlockSize_.y ) / mapBlockSize_.x;
+		float aspectRatio = static_cast< float >( mapBlockSize_.y ) / mapBlockSize_.x;
 
 		editorMapSize.x = MAX_EDITOR_MAP_SIZE.y;
 		editorMapSize.y = MAX_EDITOR_MAP_SIZE.y * aspectRatio;
@@ -41,8 +41,8 @@ void EditorScene::Initialize(int32_t screen)
 	{
 		float aspectRatio = static_cast< float >( mapBlockSize_.x ) / mapBlockSize_.y;
 
-		editorMapSize.x = MAX_EDITOR_MAP_SIZE.y* aspectRatio;
-		editorMapSize.y = MAX_EDITOR_MAP_SIZE.y ;
+		editorMapSize.x = MAX_EDITOR_MAP_SIZE.y * aspectRatio;
+		editorMapSize.y = MAX_EDITOR_MAP_SIZE.y;
 	}
 	else
 	{
@@ -79,6 +79,7 @@ void EditorScene::Initialize(int32_t screen)
 			GenerateRoomExample(room.name,room.example);
 
 			FileTableElement element = { RandId(),{"example"} };
+			element.directoryPath = "Export/Room/" + file;
 			room.roomFiles.push_back(element);
 
 			rooms_.push_back(room);
@@ -100,7 +101,7 @@ void EditorScene::Initialize(int32_t screen)
 		}
 	}
 
-	selectFile_.directoryPath = "Export/Map";
+	selectFile_ = &mapFileName_.back();
 }
 
 void EditorScene::Update()
@@ -225,7 +226,7 @@ void EditorScene::EditorView()
 
 	ImGui::SetCursorPos(editorViewCenter);
 
-	ImGui::Image(screenGraph_.pSRV,{ (float)editorMapSize.x,( float ) editorMapSize.y },screenUV.min,screenUV.max);
+	ImGui::Image(screenGraph_.pSRV,{ ( float ) editorMapSize.x,( float ) editorMapSize.y },screenUV.min,screenUV.max);
 
 	ImGui::End();
 
@@ -369,19 +370,19 @@ void EditorScene::MapSelectView()
 
 	ImGui::TableHeadersRow();
 
-	for ( auto itr = mapFileName_.begin(); itr != mapFileName_.end(); itr++ )
+	for (auto& itr : mapFileName_)
 	{
 		ImGui::TableNextRow();
 
 		ImGui::TableSetColumnIndex(0);
-		const bool item_is_selected = mapsOrRoomsTableSelection.contains(itr->id);
+		const bool item_is_selected = mapsOrRoomsTableSelection.contains(itr.id);
 
 		ImGuiSelectableFlags selectable_flags = ImGuiSelectableFlags_SpanAllColumns | ImGuiSelectableFlags_AllowItemOverlap;
-		if ( ImGui::Selectable(itr->value.data(),item_is_selected,selectable_flags) )
+		if ( ImGui::Selectable(itr.value.data(),item_is_selected,selectable_flags) )
 		{
 			mapsOrRoomsTableSelection.clear();
-			mapsOrRoomsTableSelection.push_back(itr->id);
-			selectFile_ = *itr;
+			mapsOrRoomsTableSelection.push_back(itr.id);
+			selectFile_ = &itr;
 			selectMode_ = EditMode::MAP;
 		}
 	}
@@ -426,21 +427,21 @@ void EditorScene::RoomSelectView()
 
 			ImGui::TableHeadersRow();
 
-			for ( auto itr = room.roomFiles.begin(); itr != room.roomFiles.end(); itr++ )
+			for ( auto& file : room.roomFiles )
 			{
 				ImGui::TableNextRow();
 
 				ImGui::TableSetColumnIndex(0);
-				const bool item_is_selected = mapsOrRoomsTableSelection.contains(itr->id);
+				const bool item_is_selected = mapsOrRoomsTableSelection.contains(file.id);
 
 				ImGuiSelectableFlags selectable_flags = ImGuiSelectableFlags_SpanAllColumns | ImGuiSelectableFlags_AllowItemOverlap;
-				if ( ImGui::Selectable(itr->value.data(),item_is_selected,selectable_flags) )
+				if ( ImGui::Selectable(file.value.data(),item_is_selected,selectable_flags) )
 				{
 					mapsOrRoomsTableSelection.clear();
-					mapsOrRoomsTableSelection.push_back(itr->id);
-					selectFile_ = *itr;
+					mapsOrRoomsTableSelection.push_back(file.id);
+					selectFile_ = &file;
 					selectMode_ = EditMode::ROOM;
-					selectRooms_ = room;
+					selectRooms_ = &room;
 				}
 			}
 
@@ -875,14 +876,18 @@ void EditorScene::Export()
 			roomSetting[ "RoomName" ] = roomName;
 
 			{
-				auto itr =  std::find_if(rooms_.begin(),rooms_.end(),[ & ] (Rooms room){return room.name == roomName;});
+				auto itr = std::find_if(rooms_.begin(),rooms_.end(),[ & ] (Rooms room)
+{
+	return room.name == roomName;
+});
 
-				if ( itr == rooms_ .end())
+				if ( itr == rooms_.end() )
 				{
 					Rooms room;
 					room.name = roomName;
 					GenerateRoomExample(room.name,room.example);
-					FileTableElement element = { RandId(),{"example"}};
+					FileTableElement element = { RandId(),{"example"} };
+					element.directoryPath = "Export/Room/" + roomName;
 					room.roomFiles.push_back(element);
 					rooms_.push_back(room);
 				}
@@ -894,7 +899,7 @@ void EditorScene::Export()
 		data[ "2_RoomNum" ].push_back(roomSettings_.size());
 
 		std::ofstream file;
-		file.open(selectFile_.directoryPath + '/' + mapName_ + ".json");
+		file.open(selectFile_->directoryPath + '/' + mapName_ + ".json");
 		file << data.dump();
 		file.close();
 
@@ -925,25 +930,17 @@ void EditorScene::Export()
 			}
 		}
 		std::ofstream file;
-		file.open(selectFile_.directoryPath + '/' + mapName_ + ".json");
+		file.open(selectFile_->directoryPath + '/' + mapName_ + ".json");
 		file << data.dump();
 		file.close();
 
 		{
-			auto itr = std::find_if(loadRooms_.roomFiles.begin(),loadRooms_.roomFiles.end(),[ & ] (FileTableElement room)
-									{
-										return room.value == mapName_;
-									});
-
-			if ( itr == loadRooms_.roomFiles.end() )
-			{
-				FileTableElement element;
-				element.value = mapName_;
-				element.id = RandId();
-				element.filePath = selectFile_.directoryPath + '/' + mapName_ + ".json";
-				element.directoryPath = selectFile_.directoryPath;
-				loadRooms_.roomFiles.push_back(element);
-			}
+			FileTableElement element;
+			element.value = mapName_;
+			element.id = RandId();
+			element.filePath = selectFile_->directoryPath + '/' + mapName_ + ".json";
+			element.directoryPath = selectFile_->directoryPath;
+			loadRooms_->roomFiles.push_back(element);
 		}
 	}
 
@@ -973,26 +970,26 @@ void EditorScene::LoadFile()
 	}
 	editorMap_.clear();
 
-	if ( mode_ == EditMode::ROOM && loadFile_.value == "example" )
+	if ( mode_ == EditMode::ROOM && loadFile_->value == "example" )
 	{
-		editorMap_.resize(loadRooms_.example.size());
+		editorMap_.resize(loadRooms_->example.size());
 
-		for ( size_t i = 0; i < loadRooms_.example.size(); i++ )
+		for ( size_t i = 0; i < loadRooms_->example.size(); i++ )
 		{
-			editorMap_[ i ].resize(loadRooms_.example[ i ].size());
+			editorMap_[ i ].resize(loadRooms_->example[ i ].size());
 
-			for ( size_t j = 0; j < loadRooms_.example[ i ].size(); j++ )
+			for ( size_t j = 0; j < loadRooms_->example[ i ].size(); j++ )
 			{
-				editorMap_[ i ][ j ].chip = loadRooms_.example[ i ][ j ];
+				editorMap_[ i ][ j ].chip = loadRooms_->example[ i ][ j ];
 			}
 		}
 
-		mapBlockSize_ = { int32_t(loadRooms_.example[ 0 ].size()) ,int32_t(loadRooms_.example.size()) };
+		mapBlockSize_ = { int32_t(loadRooms_->example[ 0 ].size()) ,int32_t(loadRooms_->example.size()) };
 	}
 	else
 	{
 		std::fstream file;
-		file.open(selectFile_.filePath);
+		file.open(selectFile_->filePath);
 		if ( file.fail() )
 		{
 			assert(0);
@@ -1069,7 +1066,7 @@ void EditorScene::Reset()
 			for ( size_t j = 0; j < mapBlockSize_.x; j++ )
 			{
 				editorMap_[ i ][ j ].out = false;
-				editorMap_[ i ][ j ].chip = loadRooms_.example[ i ][ j ];
+				editorMap_[ i ][ j ].chip = loadRooms_->example[ i ][ j ];
 
 			}
 		}

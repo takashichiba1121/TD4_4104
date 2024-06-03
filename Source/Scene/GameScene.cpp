@@ -21,7 +21,7 @@ void GameScene::Initialize()
 
 	mapChip_ = std::make_unique<MapChip>();
 	mapChip_->Initialize();
-	mapChip_->MapLoad("Resources/t.json");
+	mapChip_->MapLoad("Resources/Export/Map/t.json");
 }
 
 void GameScene::Update()

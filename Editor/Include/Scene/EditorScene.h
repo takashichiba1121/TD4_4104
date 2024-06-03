@@ -76,7 +76,7 @@ private:
 	const int2 VIEW_WINDOW_SIZE_HALF = { VIEW_WINDOW_SIZE.x / 2,VIEW_WINDOW_SIZE.y / 2 };
 	const int2 WINDOW_SIZE = { 1280,720 };
 	const  float2 INIT_SCALE = { 1280.0f / 854.0f, 720.0f / 480.0f };
-	const float2 MAX_EDITOR_MAP_SIZE = { 800.0f ,550.0f};
+	const float2 MAX_EDITOR_MAP_SIZE = { 800.0f ,400.0f};
 
 	std::unordered_set<int32_t>randNums_;
 
@@ -95,10 +95,10 @@ private:
 	std::list<FileTableElement>roomFileName_;
 	EditMode selectMode_;
 	EditMode mode_= EditMode::MAP;
-	FileTableElement selectFile_;
-	FileTableElement loadFile_;
-	Rooms selectRooms_;
-	Rooms loadRooms_;
+	FileTableElement* selectFile_;
+	FileTableElement* loadFile_;
+	Rooms* selectRooms_;
+	Rooms* loadRooms_;
 
 	ImVector<int8_t>tableSelection;
 	ImVector<int32_t>mapsOrRoomsTableSelection;

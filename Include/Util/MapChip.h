@@ -24,4 +24,6 @@ public:
 	const std::vector < std::vector<uint8_t>>& GetMapChip()const;
 
 	void Draw(const Vector2& screenPos);
+
+	void RoomInstallation(const std::string& directoryPath,const Vector2& leftTop);
 };
