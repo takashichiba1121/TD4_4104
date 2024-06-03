@@ -1,25 +1,41 @@
 #include "WalkEnemy.h"
 #include"DxlibInclude.h"
 #include "CollisionManager.h"
+#include "Player.h"
+
+using namespace std;
 void WalkEnemy::Initialize()
 {
 
 	MapChipObjectEnable();
 	SetMapChipCenter(&pos_);
 	SetMapChipRadius({ drawSize_.x / 2,drawSize_.y / 2 });
-	
 
-	//CollisionManager::GetInstance()->AddObject(this);
+
 	gravity_ = { 0,1 };
-	speed_ = 3;
-	velocity_ = { 1,0 };
-	pos_ = { 100,100 };
+	speed_ = GetRand(4)+1;
+	if ( GetRand(2) >= 2 )
+	{
+		velocity_ = { 1,0 };
+	}
+	else
+	{
+		velocity_ = { -1,0 };
+	}
 	islive_ = true;
+	shape_ = new RectShape();
+	shape_->SetRadius(drawSize_ / 2);
+	SetShape(shape_);
+	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
+	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
+	CollisionManager::GetInstance()->AddObject(this);
+	attackPower_ = 1;
 }
 
 void WalkEnemy::Update()
 {
 	Move();
+	shape_->SetCenter({ pos_.x , pos_.y });
 }
 
 void WalkEnemy::Move()
@@ -50,4 +66,12 @@ void WalkEnemy::Draw()
 	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2,
 		pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,0),true);
 
+}
+
+void WalkEnemy::OnCollision()
+{
+	if ( GetCollisionInfo().object->GetCollisionAttribute() & COLLISION_ATTRIBUTE_PLAYRE )
+	{
+		dynamic_cast< Player* >( GetCollisionInfo().object )->Damage(attackPower_);
+	}
 }
