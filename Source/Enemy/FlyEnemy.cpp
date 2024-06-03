@@ -2,6 +2,7 @@
 #include"DxlibInclude.h"
 #include "CollisionManager.h"
 #include "Util.h"
+#include "Player.h"
 
 void FlyEnemy::Initialize()
 {
@@ -121,4 +122,12 @@ void FlyEnemy::Draw()
 	if ( !islive_ ) return;
 	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2,
 		pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,0),true);
+}
+
+void FlyEnemy::OnCollision()
+{
+	if ( GetCollisionInfo().object->GetCollisionAttribute() & COLLISION_ATTRIBUTE_PLAYRE )
+	{
+		dynamic_cast< Player* >( GetCollisionInfo().object )->Damage(attackPower_);
+	}
 }
