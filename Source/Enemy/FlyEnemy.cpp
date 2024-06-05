@@ -17,8 +17,6 @@ void FlyEnemy::Initialize()
 	velocity_ = { 1,0 };
 	islive_ = true;
 	attackIntervalTime_ = ATTACK_INTERVAL;
-
-
 	MapChipObjectEnable();
 	SetMapChipCenter(&pos_);
 	SetMapChipRadius({ drawSize_.x / 2,drawSize_.y / 2 });
