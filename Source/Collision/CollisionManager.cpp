@@ -43,7 +43,7 @@ void CollisionManager::Update()
 			continue;
 		}
 
-		auto& itrB = itrA;
+		auto itrB = itrA;
 		itrB++;
 
 		for ( ; itrB != objects_.end(); ++itrB )
