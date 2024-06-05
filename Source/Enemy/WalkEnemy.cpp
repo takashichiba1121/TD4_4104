@@ -30,6 +30,7 @@ void WalkEnemy::Initialize()
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
 	CollisionManager::GetInstance()->AddObject(this);
 	attackPower_ = 1;
+
 }
 
 void WalkEnemy::Update()
@@ -70,7 +71,7 @@ void WalkEnemy::Draw()
 
 void WalkEnemy::OnCollision()
 {
-	if ( GetCollisionInfo().object->GetCollisionAttribute() & COLLISION_ATTRIBUTE_PLAYRE )
+	if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "player" )
 	{
 		dynamic_cast< Player* >( GetCollisionInfo().object )->Damage(attackPower_);
 	}

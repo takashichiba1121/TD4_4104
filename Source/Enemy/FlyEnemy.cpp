@@ -17,8 +17,6 @@ void FlyEnemy::Initialize()
 	velocity_ = { 1,0 };
 	islive_ = true;
 	attackIntervalTime_ = ATTACK_INTERVAL;
-
-
 	MapChipObjectEnable();
 	SetMapChipCenter(&pos_);
 	SetMapChipRadius({ drawSize_.x / 2,drawSize_.y / 2 });
@@ -126,7 +124,7 @@ void FlyEnemy::Draw()
 
 void FlyEnemy::OnCollision()
 {
-	if ( GetCollisionInfo().object->GetCollisionAttribute() & COLLISION_ATTRIBUTE_PLAYRE )
+	if ( static_cast<ObjectUserData*>(GetCollisionInfo().userData)->tag == "player")
 	{
 		dynamic_cast< Player* >( GetCollisionInfo().object )->Damage(attackPower_);
 	}
