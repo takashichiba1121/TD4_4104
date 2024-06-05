@@ -89,6 +89,16 @@ void IObject::MapChipObjectDisable()
 	mapChipObject_ = false;
 }
 
+void IObject::CollisionEnable()
+{
+	collisionAttribute_ = true;
+}
+
+void IObject::CollisionDisable()
+{
+	collisionAttribute_ = false;
+}
+
 void IObject::Update()
 {
 	collisionInfo_.object = nullptr;
