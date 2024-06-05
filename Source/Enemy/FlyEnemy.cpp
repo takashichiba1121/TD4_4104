@@ -56,6 +56,7 @@ void FlyEnemy::Update()
 			attackIntervalTime_ = ATTACK_INTERVAL;
 			attackTimer_ = 0;
 			attackBeforePos_ = pos_;
+			velocity_ = GetVector2d(targetPos_,pos_);
 		}
 	}
 
@@ -83,10 +84,6 @@ void FlyEnemy::Move()
 
 void FlyEnemy::Attack()
 {
-	if ( !back_ )
-	{
-		velocity_ = GetVector2d(targetPos_,pos_);
-	}
 	if ( ATTACK_TIME >= attackTimer_ )
 	{
 		attackTimer_++;
