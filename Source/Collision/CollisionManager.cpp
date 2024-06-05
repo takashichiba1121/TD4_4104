@@ -34,7 +34,16 @@ void CollisionManager::Update()
 
 	for ( ; itrA != objects_.end(); ++itrA )
 	{
-		auto itrB = itrA;
+		IObject* objectA = *itrA;
+
+		objectA->Update();
+
+		if ( !objectA->isCollision_ )
+		{
+			continue;
+		}
+
+		auto& itrB = itrA;
 		itrB++;
 
 		for ( ; itrB != objects_.end(); ++itrB )
@@ -42,8 +51,12 @@ void CollisionManager::Update()
 			IObject* objectA = itrA._Ptr->_Myval;
 			IObject* objectB = itrB._Ptr->_Myval;
 
-			objectA->Update();
 			objectB->Update();
+
+			if ( !objectB->isCollision_ )
+			{
+				continue;
+			}
 
 			if ( CheckCollisionPair(objectA,objectB) )
 			{
