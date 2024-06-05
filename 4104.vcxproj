@@ -107,6 +107,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseNode.cpp" />
+    <ClCompile Include="NodeManager.cpp" />
     <ClCompile Include="Source\Util\MapChip.cpp" />
     <ClCompile Include="Source\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Source\Enemy\FlyEnemy.cpp" />
@@ -153,6 +155,7 @@
     <ClCompile Include="Source\Util\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\BaseNode.h" />
     <ClInclude Include="Include\Util\ChipIndex.h" />
     <ClInclude Include="Include\Enemy\EnemyManager.h" />
     <ClInclude Include="Include\Base\BaseObject.h" />
@@ -186,6 +189,7 @@
     <ClInclude Include="Include\Collision\IShape.h" />
     <ClInclude Include="Include\Collision\RectShape.h" />
     <ClInclude Include="Include\Util\MapChip.h" />
+    <ClInclude Include="Include\NodeManager.h" />
     <ClInclude Include="ThirdParty\imgui\imconfig.h" />
     <ClInclude Include="ThirdParty\imgui\imgui.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_impl_dx11.h" />
