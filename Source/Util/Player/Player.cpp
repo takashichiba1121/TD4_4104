@@ -102,7 +102,7 @@ void Player::Update()
 
 void Player::Move()
 {
-	if ( Input::Instance()->PushKey(KEY_INPUT_LEFT) )
+	if ( Input::Instance()->PushKey(KEY_INPUT_LEFT)|| Input::Instance()->PushKey(KEY_INPUT_A) )
 	{
 		direction_ = false;
 		if ( velocity_.x > -topSpeed_*changeSpd_)
@@ -136,7 +136,7 @@ void Player::Move()
 			velocity_.x = 0;
 		}
 	}
-	if ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) )
+	if ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) )
 	{
 		direction_ = true;
 		if ( velocity_.x < topSpeed_ *changeSpd_ )
