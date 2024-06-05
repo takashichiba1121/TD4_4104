@@ -33,10 +33,10 @@ void Player::Initialize()
 
 	MapChipObjectEnable();
 	SetMapChipCenter(&pos_);
-	SetMapChipRadius({ drawSize_.x / 2,drawSize_.y / 2 });
+	SetMapChipRadius({ hitboxSize_.x / 2,hitboxSize_.y / 2 });
 
-	shape_ = new CircleShape();
-	shape_->SetRadius(drawSize_.y / 2);
+	shape_ = new RectShape();
+	shape_->SetRadius(hitboxSize_ / 2);
 
 	SetShape(shape_);
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_PLAYRE);
@@ -95,6 +95,8 @@ void Player::Update()
 
 	ImGui::Text("vec:%f,%f",velocity_.x,velocity_.y);
 
+	ImGui::Text("HP:%d",hp_);
+
 	ImGui::End();
 
 #endif
@@ -105,20 +107,20 @@ void Player::Move()
 	if ( Input::Instance()->PushKey(KEY_INPUT_LEFT)|| Input::Instance()->PushKey(KEY_INPUT_A) )
 	{
 		direction_ = false;
-		if ( velocity_.x > -topSpeed_*changeSpd_)
+		if ( velocity_.x > -topSpeed_*changeAcl_)
 		{
 			if ( onGround_ )
 			{
-				velocity_.x -= ( airAcceleration_ * changeSpd_ ) /GameConfig::GetGameConfig()->fps;
+				velocity_.x -= ( airAcceleration_ * changeAcl_ ) /GameConfig::GetGameConfig()->fps;
 			}
 			else
 			{
-				velocity_.x -= (acceleration_*changeSpd_) / GameConfig::GetGameConfig()->fps;
+				velocity_.x -= (acceleration_*changeAcl_) / GameConfig::GetGameConfig()->fps;
 			}
 		}
 		else
 		{
-			velocity_.x = -topSpeed_ * changeSpd_;
+			velocity_.x = -topSpeed_ * changeAcl_;
 		}
 	}
 	else if ( velocity_.x < 0 )
@@ -139,20 +141,20 @@ void Player::Move()
 	if ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) )
 	{
 		direction_ = true;
-		if ( velocity_.x < topSpeed_ *changeSpd_ )
+		if ( velocity_.x < topSpeed_ *changeAcl_ )
 		{
 			if ( onGround_ )
 			{
-				velocity_.x += ( airAcceleration_ * changeSpd_ ) / GameConfig::GetGameConfig()->fps;
+				velocity_.x += ( airAcceleration_ * changeAcl_ ) / GameConfig::GetGameConfig()->fps;
 			}
 			else
 			{
-				velocity_.x += ( acceleration_ * changeSpd_ ) / GameConfig::GetGameConfig()->fps;
+				velocity_.x += ( acceleration_ * changeAcl_ ) / GameConfig::GetGameConfig()->fps;
 			}
 		}
 		else
 		{
-			velocity_.x = topSpeed_ * changeSpd_;
+			velocity_.x = topSpeed_ * changeAcl_;
 		}
 	}
 	else if ( velocity_.x > 0 )
@@ -238,7 +240,7 @@ void Player::Attack()
 {
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && attackZ_ != nullptr && attackInterval_ == 0 )
 	{
-		attackZ_->AttackInit(pos_,direction_);
+		attackZ_->AttackInit(pos_,direction_,changePow_);
 
 		velocity_ = { 0,0 };
 
@@ -247,7 +249,7 @@ void Player::Attack()
 
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && attackX_ != nullptr && attackInterval_ == 0 )
 	{
-		attackX_->AttackInit(pos_,direction_);
+		attackX_->AttackInit(pos_,direction_,changePow_);
 
 		velocity_ = { 0,0 };
 
@@ -315,7 +317,7 @@ void Player::ChangeAttackX(std::string attackName)
 
 void Player::AddSpd(int32_t spd)
 {
-	changeSpd_ += float(spd)/100.0f;//パーセントを実数値に戻す
+	changeAcl_ += float(spd)/100.0f;//パーセントを実数値に戻す
 }
 
 void Player::AddPow(int32_t pow)

@@ -2,7 +2,11 @@
 #include"DxlibInclude.h"
 #include"PlayerBulletManager.h"
 
-void PlayerAttackWeapon::AttackInit(const Vector2& playerPos,bool direction)
+void PlayerAttackWeapon::Initialize()
+{
+}
+
+void PlayerAttackWeapon::AttackInit(const Vector2& playerPos,bool direction,float pow)
 {
 	if ( isAttack_ == false )
 	{
