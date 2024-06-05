@@ -14,7 +14,7 @@
 void GameScene::Initialize()
 {
 	player_ = std::make_unique<Player>();
-	player_->Initialze();
+	player_->Initialize();
 	
 	mapChip_ = std::make_unique<MapChip>();
 	mapChip_->Initialize();
