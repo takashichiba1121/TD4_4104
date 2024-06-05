@@ -10,7 +10,7 @@ private:
 
 	Vector2 DrawPos_;
 
-	const float LAST_ATTACK_TIME_ = 3;
+	const float LAST_ATTACK_TIME_ = 30;
 
 	const Vector2 ATTACK_POS_ = { 15,-10 };
 

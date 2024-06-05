@@ -29,9 +29,13 @@ void FlyEnemy::Initialize()
 	{
 		velocity_ = { -1,0 };
 	}
+	user.tag = "FlyEnemy";
+	userData_ = &user;
+
 	islive_ = true;
 	shape_ = new RectShape();
 	shape_->SetRadius(drawSize_ / 2);
+
 	SetShape(shape_);
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);

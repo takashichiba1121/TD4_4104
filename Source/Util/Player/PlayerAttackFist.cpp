@@ -1,7 +1,7 @@
 #include "PlayerAttackFist.h"
 #include"DxlibInclude.h"
 #include"CollisionManager.h"
-#include"BaseEnemy.h"
+#include"FlyEnemy.h"
 void PlayerAttackFist::Initialize()
 {
 	shape_ = new RectShape();
@@ -38,6 +38,8 @@ void PlayerAttackFist::Attack()
 	{
 		AttackTime_++;
 
+		shape_->SetCenter(DrawPos_);
+
 		if (AttackTime_> LAST_ATTACK_TIME_ )
 		{
 			isAttack_ = false;
@@ -57,8 +59,11 @@ void PlayerAttackFist::Draw()
 
 void PlayerAttackFist::OnCollision()
 {
-	if ( GetCollisionInfo().object->GetCollisionAttribute() & COLLISION_ATTRIBUTE_PLAYRE )
+	if ( GetCollisionInfo().userData )
 	{
-		dynamic_cast< BaseEnemy* >( GetCollisionInfo().object )->Damage(playerPow_*POW);
+		if ( static_cast<ObjectUserData*>(GetCollisionInfo().userData)->tag == "FlyEnemy" )
+		{
+			dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_*POW);
+		}
 	}
 }
