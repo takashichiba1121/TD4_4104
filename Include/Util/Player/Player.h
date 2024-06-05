@@ -5,6 +5,12 @@
 #include<memory>
 #include<string>
 #include"BaseObject.h"
+
+struct UserData
+{
+	std::string tag;
+};
+
 class Player:public BaseObject
 {
 private:
@@ -67,6 +73,8 @@ private:
 	bool isJump_ = false;
 
 	float fallSpeed_ = 0;
+
+	UserData name;
 
 public:
 	void Initialize() override;

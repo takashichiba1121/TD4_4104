@@ -15,7 +15,7 @@ void EnemyManager::Pop()
 	{
 		if ( enemylist_.size() >= MAX_ENEMY_NUM ) return;
 		popTime_ = POP_INTERVAL;
-		if (GetRand(2))
+		if (true)
 		{
 			unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
 			temp->Initialize();
