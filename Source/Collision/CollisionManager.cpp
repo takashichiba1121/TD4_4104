@@ -34,16 +34,28 @@ void CollisionManager::Update()
 
 	for ( ; itrA != objects_.end(); ++itrA )
 	{
+		IObject* objectA = *itrA;
+
+		objectA->Update();
+
+		if ( !objectA->isCollision_ )
+		{
+			continue;
+		}
+
 		auto itrB = itrA;
 		itrB++;
 
 		for ( ; itrB != objects_.end(); ++itrB )
 		{
-			IObject* objectA = *itrA;
 			IObject* objectB = *itrB;
 
-			objectA->Update();
 			objectB->Update();
+
+			if ( !objectB->isCollision_ )
+			{
+				continue;
+			}
 
 			if ( CheckCollisionPair(objectA,objectB) )
 			{
