@@ -29,6 +29,9 @@ void Player::Initialize()
 
 	hp_ = maxHp_;
 
+	name.tag = "Player";
+	userData_ = &name;
+
 	islive_ = true;
 
 	MapChipObjectEnable();

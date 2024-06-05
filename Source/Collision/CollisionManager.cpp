@@ -39,8 +39,8 @@ void CollisionManager::Update()
 
 		for ( ; itrB != objects_.end(); ++itrB )
 		{
-			IObject* objectA = *itrA;
-			IObject* objectB = *itrB;
+			IObject* objectA = itrA._Ptr->_Myval;
+			IObject* objectB = itrB._Ptr->_Myval;
 
 			objectA->Update();
 			objectB->Update();

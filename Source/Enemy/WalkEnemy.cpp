@@ -57,7 +57,7 @@ void WalkEnemy::Move()
 	}
 
 	SetMapChipSpeed({ velocity_ * speed_,gravity_ });
-
+	shape_->SetCenter(pos_);
 }
 
 void WalkEnemy::Draw()
@@ -70,8 +70,11 @@ void WalkEnemy::Draw()
 
 void WalkEnemy::OnCollision()
 {
-	if ( GetCollisionInfo().object->GetCollisionAttribute() & COLLISION_ATTRIBUTE_PLAYRE )
+	if ( GetCollisionInfo().userData )
 	{
-		dynamic_cast< Player* >( GetCollisionInfo().object )->Damage(attackPower_);
+		if ( static_cast< UserData* >( GetCollisionInfo().userData )->tag == "Player" )
+		{
+			dynamic_cast< Player* >( GetCollisionInfo().object )->Damage(attackPower_);
+		}
 	}
 }
