@@ -8,9 +8,7 @@ private:
 
 	float AttackTime_ = 0;
 
-	Vector2 playerPos_;
-
-	bool direction_;
+	Vector2 DrawPos_;
 
 	const float LAST_ATTACK_TIME_ = 3;
 
@@ -20,10 +18,16 @@ private:
 
 	const uint32_t INTERVAL_ = 10;
 
-	const float Pow = 5;
+	const float POW = 5;
+
+	float playerPow_;
+
+	RectShape* shape_;
 
 public:
-	void AttackInit(const Vector2& playerPos,bool direction) override;
+	void Initialize() override;
+
+	void AttackInit(const Vector2& playerPos,bool direction,float pow) override;
 
 	void Attack() override;
 
@@ -34,7 +38,9 @@ public:
 	uint32_t GetInterval() override {return INTERVAL_;}
 
 	float GetPow() override {
-		return Pow;
+		return POW;
 	}
+
+	void OnCollision() override;
 };
 
