@@ -301,6 +301,8 @@ void Player::ChangeAttackZ(std::string attackName)
 	{
 		attackZ_ = std::make_unique<PlayerAttackWeapon>();
 	}
+
+	attackZ_->Initialize();
 }
 
 void Player::ChangeAttackX(std::string attackName)
@@ -313,6 +315,8 @@ void Player::ChangeAttackX(std::string attackName)
 	{
 		attackX_ = std::make_unique<PlayerAttackWeapon>();
 	}
+
+	attackX_->Initialize();
 }
 
 void Player::AddSpd(int32_t spd)
