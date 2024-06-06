@@ -6,6 +6,8 @@ class PlayerAttackFist :
 private:
 	bool isAttack_ = false;
 
+	bool isGiveDamage_ = false;
+
 	float AttackTime_ = 0;
 
 	Vector2 DrawPos_;

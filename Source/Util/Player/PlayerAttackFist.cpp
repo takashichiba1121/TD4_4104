@@ -44,6 +44,7 @@ void PlayerAttackFist::Attack()
 		{
 			isAttack_ = false;
 			AttackTime_ = 0;
+			isGiveDamage_ = false;
 		}
 	}
 
@@ -59,11 +60,13 @@ void PlayerAttackFist::Draw()
 
 void PlayerAttackFist::OnCollision()
 {
-	if ( GetCollisionInfo().userData )
+	if ( GetCollisionInfo().userData&&isGiveDamage_==false )
 	{
 		if ( static_cast<ObjectUserData*>(GetCollisionInfo().userData)->tag == "FlyEnemy" )
 		{
 			dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_*POW);
+
+			isGiveDamage_ = true;
 		}
 	}
 }

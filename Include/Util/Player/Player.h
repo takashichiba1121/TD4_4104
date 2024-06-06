@@ -76,6 +76,9 @@ private:
 
 	UserData name;
 
+	const uint32_t DAMAGE_INTERVAL_MAX_ = 16;
+
+	uint32_t DamageInterval_ = DAMAGE_INTERVAL_MAX_;
 public:
 	void Initialize() override;
 

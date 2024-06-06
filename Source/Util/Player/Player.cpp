@@ -50,6 +50,10 @@ void Player::Initialize()
 
 void Player::Update()
 {
+	if (DamageInterval_<DAMAGE_INTERVAL_MAX_ )
+	{
+		DamageInterval_++;
+	}
 
 	if ( attackInterval_ > 0 )
 	{
@@ -59,6 +63,10 @@ void Player::Update()
 	if ( attackZ_->GetAttack() == false&& attackX_->GetAttack() == false )
 	{
 		Move();
+	}
+	else
+	{
+		SetMapChipSpeed({0,0});
 	}
 
 	Attack();
@@ -291,8 +299,12 @@ float Player::IsDamage()
 }
 void Player::Damage(int32_t Damage)
 {
-	hp_ -= Damage * changeDef_;
+	if (DamageInterval_>=DAMAGE_INTERVAL_MAX_ )
+	{
+		hp_ -= Damage * changeDef_;
 
+		DamageInterval_ = 0;
+	}
 }
 void Player::ChangeAttackZ(std::string attackName)
 {
@@ -355,8 +367,10 @@ void Player::Draw()
 	float rightPos = pos_.x + drawSize_.x / 2;
 	float upPos = pos_.y - drawSize_.y / 2;
 	float downPos = pos_.y + drawSize_.y / 2;
-
-	DrawBox(leftPos,upPos,rightPos,downPos,GetColor(255,255,255),true);
+	if (DamageInterval_%2==0 )
+	{
+		DrawBox(leftPos,upPos,rightPos,downPos,GetColor(255,255,255),true);
+	}
 	DrawBox(pos_.x - hitboxSize_.x / 2,pos_.y - hitboxSize_.y / 2,pos_.x + hitboxSize_.x/2,pos_.y + hitboxSize_.y/2,GetColor(255,0,0),false);
 	//向いてる方向の視覚化
 	if ( direction_ )
