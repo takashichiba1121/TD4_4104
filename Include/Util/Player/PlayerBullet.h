@@ -32,9 +32,11 @@ protected:
 
 	Phase phase_ = Phase::Charge;
 
-	const Vector2 SIZE_ = { 20,20 };
+	const Vector2 SIZE_ = { 10,10 };
 
 	RectShape* shape_;
+
+	const uint32_t POW_ = 5;
 
 public:
 
@@ -61,7 +63,7 @@ public:
 	///<summary>
 	///衝突を検出したら呼び出されたるコールバック関数
 	///</summary>
-	virtual void OnCollision();
+	void OnCollision() override;
 
 /// <summary>
 /// 消えるべきか

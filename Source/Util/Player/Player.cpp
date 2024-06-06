@@ -46,11 +46,13 @@ void Player::Initialize()
 	SetCollisionMask(~COLLISION_ATTRIBUTE_PLAYRE);
 
 	CollisionManager::GetInstance()->AddObject(this);
+
+	textureId_ = LoadGraph("Resources/Player/PlayerStand.png");
 }
 
 void Player::Update()
 {
-	if (DamageInterval_<DAMAGE_INTERVAL_MAX_ )
+	if ( DamageInterval_ < DAMAGE_INTERVAL_MAX_ )
 	{
 		DamageInterval_++;
 	}
@@ -60,13 +62,13 @@ void Player::Update()
 		attackInterval_--;
 	}
 
-	if ( attackZ_->GetAttack() == false&& attackX_->GetAttack() == false )
+	if ( attackZ_->GetAttack() == false && attackX_->GetAttack() == false )
 	{
 		Move();
 	}
 	else
 	{
-		SetMapChipSpeed({0,0});
+		SetMapChipSpeed({ 0,0 });
 	}
 
 	Attack();
@@ -115,18 +117,18 @@ void Player::Update()
 
 void Player::Move()
 {
-	if ( Input::Instance()->PushKey(KEY_INPUT_LEFT)|| Input::Instance()->PushKey(KEY_INPUT_A) )
+	if ( Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A) )
 	{
 		direction_ = false;
-		if ( velocity_.x > -topSpeed_*changeAcl_)
+		if ( velocity_.x > -topSpeed_ * changeAcl_ )
 		{
 			if ( onGround_ )
 			{
-				velocity_.x -= ( airAcceleration_ * changeAcl_ ) /GameConfig::GetGameConfig()->fps;
+				velocity_.x -= ( airAcceleration_ * changeAcl_ ) / GameConfig::GetGameConfig()->fps;
 			}
 			else
 			{
-				velocity_.x -= (acceleration_*changeAcl_) / GameConfig::GetGameConfig()->fps;
+				velocity_.x -= ( acceleration_ * changeAcl_ ) / GameConfig::GetGameConfig()->fps;
 			}
 		}
 		else
@@ -138,11 +140,11 @@ void Player::Move()
 	{
 		if ( onGround_ )
 		{
-			velocity_.x += airDeccelaration_ /GameConfig::GetGameConfig()->fps;
+			velocity_.x += airDeccelaration_ / GameConfig::GetGameConfig()->fps;
 		}
 		else
 		{
-			velocity_.x += deccelaration_ /GameConfig::GetGameConfig()->fps;
+			velocity_.x += deccelaration_ / GameConfig::GetGameConfig()->fps;
 		}
 		if ( velocity_.x > 0 )
 		{
@@ -152,7 +154,7 @@ void Player::Move()
 	if ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) )
 	{
 		direction_ = true;
-		if ( velocity_.x < topSpeed_ *changeAcl_ )
+		if ( velocity_.x < topSpeed_ * changeAcl_ )
 		{
 			if ( onGround_ )
 			{
@@ -183,21 +185,21 @@ void Player::Move()
 			velocity_.x = 0;
 		}
 	}
-	
+
 	if ( Input::Instance()->PushKey(KEY_INPUT_SPACE) && !onGround_ )
 	{
 		JumpStart();
 	}
 
 
-	if ( !(GetOnDir() & 0b1 << OnDir::BOTTOM) )
+	if ( !( GetOnDir() & 0b1 << OnDir::BOTTOM ) )
 	{
 		onGround_ = true;
 	}
 
 	if ( onGround_ )
 	{
-		if (isJump_ )
+		if ( isJump_ )
 		{
 			Jump();
 		}
@@ -225,11 +227,11 @@ void Player::Jump()
 {
 	velocity_.y += jumpAcceleration_;
 
-	if ( Input::Instance()->ReleaseKey(KEY_INPUT_SPACE)|| velocity_.y >=0)
+	if ( Input::Instance()->ReleaseKey(KEY_INPUT_SPACE) || velocity_.y >= 0 )
 	{
 		isJump_ = false;
-		
-		velocity_.y /=3;
+
+		velocity_.y /= 3;
 	}
 
 }
@@ -258,14 +260,14 @@ void Player::Attack()
 		attackInterval_ = attackZ_->GetInterval();
 	}
 
-	//if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && attackX_ != nullptr && attackInterval_ == 0 )
-	//{
-	//	attackX_->AttackInit(pos_,direction_,changePow_);
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && attackX_ != nullptr && attackInterval_ == 0 )
+	{
+		attackX_->AttackInit(pos_,direction_,changePow_);
 
-	//	velocity_ = { 0,0 };
+		velocity_ = { 0,0 };
 
-	//	attackInterval_ = attackX_->GetInterval();
-	//}
+		attackInterval_ = attackX_->GetInterval();
+	}
 
 	if ( attackZ_ != nullptr )
 	{
@@ -282,11 +284,11 @@ void Player::Attack()
 
 float Player::IsDamage()
 {
-	float Damage=0;
+	float Damage = 0;
 
-	if ( attackX_->GetAttack())
+	if ( attackX_->GetAttack() )
 	{
-		  Damage=attackX_->GetPow() * changePow_;
+		Damage = attackX_->GetPow() * changePow_;
 
 		return Damage;
 	}
@@ -299,7 +301,7 @@ float Player::IsDamage()
 }
 void Player::Damage(int32_t Damage)
 {
-	if (DamageInterval_>=DAMAGE_INTERVAL_MAX_ )
+	if ( DamageInterval_ >= DAMAGE_INTERVAL_MAX_ )
 	{
 		hp_ -= Damage * changeDef_;
 
@@ -336,17 +338,17 @@ void Player::ChangeAttackX(std::string attackName)
 
 void Player::AddSpd(int32_t spd)
 {
-	changeAcl_ += float(spd)/100.0f;//パーセントを実数値に戻す
+	changeAcl_ += float(spd) / 100.0f;//パーセントを実数値に戻す
 }
 
 void Player::AddPow(int32_t pow)
 {
-	changePow_ += float(pow)/100.0f;
+	changePow_ += float(pow) / 100.0f;
 }
 
 void Player::AddDef(int32_t def)
 {
-	changeDef_ += float(def)/100.0f;
+	changeDef_ += float(def) / 100.0f;
 }
 
 void Player::AddMaxHp(int32_t maxHp)
@@ -367,19 +369,17 @@ void Player::Draw()
 	float rightPos = pos_.x + drawSize_.x / 2;
 	float upPos = pos_.y - drawSize_.y / 2;
 	float downPos = pos_.y + drawSize_.y / 2;
-	if (DamageInterval_%2==0 )
+	if ( DamageInterval_ % 2 == 0 )
 	{
-		DrawBox(leftPos,upPos,rightPos,downPos,GetColor(255,255,255),true);
-	}
-	DrawBox(pos_.x - hitboxSize_.x / 2,pos_.y - hitboxSize_.y / 2,pos_.x + hitboxSize_.x/2,pos_.y + hitboxSize_.y/2,GetColor(255,0,0),false);
-	//向いてる方向の視覚化
-	if ( direction_ )
-	{
-		DrawBox(rightPos,upPos,rightPos - 5,upPos + 5,GetColor(255,0,0),true);
-	} 
-	else
-	{
-		DrawBox(leftPos,upPos,leftPos + 5,upPos + 5,GetColor(255,0,0),true);
+
+		if ( direction_ )
+		{
+			DrawExtendGraph(leftPos,upPos,rightPos,downPos,textureId_,TRUE);
+		}
+		else
+		{
+			DrawExtendGraph(rightPos,upPos,leftPos,downPos,textureId_,TRUE);
+		}
 	}
 
 	if ( attackZ_ != nullptr )
@@ -416,8 +416,8 @@ void Player::Load()
 
 	assert(lName.compare("Player") == 0);
 
-	topSpeed_= jsonObject[ "TopSpeed" ];
-	acceleration_= jsonObject[ "Acceleration" ];
+	topSpeed_ = jsonObject[ "TopSpeed" ];
+	acceleration_ = jsonObject[ "Acceleration" ];
 	airAcceleration_ = jsonObject[ "AirAcceleration" ];
 	deccelaration_ = jsonObject[ "Deccelaration" ];
 	airDeccelaration_ = jsonObject[ "AirDeccelaration" ];

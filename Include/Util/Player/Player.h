@@ -66,7 +66,7 @@ private:
 
 	std::unique_ptr<PlayerAttack> attackX_;
 
-	int32_t maxHp_ = 1;
+	int32_t maxHp_ = 100;
 
 	bool onGround_ = false;
 
