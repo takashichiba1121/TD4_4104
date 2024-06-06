@@ -20,7 +20,7 @@ void FlyEnemy::Initialize()
 	MapChipObjectEnable();
 	SetMapChipCenter(&pos_);
 	SetMapChipRadius({ drawSize_.x / 2,drawSize_.y / 2 });
-
+	hp_ = 10;
 	if ( GetRand(2) >= 2 )
 	{
 		velocity_ = { 1,0 };
