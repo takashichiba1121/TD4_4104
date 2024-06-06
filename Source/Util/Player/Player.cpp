@@ -50,6 +50,10 @@ void Player::Initialize()
 
 void Player::Update()
 {
+	if (DamageInterval_<DAMAGE_INTERVAL_MAX_ )
+	{
+		DamageInterval_++;
+	}
 
 	if ( attackInterval_ > 0 )
 	{
@@ -59,6 +63,10 @@ void Player::Update()
 	if ( attackZ_->GetAttack() == false&& attackX_->GetAttack() == false )
 	{
 		Move();
+	}
+	else
+	{
+		SetMapChipSpeed({0,0});
 	}
 
 	Attack();
@@ -250,14 +258,14 @@ void Player::Attack()
 		attackInterval_ = attackZ_->GetInterval();
 	}
 
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && attackX_ != nullptr && attackInterval_ == 0 )
-	{
-		attackX_->AttackInit(pos_,direction_,changePow_);
+	//if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && attackX_ != nullptr && attackInterval_ == 0 )
+	//{
+	//	attackX_->AttackInit(pos_,direction_,changePow_);
 
-		velocity_ = { 0,0 };
+	//	velocity_ = { 0,0 };
 
-		attackInterval_ = attackX_->GetInterval();
-	}
+	//	attackInterval_ = attackX_->GetInterval();
+	//}
 
 	if ( attackZ_ != nullptr )
 	{
@@ -291,8 +299,12 @@ float Player::IsDamage()
 }
 void Player::Damage(int32_t Damage)
 {
-	hp_ -= Damage * changeDef_;
+	if (DamageInterval_>=DAMAGE_INTERVAL_MAX_ )
+	{
+		hp_ -= Damage * changeDef_;
 
+		DamageInterval_ = 0;
+	}
 }
 void Player::ChangeAttackZ(std::string attackName)
 {
@@ -355,8 +367,10 @@ void Player::Draw()
 	float rightPos = pos_.x + drawSize_.x / 2;
 	float upPos = pos_.y - drawSize_.y / 2;
 	float downPos = pos_.y + drawSize_.y / 2;
-
-	DrawBox(leftPos,upPos,rightPos,downPos,GetColor(255,255,255),true);
+	if (DamageInterval_%2==0 )
+	{
+		DrawBox(leftPos,upPos,rightPos,downPos,GetColor(255,255,255),true);
+	}
 	DrawBox(pos_.x - hitboxSize_.x / 2,pos_.y - hitboxSize_.y / 2,pos_.x + hitboxSize_.x/2,pos_.y + hitboxSize_.y/2,GetColor(255,0,0),false);
 	//向いてる方向の視覚化
 	if ( direction_ )

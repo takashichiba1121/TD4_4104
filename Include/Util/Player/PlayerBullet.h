@@ -2,7 +2,9 @@
 #include"Vector2.h"
 #include"Vector3.h"
 #include<memory>
-class PlayerBullet
+#include"IObject.h"
+#include"RectShape.h"
+class PlayerBullet:public IObject
 {
 public:
 	enum class Phase
@@ -26,7 +28,13 @@ protected:
 
 	uint32_t chageTimer_ = 0;
 
+	float playerPow_;
+
 	Phase phase_ = Phase::Charge;
+
+	const Vector2 SIZE_ = { 20,20 };
+
+	RectShape* shape_;
 
 public:
 
@@ -36,7 +44,7 @@ public:
 	///<param name="velocity">速度</param>
 	///<param name="position">初期位置</param>
 	///<param name="life">消えるまでの時間</param>
-	void Initialize(Vector2 velocity,Vector2 position,uint32_t life);
+	void Initialize(Vector2 velocity,Vector2 position,uint32_t life,float PlayerPow);
 
 	///<summary>
 	///毎フレーム処理

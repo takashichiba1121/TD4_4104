@@ -22,6 +22,9 @@ void WalkEnemy::Initialize()
 	{
 		velocity_ = { -1,0 };
 	}
+	user.tag = "WalkEnemy";
+	userData_ = &user;
+
 	islive_ = true;
 	shape_ = new RectShape();
 	shape_->SetRadius(drawSize_ / 2);
