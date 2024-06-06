@@ -109,6 +109,7 @@
   <ItemGroup>
     <ClCompile Include="Source\Scene\ClearScene.cpp" />
     <ClCompile Include="Source\Scene\GameOverScene.cpp" />
+    <ClCompile Include="Source\Base\BaseEnemy.cpp" />
     <ClCompile Include="Source\Util\MapChip.cpp" />
     <ClCompile Include="Source\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Source\Enemy\FlyEnemy.cpp" />
@@ -122,9 +123,7 @@
     <ClCompile Include="GameCore\FPS.cpp" />
     <ClCompile Include="GameCore\FrameWork.cpp" />
     <ClCompile Include="GameCore\Input.cpp" />
-    <ClCompile Include="Source\Enemy\BaseEnemy.cpp" />
     <ClCompile Include="Include\Util\Player\PlayerBullet.cpp" />
-    <ClCompile Include="Source\Enemy\BaseEnemy.cpp" />
     <ClCompile Include="Source\Collision\IObject.cpp" />
     <ClCompile Include="Source\Collision\IShape.cpp" />
     <ClCompile Include="Source\Collision\RectShape.cpp">
