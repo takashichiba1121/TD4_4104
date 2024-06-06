@@ -24,5 +24,6 @@ public:
 	void Draw();
 	size_t GetEnemyCount();
 	bool GameEnd();
+	void EnemysClear();
 };
 
