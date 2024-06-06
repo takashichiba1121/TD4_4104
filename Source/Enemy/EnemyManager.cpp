@@ -90,7 +90,6 @@ size_t EnemyManager::GetEnemyCount()
 
 bool EnemyManager::GameEnd()
 {
-	bool flag;
 	if ( enemylist_.empty() && popEnemyCount_ >= MAX_POP_ENEMY_NUM )
 	{
 		return true;

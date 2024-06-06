@@ -107,6 +107,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Scene\ClearScene.cpp" />
+    <ClCompile Include="Source\Scene\GameOverScene.cpp" />
     <ClCompile Include="Source\Base\BaseEnemy.cpp" />
     <ClCompile Include="Source\Util\MapChip.cpp" />
     <ClCompile Include="Source\Enemy\EnemyManager.cpp" />
@@ -150,8 +152,11 @@
     <ClCompile Include="Source\Util\Math\Vector3.cpp" />
     <ClCompile Include="Source\Enemy\WalkEnemy.cpp" />
     <ClCompile Include="Source\Util\Util.cpp" />
+    <ClCompile Include="Source\Scene\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Scene\ClearScene.h" />
+    <ClInclude Include="Include\Scene\GameOverScene.h" />
     <ClInclude Include="Include\Util\ChipIndex.h" />
     <ClInclude Include="Include\Enemy\EnemyManager.h" />
     <ClInclude Include="Include\Base\BaseObject.h" />
@@ -195,6 +200,7 @@
     <ClInclude Include="Include\Util\Math\Vector3.h" />
     <ClInclude Include="Include\Enemy\WalkEnemy.h" />
     <ClInclude Include="Include\Util\Util.h" />
+    <ClInclude Include="Include\Scene\TitleScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

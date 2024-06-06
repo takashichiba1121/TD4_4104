@@ -7,9 +7,7 @@
 #include"DxlibInclude.h"
 #include"Input.h"
 
-#include<DxLib.h>
-
-
+#include<SceneManager.h>
 
 void GameScene::Initialize()
 {
@@ -31,10 +29,27 @@ void GameScene::Update()
 {
 	//ImGui::ShowDemoWindow();
 
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_R) )
+	{
+		SceneManager::GetInstance()->ChangeScene("TITLE");
+	}
+
 	player_->Update();
 	enemys_->Update();
 
 	CollisionManager::GetInstance()->Update();
+
+	//TODO
+	if ( enemys_->GameEnd())
+	{
+		SceneManager::GetInstance()->ChangeScene("CLEAR");
+	}
+
+	//TODO
+	if ( player_->GetHp()<=0 )
+	{
+		SceneManager::GetInstance()->ChangeScene("GAMEOVER");
+	}
 }
 
 void GameScene::Draw()
