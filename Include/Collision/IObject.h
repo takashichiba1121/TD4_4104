@@ -49,6 +49,9 @@ protected:
 
 public:
 
+	IObject() = default;
+	virtual ~IObject();
+
 	virtual void OnCollision();
 
 

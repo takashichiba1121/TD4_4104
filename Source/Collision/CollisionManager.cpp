@@ -38,7 +38,7 @@ void CollisionManager::Update()
 
 		objectA->Update();
 
-		if ( !objectA->isCollision_ )
+		if ( !objectA->isCollision_ || !objectA ->shape_)
 		{
 			continue;
 		}
@@ -53,7 +53,7 @@ void CollisionManager::Update()
 
 			objectB->Update();
 
-			if ( !objectB->isCollision_ )
+			if ( !objectB->isCollision_ || !objectB->shape_ )
 			{
 				continue;
 			}
