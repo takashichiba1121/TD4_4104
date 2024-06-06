@@ -40,6 +40,11 @@ void WalkEnemy::Initialize()
 
 void WalkEnemy::Update()
 {
+	immotalTime_--;
+	if ( immotalTime_ <= 0 )
+	{
+		immortal_ = false;
+	}
 	Move();
 	shape_->SetCenter({ pos_.x , pos_.y });
 }
