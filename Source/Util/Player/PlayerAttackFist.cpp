@@ -2,6 +2,7 @@
 #include"DxlibInclude.h"
 #include"CollisionManager.h"
 #include"FlyEnemy.h"
+#include"WalkEnemy.h"
 void PlayerAttackFist::Initialize()
 {
 	shape_ = new RectShape();
@@ -70,6 +71,12 @@ void PlayerAttackFist::OnCollision()
 		if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "FlyEnemy" )
 		{
 			dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW);
+
+			isGiveDamage_ = true;
+		}
+		if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "WalkEnemy" )
+		{
+			dynamic_cast< WalkEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW);
 
 			isGiveDamage_ = true;
 		}

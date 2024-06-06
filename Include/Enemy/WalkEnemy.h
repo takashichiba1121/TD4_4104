@@ -6,6 +6,8 @@ class WalkEnemy:public BaseEnemy
 private:
 	Vector2 gravity_;
 	RectShape* shape_;
+
+	ObjectUserData user;
 public:
 
 	void Initialize() override;
