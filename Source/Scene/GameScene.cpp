@@ -25,6 +25,9 @@ void GameScene::Initialize()
 	enemys_ = std::make_unique<EnemyManager>();
 	enemys_->Initialize();
 	enemys_->SetPlayerPtr(player_.get());
+
+	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
+
 }
 
 void GameScene::Update()
@@ -39,6 +42,8 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
+	DrawGraph(0,0,backGround_,true);
+
 	mapChip_->Draw({0,0});
 	
 	player_->Draw();
