@@ -1,5 +1,15 @@
 #include "BaseEnemy.h"
 
+void BaseEnemy::Damage(int32_t damage)
+{
+	if (!immortal_)
+	{
+		immortal_ = true;
+		hp_ -= damage;
+		immotalTime_ = 10;
+	}
+}
+
 void BaseEnemy::SetPos(Vector2 pos)
 {
 	pos_ = pos;

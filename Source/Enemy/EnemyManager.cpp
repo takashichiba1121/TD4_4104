@@ -1,5 +1,6 @@
 #include "EnemyManager.h"
 #include "DxlibInclude.h"
+#include "GameConfig.h"
 using namespace std;
 std::list<std::unique_ptr<BaseEnemy>> EnemyManager::enemylist_;
 BaseObject* EnemyManager::playerPtr_ = nullptr;
@@ -70,7 +71,7 @@ void EnemyManager::Update()
 		itr->Update();
 	}
 
-	enemylist_.remove_if([](unique_ptr<BaseEnemy>& enemy )
+	deadEnemyCount_ += enemylist_.remove_if([](unique_ptr<BaseEnemy>& enemy )
 	{
 		return enemy->IsLive() == false;
 	});
@@ -82,6 +83,7 @@ void EnemyManager::Draw()
 	{
 		itr->Draw();
 	}
+	DrawFormatString(GameConfig::GetWindowWidth() - 200,10,0xffffff,"KillEnemy %d / %d",deadEnemyCount_,MAX_POP_ENEMY_NUM);
 }
 
 size_t EnemyManager::GetEnemyCount()
