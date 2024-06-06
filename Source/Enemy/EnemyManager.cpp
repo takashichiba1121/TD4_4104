@@ -5,6 +5,7 @@ std::list<std::unique_ptr<BaseEnemy>> EnemyManager::enemylist_;
 BaseObject* EnemyManager::playerPtr_ = nullptr;
 void EnemyManager::Initialize()
 {
+	enemylist_.clear();
 	popTime_ = POP_INTERVAL;
 }
 
@@ -95,4 +96,9 @@ bool EnemyManager::GameEnd()
 		return true;
 	}
 	return false;
+}
+
+void EnemyManager::EnemysClear()
+{
+	enemylist_.clear();
 }
