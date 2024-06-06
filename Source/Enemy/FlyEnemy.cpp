@@ -17,8 +17,6 @@ void FlyEnemy::Initialize()
 	velocity_ = { 1,0 };
 	islive_ = true;
 	attackIntervalTime_ = ATTACK_INTERVAL;
-
-
 	MapChipObjectEnable();
 	SetMapChipCenter(&pos_);
 	SetMapChipRadius({ drawSize_.x / 2,drawSize_.y / 2 });
@@ -58,6 +56,7 @@ void FlyEnemy::Update()
 			attackIntervalTime_ = ATTACK_INTERVAL;
 			attackTimer_ = 0;
 			attackBeforePos_ = pos_;
+			velocity_ = GetVector2d(targetPos_,pos_);
 		}
 	}
 
@@ -85,10 +84,6 @@ void FlyEnemy::Move()
 
 void FlyEnemy::Attack()
 {
-	if ( !back_ )
-	{
-		velocity_ = GetVector2d(targetPos_,pos_);
-	}
 	if ( ATTACK_TIME >= attackTimer_ )
 	{
 		attackTimer_++;
@@ -126,7 +121,7 @@ void FlyEnemy::Draw()
 
 void FlyEnemy::OnCollision()
 {
-	if ( GetCollisionInfo().object->GetCollisionAttribute() & COLLISION_ATTRIBUTE_PLAYRE )
+	if ( static_cast<ObjectUserData*>(GetCollisionInfo().userData)->tag == "player")
 	{
 		dynamic_cast< Player* >( GetCollisionInfo().object )->Damage(attackPower_);
 	}

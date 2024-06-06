@@ -4,7 +4,7 @@
 class BaseEnemy:public BaseObject
 {
 protected:
-	std::string tag_;
+	ObjectUserData name_;
 	uint32_t id_;
 
 	BaseObject* playerPtr_;
