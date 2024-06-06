@@ -6,6 +6,7 @@
 
 #include"DxlibInclude.h"
 #include"Input.h"
+#include"PlayerBulletManager.h"
 
 #include<SceneManager.h>
 
@@ -71,4 +72,5 @@ void GameScene::SpriteDraw()
 
 void GameScene::Finalize()
 {
+	PlayerBulletManager::Instance()->Clear();
 }
