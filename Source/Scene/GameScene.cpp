@@ -40,10 +40,10 @@ void GameScene::Update()
 	CollisionManager::GetInstance()->Update();
 
 	//TODO
-	//if ( クリアー条件 )
-	//{
-	//	SceneManager::GetInstance()->ChangeScene("CLEAR");
-	//}
+	if ( enemys_->GameEnd())
+	{
+		SceneManager::GetInstance()->ChangeScene("CLEAR");
+	}
 
 	//TODO
 	if ( player_->GetHp()<=0 )
