@@ -20,5 +20,6 @@ public:
 	void Initialize();
 	void Update();
 	void Draw();
+	size_t GetEnemyCount();
 };
 
