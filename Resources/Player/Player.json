@@ -4,8 +4,8 @@
     "JumpAcceleration":0.5,
     "GravityAcceleration":0.75,
     "Acceleration":45.0,
-    "AirAcceleration":36.0,
+    "AirAcceleration":18.0,
     "Deccelaration":65.0,
-    "AirDeccelaration":48.0,
+    "AirDeccelaration":92.0,
     "TopSpeed":6.0
 }
