@@ -121,7 +121,7 @@ void FlyEnemy::Draw()
 {
 	if ( !islive_ ) return;
 	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2,
-		pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,0),true);
+		pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,155),true);
 }
 
 void FlyEnemy::OnCollision()
