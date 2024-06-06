@@ -11,7 +11,7 @@ private:
 	int32_t popTime_;
 	const int32_t POP_INTERVAL = 30;
 	const int32_t MAX_POP_ENEMY_NUM = 15;
-	const int32_t MAX_ENEMY_NUM = 10;
+	const int32_t MAX_ENEMY_NUM = 3;
 
 	static BaseObject* playerPtr_;
 	size_t popEnemyCount_;
