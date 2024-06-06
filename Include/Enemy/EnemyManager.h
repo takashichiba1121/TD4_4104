@@ -9,9 +9,9 @@ class EnemyManager
 private:
 	static std::list<std::unique_ptr<BaseEnemy>> enemylist_;
 	int32_t popTime_;
-	const uint32_t POP_INTERVAL = 30;
-	const uint32_t MAX_POP_ENEMY_NUM = 15;
-	const uint32_t MAX_ENEMY_NUM = 3;
+	const int32_t POP_INTERVAL = 30;
+	const int32_t MAX_POP_ENEMY_NUM = 15;
+	const int32_t MAX_ENEMY_NUM = 10;
 
 	static BaseObject* playerPtr_;
 	size_t popEnemyCount_;
