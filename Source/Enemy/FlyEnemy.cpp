@@ -78,7 +78,7 @@ void FlyEnemy::Move()
 		velocity_.y = 0;
 	}
 	SetMapChipSpeed({ velocity_.x * speed_,velocity_.y * speed_ });
-	
+	shape_->SetCenter(pos_);
 
 }
 
@@ -102,7 +102,7 @@ void FlyEnemy::Attack()
 	{
 		speed_ = OutQuad(0.f,5.f,ATTACK_TIME,attackTimer_);
 	}
-	if ( pos_.y <= attackBeforePos_.y && velocity_.y < 0  )
+	if ( pos_.y - 1 <= attackBeforePos_.y && back_  )
 	{
 		isAttack_ = false;
 		velocity_.y = 0.f;
@@ -121,8 +121,11 @@ void FlyEnemy::Draw()
 
 void FlyEnemy::OnCollision()
 {
-	if ( static_cast<ObjectUserData*>(GetCollisionInfo().userData)->tag == "player")
+	if ( GetCollisionInfo().userData )
 	{
-		dynamic_cast< Player* >( GetCollisionInfo().object )->Damage(attackPower_);
+		if ( static_cast<UserData*>(GetCollisionInfo().userData)->tag == "Player" )
+		{
+			dynamic_cast< Player* >( GetCollisionInfo().object )->Damage(attackPower_);
+		}
 	}
 }

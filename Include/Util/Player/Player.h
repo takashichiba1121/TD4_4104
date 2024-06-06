@@ -5,6 +5,12 @@
 #include<memory>
 #include<string>
 #include"BaseObject.h"
+
+struct UserData
+{
+	std::string tag;
+};
+
 class Player:public BaseObject
 {
 private:
@@ -35,7 +41,7 @@ private:
 #pragma endregion
 
 #pragma region 変更ステータス
-	float changeSpd_=1;
+	float changeAcl_=1;
 
 	float changePow_=1;
 
@@ -54,7 +60,7 @@ private:
 
 	uint32_t attackInterval_ = 0;
 
-	CircleShape* shape_;
+	RectShape* shape_;
 
 	std::unique_ptr<PlayerAttack> attackZ_;
 
@@ -67,6 +73,8 @@ private:
 	bool isJump_ = false;
 
 	float fallSpeed_ = 0;
+
+	UserData name;
 
 public:
 	void Initialize() override;
