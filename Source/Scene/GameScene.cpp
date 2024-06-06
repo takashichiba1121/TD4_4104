@@ -46,10 +46,10 @@ void GameScene::Update()
 	//}
 
 	//TODO
-	//if ( ゲームオーバー条件 )
-	//{
-	//	SceneManager::GetInstance()->ChangeScene("GAMEOVER");
-	//}
+	if ( player_->GetHp()<=0 )
+	{
+		SceneManager::GetInstance()->ChangeScene("GAMEOVER");
+	}
 }
 
 void GameScene::Draw()
@@ -66,4 +66,5 @@ void GameScene::SpriteDraw()
 
 void GameScene::Finalize()
 {
+	enemys_->Clear();
 }

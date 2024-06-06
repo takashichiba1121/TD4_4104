@@ -13,7 +13,7 @@ void GameOverScene::Update()
 {
 	if ( input_->TriggerKey(KEY_INPUT_RETURN) )
 	{
-		SceneManager::GetInstance()->ChangeScene("TiTle");
+		SceneManager::GetInstance()->ChangeScene("TITLE");
 	}
 }
 
