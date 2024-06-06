@@ -18,6 +18,8 @@ private:
 
 	std::unique_ptr<MapChip>mapChip_;
 
+	uint32_t backGround_;
+
 public:
 	void Initialize() override;
 	void Update() override;
