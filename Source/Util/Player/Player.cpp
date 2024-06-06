@@ -258,14 +258,14 @@ void Player::Attack()
 		attackInterval_ = attackZ_->GetInterval();
 	}
 
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && attackX_ != nullptr && attackInterval_ == 0 )
-	{
-		attackX_->AttackInit(pos_,direction_,changePow_);
+	//if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && attackX_ != nullptr && attackInterval_ == 0 )
+	//{
+	//	attackX_->AttackInit(pos_,direction_,changePow_);
 
-		velocity_ = { 0,0 };
+	//	velocity_ = { 0,0 };
 
-		attackInterval_ = attackX_->GetInterval();
-	}
+	//	attackInterval_ = attackX_->GetInterval();
+	//}
 
 	if ( attackZ_ != nullptr )
 	{

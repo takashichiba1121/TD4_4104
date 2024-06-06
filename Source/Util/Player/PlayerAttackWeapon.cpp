@@ -16,11 +16,11 @@ void PlayerAttackWeapon::AttackInit(const Vector2& playerPos,bool direction,floa
 
 		if ( direction )
 		{
-			newBullet->Initialize({10,0},playerPos,60);
+			newBullet->Initialize({10,0},playerPos,60,pow);
 		}
 		else
 		{
-			newBullet->Initialize({-10,0},playerPos,60);
+			newBullet->Initialize({-10,0},playerPos,60,pow);
 		}
 
 		PlayerBulletManager::Instance()->AddBullet(std::move(newBullet));
