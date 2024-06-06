@@ -34,6 +34,8 @@ void WalkEnemy::Initialize()
 	CollisionManager::GetInstance()->AddObject(this);
 	attackPower_ = 1;
 
+	hp_ = 10;
+
 }
 
 void WalkEnemy::Update()
