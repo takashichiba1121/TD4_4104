@@ -107,7 +107,7 @@ void MapChip::Draw(const Vector2& screenPos)
 			case NONE:
 				break;
 			case ROAD:
-				DrawGraph(( j * BLOCK_SIZE ) + screenPos.x,( i * BLOCK_SIZE ) + screenPos.y,roadChipHandle_,true);
+				DrawRotaGraph3(( j * BLOCK_SIZE ) + screenPos.x,( i * BLOCK_SIZE ) + screenPos.y,0,0,0.5,0.5,0.0,roadChipHandle_,true);
 				break;
 			case DOOR:
 				break;
@@ -116,7 +116,7 @@ void MapChip::Draw(const Vector2& screenPos)
 			case LOCK_ROOM:
 				break;
 			case WALL:
-				DrawGraph(( j * BLOCK_SIZE ) + screenPos.x,( i * BLOCK_SIZE ) + screenPos.y,wallChipHandle_,true);
+				DrawRotaGraph3(( j * BLOCK_SIZE ) + screenPos.x,( i * BLOCK_SIZE ) + screenPos.y,0,0,0.5,0.5,0.0,wallChipHandle_,true);
 				break;
 			default:
 				break;
