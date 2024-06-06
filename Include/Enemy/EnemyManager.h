@@ -20,6 +20,5 @@ public:
 	void Initialize();
 	void Update();
 	void Draw();
-	void Clear();
 };
 

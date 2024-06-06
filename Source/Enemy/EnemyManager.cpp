@@ -75,8 +75,3 @@ void EnemyManager::Draw()
 		itr->Draw();
 	}
 }
-
-void EnemyManager::Clear()
-{
-	enemylist_.clear();
-}

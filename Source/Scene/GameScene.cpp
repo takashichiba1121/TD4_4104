@@ -66,5 +66,4 @@ void GameScene::SpriteDraw()
 
 void GameScene::Finalize()
 {
-	enemys_->Clear();
 }
