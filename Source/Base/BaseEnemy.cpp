@@ -2,7 +2,7 @@
 
 void BaseEnemy::Damage(int32_t damage)
 {
-	if (!immortal_)
+	if (true)
 	{
 		immortal_ = true;
 		hp_ -= damage;
