@@ -50,8 +50,6 @@ void GameScene::Update()
 	//{
 	//	SceneManager::GetInstance()->ChangeScene("GAMEOVER");
 	//}
-
-
 }
 
 void GameScene::Draw()

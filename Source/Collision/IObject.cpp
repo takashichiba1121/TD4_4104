@@ -99,12 +99,12 @@ void IObject::MapChipObjectDisable()
 
 void IObject::CollisionEnable()
 {
-	collisionAttribute_ = true;
+	isCollision_ = true;
 }
 
 void IObject::CollisionDisable()
 {
-	collisionAttribute_ = false;
+	isCollision_ = false;
 }
 
 void IObject::Update()
