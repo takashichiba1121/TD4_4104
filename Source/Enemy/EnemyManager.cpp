@@ -13,7 +13,7 @@ void EnemyManager::Pop()
 	popTime_--;
 	if ( popTime_ <= 0 )
 	{
-		if ( enemylist_.size() >= MAX_ENEMY_NUM ) return;
+		if ( enemylist_.size() >= MAX_ENEMY_NUM || popEnemyCount_ >= MAX_POP_ENEMY_NUM) return;
 		popTime_ = POP_INTERVAL;
 		if (true)
 		{
@@ -22,6 +22,7 @@ void EnemyManager::Pop()
 			temp->SetPlayerPtr(playerPtr_);
 			temp->SetPos({ GetRand(850) + 50.f,100.f });
 			enemylist_.push_back(move(temp));
+			popEnemyCount_++;
 		}
 		else
 		{
@@ -29,6 +30,7 @@ void EnemyManager::Pop()
 			temp->Initialize();
 			temp->SetPos({ GetRand(850) + 50.f,100.f });
 			enemylist_.push_back(move(temp));
+			popEnemyCount_++;
 		}
 	}
 }
@@ -84,4 +86,14 @@ void EnemyManager::Draw()
 size_t EnemyManager::GetEnemyCount()
 {
 	return enemylist_.size();
+}
+
+bool EnemyManager::GameEnd()
+{
+	bool flag;
+	if ( enemylist_.empty() && popEnemyCount_ >= MAX_POP_ENEMY_NUM )
+	{
+		return true;
+	}
+	return false;
 }
