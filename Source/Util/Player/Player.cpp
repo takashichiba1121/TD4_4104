@@ -391,6 +391,8 @@ void Player::Draw()
 	{
 		attackX_->Draw();
 	}
+
+	DrawFormatString(0,GameConfig::GetWindowHeight()-20,0xffffff,"PlayerHP:%d/%d",hp_,maxHp_);
 }
 
 void Player::Load()
