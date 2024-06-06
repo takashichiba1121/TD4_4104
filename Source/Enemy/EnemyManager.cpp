@@ -66,6 +66,11 @@ void EnemyManager::Update()
 	{
 		itr->Update();
 	}
+
+	enemylist_.remove_if([](unique_ptr<BaseEnemy>& enemy )
+	{
+		return enemy->IsLive() == false;
+	});
 }
 
 void EnemyManager::Draw()
@@ -74,4 +79,9 @@ void EnemyManager::Draw()
 	{
 		itr->Draw();
 	}
+}
+
+size_t EnemyManager::GetEnemyCount()
+{
+	return enemylist_.size();
 }
