@@ -74,11 +74,13 @@ private:
 
 	float fallSpeed_ = 0;
 
-	UserData name;
+	UserData name_;
 
 	const uint32_t DAMAGE_INTERVAL_MAX_ = 16;
 
 	uint32_t DamageInterval_ = DAMAGE_INTERVAL_MAX_;
+
+	bool isEvasionRoll_ = false;
 public:
 	void Initialize() override;
 
@@ -89,6 +91,8 @@ public:
 	void JumpStart();
 
 	void Jump();
+
+	void EvasionRoll();
 
 	void Falling();
 
