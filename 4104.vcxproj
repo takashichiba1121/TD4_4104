@@ -109,7 +109,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\NPC\PowerUpCave.cpp" />
+    <ClCompile Include="ATKUpCave.cpp" />
+    <ClCompile Include="PowerUpCave.cpp" />
     <ClCompile Include="Source\NPC\DealDaemon.cpp" />
     <ClCompile Include="Source\NPC\NPCManager.cpp" />
     <ClCompile Include="Source\NPC\NPC.cpp" />
@@ -162,6 +163,7 @@
     <ClCompile Include="Source\Scene\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ATKUpCave.h" />
     <ClInclude Include="Include\NPC\DealDaemon.h" />
     <ClInclude Include="Include\Scene\ClearScene.h" />
     <ClInclude Include="Include\Scene\GameOverScene.h" />
