@@ -59,7 +59,6 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;$(ProjectDir)\ThirdParty\imgui;$(ProjectDir)\Include\Util\Player</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Collision;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;$(ProjectDir)\Include\Base;$(ProjectDir)\ThirdParty\imgui;$(ProjectDir)\Include\Player;$(ProjectDir)\Include\NPC;$(ProjectDir)\Include\Deal</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Collision;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;$(ProjectDir)\Include\Base;$(ProjectDir)\ThirdParty\imgui;$(ProjectDir)\Include\Util\Player;$(ProjectDir)\Include\NPC</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -110,23 +109,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\NPC\PowerUpCave.cpp" />
-    <ClCompile Include="ATKUpCave.cpp" />
-    <ClCompile Include="PowerUpCave.cpp" />
-    <ClCompile Include="Source\NPC\ATKUpCave.cpp" />
-    <ClCompile Include="Source\NPC\PowerUpCave.cpp" />
-    <ClCompile Include="Source\NPC\DealDaemon.cpp" />
-    <ClCompile Include="Source\NPC\NPCManager.cpp" />
-    <ClCompile Include="Source\NPC\NPC.cpp" />
-    <ClCompile Include="Source\Deal\ItemShop.cpp" />
-    <ClCompile Include="Source\Player\PlayerAttackSpider.cpp" />
-    <ClCompile Include="Source\Node\BaseNode.cpp" />
-    <ClCompile Include="Source\Node\BattleNode.cpp" />
-    <ClCompile Include="Source\Node\HealingNode.cpp" />
-    <ClCompile Include="Source\Node\NodeManager.cpp" />
-    <ClCompile Include="Source\Node\ReinforcementNode.cpp" />
-    <ClCompile Include="Source\Node\ShopNode.cpp" />
-    <ClCompile Include="Source\Node\TransactionNode.cpp" />
     <ClCompile Include="Source\NPC\DealDaemon.cpp" />
     <ClCompile Include="Source\NPC\NPCManager.cpp" />
     <ClCompile Include="Source\NPC\NPC.cpp" />
@@ -189,8 +171,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\NPC\DealDaemon.h" />
-    <ClInclude Include="Include\Player\PlayerAttackSpider.h" />
-    <ClInclude Include="Include\NPC\DealDaemon.h" />
     <ClInclude Include="Include\Scene\ClearScene.h" />
     <ClInclude Include="Include\Scene\GameOverScene.h" />
     <ClInclude Include="BattleNode.h" />
@@ -229,19 +209,8 @@
     <ClInclude Include="Include\Collision\IShape.h" />
     <ClInclude Include="Include\Collision\RectShape.h" />
     <ClInclude Include="Include\Util\MapChip.h" />
-    <ClInclude Include="Include\Deal\ItemShop.h" />
     <ClInclude Include="Include\NPC\NPC.h" />
     <ClInclude Include="Include\NPC\NPCManager.h" />
-    <ClInclude Include="Include\NPC\PowerUpCave.h" />
-    <ClInclude Include="PowerUpCave.h" />
-    <ClInclude Include="Include\Player\PlayerLeg.h" />
-    <ClInclude Include="Include\Player\PlayerLegNormal.h" />
-    <ClInclude Include="Include\NodeManager.h" />
-    <ClInclude Include="ReinforcementNode.h" />
-    <ClInclude Include="ShopNode.h" />
-    <ClInclude Include="Include\NPC\NPC.h" />
-    <ClInclude Include="Include\NPC\NPCManager.h" />
-    <ClInclude Include="Include\NPC\PowerUpCave.h" />
     <ClInclude Include="ThirdParty\imgui\imconfig.h" />
     <ClInclude Include="ThirdParty\imgui\imgui.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_impl_dx11.h" />
