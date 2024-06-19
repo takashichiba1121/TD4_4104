@@ -60,6 +60,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;$(ProjectDir)\ThirdParty\imgui;$(ProjectDir)\Include\Util\Player</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Collision;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;$(ProjectDir)\Include\Base;$(ProjectDir)\ThirdParty\imgui;$(ProjectDir)\Include\Player;$(ProjectDir)\Include\NPC;$(ProjectDir)\Include\Deal</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Collision;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;$(ProjectDir)\Include\Base;$(ProjectDir)\ThirdParty\imgui;$(ProjectDir)\Include\Util\Player;$(ProjectDir)\Include\NPC</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>Core.h</PrecompiledHeaderFile>
@@ -122,6 +123,9 @@
     <ClCompile Include="Source\Node\ReinforcementNode.cpp" />
     <ClCompile Include="Source\Node\ShopNode.cpp" />
     <ClCompile Include="Source\Node\TransactionNode.cpp" />
+    <ClCompile Include="Source\NPC\DealDaemon.cpp" />
+    <ClCompile Include="Source\NPC\NPCManager.cpp" />
+    <ClCompile Include="Source\NPC\NPC.cpp" />
     <ClCompile Include="Source\Scene\ClearScene.cpp" />
     <ClCompile Include="Source\Scene\GameOverScene.cpp" />
     <ClCompile Include="Source\Base\BaseEnemy.cpp" />
@@ -182,6 +186,7 @@
   <ItemGroup>
     <ClInclude Include="Include\NPC\DealDaemon.h" />
     <ClInclude Include="Include\Player\PlayerAttackSpider.h" />
+    <ClInclude Include="Include\NPC\DealDaemon.h" />
     <ClInclude Include="Include\Scene\ClearScene.h" />
     <ClInclude Include="Include\Scene\GameOverScene.h" />
     <ClInclude Include="BattleNode.h" />
@@ -230,6 +235,8 @@
     <ClInclude Include="Include\NodeManager.h" />
     <ClInclude Include="ReinforcementNode.h" />
     <ClInclude Include="ShopNode.h" />
+    <ClInclude Include="Include\NPC\NPC.h" />
+    <ClInclude Include="Include\NPC\NPCManager.h" />
     <ClInclude Include="ThirdParty\imgui\imconfig.h" />
     <ClInclude Include="ThirdParty\imgui\imgui.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_impl_dx11.h" />
