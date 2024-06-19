@@ -111,6 +111,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\NPC\PowerUpCave.cpp" />
+    <ClCompile Include="ATKUpCave.cpp" />
+    <ClCompile Include="PowerUpCave.cpp" />
     <ClCompile Include="Source\NPC\DealDaemon.cpp" />
     <ClCompile Include="Source\NPC\NPCManager.cpp" />
     <ClCompile Include="Source\NPC\NPC.cpp" />
@@ -184,6 +186,7 @@
     <ClCompile Include="TransactionNode.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ATKUpCave.h" />
     <ClInclude Include="Include\NPC\DealDaemon.h" />
     <ClInclude Include="Include\Player\PlayerAttackSpider.h" />
     <ClInclude Include="Include\NPC\DealDaemon.h" />
@@ -237,6 +240,7 @@
     <ClInclude Include="ShopNode.h" />
     <ClInclude Include="Include\NPC\NPC.h" />
     <ClInclude Include="Include\NPC\NPCManager.h" />
+    <ClInclude Include="PowerUpCave.h" />
     <ClInclude Include="ThirdParty\imgui\imconfig.h" />
     <ClInclude Include="ThirdParty\imgui\imgui.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_impl_dx11.h" />
