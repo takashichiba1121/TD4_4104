@@ -6,10 +6,7 @@
 #include "DxlibInclude.h"
 #include "CollisionManager.h"
 
-using namespace nlohmann;
-using namespace std;
-
-void PowerUpCave::Initialize()
+void PowerUpCave::Initialize(std::string filePath)
 {
 
 	selectmode_ = false;
@@ -77,12 +74,9 @@ void PowerUpCave::OnCollision()
 {
 }
 
-
-void PowerUpCave::Update()
-{
-	
-	selectmode_ = playerPtr_->IsPowerUp();
-
+	//Survival 生存
+	//Hunt 攻撃
+	//Precision クリティカル
 }
 
 void PowerUpCave::OnCollision()
@@ -91,11 +85,7 @@ void PowerUpCave::OnCollision()
 
 bool PowerUpCave::StatusChenge()
 {
-	if ( dealed_ )
-	{
-		return true;
-	}
-	PowerUp* product = selectProducts_[ selectNum_ ];
+	PowerUp* product = &selectProducts_[ selectNum_ ];
 	bool isBuy = false;
 	switch ( magic_enum::enum_cast< Status >( product->statusNames.second ).value() )
 	{
@@ -112,7 +102,7 @@ bool PowerUpCave::StatusChenge()
 		isBuy = playerPtr_->SubSpd(product->cost);
 		break;
 	case CRIT:
-		isBuy = playerPtr_->SubCrit(product->cost);
+
 		break;
 	case CDMG:
 		isBuy = playerPtr_->SubCdmg(product->cost);
@@ -137,7 +127,7 @@ bool PowerUpCave::StatusChenge()
 			isBuy = playerPtr_->AddSpd(product->power);
 			break;
 		case CRIT:
-			isBuy = playerPtr_->AddCrit(product->power);
+
 			break;
 		case CDMG:
 			isBuy = playerPtr_->AddCdmg(product->power);
@@ -152,132 +142,5 @@ bool PowerUpCave::StatusChenge()
 
 void PowerUpCave::SetSlect(uint8_t selectNum)
 {
-	selectNum_ = min(selectNum,selectProducts_.size() - 1);
-}
-
-void PowerUpCave::SetPriducts()
-{
-	nowProductType = productKey_[ GetRand(productKey_.size() - 1) ];
-	for ( int i = 0; i < selectProducts_.size(); i++ )
-	{
-		selectProducts_[ i ] = products_[ nowProductType ][ GetRand(products_[ nowProductType ].size()-1) ].get();
-
-		int32_t change = selectProducts_[ i ]->powerRandRange.second - selectProducts_[ i ]->powerRandRange.first;
-		selectProducts_[ i ]->power = GetRand(change) + selectProducts_[ i ]->powerRandRange.first;
-
-		change = selectProducts_[ i ]->costRandRange.second - selectProducts_[ i ]->costRandRange.first;
-		selectProducts_[ i ]->cost = GetRand(change) + selectProducts_[ i ]->costRandRange.first;
-	}
-}
-
-void PowerUpCave::SetPlayer(Player* player)
-{
-	playerPtr_ = player;
-}
-
-void PowerUpCave::Draw()
-{
-	string type = productKey_[ GetRand(productKey_.size() - 1) ];
-	for ( int i = 0; i < selectProducts_.size(); i++ )
-	{
-		int64_t color = 0x000000;
-		if ( i == selectNum_ )
-		{
-			color = 0xf00f00;
-		}
-		DrawBox((boxLeftTop_.x + i * boxDist_),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,color,true);
-		DrawFormatString(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,
-			0xffffff,"%s\nPowerUp\nStatus:%s \nUP:%d\nCost\nStatus:%s \nDown:%d",nowProductType.c_str(),selectProducts_[i]->statusNames.first.c_str(),
-			selectProducts_[i]->power,selectProducts_[i]->statusNames.second.c_str(),selectProducts_[i]->cost);
-	}
-}
-
-void PowerUpCave::SetPriducts()
-{
-	nowProductType = productKey_[ GetRand(productKey_.size() - 1) ];
-	SRand(GetRand(INT_MAX));
-	for ( int i = 0; i < selectProducts_.size(); i++ )
-	{
-		selectProducts_[ i ] = products_[ nowProductType ][ GetRand(products_[ nowProductType ].size()-1) ].get();
-
-		int32_t change = selectProducts_[ i ]->powerRandRange.second - selectProducts_[ i ]->powerRandRange.first;
-		selectProducts_[ i ]->power = GetRand(change) + selectProducts_[ i ]->powerRandRange.first;
-
-		change = selectProducts_[ i ]->costRandRange.second - selectProducts_[ i ]->costRandRange.first;
-		selectProducts_[ i ]->cost = GetRand(change) + selectProducts_[ i ]->costRandRange.first;
-	}
-}
-
-void PowerUpCave::SetPlayer(Player* player)
-{
-	playerPtr_ = player;
-}
-
-void PowerUpCave::Draw()
-{
-	if ( selectmode_ && !dealed_)
-	{
-		for ( int i = 0; i < selectProducts_.size(); i++ )
-		{
-			int64_t color = 0x000000;
-			if ( i == selectNum_ )
-			{
-				color = 0xf00f00;
-			}
-			DrawBox(( boxLeftTop_.x + i * boxDist_ ),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,color,true);
-			DrawFormatString(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,
-				0xffffff,"%s\nPowerUp\nStatus:%s \nUP:%d\nCost\nStatus:%s \nDown:%d",nowProductType.c_str(),selectProducts_[ i ]->statusNames.first.c_str(),
-				selectProducts_[ i ]->power,selectProducts_[ i ]->statusNames.second.c_str(),selectProducts_[ i ]->cost);
-		}
-	}
-
-	if ( !dealed_ )
-	{
-		DrawBox(pos_.x - hitboxSize_.x/2,pos_.y - hitboxSize_.y/2,pos_.x + hitboxSize_.x/2,pos_.y + hitboxSize_.y/2,0xffffff,true);
-	}
-}
-
-void PowerUpCave::SetPriducts()
-{
-	nowProductType = productKey_[ GetRand(productKey_.size() - 1) ];
-	SRand(GetRand(INT_MAX));
-	for ( int i = 0; i < selectProducts_.size(); i++ )
-	{
-		selectProducts_[ i ] = products_[ nowProductType ][ GetRand(products_[ nowProductType ].size()-1) ].get();
-
-		int32_t change = selectProducts_[ i ]->powerRandRange.second - selectProducts_[ i ]->powerRandRange.first;
-		selectProducts_[ i ]->power = GetRand(change) + selectProducts_[ i ]->powerRandRange.first;
-
-		change = selectProducts_[ i ]->costRandRange.second - selectProducts_[ i ]->costRandRange.first;
-		selectProducts_[ i ]->cost = GetRand(change) + selectProducts_[ i ]->costRandRange.first;
-	}
-}
-
-void PowerUpCave::SetPlayer(Player* player)
-{
-	playerPtr_ = player;
-}
-
-void PowerUpCave::Draw()
-{
-	if ( selectmode_ && !dealed_)
-	{
-		for ( int i = 0; i < selectProducts_.size(); i++ )
-		{
-			int64_t color = 0x000000;
-			if ( i == selectNum_ )
-			{
-				color = 0xf00f00;
-			}
-			DrawBox(( boxLeftTop_.x + i * boxDist_ ),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,color,true);
-			DrawFormatString(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,
-				0xffffff,"%s\nPowerUp\nStatus:%s \nUP:%d\nCost\nStatus:%s \nDown:%d",nowProductType.c_str(),selectProducts_[ i ]->statusNames.first.c_str(),
-				selectProducts_[ i ]->power,selectProducts_[ i ]->statusNames.second.c_str(),selectProducts_[ i ]->cost);
-		}
-	}
-
-	if ( !dealed_ )
-	{
-		DrawBox(pos_.x - hitboxSize_.x/2,pos_.y - hitboxSize_.y/2,pos_.x + hitboxSize_.x/2,pos_.y + hitboxSize_.y/2,0xffffff,true);
-	}
+	selectNum_ = selectNum;
 }
