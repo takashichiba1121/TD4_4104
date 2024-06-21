@@ -116,6 +116,14 @@ public:
 
 	bool AddCost(int32_t cost);
 
+	bool SubSpd(int32_t spd);
+
+	bool SubPow(int32_t pow);
+
+	bool SubDef(int32_t def);
+
+	bool SubMaxHp(int32_t maxHp);
+
 	int32_t GetCost() {
 		return nowCost;
 	}

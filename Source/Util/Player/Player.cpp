@@ -384,29 +384,62 @@ void Player::ChangeAttackX(std::string attackName)
 	attackX_->Initialize();
 }
 
-void Player::AddSpd(int32_t spd)
+bool Player::AddSpd(int32_t spd)
 {
-	changeAcl_ = float(spd) / 100.0f;//パーセントを実数値に戻す
+	changeAcl_ += float(spd) / 100.0f;//パーセントを実数値に戻す
+
+	return true;
 }
 
-void Player::AddPow(int32_t pow)
+bool Player::AddPow(int32_t pow)
 {
-	changePow_ = float(pow) / 100.0f;
+	changePow_ += float(pow) / 100.0f;
+
+	return true;
 }
 
-void Player::AddDef(int32_t def)
+bool Player::AddDef(int32_t def)
 {
-	changeDef_ = float(def) / 100.0f;
+	changeDef_ += float(def) / 100.0f;
+	return true;
 }
 
-void Player::AddMaxHp(int32_t maxHp)
+bool Player::AddMaxHp(int32_t maxHp)
 {
-	changeMaxHp_ = float(maxHp) / 100.0f;
+	changeMaxHp_ += float(maxHp) / 100.0f;
+
+	return true;
 }
 
-void Player::AddCost(int32_t cost)
+bool Player::SubSpd(int32_t spd)
 {
-	nowCost += cost;
+	if ( changeAcl_ - float(spd) / 100.0f <= 0 ){return false;}
+	changeAcl_ -= float(spd) / 100.0f;//パーセントを実数値に戻す
+
+	return true;
+}
+
+bool Player::SubPow(int32_t pow)
+{
+	if ( changePow_ - float(pow) / 100.0f <= 0 ){return false;}
+	changePow_ -= float(pow) / 100.0f;
+
+	return true;
+}
+
+bool Player::SubDef(int32_t def)
+{
+	if ( changeDef_ - float(def) / 100.0f <= 0 ){return false;}
+	changeDef_ -= float(def) / 100.0f;
+	return true;
+}
+
+bool Player::SubMaxHp(int32_t maxHp)
+{
+	if ( changeMaxHp_ - float(maxHp) / 100.0f <= 0 ){return false;}
+	changeMaxHp_ -= float(maxHp) / 100.0f;
+
+	return true;
 }
 
 void Player::Draw()
