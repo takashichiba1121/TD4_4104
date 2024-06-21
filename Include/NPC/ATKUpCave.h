@@ -7,6 +7,6 @@ class ATKUpCave:public PowerUpCave
 
 public:
 	void Initialize() override;
-	void PowerUp() override;
+	bool StatusChenge() override;
 };
 
