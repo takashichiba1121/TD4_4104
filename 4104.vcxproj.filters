@@ -46,6 +46,12 @@
     <Filter Include="ヘッダー ファイル\Scene">
       <UniqueIdentifier>{05a5c1ae-1de3-466c-be70-36ac77187080}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\PowerUp">
+      <UniqueIdentifier>{f8b10665-6ece-49d1-abae-cb623b127e77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\PowerUp">
+      <UniqueIdentifier>{88bedcf7-a7eb-409d-9ec6-912d77eb3120}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
@@ -173,6 +179,24 @@
     </ClCompile>
     <ClCompile Include="Source\Scene\GameOverScene.cpp">
       <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\NPC\DealDaemon.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\NPC\NPCManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\NPC\NPC.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Base\BaseEnemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\NPC\PowerUpCave.cpp">
+      <Filter>ソース ファイル\PowerUp</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\NPC\ATKUpCave.cpp">
+      <Filter>ソース ファイル\PowerUp</Filter>
     </ClCompile>
     <ClCompile Include="Source\Base\BaseEnemy.cpp">
       <Filter>ソース ファイル</Filter>
@@ -319,6 +343,21 @@
     </ClInclude>
     <ClInclude Include="Include\Scene\TitleScene.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\NPC\DealDaemon.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\NPC\NPC.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\NPC\NPCManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\NPC\PowerUpCave.h">
+      <Filter>ヘッダー ファイル\PowerUp</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\NPC\ATKUpCave.h">
+      <Filter>ヘッダー ファイル\PowerUp</Filter>
     </ClInclude>
     <ClInclude Include="Include\Util\Player\PlayerLeg.h">
       <Filter>ヘッダー ファイル\player</Filter>

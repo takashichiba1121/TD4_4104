@@ -109,8 +109,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ATKUpCave.cpp" />
-    <ClCompile Include="PowerUpCave.cpp" />
+    <ClCompile Include="Source\NPC\ATKUpCave.cpp" />
+    <ClCompile Include="Source\NPC\PowerUpCave.cpp" />
     <ClCompile Include="Source\NPC\DealDaemon.cpp" />
     <ClCompile Include="Source\NPC\NPCManager.cpp" />
     <ClCompile Include="Source\NPC\NPC.cpp" />
@@ -163,7 +163,7 @@
     <ClCompile Include="Source\Scene\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ATKUpCave.h" />
+    <ClInclude Include="Include\NPC\ATKUpCave.h" />
     <ClInclude Include="Include\NPC\DealDaemon.h" />
     <ClInclude Include="Include\Scene\ClearScene.h" />
     <ClInclude Include="Include\Scene\GameOverScene.h" />
@@ -202,6 +202,7 @@
     <ClInclude Include="Include\Util\MapChip.h" />
     <ClInclude Include="Include\NPC\NPC.h" />
     <ClInclude Include="Include\NPC\NPCManager.h" />
+    <ClInclude Include="Include\NPC\PowerUpCave.h" />
     <ClInclude Include="PowerUpCave.h" />
     <ClInclude Include="Include\Util\Player\PlayerLeg.h" />
     <ClInclude Include="Include\Util\Player\PlayerLegNormal.h" />
