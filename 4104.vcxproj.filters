@@ -395,5 +395,8 @@
     <ClInclude Include="Include\NPC\ATKUpCave.h">
       <Filter>ヘッダー ファイル\PowerUp</Filter>
     </ClInclude>
+    <ClInclude Include="ThirdParty\magic_enum.hpp">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
