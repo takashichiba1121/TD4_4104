@@ -14,7 +14,7 @@ void ClearScene::Update()
 {
 	if ( input_->TriggerKey(KEY_INPUT_RETURN) )
 	{
-		SceneManager::GetInstance()->ChangeScene("TiTle");
+		SceneManager::GetInstance()->ChangeScene("TITLE");
 	}
 }
 
@@ -22,7 +22,7 @@ void ClearScene::Draw()
 {
 	DrawFormatString(560,200,GetColor(255,255,255),"Clear");
 
-	DrawFormatString(470,450,GetColor(255,255,255),"Title To EnterKye");
+	DrawFormatString(470,450,GetColor(255,255,255),"Title To EnterKey");
 }
 
 void ClearScene::SpriteDraw()

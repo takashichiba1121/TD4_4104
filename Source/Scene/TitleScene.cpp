@@ -22,7 +22,7 @@ void TitleScene::Draw()
 {
 	DrawFormatString(460,200,GetColor(255,255,255),"Eternal Damnation");
 
-	DrawFormatString(470,450,GetColor(255,255,255),"Start To EnterKye");
+	DrawFormatString(470,450,GetColor(255,255,255),"Start To EnterKey");
 }
 
 void TitleScene::SpriteDraw()

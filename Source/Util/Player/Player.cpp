@@ -29,8 +29,8 @@ void Player::Initialize()
 
 	hp_ = maxHp_;
 
-	name.tag = "Player";
-	userData_ = &name;
+	name_.tag = "Player";
+	userData_ = &name_;
 
 	islive_ = true;
 
@@ -249,6 +249,11 @@ void Player::Falling()
 	}
 }
 
+void Player::EvasionRoll()
+{
+
+}
+
 void Player::Attack()
 {
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && attackZ_ != nullptr && attackInterval_ == 0 )
@@ -301,7 +306,7 @@ float Player::IsDamage()
 }
 void Player::Damage(int32_t Damage)
 {
-	if ( DamageInterval_ >= DAMAGE_INTERVAL_MAX_ )
+	if ( DamageInterval_ >= DAMAGE_INTERVAL_MAX_&&isEvasionRoll_==false )
 	{
 		hp_ -= Damage * changeDef_;
 
