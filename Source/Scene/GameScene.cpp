@@ -31,6 +31,8 @@ void GameScene::Initialize()
 	powerUp_->SetPlayer(player_.get());
 	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
 
+	nodeManager_ = NodeManager::GetInstance();
+	nodeManager_->Initialize();
 }
 
 void GameScene::Update()
@@ -49,17 +51,21 @@ void GameScene::Update()
 		CollisionManager::GetInstance()->Update();
 	}
 
-	//TODO
 	if ( enemys_->GameEnd() )
 	{
 		SceneManager::GetInstance()->ChangeScene("CLEAR");
 	}
 
-	//TODO
 	if ( player_->GetHp() <= 0 )
 	{
 		SceneManager::GetInstance()->ChangeScene("GAMEOVER");
 	}
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_R) )
+	{
+		nodeManager_->Reset();
+	}
+
+	CollisionManager::GetInstance()->Update();
 }
 
 void GameScene::Draw()
@@ -74,6 +80,8 @@ void GameScene::Draw()
 	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
 	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");
 	DrawFormatString(0,40,0xffffff,"ATTACK:Z X");
+
+	nodeManager_->NodeDrew();
 }
 
 void GameScene::SpriteDraw()

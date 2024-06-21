@@ -7,6 +7,7 @@
 #include "EnemyManager.h"
 #include"CollisionManager.h"
 #include "PowerUpCave.h"
+#include"NodeManager.h"
 
 #include"MapChip.h"
 
@@ -23,6 +24,7 @@ private:
 	uint32_t backGround_;
 	uint8_t num;
 	bool chenged;
+	NodeManager* nodeManager_;
 
 public:
 	void Initialize() override;

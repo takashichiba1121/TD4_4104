@@ -1,6 +1,7 @@
 #pragma once
 #include<BaseNode.h>
 #include<map>
+#include<random>
 
 class NodeManager
 {
@@ -11,7 +12,8 @@ private:
 	static constexpr int PLACEMENT_RANDOMNESS = 5;
 	static constexpr int FLOORS = 15;
 	static constexpr int MAP_WIDTH = 7;
-	static constexpr int PATHS = 6;
+	static constexpr int PATHS = 5;
+	static constexpr int START_POINT = 3;
 	static constexpr float MONSTER_ROOM_WEIGHT = 10.0;
 	static constexpr float SHOP_ROOM_WEIGHT = 2.5;
 	static constexpr float CAMPFIRE_ROOM_WEIGHT = 4.0;
@@ -35,10 +37,13 @@ public:
 	void Initialize();
 	void Update();
 	void Draw();
+	void Reset();
 
 	void ChangeNodeSelectLeft();
 	void ChangeNodeSelectCenter();
 	void ChangeNodeSelectRight();
+
+	void NodeDrew();
 
 private:
 
@@ -49,6 +54,9 @@ private:
 	void SetupBossRoom();
 	void SetupRandomRoomWeights();
 	void SetupRoomTypes();
+	BaseNode::Type GetRandomRoomTypeByWeight();
+	void SetRoomRandomly(BaseNode* roomToSet);
+	bool RoomHasParentOfType(BaseNode* room,BaseNode::Type type);
 
 	NodeManager() = default;
 	~NodeManager() = default;
