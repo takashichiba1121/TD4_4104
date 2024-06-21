@@ -23,9 +23,9 @@ void Player::Initialize()
 
 	Load();
 
-	ChangeAttackZ("Fist");
+	ChangeLeftArm("Fist");
 
-	ChangeAttackX("Weapon");
+	ChangeRightArm("Weapon");
 
 	hp_ = maxHp_;
 
@@ -62,7 +62,7 @@ void Player::Update()
 		attackInterval_--;
 	}
 
-	if ( attackZ_->GetAttack() == false && attackX_->GetAttack() == false )
+	if ( leftArm_->GetAttack() == false && rightArm_->GetAttack() == false )
 	{
 		Move();
 
@@ -291,9 +291,9 @@ void Player::EvasionRoll()
 
 void Player::Attack()
 {
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && attackZ_ != nullptr && attackInterval_ == 0 )
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && leftArm_ != nullptr && attackInterval_ == 0 )
 	{
-		attackZ_->AttackInit(pos_,direction_,changePow_);
+		leftArm_->AttackInit(pos_,direction_,changePow_);
 
 		if ( isEvasionRoll_ )
 		{
@@ -302,12 +302,12 @@ void Player::Attack()
 
 		velocity_ = { 0,0 };
 
-		attackInterval_ = attackZ_->GetInterval();
+		attackInterval_ = leftArm_->GetInterval();
 	}
 
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && attackX_ != nullptr && attackInterval_ == 0 )
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && rightArm_ != nullptr && attackInterval_ == 0 )
 	{
-		attackX_->AttackInit(pos_,direction_,changePow_);
+		rightArm_->AttackInit(pos_,direction_,changePow_);
 
 		if ( isEvasionRoll_ )
 		{
@@ -316,17 +316,17 @@ void Player::Attack()
 
 		velocity_ = { 0,0 };
 
-		attackInterval_ = attackX_->GetInterval();
+		attackInterval_ = rightArm_->GetInterval();
 	}
 
-	if ( attackZ_ != nullptr )
+	if ( leftArm_ != nullptr )
 	{
-		attackZ_->Attack();
+		leftArm_->Attack();
 	}
 
-	if ( attackX_ != nullptr )
+	if ( rightArm_ != nullptr )
 	{
-		attackX_->Attack();
+		rightArm_->Attack();
 	}
 }
 
@@ -334,15 +334,15 @@ float Player::IsDamage()
 {
 	float Damage = 0;
 
-	if ( attackX_->GetAttack() )
+	if ( rightArm_->GetAttack() )
 	{
-		Damage = attackX_->GetPow() * changePow_;
+		Damage = rightArm_->GetPow() * changePow_;
 
 		return Damage;
 	}
 	else
 	{
-		Damage = attackZ_->GetPow() * changePow_;
+		Damage = leftArm_->GetPow() * changePow_;
 
 		return Damage;
 	}
@@ -356,32 +356,32 @@ void Player::Damage(int32_t Damage)
 		DamageInterval_ = 0;
 	}
 }
-void Player::ChangeAttackZ(std::string attackName)
+void Player::ChangeLeftArm(std::string attackName)
 {
 	if ( attackName == "Fist" )
 	{
-		attackZ_ = std::make_unique<PlayerAttackFist>();
+		leftArm_ = std::make_unique<PlayerAttackFist>();
 	}
 	if ( attackName == "Weapon" )
 	{
-		attackZ_ = std::make_unique<PlayerAttackWeapon>();
+		leftArm_ = std::make_unique<PlayerAttackWeapon>();
 	}
 
-	attackZ_->Initialize();
+	leftArm_->Initialize();
 }
 
-void Player::ChangeAttackX(std::string attackName)
+void Player::ChangeRightArm(std::string attackName)
 {
 	if ( attackName == "Fist" )
 	{
-		attackX_ = std::make_unique<PlayerAttackFist>();
+		rightArm_ = std::make_unique<PlayerAttackFist>();
 	}
 	if ( attackName == "Weapon" )
 	{
-		attackX_ = std::make_unique<PlayerAttackWeapon>();
+		rightArm_ = std::make_unique<PlayerAttackWeapon>();
 	}
 
-	attackX_->Initialize();
+	rightArm_->Initialize();
 }
 
 bool Player::AddSpd(int32_t spd)
@@ -463,14 +463,14 @@ void Player::Draw()
 		}
 	}
 
-	if ( attackZ_ != nullptr )
+	if ( leftArm_ != nullptr )
 	{
-		attackZ_->Draw();
+		leftArm_->Draw();
 	}
 
-	if ( attackX_ != nullptr )
+	if ( rightArm_ != nullptr )
 	{
-		attackX_->Draw();
+		rightArm_->Draw();
 	}
 
 	DrawFormatString(0,GameConfig::GetWindowHeight() - 20,0xffffff,"PlayerHP:%d/%d",hp_,maxHp_);

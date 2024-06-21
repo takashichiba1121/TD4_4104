@@ -62,9 +62,9 @@ private:
 
 	RectShape* shape_;
 
-	std::unique_ptr<PlayerAttack> attackZ_;
+	std::unique_ptr<PlayerAttack> leftArm_;
 
-	std::unique_ptr<PlayerAttack> attackX_;
+	std::unique_ptr<PlayerAttack> rightArm_;
 
 	int32_t maxHp_ = 100;
 
@@ -102,9 +102,9 @@ public:
 
 	void Damage(int32_t Damage) override;
 
-	void ChangeAttackZ(std::string attackName);
+	void ChangeLeftArm(std::string attackName);
 
-	void ChangeAttackX(std::string attackName);
+	void ChangeRightArm(std::string attackName);
 
 	bool AddSpd(int32_t spd);
 
