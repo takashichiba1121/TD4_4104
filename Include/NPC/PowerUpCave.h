@@ -31,7 +31,7 @@ enum Status
 
 class PowerUpCave
 {
-private:
+protected:
 	Player* playerPtr_;
 	std::array<PowerUp*,3> selectProducts_;
 	uint8_t selectNum_ = 0;
@@ -42,7 +42,7 @@ private:
 	Vector2 boxSize_ = { 200,300 };
 	int32_t boxDist_ = 400;
 public:
-	void Initialize();
+	void Initialize(std::string filePath);
 	bool StatusChenge();
 	void SetSlect(uint8_t selectNum);
 	void SetPriducts();
