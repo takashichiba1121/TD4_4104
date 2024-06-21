@@ -65,6 +65,8 @@ void Player::Update()
 	if ( attackZ_->GetAttack() == false && attackX_->GetAttack() == false )
 	{
 		Move();
+
+		EvasionRoll();
 	}
 	else
 	{
@@ -72,6 +74,12 @@ void Player::Update()
 	}
 
 	Attack();
+
+	PlayerBulletManager::Instance()->Update();
+
+	SetMapChipSpeed(velocity_);
+
+	shape_->SetCenter(pos_);
 
 #ifdef _DEBUG
 
@@ -92,15 +100,15 @@ void Player::Update()
 
 	ImGui::Text("Move");
 
-	ImGui::SliderFloat("Acceleration",&acceleration_,0.0f,100.0f,"%3.0f");
+	ImGui::InputFloat("Acceleration",&acceleration_,0.0f,100.0f,"%3.0f");
 
-	ImGui::SliderFloat("AirAcceleration",&airAcceleration_,0.0f,100.0f,"%3.0f");
+	ImGui::InputFloat("AirAcceleration",&airAcceleration_,0.0f,100.0f,"%3.0f");
 
-	ImGui::SliderFloat("Deccelaration",&deccelaration_,0.0f,100.0f,"%3.0f");
+	ImGui::InputFloat("Deccelaration",&deccelaration_,0.0f,100.0f,"%3.0f");
 
-	ImGui::SliderFloat("AirDeccelaration_",&airDeccelaration_,0.0f,100.0f,"%3.0f");
+	ImGui::InputFloat("AirDeccelaration_",&airDeccelaration_,0.0f,100.0f,"%3.0f");
 
-	ImGui::SliderFloat("TopSpeed",&topSpeed_,0.0f,200.0f,"%3.0f");
+	ImGui::InputFloat("TopSpeed",&topSpeed_,0.0f,200.0f,"%3.0f");
 
 	ImGui::End();
 
@@ -110,6 +118,8 @@ void Player::Update()
 
 	ImGui::Text("HP:%d",hp_);
 
+	ImGui::Text("onGround:%d",onGround_);
+
 	ImGui::End();
 
 #endif
@@ -117,7 +127,7 @@ void Player::Update()
 
 void Player::Move()
 {
-	if ( Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A) )
+	if ( Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A) && isEvasionRoll_ == false )
 	{
 		direction_ = false;
 		if ( velocity_.x > -topSpeed_ * changeAcl_ )
@@ -151,7 +161,7 @@ void Player::Move()
 			velocity_.x = 0;
 		}
 	}
-	if ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) )
+	if ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) && isEvasionRoll_ == false )
 	{
 		direction_ = true;
 		if ( velocity_.x < topSpeed_ * changeAcl_ )
@@ -208,10 +218,6 @@ void Player::Move()
 			Falling();
 		}
 	}
-
-	SetMapChipSpeed(velocity_);
-
-	shape_->SetCenter(pos_);
 }
 
 void Player::JumpStart()
@@ -251,7 +257,36 @@ void Player::Falling()
 
 void Player::EvasionRoll()
 {
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_Q) && isEvasionRoll_ == false )
+	{
+		isEvasionRoll_ = true;
 
+		if ( direction_ )
+		{
+			velocity_ = { 16,0 };
+		}
+		else
+		{
+			velocity_ = { -16,0 };
+		}
+	}
+	if ( isEvasionRoll_ )
+	{
+		if ( direction_ )
+		{
+			if ( velocity_.x < 6 )
+			{
+				isEvasionRoll_ = false;
+			}
+		}
+		else
+		{
+			if ( velocity_.x > -6 )
+			{
+				isEvasionRoll_ = false;
+			}
+		}
+	}
 }
 
 void Player::Attack()
@@ -259,6 +294,11 @@ void Player::Attack()
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && attackZ_ != nullptr && attackInterval_ == 0 )
 	{
 		attackZ_->AttackInit(pos_,direction_,changePow_);
+
+		if ( isEvasionRoll_ )
+		{
+			isEvasionRoll_ = false;
+		}
 
 		velocity_ = { 0,0 };
 
@@ -268,6 +308,11 @@ void Player::Attack()
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && attackX_ != nullptr && attackInterval_ == 0 )
 	{
 		attackX_->AttackInit(pos_,direction_,changePow_);
+
+		if ( isEvasionRoll_ )
+		{
+			isEvasionRoll_ = false;
+		}
 
 		velocity_ = { 0,0 };
 
@@ -283,8 +328,6 @@ void Player::Attack()
 	{
 		attackX_->Attack();
 	}
-
-	PlayerBulletManager::Instance()->Update();
 }
 
 float Player::IsDamage()
@@ -306,7 +349,7 @@ float Player::IsDamage()
 }
 void Player::Damage(int32_t Damage)
 {
-	if ( DamageInterval_ >= DAMAGE_INTERVAL_MAX_&&isEvasionRoll_==false )
+	if ( DamageInterval_ >= DAMAGE_INTERVAL_MAX_ && isEvasionRoll_ == false )
 	{
 		hp_ -= Damage * changeDef_;
 
@@ -343,22 +386,22 @@ void Player::ChangeAttackX(std::string attackName)
 
 void Player::AddSpd(int32_t spd)
 {
-	changeAcl_ += float(spd) / 100.0f;//パーセントを実数値に戻す
+	changeAcl_ = float(spd) / 100.0f;//パーセントを実数値に戻す
 }
 
 void Player::AddPow(int32_t pow)
 {
-	changePow_ += float(pow) / 100.0f;
+	changePow_ = float(pow) / 100.0f;
 }
 
 void Player::AddDef(int32_t def)
 {
-	changeDef_ += float(def) / 100.0f;
+	changeDef_ = float(def) / 100.0f;
 }
 
 void Player::AddMaxHp(int32_t maxHp)
 {
-	changeMaxHp_ += float(maxHp) / 100.0f;
+	changeMaxHp_ = float(maxHp) / 100.0f;
 }
 
 void Player::AddCost(int32_t cost)
@@ -397,7 +440,7 @@ void Player::Draw()
 		attackX_->Draw();
 	}
 
-	DrawFormatString(0,GameConfig::GetWindowHeight()-20,0xffffff,"PlayerHP:%d/%d",hp_,maxHp_);
+	DrawFormatString(0,GameConfig::GetWindowHeight() - 20,0xffffff,"PlayerHP:%d/%d",hp_,maxHp_);
 }
 
 void Player::Load()

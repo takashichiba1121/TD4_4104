@@ -106,15 +106,19 @@ public:
 
 	void ChangeAttackX(std::string attackName);
 
-	void AddSpd(int32_t spd);
+	bool AddSpd(int32_t spd);
 
-	void AddPow(int32_t pow);
+	bool AddPow(int32_t pow);
 
-	void AddDef(int32_t def);
+	bool AddDef(int32_t def);
 
-	void AddMaxHp(int32_t maxHp);
+	bool AddMaxHp(int32_t maxHp);
 
-	void AddCost(int32_t cost);
+	bool AddCost(int32_t cost);
+
+	int32_t GetCost() {
+		return nowCost;
+	}
 
 	void Draw() override;
 
