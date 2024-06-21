@@ -58,6 +58,12 @@
     <Filter Include="ヘッダー ファイル\Node">
       <UniqueIdentifier>{744e79e3-b9aa-4477-948b-7d04ac14bb49}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\PowerUp">
+      <UniqueIdentifier>{f8b10665-6ece-49d1-abae-cb623b127e77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\PowerUp">
+      <UniqueIdentifier>{88bedcf7-a7eb-409d-9ec6-912d77eb3120}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
@@ -373,6 +379,21 @@
     </ClInclude>
     <ClInclude Include="Include\Node\StartNode.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\NPC\DealDaemon.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\NPC\NPC.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\NPC\NPCManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\NPC\PowerUpCave.h">
+      <Filter>ヘッダー ファイル\PowerUp</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\NPC\ATKUpCave.h">
+      <Filter>ヘッダー ファイル\PowerUp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
