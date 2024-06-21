@@ -25,6 +25,9 @@ void GameScene::Initialize()
 	enemys_ = std::make_unique<EnemyManager>();
 	enemys_->Initialize();
 	enemys_->SetPlayerPtr(player_.get());
+
+	nodeManager_ = NodeManager::GetInstance();
+	nodeManager_->Initialize();
 }
 
 void GameScene::Update()
@@ -33,6 +36,11 @@ void GameScene::Update()
 
 	player_->Update();
 	enemys_->Update();
+
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_R) )
+	{
+		nodeManager_->Reset();
+	}
 
 	CollisionManager::GetInstance()->Update();
 }
@@ -43,6 +51,8 @@ void GameScene::Draw()
 	
 	player_->Draw();
 	enemys_->Draw();
+
+	nodeManager_->NodeDrew();
 }
 
 void GameScene::SpriteDraw()

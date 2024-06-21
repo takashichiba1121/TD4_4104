@@ -6,6 +6,7 @@
 #include"Player.h"
 #include "EnemyManager.h"
 #include"CollisionManager.h"
+#include"NodeManager.h"
 
 #include"MapChip.h"
 
@@ -17,6 +18,7 @@ private:
 	std::unique_ptr<EnemyManager> enemys_;
 
 	std::unique_ptr<MapChip>mapChip_;
+	NodeManager* nodeManager_;
 
 public:
 	void Initialize() override;
