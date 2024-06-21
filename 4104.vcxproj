@@ -227,8 +227,6 @@
     <ClInclude Include="Include\Util\Util.h" />
     <ClInclude Include="Include\Scene\TitleScene.h" />
     <ClInclude Include="ThirdParty\magic_enum.hpp" />
-    <ClInclude Include="TransactionNode.h" />
-    <ClInclude Include="ThirdParty\magic_enum.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
