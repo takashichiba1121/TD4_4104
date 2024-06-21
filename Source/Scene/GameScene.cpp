@@ -23,13 +23,8 @@ void GameScene::Initialize()
 	enemys_->Initialize();
 	enemys_->SetPlayerPtr(player_.get());
 
-	powerUp_ = std::make_unique<PowerUpCave>();
-	powerUp_->Initialize();
-	powerUp_->SetPlayer(player_.get());
-	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
-
-	nodeManager_->StartNodeSet(0);
-	nodeManager_->StartNodeSet(0);
+	nodeManager_ = NodeManager::GetInstance();
+	nodeManager_->Initialize();
 }
 
 void GameScene::Update()
@@ -45,19 +40,9 @@ void GameScene::Update()
 		player_->Update();
 		enemys_->Update();
 
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_D) )
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_R) )
 	{
-		num++;
-	}
-	else if ( Input::Instance()->TriggerKey(KEY_INPUT_A) )
-	{
-		num--;
-	}
-	num = min(num,2);
-	powerUp_->SetSlect(num);
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_RETURN) && !chenged )
-	{
-		chenged = powerUp_->StatusChenge();
+		nodeManager_->Reset();
 	}
 
 	CollisionManager::GetInstance()->Update();
@@ -83,10 +68,8 @@ void GameScene::Draw()
 
 	player_->Draw();
 	enemys_->Draw();
-	if(!chenged) powerUp_->Draw();
-	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
-	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");
-	DrawFormatString(0,40,0xffffff,"ATTACK:Z X");
+
+	nodeManager_->NodeDrew();
 }
 
 void GameScene::SpriteDraw()
