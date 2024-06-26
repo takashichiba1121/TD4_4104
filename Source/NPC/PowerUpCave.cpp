@@ -6,6 +6,9 @@
 #include "DxlibInclude.h"
 #include "CollisionManager.h"
 
+using namespace nlohmann;
+using namespace std;
+
 void PowerUpCave::Initialize(std::string filePath)
 {
 
@@ -42,41 +45,24 @@ void PowerUpCave::Initialize(std::string filePath)
 		temp->powerRandRange.first = static_cast< int32_t >( obj[ "PowerRange" ][ 0 ] );
 		temp->powerRandRange.second = static_cast< int32_t >( obj[ "PowerRange" ][ 1 ] );
 
+	for ( json& obj : jsonObject[ "objects" ] )
+	{
+		unique_ptr<PowerUp> temp = make_unique<PowerUp>();
+		temp->power = static_cast< int32_t >(obj[ "Power" ]);
+		temp->cost = static_cast< int32_t >(obj[ "Cost" ]);
+		temp->powerRandRange.first = static_cast< int32_t >( obj[ "PowerRange" ][ 0 ] );
+		temp->powerRandRange.second = static_cast< int32_t >( obj[ "PowerRange" ][ 1 ] );
+
 		temp->costRandRange.first = static_cast< int32_t >( obj[ "CostRange" ][ 0 ] );
 		temp->costRandRange.second = static_cast< int32_t >( obj[ "CostRange" ][ 1 ] );
 
 		temp->statusNames.first = static_cast< string >( obj[ "PowerName" ] );
 		temp->statusNames.second = static_cast< string >( obj[ "CostName" ] );
-		products_[ static_cast< string >( obj[ "Type" ] ) ].push_back(std::move(temp));
-}
-
-	for ( auto itr = products_.begin(); itr != products_.end(); ++itr )
-	{
-		string temp = itr->first;
-		productKey_.push_back(temp);
-		
+		products[ static_cast< string >( obj[ "Type" ] ) ].push_back(std::move(temp));
 	}
-
-	SetPriducts();
-
-	name_.tag = "PowerUpCave";
-}
-
-
-void PowerUpCave::Update()
-{
-	
-	selectmode_ = playerPtr_->IsPowerUp();
-
-}
-
-void PowerUpCave::OnCollision()
-{
-}
-
-	//Survival 生存
-	//Hunt 攻撃
-	//Precision クリティカル
+	//Survival 逕溷ｭ・
+	//Hunt 謾ｻ謦・
+	//Precision 繧ｯ繝ｪ繝・ぅ繧ｫ繝ｫ
 }
 
 void PowerUpCave::OnCollision()
@@ -85,7 +71,7 @@ void PowerUpCave::OnCollision()
 
 bool PowerUpCave::StatusChenge()
 {
-	PowerUp* product = &selectProducts_[ selectNum_ ];
+	PowerUp* product = selectProducts_[ selectNum_ ];
 	bool isBuy = false;
 	switch ( magic_enum::enum_cast< Status >( product->statusNames.second ).value() )
 	{
@@ -102,7 +88,7 @@ bool PowerUpCave::StatusChenge()
 		isBuy = playerPtr_->SubSpd(product->cost);
 		break;
 	case CRIT:
-
+		isBuy = playerPtr_->SubCrit(product->cost);
 		break;
 	case CDMG:
 		isBuy = playerPtr_->SubCdmg(product->cost);
@@ -127,7 +113,7 @@ bool PowerUpCave::StatusChenge()
 			isBuy = playerPtr_->AddSpd(product->power);
 			break;
 		case CRIT:
-
+			isBuy = playerPtr_->AddCrit(product->power);
 			break;
 		case CDMG:
 			isBuy = playerPtr_->AddCdmg(product->power);
