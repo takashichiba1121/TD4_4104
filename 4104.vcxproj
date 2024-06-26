@@ -188,7 +188,6 @@
     <ClCompile Include="TransactionNode.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\NPC\ATKUpCave.h" />
     <ClInclude Include="Include\NPC\DealDaemon.h" />
     <ClInclude Include="Include\Player\PlayerAttackSpider.h" />
     <ClInclude Include="Include\NPC\DealDaemon.h" />
