@@ -35,7 +35,7 @@ protected:
 	Player* playerPtr_;
 	std::array<PowerUp*,3> selectProducts_;
 	uint8_t selectNum_;
-	std::unordered_map<std::string,std::vector<PowerUp>> products;
+	std::unordered_map<std::string,std::vector<std::unique_ptr<PowerUp>>> products;
 public:
 	void Initialize(std::string filePath);
 	bool StatusChenge();
