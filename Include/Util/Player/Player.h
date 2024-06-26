@@ -49,6 +49,10 @@ private:
 
 	float changeMaxHp_=1;
 
+	float changeCrit_ = 0.1;
+
+	float changeCdmg_ = 1.5;
+
 	int32_t nowCost=0;
 #pragma endregion
 
@@ -62,9 +66,9 @@ private:
 
 	RectShape* shape_;
 
-	std::unique_ptr<PlayerAttack> attackZ_;
+	std::unique_ptr<PlayerAttack> leftArm_;
 
-	std::unique_ptr<PlayerAttack> attackX_;
+	std::unique_ptr<PlayerAttack> rightArm_;
 
 	int32_t maxHp_ = 100;
 
@@ -102,9 +106,9 @@ public:
 
 	void Damage(int32_t Damage) override;
 
-	void ChangeAttackZ(std::string attackName);
+	void ChangeLeftArm(std::string attackName);
 
-	void ChangeAttackX(std::string attackName);
+	void ChangeRightArm(std::string attackName);
 
 	bool AddSpd(int32_t spd);
 
@@ -113,6 +117,10 @@ public:
 	bool AddDef(int32_t def);
 
 	bool AddMaxHp(int32_t maxHp);
+
+	bool AddCrit(float Crit);
+
+	bool AddCdmg(int32_t Cdmg);
 
 	bool AddCost(int32_t cost);
 
@@ -123,6 +131,10 @@ public:
 	bool SubDef(int32_t def);
 
 	bool SubMaxHp(int32_t maxHp);
+
+	bool SubCrit(int32_t Crit);
+
+	bool SubCdmg(int32_t Cdmg);
 
 	int32_t GetCost() {
 		return nowCost;
