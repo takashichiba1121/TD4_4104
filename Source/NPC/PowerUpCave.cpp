@@ -4,6 +4,9 @@
 #include <json.hpp>
 #include <fstream>
 
+using namespace nlohmann;
+using namespace std;
+
 void PowerUpCave::Initialize(std::string filePath)
 {
 
@@ -21,7 +24,21 @@ void PowerUpCave::Initialize(std::string filePath)
 	file >> jsonObject;
 
 
+	for ( json& obj : jsonObject[ "objects" ] )
+	{
+		unique_ptr<PowerUp> temp = make_unique<PowerUp>();
+		temp->power = static_cast< int32_t >(obj[ "Power" ]);
+		temp->cost = static_cast< int32_t >(obj[ "Cost" ]);
+		temp->powerRandRange.first = static_cast< int32_t >( obj[ "PowerRange" ][ 0 ] );
+		temp->powerRandRange.second = static_cast< int32_t >( obj[ "PowerRange" ][ 1 ] );
 
+		temp->costRandRange.first = static_cast< int32_t >( obj[ "CostRange" ][ 0 ] );
+		temp->costRandRange.second = static_cast< int32_t >( obj[ "CostRange" ][ 1 ] );
+
+		temp->statusNames.first = static_cast< string >( obj[ "PowerName" ] );
+		temp->statusNames.second = static_cast< string >( obj[ "CostName" ] );
+		products[ static_cast< string >( obj[ "Type" ] ) ].push_back(std::move(temp));
+	}
 	//Survival 生存
 	//Hunt 攻撃
 	//Precision クリティカル
@@ -29,7 +46,7 @@ void PowerUpCave::Initialize(std::string filePath)
 
 bool PowerUpCave::StatusChenge()
 {
-	PowerUp* product = &selectProducts_[ selectNum_ ];
+	PowerUp* product = selectProducts_[ selectNum_ ];
 	bool isBuy = false;
 	switch ( magic_enum::enum_cast< Status >( product->statusNames.second ).value() )
 	{
@@ -46,9 +63,10 @@ bool PowerUpCave::StatusChenge()
 		isBuy = playerPtr_->SubSpd(product->cost);
 		break;
 	case CRIT:
-
+		isBuy = playerPtr_->SubCrit(product->cost);
 		break;
 	case CDMG:
+		isBuy = playerPtr_->SubCdmg(product->cost);
 		break;
 	default:
 		break;
@@ -70,9 +88,10 @@ bool PowerUpCave::StatusChenge()
 			isBuy = playerPtr_->AddSpd(product->power);
 			break;
 		case CRIT:
-
+			isBuy = playerPtr_->AddCrit(product->power);
 			break;
 		case CDMG:
+			isBuy = playerPtr_->AddCdmg(product->power);
 			break;
 		default:
 			break;
