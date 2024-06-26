@@ -4,6 +4,7 @@
 #include <array>
 #include <string>
 #include <unordered_map>
+#include <memory>
 
 class Player;
 
@@ -31,7 +32,7 @@ class PowerUpCave
 {
 protected:
 	Player* playerPtr_;
-	std::array<PowerUp,3> selectProducts_;
+	std::array<PowerUp*,3> selectProducts_;
 	uint8_t selectNum_;
 	std::unordered_map<std::string,std::vector<PowerUp>> products;
 public:
