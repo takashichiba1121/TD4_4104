@@ -143,6 +143,7 @@
     <ClCompile Include="Source\Util\Player\Player.cpp" />
     <ClCompile Include="Source\Util\Player\PlayerAttackWeapon.cpp" />
     <ClCompile Include="Source\Util\Player\PlayerBulletManager.cpp" />
+    <ClCompile Include="Source\Util\Player\PlayerLegNormal.cpp" />
     <ClCompile Include="ThirdParty\imgui\imgui.cpp" />
     <ClCompile Include="ThirdParty\imgui\imgui_demo.cpp" />
     <ClCompile Include="ThirdParty\imgui\imgui_draw.cpp" />
@@ -192,6 +193,8 @@
     <ClInclude Include="Include\Collision\IShape.h" />
     <ClInclude Include="Include\Collision\RectShape.h" />
     <ClInclude Include="Include\Util\MapChip.h" />
+    <ClInclude Include="Include\Util\Player\PlayerLeg.h" />
+    <ClInclude Include="Include\Util\Player\PlayerLegNormal.h" />
     <ClInclude Include="ThirdParty\imgui\imconfig.h" />
     <ClInclude Include="ThirdParty\imgui\imgui.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_impl_dx11.h" />

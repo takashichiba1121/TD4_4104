@@ -48,6 +48,10 @@ void Player::Initialize()
 	CollisionManager::GetInstance()->AddObject(this);
 
 	textureId_ = LoadGraph("Resources/Player/PlayerStand.png");
+
+	leg_ = std::make_unique<PlayerLegNormal>();
+
+	leg_->Initialize(&velocity_,&direction_,&changeAcl_);
 }
 
 void Player::Update()

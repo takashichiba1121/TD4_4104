@@ -5,6 +5,8 @@
 #include<memory>
 #include<string>
 #include"BaseObject.h"
+#include"PlayerLeg.h"
+#include"PlayerLegNormal.h"
 
 struct UserData
 {
@@ -65,6 +67,8 @@ private:
 	std::unique_ptr<PlayerAttack> leftArm_;
 
 	std::unique_ptr<PlayerAttack> rightArm_;
+
+	std::unique_ptr<PlayerLeg> leg_;
 
 	int32_t maxHp_ = 100;
 
