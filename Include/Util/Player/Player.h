@@ -51,6 +51,10 @@ private:
 
 	float changeMaxHp_=1;
 
+	float changeCrit_ = 0.1;
+
+	float changeCdmg_ = 1.5;
+
 	int32_t nowCost=0;
 #pragma endregion
 
@@ -118,6 +122,10 @@ public:
 
 	bool AddMaxHp(int32_t maxHp);
 
+	bool AddCrit(float Crit);
+
+	bool AddCdmg(int32_t Cdmg);
+
 	bool AddCost(int32_t cost);
 
 	bool SubSpd(int32_t spd);
@@ -127,6 +135,10 @@ public:
 	bool SubDef(int32_t def);
 
 	bool SubMaxHp(int32_t maxHp);
+
+	bool SubCrit(int32_t Crit);
+
+	bool SubCdmg(int32_t Cdmg);
 
 	int32_t GetCost() {
 		return nowCost;

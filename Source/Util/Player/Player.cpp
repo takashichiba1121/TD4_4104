@@ -414,7 +414,18 @@ bool Player::AddMaxHp(int32_t maxHp)
 
 	return true;
 }
+bool Player::AddCrit(float Crit)
+{
+	changeCrit_ += Crit;
 
+	return true;
+}
+bool Player::AddCdmg(int32_t Cdmg)
+{
+	changeCdmg_ += float(Cdmg) / 100.0f;
+
+	return true;
+}
 bool Player::SubSpd(int32_t spd)
 {
 	if ( changeAcl_ - float(spd) / 100.0f <= 0 ){return false;}
@@ -442,6 +453,20 @@ bool Player::SubMaxHp(int32_t maxHp)
 {
 	if ( changeMaxHp_ - float(maxHp) / 100.0f <= 0 ){return false;}
 	changeMaxHp_ -= float(maxHp) / 100.0f;
+
+	return true;
+}
+
+bool Player::SubCrit(int32_t Crit)
+{
+	changeCrit_ -= Crit;
+
+	return true;
+}
+
+bool Player::SubCdmg(int32_t Cdmg)
+{
+	changeCdmg_ -= float(Cdmg) / 100.0f;
 
 	return true;
 }
