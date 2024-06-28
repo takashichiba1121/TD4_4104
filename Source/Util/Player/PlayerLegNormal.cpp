@@ -12,11 +12,15 @@ void PlayerLegNormal::Initialize(Vector2* playerVelocity,bool* direction,float* 
 	direction_ = direction;
 
 	changeAcl_ = changeAcl;
+
+	Load();
 }
 
 void PlayerLegNormal::Move(bool DirBOTTOM)
 {
-	if ( Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A) && isEvasionRoll_ == false )
+	isDirBottom_ = DirBOTTOM;
+
+	if ( (Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A)) && isEvasionRoll_ == false )
 	{
 		*direction_ = false;
 		if ( playerVelocity_->x > topSpeed_ * *changeAcl_ )
@@ -50,7 +54,7 @@ void PlayerLegNormal::Move(bool DirBOTTOM)
 			playerVelocity_->x = 0;
 		}
 	}
-	if ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) && isEvasionRoll_ == false )
+	if ( (Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D)) && isEvasionRoll_ == false )
 	{
 		*direction_ = true;
 		if ( playerVelocity_->x < topSpeed_ * *changeAcl_ )
@@ -90,8 +94,9 @@ void PlayerLegNormal::Move(bool DirBOTTOM)
 		JumpStart();
 	}
 
+	EvasionRoll();
 
-	if (DirBOTTOM )
+	if (!DirBOTTOM )
 	{
 		onGround_ = true;
 	}
@@ -111,22 +116,71 @@ void PlayerLegNormal::Move(bool DirBOTTOM)
 
 void PlayerLegNormal::JumpStart()
 {
+	onGround_ = true;
 
+	isJump_ = true;
+
+	playerVelocity_->y += jumpInitialVelocity_;
 }
 
 void PlayerLegNormal::Jump()
 {
+	playerVelocity_->y += jumpAcceleration_;
+
+	if ( Input::Instance()->ReleaseKey(KEY_INPUT_SPACE) || playerVelocity_->y >= 0 )
+	{
+		isJump_ = false;
+
+		playerVelocity_->y /= 3;
+	}
 
 }
 
 void PlayerLegNormal::EvasionRoll()
 {
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_Q) && isEvasionRoll_ == false )
+	{
+		isEvasionRoll_ = true;
 
+		if ( *direction_ )
+		{
+			*playerVelocity_ = { 16,0 };
+		}
+		else
+		{
+			*playerVelocity_ = { -16,0 };
+		}
+	}
+	if ( isEvasionRoll_ )
+	{
+		if ( *direction_ )
+		{
+			if ( playerVelocity_->x < 6 )
+			{
+				isEvasionRoll_ = false;
+			}
+		}
+		else
+		{
+			if ( playerVelocity_->x > -6 )
+			{
+				isEvasionRoll_ = false;
+			}
+		}
+	}
 }
 
 void PlayerLegNormal::Falling()
 {
+	playerVelocity_->y += gravityAcceleration_;
 
+	if (isDirBottom_)
+	{
+		onGround_ = false;
+
+		playerVelocity_->y = 0;
+
+	}
 }
 
 void PlayerLegNormal::Draw()

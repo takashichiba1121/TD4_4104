@@ -59,6 +59,8 @@ private:
 
 	float jumpInitialVelocity_ = 0;
 
+	bool isDirBottom_;
+
 #pragma endregion
 };
 

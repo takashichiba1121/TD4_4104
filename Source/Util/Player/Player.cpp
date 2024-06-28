@@ -68,9 +68,7 @@ void Player::Update()
 
 	if ( leftArm_->GetAttack() == false && rightArm_->GetAttack() == false )
 	{
-		Move();
-
-		EvasionRoll();
+		leg_->Move(GetOnDir() & 0b1 << OnDir::BOTTOM);
 	}
 	else
 	{
