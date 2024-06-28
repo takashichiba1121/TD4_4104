@@ -16,11 +16,11 @@ void PlayerLegNormal::Initialize(Vector2* playerVelocity,bool* direction,float* 
 	Load();
 }
 
-void PlayerLegNormal::Move(bool DirBOTTOM)
+void PlayerLegNormal::Move(bool DirBOTTOM,bool isAttack)
 {
 	isDirBottom_ = DirBOTTOM;
 
-	if ( (Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A)) && isEvasionRoll_ == false )
+	if ( (Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A)) && !isEvasionRoll_&&!isAttack )
 	{
 		*direction_ = false;
 		if ( playerVelocity_->x > topSpeed_ * *changeAcl_ )
@@ -54,7 +54,7 @@ void PlayerLegNormal::Move(bool DirBOTTOM)
 			playerVelocity_->x = 0;
 		}
 	}
-	if ( (Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D)) && isEvasionRoll_ == false )
+	if ( (Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D)) && !isEvasionRoll_&&!isAttack )
 	{
 		*direction_ = true;
 		if ( playerVelocity_->x < topSpeed_ * *changeAcl_ )

@@ -6,30 +6,34 @@ class PlayerAttackFist :
 private:
 	bool isAttack_ = false;
 
+	uint32_t attackType_ = 0;
+
+	uint32_t nextAttack_=0;
+
 	bool isGiveDamage_ = false;
 
 	float AttackTime_ = 0;
 
 	Vector2 DrawPos_;
 
-	const float LAST_ATTACK_TIME_ = 3;
+	Combo combo1 = { 10,{15,-10},{30,30},70,5 };
 
-	const Vector2 ATTACK_POS_ = { 15,-10 };
+	Combo combo2 = { 20,{20,-10},{45,30},80,10 };
 
-	const Vector2 COLISION_SIZE_ = { 30,30 };
-
-	const uint32_t INTERVAL_ = 10;
-
-	const float POW = 5;
+	Combo combo3 = { 30,{25,-10},{60,30},90,20 };
 
 	float playerPow_;
 
 	RectShape* shape_;
 
-public:
-	void Initialize() override;
+	Vector2* playerPos_;
 
-	void AttackInit(const Vector2& playerPos,bool direction,float pow) override;
+	bool* direction_;
+
+public:
+	void Initialize(Vector2* playerPos,bool* direction) override;
+
+	void AttackInit(float pow) override;
 
 	void Attack() override;
 
@@ -37,11 +41,9 @@ public:
 
 	bool GetAttack() override {return isAttack_;}
 
-	uint32_t GetInterval() override {return INTERVAL_;}
+	uint32_t GetInterval() override;
 
-	float GetPow() override {
-		return POW;
-	}
+	float GetPow() override;
 
 	void OnCollision() override;
 };

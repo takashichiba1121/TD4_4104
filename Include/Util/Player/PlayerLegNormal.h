@@ -7,7 +7,7 @@ class PlayerLegNormal :
 
 	void Initialize(Vector2* playerPos,bool* direction,float* changeAcl) override;
 
-	void Move(bool DirBOTTOM) override;
+	void Move(bool DirBOTTOM,bool isAttack) override;
 
 	void JumpStart() override;
 

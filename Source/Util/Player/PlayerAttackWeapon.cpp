@@ -2,11 +2,14 @@
 #include"DxlibInclude.h"
 #include"PlayerBulletManager.h"
 
-void PlayerAttackWeapon::Initialize()
+void PlayerAttackWeapon::Initialize(Vector2* playerPos,bool* direction)
 {
+	playerPos_ = playerPos;
+
+	direction_ = direction;
 }
 
-void PlayerAttackWeapon::AttackInit(const Vector2& playerPos,bool direction,float pow)
+void PlayerAttackWeapon::AttackInit(float pow)
 {
 	if ( isAttack_ == false )
 	{
@@ -14,13 +17,13 @@ void PlayerAttackWeapon::AttackInit(const Vector2& playerPos,bool direction,floa
 
 		std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
 
-		if ( direction )
+		if ( *direction_ )
 		{
-			newBullet->Initialize({10,0},playerPos,60,pow);
+			newBullet->Initialize({ 10,0 },*playerPos_,60,pow);
 		}
 		else
 		{
-			newBullet->Initialize({-10,0},playerPos,60,pow);
+			newBullet->Initialize({ -10,0 },*playerPos_,60,pow);
 		}
 
 		PlayerBulletManager::Instance()->AddBullet(std::move(newBullet));

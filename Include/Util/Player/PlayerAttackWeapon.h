@@ -5,7 +5,7 @@ class PlayerAttackWeapon :
     public PlayerAttack
 {
 private:
-	bool isAttack_ = false;
+	uint32_t isAttack_ = false;
 
 	float AttackTime_ = 0;
 
@@ -25,10 +25,14 @@ private:
 
 	RectShape* shape_;
 
-public:
-	void Initialize() override;
+	Vector2* playerPos_;
 
-	void AttackInit(const Vector2& playerPos,bool direction,float pow) override;
+	bool* direction_;
+
+public:
+	void Initialize(Vector2* playerPos,bool* direction) override;
+
+	void AttackInit(float pow) override;
 
 	void Attack() override;
 

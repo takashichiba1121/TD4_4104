@@ -6,7 +6,7 @@ public:
 
 	virtual void Initialize(Vector2* playerPos,bool* direction,float* changeAcl) = 0;
 
-	virtual void Move(bool DirBOTTOM) = 0;
+	virtual void Move(bool DirBOTTOM,bool isAttack) = 0;
 
 	virtual void JumpStart()=0;
 

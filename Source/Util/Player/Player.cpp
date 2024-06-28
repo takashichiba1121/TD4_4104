@@ -21,8 +21,6 @@ void Player::Initialize()
 
 	pos_.y = GameConfig::GetGameConfig()->windowHeight / 2;
 
-	Load();
-
 	ChangeLeftArm("Fist");
 
 	ChangeRightArm("Weapon");
@@ -61,19 +59,7 @@ void Player::Update()
 		DamageInterval_++;
 	}
 
-	if ( attackInterval_ > 0 )
-	{
-		attackInterval_--;
-	}
-
-	if ( leftArm_->GetAttack() == false && rightArm_->GetAttack() == false )
-	{
-		leg_->Move(GetOnDir() & 0b1 << OnDir::BOTTOM);
-	}
-	else
-	{
-		SetMapChipSpeed({ 0,0 });
-	}
+	leg_->Move(GetOnDir() & 0b1 << OnDir::BOTTOM,leftArm_->GetAttack() || rightArm_->GetAttack());
 
 	Attack();
 
@@ -85,240 +71,27 @@ void Player::Update()
 
 #ifdef _DEBUG
 
-	ImGui::Begin("PlayerStatus");
-
-	if ( ImGui::Button("Load") )
-	{
-		Load();
-	}
-
-	ImGui::Text("Jump");
-
-	ImGui::SliderFloat("JumpInitialVelocity",&jumpInitialVelocity_,0.0f,-20.0f,"%2.0f");
-
-	ImGui::SliderFloat("JumpAcceleration",&jumpAcceleration_,0.0f,20.0f,"%2.1f");
-
-	ImGui::SliderFloat("GravityAcceleration",&gravityAcceleration_,0.0f,5.0f,"%1.1f");
-
-	ImGui::Text("Move");
-
-	ImGui::InputFloat("Acceleration",&acceleration_,0.0f,100.0f,"%3.0f");
-
-	ImGui::InputFloat("AirAcceleration",&airAcceleration_,0.0f,100.0f,"%3.0f");
-
-	ImGui::InputFloat("Deccelaration",&deccelaration_,0.0f,100.0f,"%3.0f");
-
-	ImGui::InputFloat("AirDeccelaration_",&airDeccelaration_,0.0f,100.0f,"%3.0f");
-
-	ImGui::InputFloat("TopSpeed",&topSpeed_,0.0f,200.0f,"%3.0f");
-
-	ImGui::End();
-
 	ImGui::Begin("PlayerSituation");
 
 	ImGui::Text("vec:%f,%f",velocity_.x,velocity_.y);
 
 	ImGui::Text("HP:%d",hp_);
 
-	ImGui::Text("onGround:%d",onGround_);
-
 	ImGui::End();
 
 #endif
 }
 
-void Player::Move()
-{
-	if ( Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A) && isEvasionRoll_ == false )
-	{
-		direction_ = false;
-		if ( velocity_.x > -topSpeed_ * changeAcl_ )
-		{
-			if ( onGround_ )
-			{
-				velocity_.x -= ( airAcceleration_ * changeAcl_ ) / GameConfig::GetGameConfig()->fps;
-			}
-			else
-			{
-				velocity_.x -= ( acceleration_ * changeAcl_ ) / GameConfig::GetGameConfig()->fps;
-			}
-		}
-		else
-		{
-			velocity_.x = -topSpeed_ * changeAcl_;
-		}
-	}
-	else if ( velocity_.x < 0 )
-	{
-		if ( onGround_ )
-		{
-			velocity_.x += airDeccelaration_ / GameConfig::GetGameConfig()->fps;
-		}
-		else
-		{
-			velocity_.x += deccelaration_ / GameConfig::GetGameConfig()->fps;
-		}
-		if ( velocity_.x > 0 )
-		{
-			velocity_.x = 0;
-		}
-	}
-	if ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) && isEvasionRoll_ == false )
-	{
-		direction_ = true;
-		if ( velocity_.x < topSpeed_ * changeAcl_ )
-		{
-			if ( onGround_ )
-			{
-				velocity_.x += ( airAcceleration_ * changeAcl_ ) / GameConfig::GetGameConfig()->fps;
-			}
-			else
-			{
-				velocity_.x += ( acceleration_ * changeAcl_ ) / GameConfig::GetGameConfig()->fps;
-			}
-		}
-		else
-		{
-			velocity_.x = topSpeed_ * changeAcl_;
-		}
-	}
-	else if ( velocity_.x > 0 )
-	{
-		if ( onGround_ )
-		{
-			velocity_.x -= airDeccelaration_ / GameConfig::GetGameConfig()->fps;
-		}
-		else
-		{
-			velocity_.x -= deccelaration_ / GameConfig::GetGameConfig()->fps;
-		}
-		if ( velocity_.x < 0 )
-		{
-			velocity_.x = 0;
-		}
-	}
-
-	if ( Input::Instance()->PushKey(KEY_INPUT_SPACE) && !onGround_ )
-	{
-		JumpStart();
-	}
-
-
-	if ( !( GetOnDir() & 0b1 << OnDir::BOTTOM ) )
-	{
-		onGround_ = true;
-	}
-
-	if ( onGround_ )
-	{
-		if ( isJump_ )
-		{
-			Jump();
-		}
-		else
-		{
-			Falling();
-		}
-	}
-}
-
-void Player::JumpStart()
-{
-	onGround_ = true;
-
-	isJump_ = true;
-
-	velocity_.y += jumpInitialVelocity_;
-}
-
-void Player::Jump()
-{
-	velocity_.y += jumpAcceleration_;
-
-	if ( Input::Instance()->ReleaseKey(KEY_INPUT_SPACE) || velocity_.y >= 0 )
-	{
-		isJump_ = false;
-
-		velocity_.y /= 3;
-	}
-
-}
-
-void Player::Falling()
-{
-	velocity_.y += gravityAcceleration_;
-
-	if ( GetOnDir() & 0b1 << OnDir::BOTTOM )
-	{
-		onGround_ = false;
-
-		velocity_.y = 0;
-
-	}
-}
-
-void Player::EvasionRoll()
-{
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_Q) && isEvasionRoll_ == false )
-	{
-		isEvasionRoll_ = true;
-
-		if ( direction_ )
-		{
-			velocity_ = { 16,0 };
-		}
-		else
-		{
-			velocity_ = { -16,0 };
-		}
-	}
-	if ( isEvasionRoll_ )
-	{
-		if ( direction_ )
-		{
-			if ( velocity_.x < 6 )
-			{
-				isEvasionRoll_ = false;
-			}
-		}
-		else
-		{
-			if ( velocity_.x > -6 )
-			{
-				isEvasionRoll_ = false;
-			}
-		}
-	}
-}
-
 void Player::Attack()
 {
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && leftArm_ != nullptr && attackInterval_ == 0 )
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && leftArm_ != nullptr&&!rightArm_->GetAttack() )
 	{
-		leftArm_->AttackInit(pos_,direction_,changePow_);
-
-		if ( isEvasionRoll_ )
-		{
-			isEvasionRoll_ = false;
-		}
-
-		velocity_ = { 0,0 };
-
-		attackInterval_ = leftArm_->GetInterval();
+		leftArm_->AttackInit(changePow_);
 	}
 
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && rightArm_ != nullptr && attackInterval_ == 0 )
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && rightArm_ != nullptr && !leftArm_->GetAttack() )
 	{
-		rightArm_->AttackInit(pos_,direction_,changePow_);
-
-		if ( isEvasionRoll_ )
-		{
-			isEvasionRoll_ = false;
-		}
-
-		velocity_ = { 0,0 };
-
-		attackInterval_ = rightArm_->GetInterval();
+		rightArm_->AttackInit(changePow_);
 	}
 
 	if ( leftArm_ != nullptr )
@@ -331,27 +104,9 @@ void Player::Attack()
 		rightArm_->Attack();
 	}
 }
-
-float Player::IsDamage()
-{
-	float Damage = 0;
-
-	if ( rightArm_->GetAttack() )
-	{
-		Damage = rightArm_->GetPow() * changePow_;
-
-		return Damage;
-	}
-	else
-	{
-		Damage = leftArm_->GetPow() * changePow_;
-
-		return Damage;
-	}
-}
 void Player::Damage(int32_t Damage)
 {
-	if ( DamageInterval_ >= DAMAGE_INTERVAL_MAX_ && isEvasionRoll_ == false )
+	if ( DamageInterval_ >= DAMAGE_INTERVAL_MAX_ )
 	{
 		hp_ -= Damage * changeDef_;
 
@@ -369,7 +124,7 @@ void Player::ChangeLeftArm(std::string attackName)
 		leftArm_ = std::make_unique<PlayerAttackWeapon>();
 	}
 
-	leftArm_->Initialize();
+	leftArm_->Initialize(&pos_,&direction_);
 }
 
 void Player::ChangeRightArm(std::string attackName)
@@ -383,7 +138,7 @@ void Player::ChangeRightArm(std::string attackName)
 		rightArm_ = std::make_unique<PlayerAttackWeapon>();
 	}
 
-	rightArm_->Initialize();
+	rightArm_->Initialize(&pos_,&direction_);
 }
 
 bool Player::AddSpd(int32_t spd)
@@ -426,7 +181,10 @@ bool Player::AddCdmg(int32_t Cdmg)
 }
 bool Player::SubSpd(int32_t spd)
 {
-	if ( changeAcl_ - float(spd) / 100.0f <= 0 ){return false;}
+	if ( changeAcl_ - float(spd) / 100.0f <= 0 )
+	{
+		return false;
+	}
 	changeAcl_ -= float(spd) / 100.0f;//パーセントを実数値に戻す
 
 	return true;
@@ -434,7 +192,10 @@ bool Player::SubSpd(int32_t spd)
 
 bool Player::SubPow(int32_t pow)
 {
-	if ( changePow_ - float(pow) / 100.0f <= 0 ){return false;}
+	if ( changePow_ - float(pow) / 100.0f <= 0 )
+	{
+		return false;
+	}
 	changePow_ -= float(pow) / 100.0f;
 
 	return true;
@@ -442,14 +203,20 @@ bool Player::SubPow(int32_t pow)
 
 bool Player::SubDef(int32_t def)
 {
-	if ( changeDef_ - float(def) / 100.0f <= 0 ){return false;}
+	if ( changeDef_ - float(def) / 100.0f <= 0 )
+	{
+		return false;
+	}
 	changeDef_ -= float(def) / 100.0f;
 	return true;
 }
 
 bool Player::SubMaxHp(int32_t maxHp)
 {
-	if ( changeMaxHp_ - float(maxHp) / 100.0f <= 0 ){return false;}
+	if ( changeMaxHp_ - float(maxHp) / 100.0f <= 0 )
+	{
+		return false;
+	}
 	changeMaxHp_ -= float(maxHp) / 100.0f;
 
 	return true;
@@ -501,37 +268,4 @@ void Player::Draw()
 	}
 
 	DrawFormatString(0,GameConfig::GetWindowHeight() - 20,0xffffff,"PlayerHP:%d/%d",hp_,maxHp_);
-}
-
-void Player::Load()
-{
-	std::ifstream file;
-
-	file.open("Resources/Player/Player.json");
-
-	if ( file.fail() )
-	{
-		assert(0);
-	}
-
-	nlohmann::json jsonObject;
-
-	file >> jsonObject;
-
-	assert(jsonObject.is_object());
-	assert(jsonObject.contains("name"));
-	assert(jsonObject[ "name" ].is_string());
-
-	std::string lName = jsonObject[ "name" ].get<std::string>();
-
-	assert(lName.compare("Player") == 0);
-
-	topSpeed_ = jsonObject[ "TopSpeed" ];
-	acceleration_ = jsonObject[ "Acceleration" ];
-	airAcceleration_ = jsonObject[ "AirAcceleration" ];
-	deccelaration_ = jsonObject[ "Deccelaration" ];
-	airDeccelaration_ = jsonObject[ "AirDeccelaration" ];
-	gravityAcceleration_ = jsonObject[ "GravityAcceleration" ];
-	jumpAcceleration_ = jsonObject[ "JumpAcceleration" ];
-	jumpInitialVelocity_ = jsonObject[ "JumpInitialVelocity" ];
 }
