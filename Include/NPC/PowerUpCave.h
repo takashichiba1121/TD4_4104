@@ -41,6 +41,6 @@ public:
 	void Initialize(std::string filePath);
 	bool StatusChenge();
 	void SetSlect(uint8_t selectNum);
-	void SetPriducts(std::string type);
+	void SetPriducts();
 };
 
