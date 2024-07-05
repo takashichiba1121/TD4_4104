@@ -146,3 +146,11 @@ void PowerUpCave::Draw()
 			selectProducts_[i]->power,selectProducts_[i]->statusNames.second.c_str(),selectProducts_[i]->cost);
 	}
 }
+
+void PowerUpCave::SetPriducts(std::string type)
+{
+	for ( int i = 0; i < selectProducts_.size(); i++ )
+	{
+		selectProducts_[ i ] = products[ type ][ GetRand(products[ type ].size()) ].get();
+	}
+}
