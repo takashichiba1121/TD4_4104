@@ -224,3 +224,11 @@ void PowerUpCave::Draw()
 		DrawBox(pos_.x - hitboxSize_.x/2,pos_.y - hitboxSize_.y/2,pos_.x + hitboxSize_.x/2,pos_.y + hitboxSize_.y/2,0xffffff,true);
 	}
 }
+
+void PowerUpCave::SetPriducts(std::string type)
+{
+	for ( int i = 0; i < selectProducts_.size(); i++ )
+	{
+		selectProducts_[ i ] = products[ type ][ GetRand(products[ type ].size()) ].get();
+	}
+}
