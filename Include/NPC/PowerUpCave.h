@@ -35,9 +35,12 @@ protected:
 	std::array<PowerUp*,3> selectProducts_;
 	uint8_t selectNum_;
 	std::unordered_map<std::string,std::vector<std::unique_ptr<PowerUp>>> products;
+	std::vector<std::string> productKey;
+
 public:
 	void Initialize(std::string filePath);
 	bool StatusChenge();
 	void SetSlect(uint8_t selectNum);
+	void SetPriducts(std::string type);
 };
 
