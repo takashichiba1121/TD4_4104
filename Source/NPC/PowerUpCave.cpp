@@ -3,8 +3,7 @@
 #include <magic_enum.hpp>
 #include <json.hpp>
 #include <fstream>
-#include "DxlibInclude.h"
-#include "CollisionManager.h"
+#include "DxLib.h"
 
 using namespace nlohmann;
 using namespace std;
@@ -60,13 +59,13 @@ void PowerUpCave::Initialize(std::string filePath)
 		temp->statusNames.second = static_cast< string >( obj[ "CostName" ] );
 		products[ static_cast< string >( obj[ "Type" ] ) ].push_back(std::move(temp));
 	}
-	//Survival 生孁E
-	//Hunt 攻撁E
-	//Precision クリチE��カル
-}
 
-void PowerUpCave::OnCollision()
-{
+	for ( auto itr = products.begin(); itr != products.end(); ++itr )
+	{
+		string temp = itr->first;
+		productKey.push_back(temp);
+		
+	}
 }
 
 bool PowerUpCave::StatusChenge()
@@ -129,4 +128,12 @@ bool PowerUpCave::StatusChenge()
 void PowerUpCave::SetSlect(uint8_t selectNum)
 {
 	selectNum_ = selectNum;
+}
+
+void PowerUpCave::SetPriducts(std::string type)
+{
+	for ( int i = 0; i < selectProducts_.size(); i++ )
+	{
+		selectProducts_[ i ] = products[ type ][ GetRand(products[ type ].size()) ].get();
+	}
 }
