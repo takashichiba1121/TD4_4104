@@ -124,6 +124,7 @@ void PowerUpCave::SetPriducts()
 
 void PowerUpCave::Draw()
 {
+	string type = productKey[ GetRand(productKey.size() - 1) ];
 	for ( int i = 0; i < selectProducts_.size(); i++ )
 	{
 		int64_t color = 0x000000;
