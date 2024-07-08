@@ -15,12 +15,14 @@ public:
 
 		const uint32_t INTERVAL_;
 
-		const float POW;
+		const float POW_;
+
+		const float MOVE_;
 	};
 
 public:
 
-	virtual void Initialize(Vector2* playerPos,bool* direction)=0;
+	virtual void Initialize(Vector2* playerPos,Vector2* velocity,bool* direction)=0;
 
 	virtual void AttackInit(float pow) = 0;
 
@@ -28,10 +30,6 @@ public:
 
 	virtual void Draw() = 0;
 
-	virtual	bool GetAttack()=0;
-
-	virtual uint32_t GetInterval()=0;
-
-	virtual float GetPow()=0;
+	virtual	bool IsAttack()=0;
 };
 

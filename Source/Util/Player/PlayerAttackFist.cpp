@@ -3,11 +3,13 @@
 #include"CollisionManager.h"
 #include"FlyEnemy.h"
 #include"WalkEnemy.h"
-void PlayerAttackFist::Initialize(Vector2* playerPos,bool* direction)
+void PlayerAttackFist::Initialize(Vector2* playerPos,Vector2* velocity,bool* direction)
 {
 	playerPos_ = playerPos;
 
 	direction_ = direction;
+
+	velocity_ = velocity;
 
 	shape_ = new RectShape();
 
@@ -32,6 +34,15 @@ void PlayerAttackFist::AttackInit(float pow)
 
 		isAttack_ = true;
 
+		if ( *direction_ )
+		{
+			velocity_->x += combo1.MOVE_;
+		}
+		else
+		{
+			velocity_->x -= combo1.MOVE_;
+		}
+
 		CollisionEnable();
 		break;
 	case 1:
@@ -43,24 +54,6 @@ void PlayerAttackFist::AttackInit(float pow)
 	default:
 		break;
 	}
-
-	//if ( isAttack_ == false )
-	//{
-	//	isAttack_ = true;
-
-	//	if ( direction )
-	//	{
-	//		DrawPos_ = { playerPos_->x + combo1.ATTACK_POS_.x + combo1.COLISION_SIZE_.x / 2,playerPos_->y + combo1.ATTACK_POS_.y };
-	//	}
-	//	else
-	//	{
-	//		DrawPos_ = { playerPos_->x - combo1.ATTACK_POS_.x - combo1.COLISION_SIZE_.x / 2,playerPos_->y + combo1.ATTACK_POS_.y };
-	//	}
-
-	//	playerPow_ = pow;
-
-	//	CollisionEnable();
-	//}
 }
 
 void PlayerAttackFist::Attack()
@@ -108,6 +101,15 @@ void PlayerAttackFist::Attack()
 				isAttack_ = true;
 				CollisionEnable();
 				shape_->SetRadius(combo2.COLISION_SIZE_/2);
+
+				if ( *direction_ )
+				{
+					velocity_->x += combo2.MOVE_;
+				}
+				else
+				{
+					velocity_->x -= combo2.MOVE_;
+				}
 			}
 		}
 		break;
@@ -151,6 +153,15 @@ void PlayerAttackFist::Attack()
 				isGiveDamage_ = false;
 				isAttack_ = true;
 				shape_->SetRadius(combo3.COLISION_SIZE_ / 2);
+
+				if ( *direction_ )
+				{
+					velocity_->x += combo3.MOVE_;
+				}
+				else
+				{
+					velocity_->x -= combo3.MOVE_;
+				}
 			}
 		}
 		break;
@@ -208,43 +219,6 @@ void PlayerAttackFist::Draw()
 	}
 }
 
-uint32_t PlayerAttackFist::GetInterval()
-{
-	switch ( attackType_ )
-	{
-	case 1:
-		return combo1.INTERVAL_;
-		break;
-	case 2:
-		return combo2.INTERVAL_;
-		break;
-	case 3:
-		return combo3.INTERVAL_;
-		break;
-	default:
-		break;
-	}
-	return 0;
-}
-
-float PlayerAttackFist::GetPow()
-{
-	switch ( attackType_ )
-	{
-	case 1:
-		return combo1.POW;
-		break;
-	case 2:
-		return combo2.POW;
-	case 3:
-		return combo3.POW;
-		break;
-	default:
-		break;
-	}
-	return 0.0;
-}
-
 void PlayerAttackFist::OnCollision()
 {
 	if ( GetCollisionInfo().userData && isGiveDamage_ == false )
@@ -254,13 +228,13 @@ void PlayerAttackFist::OnCollision()
 			switch ( attackType_ )
 			{
 			case 1:
-				dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * combo1.POW);
+				dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * combo1.POW_);
 				break;
 			case 2:
-				dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * combo2.POW);
+				dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * combo2.POW_);
 				break;
 			case 3:
-				dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * combo3.POW);
+				dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * combo3.POW_);
 				break;
 			default:
 				break;
@@ -272,13 +246,13 @@ void PlayerAttackFist::OnCollision()
 			switch ( attackType_ )
 			{
 			case 1:
-				dynamic_cast< WalkEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * combo1.POW);
+				dynamic_cast< WalkEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * combo1.POW_);
 				break;
 			case 2:
-				dynamic_cast< WalkEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * combo2.POW);
+				dynamic_cast< WalkEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * combo2.POW_);
 				break;
 			case 3:
-				dynamic_cast< WalkEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * combo3.POW);
+				dynamic_cast< WalkEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * combo3.POW_);
 				break;
 			default:
 				break;

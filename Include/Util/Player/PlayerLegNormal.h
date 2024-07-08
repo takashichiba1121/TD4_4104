@@ -49,6 +49,8 @@ private:
 
 	float airDeccelaration_ = 0;
 
+	float evasionRollSpeed_=16;
+
 	//戦闘
 
 	//ジャンプ

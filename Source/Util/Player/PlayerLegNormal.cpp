@@ -144,11 +144,11 @@ void PlayerLegNormal::EvasionRoll()
 
 		if ( *direction_ )
 		{
-			*playerVelocity_ = { 16,0 };
+			*playerVelocity_ = { evasionRollSpeed_,0 };
 		}
 		else
 		{
-			*playerVelocity_ = { -16,0 };
+			*playerVelocity_ = { -evasionRollSpeed_,0 };
 		}
 	}
 	if ( isEvasionRoll_ )

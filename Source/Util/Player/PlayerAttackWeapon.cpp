@@ -2,11 +2,13 @@
 #include"DxlibInclude.h"
 #include"PlayerBulletManager.h"
 
-void PlayerAttackWeapon::Initialize(Vector2* playerPos,bool* direction)
+void PlayerAttackWeapon::Initialize(Vector2* playerPos,Vector2* velocity,bool* direction)
 {
 	playerPos_ = playerPos;
 
 	direction_ = direction;
+
+	velocity_ = velocity;
 }
 
 void PlayerAttackWeapon::AttackInit(float pow)
@@ -19,11 +21,15 @@ void PlayerAttackWeapon::AttackInit(float pow)
 
 		if ( *direction_ )
 		{
-			newBullet->Initialize({ 10,0 },*playerPos_,60,pow);
+			newBullet->Initialize({ 10,0 },*playerPos_,60,pow*combo1.POW_);
+
+			velocity_->x -= 5;
 		}
 		else
 		{
-			newBullet->Initialize({ -10,0 },*playerPos_,60,pow);
+			newBullet->Initialize({ -10,0 },*playerPos_,60,pow*combo1.POW_);
+
+			velocity_->x += 5;
 		}
 
 		PlayerBulletManager::Instance()->AddBullet(std::move(newBullet));
@@ -36,7 +42,7 @@ void PlayerAttackWeapon::Attack()
 	{
 		AttackTime_++;
 
-		if ( AttackTime_ > LAST_ATTACK_TIME_ )
+		if ( AttackTime_ > combo1.LAST_ATTACK_TIME_ )
 		{
 			isAttack_ = false;
 			AttackTime_ = 0;

@@ -59,7 +59,7 @@ void Player::Update()
 		DamageInterval_++;
 	}
 
-	leg_->Move(GetOnDir() & 0b1 << OnDir::BOTTOM,leftArm_->GetAttack() || rightArm_->GetAttack());
+	leg_->Move(GetOnDir() & 0b1 << OnDir::BOTTOM,leftArm_->IsAttack() || rightArm_->IsAttack());
 
 	Attack();
 
@@ -84,12 +84,12 @@ void Player::Update()
 
 void Player::Attack()
 {
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && leftArm_ != nullptr&&!rightArm_->GetAttack() )
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && leftArm_ != nullptr&&!rightArm_->IsAttack() )
 	{
 		leftArm_->AttackInit(changePow_);
 	}
 
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && rightArm_ != nullptr && !leftArm_->GetAttack() )
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && rightArm_ != nullptr && !leftArm_->IsAttack() )
 	{
 		rightArm_->AttackInit(changePow_);
 	}
@@ -124,7 +124,7 @@ void Player::ChangeLeftArm(std::string attackName)
 		leftArm_ = std::make_unique<PlayerAttackWeapon>();
 	}
 
-	leftArm_->Initialize(&pos_,&direction_);
+	leftArm_->Initialize(&pos_,&velocity_,&direction_);
 }
 
 void Player::ChangeRightArm(std::string attackName)
@@ -138,7 +138,7 @@ void Player::ChangeRightArm(std::string attackName)
 		rightArm_ = std::make_unique<PlayerAttackWeapon>();
 	}
 
-	rightArm_->Initialize(&pos_,&direction_);
+	rightArm_->Initialize(&pos_,&velocity_ ,&direction_);
 }
 
 bool Player::AddSpd(int32_t spd)

@@ -36,7 +36,7 @@ protected:
 
 	RectShape* shape_;
 
-	const uint32_t POW_ = 5;
+	float pow_;
 
 public:
 
