@@ -19,7 +19,7 @@ private:
 	std::unique_ptr<EnemyManager> enemys_;
 
 	std::unique_ptr<MapChip>mapChip_;
-	//std::unique_ptr<PowerUpCave>powerUp_;
+	std::unique_ptr<PowerUpCave>powerUp_;
 
 	uint32_t backGround_;
 	uint8_t num;

@@ -22,6 +22,10 @@ void GameScene::Initialize()
 	enemys_ = std::make_unique<EnemyManager>();
 	enemys_->Initialize();
 	enemys_->SetPlayerPtr(player_.get());
+
+	powerUp_ = std::make_unique<PowerUpCave>();
+	powerUp_->Initialize();
+
 	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
 
 	nodeManager_->StartNodeSet(0);
