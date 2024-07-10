@@ -6,6 +6,7 @@
 #include"Player.h"
 #include "EnemyManager.h"
 #include"CollisionManager.h"
+#include "PowerUpCave.h"
 
 #include"MapChip.h"
 
