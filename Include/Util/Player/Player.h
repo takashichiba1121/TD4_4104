@@ -65,6 +65,8 @@ public:
 
 	void ChangeRightArm(std::string attackName);
 
+	void ChangeLeg(std::string legName);
+
 	bool AddSpd(int32_t spd);
 
 	bool AddPow(int32_t pow);

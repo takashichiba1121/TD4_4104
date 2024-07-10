@@ -47,9 +47,7 @@ void Player::Initialize()
 
 	textureId_ = LoadGraph("Resources/Player/PlayerStand.png");
 
-	leg_ = std::make_unique<PlayerLegNormal>();
-
-	leg_->Initialize(&velocity_,&direction_,&changeAcl_);
+	ChangeLeg("Normal");
 }
 
 void Player::Update()
@@ -139,6 +137,16 @@ void Player::ChangeRightArm(std::string attackName)
 	}
 
 	rightArm_->Initialize(&pos_,&velocity_ ,&direction_);
+}
+
+void Player::ChangeLeg(std::string legName)
+{
+	if ( legName == "Normal" )
+	{
+		leg_ = std::make_unique<PlayerLegNormal>();
+	}
+
+	leg_->Initialize(&velocity_,&direction_,&changeAcl_);
 }
 
 bool Player::AddSpd(int32_t spd)
