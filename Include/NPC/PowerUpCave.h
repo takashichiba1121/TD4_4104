@@ -42,7 +42,7 @@ protected:
 	Vector2 boxSize_ = { 200,300 };
 	int32_t boxDist_ = 400;
 public:
-	void Initialize(std::string filePath);
+	void Initialize();
 	bool StatusChenge();
 	void SetSlect(uint8_t selectNum);
 	void SetPriducts();
