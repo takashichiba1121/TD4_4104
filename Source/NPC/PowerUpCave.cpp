@@ -8,7 +8,7 @@
 using namespace nlohmann;
 using namespace std;
 
-void PowerUpCave::Initialize(std::string filePath)
+void PowerUpCave::Initialize()
 {
 
 	std::ifstream file;
@@ -25,11 +25,9 @@ void PowerUpCave::Initialize(std::string filePath)
 	file >> jsonObject;
 
 
-	for ( json& obj : jsonObject[ "objects" ] )
+	for ( json& obj : jsonObject)
 	{
 		unique_ptr<PowerUp> temp = make_unique<PowerUp>();
-		temp->power = static_cast< int32_t >(obj[ "Power" ]);
-		temp->cost = static_cast< int32_t >(obj[ "Cost" ]);
 		temp->powerRandRange.first = static_cast< int32_t >( obj[ "PowerRange" ][ 0 ] );
 		temp->powerRandRange.second = static_cast< int32_t >( obj[ "PowerRange" ][ 1 ] );
 
@@ -38,13 +36,13 @@ void PowerUpCave::Initialize(std::string filePath)
 
 		temp->statusNames.first = static_cast< string >( obj[ "PowerName" ] );
 		temp->statusNames.second = static_cast< string >( obj[ "CostName" ] );
-		products[ static_cast< string >( obj[ "Type" ] ) ].push_back(std::move(temp));
+		products_[ static_cast< string >( obj[ "Type" ] ) ].push_back(std::move(temp));
 	}
 
-	for ( auto itr = products.begin(); itr != products.end(); ++itr )
+	for ( auto itr = products_.begin(); itr != products_.end(); ++itr )
 	{
 		string temp = itr->first;
-		productKey.push_back(temp);
+		productKey_.push_back(temp);
 		
 	}
 }
@@ -112,9 +110,12 @@ void PowerUpCave::SetSlect(uint8_t selectNum)
 
 void PowerUpCave::SetPriducts()
 {
-	string type = productKey[ GetRand(productKey.size() - 1) ];
+	string type = productKey_[ GetRand(productKey_.size() - 1) ];
 	for ( int i = 0; i < selectProducts_.size(); i++ )
 	{
-		selectProducts_[ i ] = products[ type ][ GetRand(products[ type ].size()-1) ].get();
+		selectProducts_[ i ] = products_[ type ][ GetRand(products_[ type ].size()-1) ].get();
+
+		selectProducts_[ i ]->cost = GetRand(selectProducts_[ i ]->costRandRange.second - selectProducts_[ i ]->costRandRange.first) + selectProducts_[ i ]->costRandRange.first;
+		selectProducts_[ i ]->power = GetRand(selectProducts_[ i ]->costRandRange.second - selectProducts_[ i ]->costRandRange.first) + selectProducts_[ i ]->costRandRange.first;
 	}
 }
