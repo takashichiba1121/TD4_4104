@@ -31,7 +31,7 @@ enum Status
 
 class PowerUpCave
 {
-protected:
+private:
 	Player* playerPtr_;
 	std::array<PowerUp*,3> selectProducts_;
 	uint8_t selectNum_ = 0;
