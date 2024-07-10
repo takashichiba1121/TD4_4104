@@ -3,7 +3,7 @@
 #include <magic_enum.hpp>
 #include <json.hpp>
 #include <fstream>
-#include "DxLib.h"
+#include "DxlibInclude.h"
 
 using namespace nlohmann;
 using namespace std;
@@ -64,6 +64,8 @@ void PowerUpCave::Initialize()
 		productKey_.push_back(temp);
 		
 	}
+
+	SetPriducts();
 }
 
 bool PowerUpCave::StatusChenge()
@@ -130,12 +132,28 @@ void PowerUpCave::SetSlect(uint8_t selectNum)
 
 void PowerUpCave::SetPriducts()
 {
-	string type = productKey_[ GetRand(productKey_.size() - 1) ];
+	nowProductType = productKey_[ GetRand(productKey_.size() - 1) ];
 	for ( int i = 0; i < selectProducts_.size(); i++ )
 	{
-		selectProducts_[ i ] = products_[ type ][ GetRand(products_[ type ].size()-1) ].get();
+		selectProducts_[ i ] = products_[ nowProductType ][ GetRand(products_[ nowProductType ].size()-1) ].get();
 
 		selectProducts_[ i ]->cost = GetRand(selectProducts_[ i ]->costRandRange.second - selectProducts_[ i ]->costRandRange.first) + selectProducts_[ i ]->costRandRange.first;
 		selectProducts_[ i ]->power = GetRand(selectProducts_[ i ]->costRandRange.second - selectProducts_[ i ]->costRandRange.first) + selectProducts_[ i ]->costRandRange.first;
+	}
+}
+
+void PowerUpCave::Draw()
+{
+	for ( int i = 0; i < selectProducts_.size(); i++ )
+	{
+		int64_t color = 0x000000;
+		if ( i == selectNum_ )
+		{
+			color = 0xf00f00;
+		}
+		DrawBox((boxLeftTop_.x + i * boxDist_),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,color,true);
+		DrawFormatString(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,
+			0xffffff,"%s\nPowerUp\nStatus:%s \nUP:%d\nCost\nStatus:%s \nDown:%d",nowProductType.c_str(),selectProducts_[i]->statusNames.first.c_str(),
+			selectProducts_[i]->power,selectProducts_[i]->statusNames.second.c_str(),selectProducts_[i]->cost);
 	}
 }

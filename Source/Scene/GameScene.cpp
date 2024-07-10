@@ -69,7 +69,7 @@ void GameScene::Draw()
 
 	player_->Draw();
 	enemys_->Draw();
-	if(!chenged) powerUp_->Draw();
+	powerUp_->Draw();
 	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
 	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");
 	DrawFormatString(0,40,0xffffff,"ATTACK:Z X");
