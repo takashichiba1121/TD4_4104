@@ -227,9 +227,12 @@ void PowerUpCave::Draw()
 
 void PowerUpCave::SetPriducts()
 {
-	string type = productKey[ GetRand(productKey.size() - 1) ];
+	string type = productKey_[ GetRand(productKey_.size() - 1) ];
 	for ( int i = 0; i < selectProducts_.size(); i++ )
 	{
-		selectProducts_[ i ] = products[ type ][ GetRand(products[ type ].size()-1) ].get();
+		selectProducts_[ i ] = products_[ type ][ GetRand(products_[ type ].size()-1) ].get();
+
+		selectProducts_[ i ]->cost = GetRand(selectProducts_[ i ]->costRandRange.second - selectProducts_[ i ]->costRandRange.first) + selectProducts_[ i ]->costRandRange.first;
+		selectProducts_[ i ]->power = GetRand(selectProducts_[ i ]->costRandRange.second - selectProducts_[ i ]->costRandRange.first) + selectProducts_[ i ]->costRandRange.first;
 	}
 }
