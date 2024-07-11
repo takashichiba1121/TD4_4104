@@ -7,12 +7,15 @@ public:
 
 	enum Type
 	{
-		MONSTER,
-		CAMPFIRE,
-		SHOP,
-		TREASURE,
-		BOSS,
-		NOT_ASSIGNED
+		REINFORCEMENT,//強化
+		TRANSACTION,//取引
+		BATTLE,//バトル
+		SHOP,//アイテム
+		HEALING,//回復
+		NONE,//設定なし
+		NO_CHILDREN,//子なし
+
+		TYPE_NUM
 	};
 
 private:
