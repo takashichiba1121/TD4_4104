@@ -18,12 +18,14 @@ private:
 	static constexpr float SHOP_ROOM_WEIGHT = 2.5;
 	static constexpr float CAMPFIRE_ROOM_WEIGHT = 4.0;
 
-	std::map<BaseNode::Type,float> randomRoomTypeWeights = {
-	{BaseNode::MONSTER, 0.0},
-	{BaseNode::CAMPFIRE, 0.0},
-	{BaseNode::SHOP, 0.0}
-	};
-	float randomRoomTypeTotalWeight = 0;
+	int oldRand = 0;
+	int oldRandomJ = 0;
+
+	const int probabilities[ BaseNode::Type::TYPE_NUM ] = { 20, 30, 10, 15, 25 ,0}; // A: 20%, B: 30%, C: 10%, D: 15%, E: 25%
+
+	// 確率分布を作成する
+	std::discrete_distribution<int> distribution;
+
 
 	BaseNode* node_;
 	BaseNode* nextNode_;
@@ -51,10 +53,7 @@ private:
 	std::vector<int> GetRandomStartingPoints();
 	int SetupConnection(int i,int j);
 	bool WouldCrossExistingPath(int i,int j,BaseNode* room);
-	void SetupBossRoom();
-	void SetupRandomRoomWeights();
 	void SetupRoomTypes();
-	BaseNode::Type GetRandomRoomTypeByWeight();
 	void SetRoomRandomly(BaseNode* roomToSet);
 	bool RoomHasParentOfType(BaseNode* room,BaseNode::Type type);
 
