@@ -168,13 +168,9 @@
     <ClCompile Include="Source\Util\Math\Vector3.cpp" />
     <ClCompile Include="Source\Enemy\WalkEnemy.cpp" />
     <ClCompile Include="Source\Util\Util.cpp" />
-    <ClCompile Include="Source\Scene\TitleScene.cpp" />
     <ClCompile Include="TransactionNode.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\NPC\DealDaemon.h" />
-    <ClInclude Include="Include\Scene\ClearScene.h" />
-    <ClInclude Include="Include\Scene\GameOverScene.h" />
     <ClInclude Include="BattleNode.h" />
     <ClInclude Include="HealingNode.h" />
     <ClInclude Include="Include\BaseNode.h" />
@@ -211,9 +207,9 @@
     <ClInclude Include="Include\Collision\IShape.h" />
     <ClInclude Include="Include\Collision\RectShape.h" />
     <ClInclude Include="Include\Util\MapChip.h" />
-    <ClInclude Include="Include\NPC\NPC.h" />
-    <ClInclude Include="Include\NPC\NPCManager.h" />
-    <ClInclude Include="Include\NPC\PowerUpCave.h" />
+    <ClInclude Include="Include\NodeManager.h" />
+    <ClInclude Include="ReinforcementNode.h" />
+    <ClInclude Include="ShopNode.h" />
     <ClInclude Include="ThirdParty\imgui\imconfig.h" />
     <ClInclude Include="ThirdParty\imgui\imgui.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_impl_dx11.h" />
@@ -224,8 +220,7 @@
     <ClInclude Include="Include\Util\Math\Vector3.h" />
     <ClInclude Include="Include\Enemy\WalkEnemy.h" />
     <ClInclude Include="Include\Util\Util.h" />
-    <ClInclude Include="Include\Scene\TitleScene.h" />
-    <ClInclude Include="ThirdParty\magic_enum.hpp" />
+    <ClInclude Include="TransactionNode.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

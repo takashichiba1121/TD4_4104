@@ -156,44 +156,29 @@
     <ClCompile Include="Source\Enemy\EnemyManager.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scene\SceneFactrory.cpp">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="GameCore\SceneManager.cpp">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene\GameScene.cpp">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="GameCore\BaseScene.cpp">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene\TitleScene.cpp">
+    <ClCompile Include="BaseNode.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scene\ClearScene.cpp">
+    <ClCompile Include="NodeManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scene\GameOverScene.cpp">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\NPC\DealDaemon.cpp">
+    <ClCompile Include="Source\Enemy\BaseEnemy.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\NPC\NPCManager.cpp">
+    <ClCompile Include="ReinforcementNode.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\NPC\NPC.cpp">
+    <ClCompile Include="TransactionNode.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Base\BaseEnemy.cpp">
+    <ClCompile Include="BattleNode.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\NPC\PowerUpCave.cpp">
-      <Filter>ソース ファイル\PowerUp</Filter>
+    <ClCompile Include="ShopNode.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\NPC\ATKUpCave.cpp">
-      <Filter>ソース ファイル\PowerUp</Filter>
+    <ClCompile Include="HealingNode.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -308,58 +293,22 @@
     <ClInclude Include="Include\BaseNode.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Node\NodeManager.h">
-      <Filter>ヘッダー ファイル\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Node\NodeType.h">
-      <Filter>ヘッダー ファイル\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Node\ReinforcementNode.h">
-      <Filter>ヘッダー ファイル\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Node\ShopNode.h">
-      <Filter>ヘッダー ファイル\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Node\TransactionNode.h">
-      <Filter>ヘッダー ファイル\Node</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Node\StartNode.h">
+    <ClInclude Include="Include\NodeManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Include\NPC\DealDaemon.h">
+    <ClInclude Include="ReinforcementNode.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Include\NPC\NPC.h">
+    <ClInclude Include="TransactionNode.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Include\NPC\NPCManager.h">
+    <ClInclude Include="BattleNode.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Include\NPC\PowerUpCave.h">
-      <Filter>ヘッダー ファイル\PowerUp</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\NPC\ATKUpCave.h">
-      <Filter>ヘッダー ファイル\PowerUp</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\magic_enum.hpp">
+    <ClInclude Include="ShopNode.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Include\NPC\DealDaemon.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\NPC\NPC.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\NPC\NPCManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\NPC\PowerUpCave.h">
-      <Filter>ヘッダー ファイル\PowerUp</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\NPC\ATKUpCave.h">
-      <Filter>ヘッダー ファイル\PowerUp</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\magic_enum.hpp">
+    <ClInclude Include="HealingNode.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
