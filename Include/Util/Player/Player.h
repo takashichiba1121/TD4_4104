@@ -24,8 +24,6 @@ private:
 
 	float changeDef_=1;
 
-	float changeMaxHp_=1;
-
 	float changeCrit_ = 0.1;
 
 	float changeCdmg_ = 1.5;

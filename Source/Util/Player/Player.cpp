@@ -75,6 +75,20 @@ void Player::Update()
 
 	ImGui::Text("HP:%d",hp_);
 
+	ImGui::Text("MaxHP:%d",maxHp_);
+
+	ImGui::Text("Pow:%1.2f",changePow_);
+
+	ImGui::Text("Acl:%1.2f",changeAcl_);
+
+	ImGui::Text("Def:%1.2f",changeDef_);
+
+	ImGui::Text("Crit:%1.2f",changeCrit_);
+
+	ImGui::Text("Cdmg:%1.2f",changeCdmg_);
+
+	ImGui::Text("cost:%d",nowCost);
+
 	ImGui::End();
 
 #endif
@@ -171,7 +185,11 @@ bool Player::AddDef(int32_t def)
 
 bool Player::AddMaxHp(int32_t maxHp)
 {
-	changeMaxHp_ += float(maxHp) / 100.0f;
+	uint32_t nowMaxHp = maxHp_;
+
+	maxHp_ += maxHp;
+
+	hp_ += maxHp_ - nowMaxHp;
 
 	return true;
 }
@@ -221,11 +239,16 @@ bool Player::SubDef(int32_t def)
 
 bool Player::SubMaxHp(int32_t maxHp)
 {
-	if ( changeMaxHp_ - float(maxHp) / 100.0f <= 0 )
+	if (maxHp_ - maxHp <= 0 )
 	{
 		return false;
 	}
-	changeMaxHp_ -= float(maxHp) / 100.0f;
+	maxHp_ -= maxHp;
+	
+	if ( hp_ >= maxHp_ )
+	{
+		hp_ = maxHp_;
+	}
 
 	return true;
 }
