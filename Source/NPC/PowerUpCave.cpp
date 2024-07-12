@@ -127,7 +127,7 @@ bool PowerUpCave::StatusChenge()
 
 void PowerUpCave::SetSlect(uint8_t selectNum)
 {
-	selectNum_ = selectNum;
+	selectNum_ = min(selectNum,selectProducts_.size() - 1);
 }
 
 void PowerUpCave::SetPriducts()
