@@ -120,6 +120,12 @@
     <ClCompile Include="Source\Base\BaseEnemy.cpp" />
     <ClCompile Include="ReinforcementNode.cpp" />
     <ClCompile Include="ShopNode.cpp" />
+    <ClCompile Include="BaseNode.cpp" />
+    <ClCompile Include="BattleNode.cpp" />
+    <ClCompile Include="HealingNode.cpp" />
+    <ClCompile Include="NodeManager.cpp" />
+    <ClCompile Include="ReinforcementNode.cpp" />
+    <ClCompile Include="ShopNode.cpp" />
     <ClCompile Include="Source\Util\MapChip.cpp" />
     <ClCompile Include="Source\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Source\Enemy\FlyEnemy.cpp" />
@@ -164,12 +170,16 @@
     <ClCompile Include="Source\Enemy\WalkEnemy.cpp" />
     <ClCompile Include="Source\Util\Util.cpp" />
     <ClCompile Include="Source\Scene\TitleScene.cpp" />
+    <ClCompile Include="TransactionNode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\NPC\DealDaemon.h" />
     <ClInclude Include="Include\Player\PlayerAttackSpider.h" />
     <ClInclude Include="Include\Scene\ClearScene.h" />
     <ClInclude Include="Include\Scene\GameOverScene.h" />
+    <ClInclude Include="BattleNode.h" />
+    <ClInclude Include="HealingNode.h" />
+    <ClInclude Include="Include\BaseNode.h" />
     <ClInclude Include="Include\Util\ChipIndex.h" />
     <ClInclude Include="Include\Enemy\EnemyManager.h" />
     <ClInclude Include="Include\Base\BaseObject.h" />
@@ -210,6 +220,9 @@
     <ClInclude Include="PowerUpCave.h" />
     <ClInclude Include="Include\Player\PlayerLeg.h" />
     <ClInclude Include="Include\Player\PlayerLegNormal.h" />
+    <ClInclude Include="Include\NodeManager.h" />
+    <ClInclude Include="ReinforcementNode.h" />
+    <ClInclude Include="ShopNode.h" />
     <ClInclude Include="ThirdParty\imgui\imconfig.h" />
     <ClInclude Include="ThirdParty\imgui\imgui.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_impl_dx11.h" />
@@ -222,6 +235,7 @@
     <ClInclude Include="Include\Util\Util.h" />
     <ClInclude Include="Include\Scene\TitleScene.h" />
     <ClInclude Include="ThirdParty\magic_enum.hpp" />
+    <ClInclude Include="TransactionNode.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
