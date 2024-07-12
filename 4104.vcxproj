@@ -108,7 +108,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BaseNode.cpp" />
+    <ClCompile Include="BattleNode.cpp" />
+    <ClCompile Include="HealingNode.cpp" />
     <ClCompile Include="NodeManager.cpp" />
+    <ClCompile Include="ReinforcementNode.cpp" />
+    <ClCompile Include="ShopNode.cpp" />
     <ClCompile Include="Source\Util\MapChip.cpp" />
     <ClCompile Include="Source\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Source\Enemy\FlyEnemy.cpp" />
@@ -153,8 +157,11 @@
     <ClCompile Include="Source\Util\Math\Vector3.cpp" />
     <ClCompile Include="Source\Enemy\WalkEnemy.cpp" />
     <ClCompile Include="Source\Util\Util.cpp" />
+    <ClCompile Include="TransactionNode.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BattleNode.h" />
+    <ClInclude Include="HealingNode.h" />
     <ClInclude Include="Include\BaseNode.h" />
     <ClInclude Include="Include\Util\ChipIndex.h" />
     <ClInclude Include="Include\Enemy\EnemyManager.h" />
@@ -190,6 +197,8 @@
     <ClInclude Include="Include\Collision\RectShape.h" />
     <ClInclude Include="Include\Util\MapChip.h" />
     <ClInclude Include="Include\NodeManager.h" />
+    <ClInclude Include="ReinforcementNode.h" />
+    <ClInclude Include="ShopNode.h" />
     <ClInclude Include="ThirdParty\imgui\imconfig.h" />
     <ClInclude Include="ThirdParty\imgui\imgui.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_impl_dx11.h" />
@@ -200,6 +209,7 @@
     <ClInclude Include="Include\Util\Math\Vector3.h" />
     <ClInclude Include="Include\Enemy\WalkEnemy.h" />
     <ClInclude Include="Include\Util\Util.h" />
+    <ClInclude Include="TransactionNode.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
