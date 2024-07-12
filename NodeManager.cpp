@@ -114,7 +114,7 @@ void NodeManager::NodeDrew()
 	{
 		for ( int j = 0; j < MAP_WIDTH; ++j )
 		{
-			if ( !nodes_[ i ][ j ]->nexts_.empty() )
+			if ( nodes_[ i ][ j ]->type_ != BaseNode::NO_CHILDREN )
 			{
 				DrawCircle(100 + j * 30,( 60 + FLOORS * 30 ) - ( 60 + i * 30 ),3,GetColor(255,255,255));
 
@@ -191,9 +191,9 @@ int NodeManager::SetupConnection(int i,int j)
 
 	{
 		oldRandomJ = random_j;
-		oldRand = rand_;
 		while ( random_j == oldRandomJ )
 		{
+			oldRandomJ = random_j;
 			rand_ = GetRand(-1,1);
 			selectJ = rand_ + j;
 			random_j = std::clamp(selectJ,0,MAP_WIDTH - 1);
@@ -211,9 +211,9 @@ int NodeManager::SetupConnection(int i,int j)
 			if ( WouldCrossExistingPath(i,j,nextRoom) )
 			{
 				oldRandomJ = random_j;
-				oldRand = rand_;
 				while ( random_j == oldRandomJ  )
 				{
+					oldRandomJ = random_j;
 					rand_ = GetRand(-1,1);
 					selectJ = rand_ + j;
 					random_j = std::clamp(selectJ,0,MAP_WIDTH - 1);
@@ -225,7 +225,7 @@ int NodeManager::SetupConnection(int i,int j)
 	}
 
 	currentRoom->nexts_.push_back(nextRoom);
-	currentRoom->NONE;
+	currentRoom->type_ = BaseNode::Type::NONE;
 
 	return nextRoom->column_;
 }

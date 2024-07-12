@@ -34,9 +34,9 @@ private:
 
 public:
 
-	virtual void Initialize() {};
-	virtual void Update() {};
-	virtual void Draw() {};
+	virtual void Initialize()=0;
+	virtual void Update() =0;
+	virtual void Draw()=0;
 
 	BaseNode() = default;
 	~BaseNode() = default;
