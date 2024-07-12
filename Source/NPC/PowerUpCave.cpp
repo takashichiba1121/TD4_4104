@@ -113,12 +113,13 @@ void PowerUpCave::SetSlect(uint8_t selectNum)
 void PowerUpCave::SetPriducts()
 {
 	nowProductType = productKey_[ GetRand(productKey_.size() - 1) ];
+	SRand(GetRand(INT_MAX));
 	for ( int i = 0; i < selectProducts_.size(); i++ )
 	{
 		selectProducts_[ i ] = products_[ nowProductType ][ GetRand(products_[ nowProductType ].size()-1) ].get();
 
 		selectProducts_[ i ]->cost = GetRand(selectProducts_[ i ]->costRandRange.second - selectProducts_[ i ]->costRandRange.first) + selectProducts_[ i ]->costRandRange.first;
-		selectProducts_[ i ]->power = GetRand(selectProducts_[ i ]->costRandRange.second - selectProducts_[ i ]->costRandRange.first) + selectProducts_[ i ]->costRandRange.first;
+		selectProducts_[ i ]->power = GetRand(selectProducts_[ i ]->powerRandRange.second - selectProducts_[ i ]->powerRandRange.first) + selectProducts_[ i ]->powerRandRange.first;
 	}
 }
 
