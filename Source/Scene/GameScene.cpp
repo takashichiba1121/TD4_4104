@@ -28,7 +28,7 @@ void GameScene::Initialize()
 
 	powerUp_ = std::make_unique<PowerUpCave>();
 	powerUp_->Initialize();
-
+	powerUp_->SetPlayer(player_.get());
 	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
 
 }
