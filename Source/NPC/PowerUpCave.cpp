@@ -233,9 +233,17 @@ void PowerUpCave::SetPriducts()
 	{
 		selectProducts_[ i ] = products_[ nowProductType ][ GetRand(products_[ nowProductType ].size()-1) ].get();
 
-		selectProducts_[ i ]->cost = GetRand(selectProducts_[ i ]->costRandRange.second - selectProducts_[ i ]->costRandRange.first) + selectProducts_[ i ]->costRandRange.first;
-		selectProducts_[ i ]->power = GetRand(selectProducts_[ i ]->powerRandRange.second - selectProducts_[ i ]->powerRandRange.first) + selectProducts_[ i ]->powerRandRange.first;
+		int32_t change = selectProducts_[ i ]->powerRandRange.second - selectProducts_[ i ]->powerRandRange.first;
+		selectProducts_[ i ]->power = GetRand(change) + selectProducts_[ i ]->powerRandRange.first;
+
+		change = selectProducts_[ i ]->costRandRange.second - selectProducts_[ i ]->costRandRange.first;
+		selectProducts_[ i ]->cost = GetRand(change) + selectProducts_[ i ]->costRandRange.first;
 	}
+}
+
+void PowerUpCave::SetPlayer(Player* player)
+{
+	playerPtr_ = player;
 }
 
 void PowerUpCave::Draw()
