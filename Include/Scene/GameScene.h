@@ -22,6 +22,9 @@ private:
 
 	uint32_t backGround_;
 
+	bool isPowerUp=true;
+
+	uint32_t powerUpNum=0;
 public:
 	void Initialize() override;
 	void Update() override;
