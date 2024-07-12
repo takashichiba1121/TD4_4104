@@ -24,6 +24,7 @@ private:
 	uint32_t backGround_;
 	uint8_t num;
 	bool chenged;
+
 public:
 	void Initialize() override;
 	void Update() override;
