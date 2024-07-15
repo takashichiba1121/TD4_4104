@@ -32,6 +32,10 @@ private:
 	Vector2* velocity_;
 
 public:
+
+	static const uint32_t ArmCost = 15;
+
+public:
 	void Initialize(Vector2* playerPos,Vector2* velocity,bool* direction) override;
 
 	void AttackInit(float pow) override;

@@ -59,11 +59,11 @@ public:
 
 	void Damage(int32_t Damage) override;
 
-	void ChangeLeftArm(std::string attackName);
+	bool ChangeLeftArm(std::string attackName,uint32_t cost);
 
-	void ChangeRightArm(std::string attackName);
+	bool ChangeRightArm(std::string attackName,uint32_t cost);
 
-	void ChangeLeg(std::string legName);
+	bool ChangeLeg(std::string legName,uint32_t cost);
 
 	bool AddSpd(int32_t spd);
 

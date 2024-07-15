@@ -1,14 +1,14 @@
 #pragma once
 #include "PlayerAttack.h"
 class PlayerAttackFist :
-    public PlayerAttack
+	public PlayerAttack
 {
 private:
 	bool isAttack_ = false;
 
 	uint32_t attackType_ = 0;
 
-	uint32_t nextAttack_=0;
+	uint32_t nextAttack_ = 0;
 
 	bool isGiveDamage_ = false;
 
@@ -33,6 +33,10 @@ private:
 	Vector2* velocity_;
 
 public:
+
+	static const uint32_t ArmCost = 0;
+
+public:
 	void Initialize(Vector2* playerPos,Vector2* velocity,bool* direction) override;
 
 	void AttackInit(float pow) override;
@@ -41,7 +45,9 @@ public:
 
 	void Draw() override;
 
-	bool IsAttack() override {return isAttack_;}
+	bool IsAttack() override {
+		return isAttack_;
+	}
 
 	void OnCollision() override;
 };

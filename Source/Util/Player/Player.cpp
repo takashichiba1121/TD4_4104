@@ -21,9 +21,13 @@ void Player::Initialize()
 
 	pos_.y = GameConfig::GetGameConfig()->windowHeight / 2;
 
-	ChangeLeftArm("Fist");
+	leftArm_ = std::make_unique<PlayerAttackFist>();
 
-	ChangeRightArm("Weapon");
+	leftArm_->Initialize(&pos_,&velocity_,&direction_);
+
+	rightArm_ = std::make_unique<PlayerAttackFist>();
+
+	rightArm_->Initialize(&pos_,&velocity_,&direction_);
 
 	hp_ = maxHp_;
 
@@ -47,7 +51,9 @@ void Player::Initialize()
 
 	textureId_ = LoadGraph("Resources/Player/PlayerStand.png");
 
-	ChangeLeg("Normal");
+	leg_ = std::make_unique<PlayerLegNormal>();
+
+	leg_->Initialize(&velocity_,&direction_,&changeAcl_);
 }
 
 void Player::Update()
@@ -125,8 +131,13 @@ void Player::Damage(int32_t Damage)
 		DamageInterval_ = 0;
 	}
 }
-void Player::ChangeLeftArm(std::string attackName)
+bool Player::ChangeLeftArm(std::string attackName,uint32_t cost)
 {
+	if ( nowCost + cost - leftArm_->cost > 100 )
+	{
+		return false;
+	}
+
 	if ( attackName == "Fist" )
 	{
 		leftArm_ = std::make_unique<PlayerAttackFist>();
@@ -136,11 +147,18 @@ void Player::ChangeLeftArm(std::string attackName)
 		leftArm_ = std::make_unique<PlayerAttackWeapon>();
 	}
 
+	leftArm_->cost = cost;
+
 	leftArm_->Initialize(&pos_,&velocity_,&direction_);
 }
 
-void Player::ChangeRightArm(std::string attackName)
+bool Player::ChangeRightArm(std::string attackName,uint32_t cost)
 {
+	if ( nowCost + cost- rightArm_->cost > 100 )
+	{
+		return false;
+	}
+
 	if ( attackName == "Fist" )
 	{
 		rightArm_ = std::make_unique<PlayerAttackFist>();
@@ -150,15 +168,24 @@ void Player::ChangeRightArm(std::string attackName)
 		rightArm_ = std::make_unique<PlayerAttackWeapon>();
 	}
 
+	rightArm_->cost = cost;
+
 	rightArm_->Initialize(&pos_,&velocity_ ,&direction_);
 }
 
-void Player::ChangeLeg(std::string legName)
+bool Player::ChangeLeg(std::string legName,uint32_t cost)
 {
+	if ( nowCost + cost - leg_->cost > 100 )
+	{
+		return false;
+	}
+
 	if ( legName == "Normal" )
 	{
 		leg_ = std::make_unique<PlayerLegNormal>();
 	}
+
+	leg_->cost = cost;
 
 	leg_->Initialize(&velocity_,&direction_,&changeAcl_);
 }

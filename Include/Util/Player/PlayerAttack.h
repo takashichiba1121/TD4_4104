@@ -21,6 +21,9 @@ public:
 	};
 
 public:
+	uint32_t cost = 0;
+
+public:
 
 	virtual void Initialize(Vector2* playerPos,Vector2* velocity,bool* direction)=0;
 

@@ -1,7 +1,13 @@
 #pragma once
 #include"Vector2.h"
+#include<memory>
 class PlayerLeg
 {
+
+public:
+
+	uint32_t cost = 0;
+
 public:
 
 	virtual void Initialize(Vector2* playerPos,bool* direction,float* changeAcl) = 0;
