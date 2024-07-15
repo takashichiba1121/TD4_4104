@@ -59,6 +59,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;$(ProjectDir)\ThirdParty\imgui;$(ProjectDir)\Include\Util\Player</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Collision;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include\Node;$(ProjectDir)\Include\Base;$(ProjectDir)\Include\Util\Player;$(ProjectDir)\Include</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Collision;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;$(ProjectDir)\Include\Base;$(ProjectDir)\ThirdParty\imgui;$(ProjectDir)\Include\Util\Player;$(ProjectDir)\Include\NPC;$(ProjectDir)\Include\Deal;$(ProjectDir)\Include\Player</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -96,6 +97,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Collision;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;$(ProjectDir)\Include\Base;$(ProjectDir)\ThirdParty\imgui;$(ProjectDir)\Include\Util\Player;$(ProjectDir)\Include\NPC</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Collision;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include\Node;$(ProjectDir)\Include\Base;$(ProjectDir)\Include\Util\Player;$(ProjectDir)\Include</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <DisableSpecificWarnings>4244</DisableSpecificWarnings>
@@ -109,6 +111,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Enemy\BaseEnemy.cpp" />
+    <ClCompile Include="Source\Node\BaseNode.cpp" />
+    <ClCompile Include="Source\Node\BattleNode.cpp" />
+    <ClCompile Include="Source\Node\HealingNode.cpp" />
+    <ClCompile Include="Source\Node\NodeManager.cpp" />
+    <ClCompile Include="Source\Node\ReinforcementNode.cpp" />
+    <ClCompile Include="Source\Node\ShopNode.cpp" />
+    <ClCompile Include="Source\Node\TransactionNode.cpp" />
     <ClCompile Include="Source\NPC\PowerUpCave.cpp" />
     <ClCompile Include="Source\NPC\DealDaemon.cpp" />
     <ClCompile Include="Source\NPC\NPCManager.cpp" />
@@ -168,12 +178,16 @@
     <ClCompile Include="Source\Util\Math\Vector3.cpp" />
     <ClCompile Include="Source\Enemy\WalkEnemy.cpp" />
     <ClCompile Include="Source\Util\Util.cpp" />
-    <ClCompile Include="TransactionNode.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BattleNode.h" />
-    <ClInclude Include="HealingNode.h" />
-    <ClInclude Include="Include\BaseNode.h" />
+    <ClInclude Include="Include\Node\BaseNode.h" />
+    <ClInclude Include="Include\Node\BattleNode.h" />
+    <ClInclude Include="Include\Node\HealingNode.h" />
+    <ClInclude Include="Include\Node\NodeManager.h" />
+    <ClInclude Include="Include\Node\NodeType.h" />
+    <ClInclude Include="Include\Node\ReinforcementNode.h" />
+    <ClInclude Include="Include\Node\ShopNode.h" />
+    <ClInclude Include="Include\Node\TransactionNode.h" />
     <ClInclude Include="Include\Util\ChipIndex.h" />
     <ClInclude Include="Include\Enemy\EnemyManager.h" />
     <ClInclude Include="Include\Base\BaseObject.h" />
@@ -207,9 +221,7 @@
     <ClInclude Include="Include\Collision\IShape.h" />
     <ClInclude Include="Include\Collision\RectShape.h" />
     <ClInclude Include="Include\Util\MapChip.h" />
-    <ClInclude Include="Include\NodeManager.h" />
-    <ClInclude Include="ReinforcementNode.h" />
-    <ClInclude Include="ShopNode.h" />
+    <ClInclude Include="Include\Node\StartNode.h" />
     <ClInclude Include="ThirdParty\imgui\imconfig.h" />
     <ClInclude Include="ThirdParty\imgui\imgui.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_impl_dx11.h" />
@@ -220,7 +232,6 @@
     <ClInclude Include="Include\Util\Math\Vector3.h" />
     <ClInclude Include="Include\Enemy\WalkEnemy.h" />
     <ClInclude Include="Include\Util\Util.h" />
-    <ClInclude Include="TransactionNode.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

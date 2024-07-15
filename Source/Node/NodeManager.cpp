@@ -1,4 +1,5 @@
 #include "NodeManager.h"
+#include<cassert>
 #include<algorithm>
 #include<DxlibInclude.h>
 #include"Vector2.h"
@@ -32,15 +33,7 @@ NodeManager* NodeManager::GetInstance()
 
 void NodeManager::Initialize()
 {
-	{
-		GameConfig::Node* config = GameConfig::GetNodeConfig();
-		X_DIST = config->xDistance;
-		Y_DIST = config->yDistance;
-		PLACEMENT_RANDOMNESS = config->placementRandomness;
-		FLOORS = config->floors;
-		MAP_WIDTH = config->width;
-		PATHS = config->paths;
-		START_POINT = config->startPoints;
+	distribution = std::discrete_distribution<int>(probabilities,probabilities + NodeType::TYPE_NUM);
 
 		for ( size_t i = 0; i < config->nodeProbabilities.size(); i++ )
 		{
@@ -63,12 +56,13 @@ void NodeManager::Initialize()
 
 	for ( int k = 0; k < PATHS; k++ )
 	{
-		int j = startingPoints[ DxLib::GetRand(startingPoints.size() - 1) ];
+		int j = startingPoints[ GetRand(0,startingPoints.size() - 1) ];
 
 		int current_j = j;
 		for ( int i = 0; i < FLOORS - 1; ++i )
 		{
 			current_j = SetupConnection(i,current_j);
+
 		}
 	}
 
@@ -97,7 +91,7 @@ void NodeManager::Initialize()
 	rooms_[ NodeType::BATTLE ] = std::make_unique<BattleNode>();
 	rooms_[ NodeType::SHOP ] = std::make_unique<ShopNode>();
 	rooms_[ NodeType::HEALING ] = std::make_unique<HealingNode>();
-	rooms_[ NodeType::START ] = std::make_unique<StartNode>();
+	rooms_[ NodeType::NONE ] = std::make_unique<StartNode>();
 
 	for ( auto& room : rooms_ )
 	{
@@ -151,7 +145,7 @@ void NodeManager::Reset()
 
 	for ( int k = 0; k < PATHS; k++ )
 	{
-		int j = startingPoints[ DxLib::GetRand(startingPoints.size() - 1) ];
+		int j = startingPoints[ GetRand(0,startingPoints.size() - 1) ];
 
 		int current_j = j;
 		for ( int i = 0; i < FLOORS - 1; ++i )
@@ -183,41 +177,21 @@ void NodeManager::Reset()
 
 }
 
-void NodeManager::NodeDrew(int32_t leftBottomX,int32_t leftBottomY)
+void NodeManager::NodeDrew()
 {
-	for ( auto& node : drawNode_ )
+	for ( int i = 0; i < FLOORS; ++i )
 	{
-		for ( size_t k = 0; k < node->nexts.size(); k++ )
+		for ( int j = 0; j < MAP_WIDTH; ++j )
 		{
-			DrawLine(leftBottomX + node->position.x,leftBottomY + node->position.y,leftBottomX + node->nexts[ k ]->position.x,leftBottomY + node->nexts[ k ]->position.y,GetColor(255,255,255));
-		}
-	}
+			if ( nodes_[ i ][ j ].type.value != NodeType::NO_CHILDREN )
+			{
+				DrawCircle(100 + j * 30,( 60 + FLOORS * 30 ) - ( 60 + i * 30 ),3,GetColor(255,255,255));
 
-	for ( auto& node : drawNode_ )
+				for ( size_t k = 0; k < nodes_[ i ][ j ].nexts.size(); k++ )
 				{
-		switch ( node->type.value )
-		{
-		case NodeType::Type::REINFORCEMENT:
-			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,reinforcementImg,true);
-			break;
-		case NodeType::Type::TRANSACTION:
-			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,transactionImg,true);
-			break;
-		case NodeType::Type::BATTLE:
-			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,battleImg,true);
-			break;
-		case NodeType::Type::SHOP:
-			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,shopImg,true);
-			break;
-		case NodeType::Type::HEALING:
-			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,healingImg,true);
-			break;
-		case NodeType::Type::START:
-			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,startImg,true);
-			break;
-		default:
-			DrawCircle(leftBottomX + selectNode_->position.x,leftBottomY + selectNode_->position.y,32,GetColor(255,255,255));
-			break;
+					DrawLine(100 + j * 30,( 60 + FLOORS * 30 ) - ( 60 + i * 30 ),100 + nodes_[ i ][ j ].nexts[ k ]->column * 30,( 60 + FLOORS * 30 ) - ( 60 + nodes_[ i ][ j ].nexts[ k ]->row * 30 ),GetColor(255,255,255));
+				}
+			}
 		}
 
 	}
@@ -256,7 +230,7 @@ void NodeManager::GenerateInitialGrid()
 		for ( int j = 0; j < MAP_WIDTH; ++j )
 		{
 			Node currentRoom;
-			Vector2 offset(DxLib::GetRand(PLACEMENT_RANDOMNESS),DxLib::GetRand(PLACEMENT_RANDOMNESS));
+			Vector2 offset(GetRand(0,PLACEMENT_RANDOMNESS),GetRand(0,PLACEMENT_RANDOMNESS));
 			currentRoom.position = Vector2(j * X_DIST,i * -Y_DIST) + offset;
 			currentRoom.row = i;
 			currentRoom.column = j;
@@ -286,7 +260,7 @@ std::vector<int> NodeManager::GetRandomStartingPoints()
 
 		for ( int i = 0; i < START_POINT; ++i )
 		{
-			int startingPoint = DxLib::GetRand(MAP_WIDTH - 1);
+			int startingPoint = GetRand(0,MAP_WIDTH - 1);
 
 			if ( find(yCoordinates.begin(),yCoordinates.end(),startingPoint) == yCoordinates.end() )
 			{
@@ -343,10 +317,7 @@ int NodeManager::SetupConnection(int i,int j)
 		}
 	}
 
-	if ( std::find_if(currentRoom->nexts.begin(),currentRoom->nexts.end(),[ & ] (Node* node)
-		{
-			return node->column == nextRoom->column && node->row == nextRoom->row;
-		}) == currentRoom->nexts.end() )
+	if (std::find_if(currentRoom->nexts.begin(), currentRoom->nexts.end(), [&] (Node* node){return node->column == nextRoom->column && node->row == nextRoom->row;}) == currentRoom->nexts.end() )
 	{
 		currentRoom->nexts.push_back(nextRoom);
 		currentRoom->nextDoorsNum += 1;
@@ -459,4 +430,12 @@ bool NodeManager::RoomHasParentOfType(Node* room,NodeType type)
 	}
 
 	return false;
+}
+
+void NodeManager::SetRoomRandomly(Node* roomToSet)
+{
+	NodeType typeCandidate;
+	std::mt19937 gen(std::time(nullptr));
+	typeCandidate.value = static_cast< NodeType::Type >( distribution(gen) );
+	roomToSet->type = typeCandidate;
 }

@@ -24,7 +24,10 @@ void GameScene::Initialize()
 	enemys_->SetPlayerPtr(player_.get());
 
 	nodeManager_ = NodeManager::GetInstance();
+	nodeManager_->SetMapChip(mapChip_.get());
+	nodeManager_->SetPlayer(player_.get());
 	nodeManager_->Initialize();
+	nodeManager_->StartNodeSet(0);
 }
 
 void GameScene::Update()
@@ -33,17 +36,14 @@ void GameScene::Update()
 
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_R) )
 	{
-		SceneManager::GetInstance()->ChangeScene("TITLE");
-	}
-	else
-	{
-		player_->Update();
-		enemys_->Update();
-
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_R) )
-	{
 		nodeManager_->Reset();
 	}
+
+	nodeManager_->Update();
+
+	player_->Update();
+	enemys_->Update();
+
 
 	CollisionManager::GetInstance()->Update();
 
