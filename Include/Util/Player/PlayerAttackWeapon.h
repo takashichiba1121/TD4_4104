@@ -5,7 +5,7 @@ class PlayerAttackWeapon :
     public PlayerAttack
 {
 private:
-	bool isAttack_ = false;
+	uint32_t isAttack_ = false;
 
 	float AttackTime_ = 0;
 
@@ -19,31 +19,29 @@ private:
 
 	const float POW = 0;
 
-	float playerPow;
+	Combo combo1 = { 1,{0,0},{200,50},30 ,5};
 
 	Vector2 DrawPos_;
 
 	RectShape* shape_;
 
-public:
-	void Initialize() override;
+	Vector2* playerPos_;
 
-	void AttackInit(const Vector2& playerPos,bool direction,float pow) override;
+	bool* direction_;
+
+	Vector2* velocity_;
+
+public:
+	void Initialize(Vector2* playerPos,Vector2* velocity,bool* direction) override;
+
+	void AttackInit(float pow) override;
 
 	void Attack() override;
 
 	void Draw() override;
 
-	bool GetAttack() override {
+	bool IsAttack() override {
 		return isAttack_;
-	}
-
-	uint32_t GetInterval() override {
-		return INTERVAL_;
-	}
-
-	float GetPow() override {
-		return POW;
 	}
 };
 

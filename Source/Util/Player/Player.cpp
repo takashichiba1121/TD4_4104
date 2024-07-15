@@ -21,16 +21,14 @@ void Player::Initialize()
 
 	pos_.y = GameConfig::GetGameConfig()->windowHeight / 2;
 
-	Load();
+	ChangeLeftArm("Fist");
 
-	ChangeAttackZ("Fist");
-
-	ChangeAttackX("Weapon");
+	ChangeRightArm("Weapon");
 
 	hp_ = maxHp_;
 
-	name.tag = "Player";
-	userData_ = &name;
+	name_.tag = "Player";
+	userData_ = &name_;
 
 	islive_ = true;
 
@@ -48,6 +46,8 @@ void Player::Initialize()
 	CollisionManager::GetInstance()->AddObject(this);
 
 	textureId_ = LoadGraph("Resources/Player/PlayerStand.png");
+
+	ChangeLeg("Normal");
 }
 
 void Player::Update()
@@ -57,52 +57,17 @@ void Player::Update()
 		DamageInterval_++;
 	}
 
-	if ( attackInterval_ > 0 )
-	{
-		attackInterval_--;
-	}
-
-	if ( attackZ_->GetAttack() == false && attackX_->GetAttack() == false )
-	{
-		Move();
-	}
-	else
-	{
-		SetMapChipSpeed({ 0,0 });
-	}
+	leg_->Move(GetOnDir() & 0b1 << OnDir::BOTTOM,leftArm_->IsAttack() || rightArm_->IsAttack());
 
 	Attack();
 
+	PlayerBulletManager::Instance()->Update();
+
+	SetMapChipSpeed(velocity_);
+
+	shape_->SetCenter(pos_);
+
 #ifdef _DEBUG
-
-	ImGui::Begin("PlayerStatus");
-
-	if ( ImGui::Button("Load") )
-	{
-		Load();
-	}
-
-	ImGui::Text("Jump");
-
-	ImGui::SliderFloat("JumpInitialVelocity",&jumpInitialVelocity_,0.0f,-20.0f,"%2.0f");
-
-	ImGui::SliderFloat("JumpAcceleration",&jumpAcceleration_,0.0f,20.0f,"%2.1f");
-
-	ImGui::SliderFloat("GravityAcceleration",&gravityAcceleration_,0.0f,5.0f,"%1.1f");
-
-	ImGui::Text("Move");
-
-	ImGui::SliderFloat("Acceleration",&acceleration_,0.0f,100.0f,"%3.0f");
-
-	ImGui::SliderFloat("AirAcceleration",&airAcceleration_,0.0f,100.0f,"%3.0f");
-
-	ImGui::SliderFloat("Deccelaration",&deccelaration_,0.0f,100.0f,"%3.0f");
-
-	ImGui::SliderFloat("AirDeccelaration_",&airDeccelaration_,0.0f,100.0f,"%3.0f");
-
-	ImGui::SliderFloat("TopSpeed",&topSpeed_,0.0f,200.0f,"%3.0f");
-
-	ImGui::End();
 
 	ImGui::Begin("PlayerSituation");
 
@@ -110,193 +75,45 @@ void Player::Update()
 
 	ImGui::Text("HP:%d",hp_);
 
+	ImGui::Text("MaxHP:%d",maxHp_);
+
+	ImGui::Text("Pow:%1.2f",changePow_);
+
+	ImGui::Text("Acl:%1.2f",changeAcl_);
+
+	ImGui::Text("Def:%1.2f",changeDef_);
+
+	ImGui::Text("Crit:%1.2f",changeCrit_);
+
+	ImGui::Text("Cdmg:%1.2f",changeCdmg_);
+
+	ImGui::Text("cost:%d",nowCost);
+
 	ImGui::End();
 
 #endif
 }
 
-void Player::Move()
-{
-	if ( Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A) )
-	{
-		direction_ = false;
-		if ( velocity_.x > -topSpeed_ * changeAcl_ )
-		{
-			if ( onGround_ )
-			{
-				velocity_.x -= ( airAcceleration_ * changeAcl_ ) / GameConfig::GetGameConfig()->fps;
-			}
-			else
-			{
-				velocity_.x -= ( acceleration_ * changeAcl_ ) / GameConfig::GetGameConfig()->fps;
-			}
-		}
-		else
-		{
-			velocity_.x = -topSpeed_ * changeAcl_;
-		}
-	}
-	else if ( velocity_.x < 0 )
-	{
-		if ( onGround_ )
-		{
-			velocity_.x += airDeccelaration_ / GameConfig::GetGameConfig()->fps;
-		}
-		else
-		{
-			velocity_.x += deccelaration_ / GameConfig::GetGameConfig()->fps;
-		}
-		if ( velocity_.x > 0 )
-		{
-			velocity_.x = 0;
-		}
-	}
-	if ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) )
-	{
-		direction_ = true;
-		if ( velocity_.x < topSpeed_ * changeAcl_ )
-		{
-			if ( onGround_ )
-			{
-				velocity_.x += ( airAcceleration_ * changeAcl_ ) / GameConfig::GetGameConfig()->fps;
-			}
-			else
-			{
-				velocity_.x += ( acceleration_ * changeAcl_ ) / GameConfig::GetGameConfig()->fps;
-			}
-		}
-		else
-		{
-			velocity_.x = topSpeed_ * changeAcl_;
-		}
-	}
-	else if ( velocity_.x > 0 )
-	{
-		if ( onGround_ )
-		{
-			velocity_.x -= airDeccelaration_ / GameConfig::GetGameConfig()->fps;
-		}
-		else
-		{
-			velocity_.x -= deccelaration_ / GameConfig::GetGameConfig()->fps;
-		}
-		if ( velocity_.x < 0 )
-		{
-			velocity_.x = 0;
-		}
-	}
-
-	if ( Input::Instance()->PushKey(KEY_INPUT_SPACE) && !onGround_ )
-	{
-		JumpStart();
-	}
-
-
-	if ( !( GetOnDir() & 0b1 << OnDir::BOTTOM ) )
-	{
-		onGround_ = true;
-	}
-
-	if ( onGround_ )
-	{
-		if ( isJump_ )
-		{
-			Jump();
-		}
-		else
-		{
-			Falling();
-		}
-	}
-
-	SetMapChipSpeed(velocity_);
-
-	shape_->SetCenter(pos_);
-}
-
-void Player::JumpStart()
-{
-	onGround_ = true;
-
-	isJump_ = true;
-
-	velocity_.y += jumpInitialVelocity_;
-}
-
-void Player::Jump()
-{
-	velocity_.y += jumpAcceleration_;
-
-	if ( Input::Instance()->ReleaseKey(KEY_INPUT_SPACE) || velocity_.y >= 0 )
-	{
-		isJump_ = false;
-
-		velocity_.y /= 3;
-	}
-
-}
-
-void Player::Falling()
-{
-	velocity_.y += gravityAcceleration_;
-
-	if ( GetOnDir() & 0b1 << OnDir::BOTTOM )
-	{
-		onGround_ = false;
-
-		velocity_.y = 0;
-
-	}
-}
-
 void Player::Attack()
 {
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && attackZ_ != nullptr && attackInterval_ == 0 )
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && leftArm_ != nullptr&&!rightArm_->IsAttack() )
 	{
-		attackZ_->AttackInit(pos_,direction_,changePow_);
-
-		velocity_ = { 0,0 };
-
-		attackInterval_ = attackZ_->GetInterval();
+		leftArm_->AttackInit(changePow_);
 	}
 
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && attackX_ != nullptr && attackInterval_ == 0 )
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && rightArm_ != nullptr && !leftArm_->IsAttack() )
 	{
-		attackX_->AttackInit(pos_,direction_,changePow_);
-
-		velocity_ = { 0,0 };
-
-		attackInterval_ = attackX_->GetInterval();
+		rightArm_->AttackInit(changePow_);
 	}
 
-	if ( attackZ_ != nullptr )
+	if ( leftArm_ != nullptr )
 	{
-		attackZ_->Attack();
+		leftArm_->Attack();
 	}
 
-	if ( attackX_ != nullptr )
+	if ( rightArm_ != nullptr )
 	{
-		attackX_->Attack();
-	}
-
-	PlayerBulletManager::Instance()->Update();
-}
-
-float Player::IsDamage()
-{
-	float Damage = 0;
-
-	if ( attackX_->GetAttack() )
-	{
-		Damage = attackX_->GetPow() * changePow_;
-
-		return Damage;
-	}
-	else
-	{
-		Damage = attackZ_->GetPow() * changePow_;
-
-		return Damage;
+		rightArm_->Attack();
 	}
 }
 void Player::Damage(int32_t Damage)
@@ -308,57 +125,146 @@ void Player::Damage(int32_t Damage)
 		DamageInterval_ = 0;
 	}
 }
-void Player::ChangeAttackZ(std::string attackName)
+void Player::ChangeLeftArm(std::string attackName)
 {
 	if ( attackName == "Fist" )
 	{
-		attackZ_ = std::make_unique<PlayerAttackFist>();
+		leftArm_ = std::make_unique<PlayerAttackFist>();
 	}
 	if ( attackName == "Weapon" )
 	{
-		attackZ_ = std::make_unique<PlayerAttackWeapon>();
+		leftArm_ = std::make_unique<PlayerAttackWeapon>();
 	}
 
-	attackZ_->Initialize();
+	leftArm_->Initialize(&pos_,&velocity_,&direction_);
 }
 
-void Player::ChangeAttackX(std::string attackName)
+void Player::ChangeRightArm(std::string attackName)
 {
 	if ( attackName == "Fist" )
 	{
-		attackX_ = std::make_unique<PlayerAttackFist>();
+		rightArm_ = std::make_unique<PlayerAttackFist>();
 	}
 	if ( attackName == "Weapon" )
 	{
-		attackX_ = std::make_unique<PlayerAttackWeapon>();
+		rightArm_ = std::make_unique<PlayerAttackWeapon>();
 	}
 
-	attackX_->Initialize();
+	rightArm_->Initialize(&pos_,&velocity_ ,&direction_);
 }
 
-void Player::AddSpd(int32_t spd)
+void Player::ChangeLeg(std::string legName)
+{
+	if ( legName == "Normal" )
+	{
+		leg_ = std::make_unique<PlayerLegNormal>();
+	}
+
+	leg_->Initialize(&velocity_,&direction_,&changeAcl_);
+}
+
+bool Player::AddSpd(int32_t spd)
 {
 	changeAcl_ += float(spd) / 100.0f;//パーセントを実数値に戻す
+
+	return true;
 }
 
-void Player::AddPow(int32_t pow)
+bool Player::AddPow(int32_t pow)
 {
 	changePow_ += float(pow) / 100.0f;
+
+	return true;
 }
 
-void Player::AddDef(int32_t def)
+bool Player::AddDef(int32_t def)
 {
 	changeDef_ += float(def) / 100.0f;
+	return true;
 }
 
-void Player::AddMaxHp(int32_t maxHp)
+bool Player::AddMaxHp(int32_t maxHp)
 {
-	changeMaxHp_ += float(maxHp) / 100.0f;
+	uint32_t nowMaxHp = maxHp_;
+
+	maxHp_ += maxHp;
+
+	hp_ += maxHp_ - nowMaxHp;
+
+	return true;
+}
+bool Player::AddCrit(float Crit)
+{
+	changeCrit_ += Crit;
+
+	return true;
+}
+bool Player::AddCdmg(int32_t Cdmg)
+{
+	changeCdmg_ += float(Cdmg) / 100.0f;
+
+	return true;
+}
+bool Player::SubSpd(int32_t spd)
+{
+	if ( changeAcl_ - float(spd) / 100.0f <= 0 )
+	{
+		return false;
+	}
+	changeAcl_ -= float(spd) / 100.0f;//パーセントを実数値に戻す
+
+	return true;
 }
 
-void Player::AddCost(int32_t cost)
+bool Player::SubPow(int32_t pow)
 {
-	nowCost += cost;
+	if ( changePow_ - float(pow) / 100.0f <= 0 )
+	{
+		return false;
+	}
+	changePow_ -= float(pow) / 100.0f;
+
+	return true;
+}
+
+bool Player::SubDef(int32_t def)
+{
+	if ( changeDef_ - float(def) / 100.0f <= 0 )
+	{
+		return false;
+	}
+	changeDef_ -= float(def) / 100.0f;
+	return true;
+}
+
+bool Player::SubMaxHp(int32_t maxHp)
+{
+	if (maxHp_ - maxHp <= 0 )
+	{
+		return false;
+	}
+	maxHp_ -= maxHp;
+	
+	if ( hp_ >= maxHp_ )
+	{
+		hp_ = maxHp_;
+	}
+
+	return true;
+}
+
+bool Player::SubCrit(int32_t Crit)
+{
+	changeCrit_ -= Crit;
+
+	return true;
+}
+
+bool Player::SubCdmg(int32_t Cdmg)
+{
+	changeCdmg_ -= float(Cdmg) / 100.0f;
+
+	return true;
 }
 
 void Player::Draw()
@@ -382,48 +288,15 @@ void Player::Draw()
 		}
 	}
 
-	if ( attackZ_ != nullptr )
+	if ( leftArm_ != nullptr )
 	{
-		attackZ_->Draw();
+		leftArm_->Draw();
 	}
 
-	if ( attackX_ != nullptr )
+	if ( rightArm_ != nullptr )
 	{
-		attackX_->Draw();
+		rightArm_->Draw();
 	}
 
-	DrawFormatString(0,GameConfig::GetWindowHeight()-20,0xffffff,"PlayerHP:%d/%d",hp_,maxHp_);
-}
-
-void Player::Load()
-{
-	std::ifstream file;
-
-	file.open("Resources/Player/Player.json");
-
-	if ( file.fail() )
-	{
-		assert(0);
-	}
-
-	nlohmann::json jsonObject;
-
-	file >> jsonObject;
-
-	assert(jsonObject.is_object());
-	assert(jsonObject.contains("name"));
-	assert(jsonObject[ "name" ].is_string());
-
-	std::string lName = jsonObject[ "name" ].get<std::string>();
-
-	assert(lName.compare("Player") == 0);
-
-	topSpeed_ = jsonObject[ "TopSpeed" ];
-	acceleration_ = jsonObject[ "Acceleration" ];
-	airAcceleration_ = jsonObject[ "AirAcceleration" ];
-	deccelaration_ = jsonObject[ "Deccelaration" ];
-	airDeccelaration_ = jsonObject[ "AirDeccelaration" ];
-	gravityAcceleration_ = jsonObject[ "GravityAcceleration" ];
-	jumpAcceleration_ = jsonObject[ "JumpAcceleration" ];
-	jumpInitialVelocity_ = jsonObject[ "JumpInitialVelocity" ];
+	DrawFormatString(0,GameConfig::GetWindowHeight() - 20,0xffffff,"PlayerHP:%d/%d",hp_,maxHp_);
 }

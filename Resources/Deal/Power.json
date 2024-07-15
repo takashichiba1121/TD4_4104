@@ -1,0 +1,80 @@
+[
+	{
+		"Type": "survival",
+		"PowerName": "HP",
+		"CostName": "CDMG",
+		"CostRange": [
+			10,
+			20
+		],
+		"PowerRange": [
+			50,
+			100
+		]
+	},
+	{
+		"Type": "survival",
+		"PowerName": "DEF",
+		"CostName": "CRIT",
+		"CostRange": [
+			3,
+			5
+		],
+		"PowerRange": [
+			30,
+			60
+		]
+	},
+	{
+		"Type": "Attack",
+		"PowerName": "ATK",
+		"CostName": "DEF",
+		"CostRange": [
+			15,
+			30
+		],
+		"PowerRange": [
+			20,
+			40
+		]
+	},
+	{
+		"Type": "Attack",
+		"PowerName": "SPD",
+		"CostName": "HP",
+		"CostRange": [
+			35,
+			70
+		],
+		"PowerRange": [
+			12,
+			25
+		]
+	},
+	{
+		"Type": "Critical",
+		"PowerName": "CRIT",
+		"CostName": "ATK",
+		"CostRange": [
+			10,
+			20
+		],
+		"PowerRange": [
+			5,
+			15
+		]
+	},
+	{
+		"Type": "Critical",
+		"PowerName": "CDMG",
+		"CostName": "SPD",
+		"CostRange": [
+			8,
+			12
+		],
+		"PowerRange": [
+			25,
+			50
+		]
+	}
+]

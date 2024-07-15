@@ -6,6 +6,7 @@
 #include"Player.h"
 #include "EnemyManager.h"
 #include"CollisionManager.h"
+#include "PowerUpCave.h"
 
 #include"MapChip.h"
 
@@ -17,9 +18,15 @@ private:
 	std::unique_ptr<EnemyManager> enemys_;
 
 	std::unique_ptr<MapChip>mapChip_;
+	std::unique_ptr<PowerUpCave>powerUp_;
 
 	uint32_t backGround_;
+	uint8_t num;
+	bool chenged;
 
+	bool isPowerUp=true;
+
+	uint32_t powerUpNum=0;
 public:
 	void Initialize() override;
 	void Update() override;
