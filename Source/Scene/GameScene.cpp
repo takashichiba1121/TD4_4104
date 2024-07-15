@@ -18,9 +18,6 @@ void GameScene::Initialize()
 
 	mapChip_ = std::make_unique<MapChip>();
 	mapChip_->Initialize();
-	mapChip_->MapLoad("Resources/Export/Map/TestMap.json");
-
-	CollisionManager::GetInstance()->SetMapChip(mapChip_->GetMapChip());
 
 	enemys_ = std::make_unique<EnemyManager>();
 	enemys_->Initialize();
@@ -32,7 +29,10 @@ void GameScene::Initialize()
 	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
 
 	nodeManager_ = NodeManager::GetInstance();
+	nodeManager_->SetMapChip(mapChip_.get());
+	nodeManager_->SetPlayer(player_.get());
 	nodeManager_->Initialize();
+	nodeManager_->StartNodeSet(0);
 }
 
 void GameScene::Update()
@@ -60,10 +60,17 @@ void GameScene::Update()
 	{
 		SceneManager::GetInstance()->ChangeScene("GAMEOVER");
 	}
+	
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_R) )
 	{
 		nodeManager_->Reset();
 	}
+
+	nodeManager_->Update();
+
+	player_->Update();
+	enemys_->Update();
+
 
 	CollisionManager::GetInstance()->Update();
 }
