@@ -4,6 +4,7 @@
 class ShopNode: public BaseNode
 {
 private:
+	std::vector<NextDoor> nextdoors_;
 public:
 
 	// BaseNode を介して継承されました

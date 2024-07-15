@@ -25,6 +25,7 @@ void GameScene::Initialize()
 	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
 
 	nodeManager_->StartNodeSet(0);
+	nodeManager_->StartNodeSet(0);
 }
 
 void GameScene::Update()

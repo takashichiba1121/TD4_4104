@@ -1,4 +1,5 @@
 #include "NodeManager.h"
+#include<cassert>
 #include<algorithm>
 #include<DxlibInclude.h>
 #include"Vector2.h"
@@ -69,6 +70,7 @@ void NodeManager::Initialize()
 		for ( int i = 0; i < FLOORS - 1; ++i )
 		{
 			current_j = SetupConnection(i,current_j);
+
 		}
 	}
 
@@ -171,7 +173,7 @@ void NodeManager::Reset()
 			nodes_[ 0 ][ point ].type.value = NodeType::START;
 			drawNode_.push_back(&nodes_[ 0 ][ point ]);
 		}
-	}
+		}
 
 	for ( auto& node : drawNode_ )
 	{
@@ -194,7 +196,7 @@ void NodeManager::NodeDrew(int32_t leftBottomX,int32_t leftBottomY)
 	}
 
 	for ( auto& node : drawNode_ )
-	{
+				{
 		switch ( node->type.value )
 		{
 		case NodeType::Type::REINFORCEMENT:
@@ -409,10 +411,10 @@ void NodeManager::SetupRoomTypes()
 					SetRoomRandomly(next_room);
 					drawNode_.push_back(next_room);
 				}
+				}
 			}
 		}
 	}
-}
 
 void NodeManager::SetRoomRandomly(Node* roomToSet)
 {
@@ -459,4 +461,12 @@ bool NodeManager::RoomHasParentOfType(Node* room,NodeType type)
 	}
 
 	return false;
+}
+
+void NodeManager::SetRoomRandomly(Node* roomToSet)
+{
+	NodeType typeCandidate;
+	std::mt19937 gen(std::time(nullptr));
+	typeCandidate.value = static_cast< NodeType::Type >( distribution(gen) );
+	roomToSet->type = typeCandidate;
 }
