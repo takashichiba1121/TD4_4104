@@ -30,6 +30,7 @@ void DealDaemon::Initialize()
 
 		temp->cost = static_cast<int32_t>(obj["cost"]);
 		temp->partsName = static_cast<string>(obj["partsName"]);
+		temp->partsInfo = static_cast<string>(obj["partsInfo"]);
 
 		products_[static_cast<string>(obj["Type"])].push_back(std::move(temp));
 	}
@@ -52,11 +53,15 @@ bool DealDaemon::PartsChenge()
 	bool isBuy = false;
 	switch (magic_enum::enum_cast<PartsName>(nowProductType).value())
 	{
-	case LARM:
-		playerPtr_->ChangeLeftArm(product->partsName);
-		break;
-	case RARM:
-		playerPtr_->ChangeRightArm(product->partsName);
+	case ARM:
+		if ( isLeft )
+		{
+			playerPtr_->ChangeLeftArm(product->partsName);
+		}
+		else
+		{
+			playerPtr_->ChangeRightArm(product->partsName);
+		}
 		break;
 	case LEG:
 		playerPtr_->ChangeLeg(product->partsName);
@@ -103,10 +108,23 @@ void DealDaemon::SetPriducts(bool deal)
 		{
 			type = productKey_[GetRand(productKey_.size() - 1)];
 		}
+		nowProductType = type;
 	}
 	else
 	{
 		nowProductType = productKey_[GetRand(productKey_.size() - 1)];
+	}
+
+	if ( nowProductType == "ARM" )
+	{
+		if ( GetRand(10) <= 5)
+		{
+			isLeft = true;
+		}
+		else
+		{
+			isLeft = false;
+		}
 	}
 
 	for (int i = 0; i < selectProducts_.size(); i++)
@@ -133,7 +151,7 @@ void DealDaemon::Draw()
 		}
 		DrawBox((boxLeftTop_.x + i * boxDist_), boxLeftTop_.y, (boxLeftTop_.x + i * boxDist_) + boxSize_.x, boxLeftTop_.y + boxSize_.y, color, true);
 		DrawFormatString((boxLeftTop_.x + i * boxDist_) + 50, boxLeftTop_.y + 50,
-			0xffffff, " ");
+			0xffffff, "%s\nCost:%d\n%s",selectProducts_[i]->partsName,selectProducts_[i]->cost,selectProducts_[i]->partsInfo);
 	}
 
 }

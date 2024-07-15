@@ -13,14 +13,14 @@ class Player;
 struct Parts
 {
 	std::string partsName;
+	std::string partsInfo;
 	int32_t cost;
 };
 
 
 enum PartsName
 {
-	LARM,
-	RARM,
+	ARM,
 	LEG,
 	EYE,
 	MOUTH,
@@ -41,6 +41,7 @@ private:
 	Vector2 boxSize_ = { 200,300 };
 	int32_t boxDist_ = 400;
 	int8_t dealCount;
+	bool isLeft = false;
 	const std::array<int32_t,7> dealSucces = { 950,750,500,200,100,50,20 };
 public:
 	void Initialize();
