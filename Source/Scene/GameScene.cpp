@@ -18,15 +18,13 @@ void GameScene::Initialize()
 
 	mapChip_ = std::make_unique<MapChip>();
 	mapChip_->Initialize();
-	mapChip_->MapLoad("Resources/Export/Map/TestMap.json");
-
-	CollisionManager::GetInstance()->SetMapChip(mapChip_->GetMapChip());
 
 	enemys_ = std::make_unique<EnemyManager>();
 	enemys_->Initialize();
 	enemys_->SetPlayerPtr(player_.get());
 	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
 
+	nodeManager_->StartNodeSet(0);
 }
 
 void GameScene::Update()

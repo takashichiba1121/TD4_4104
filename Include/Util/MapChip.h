@@ -21,9 +21,13 @@ public:
 
 	void MapLoad(const std::string& path);
 
+	void MapWrite(int32_t x,int32_t y,uint8_t index);
+
 	const std::vector < std::vector<uint8_t>>& GetMapChip()const;
+	std::vector < std::vector<uint8_t>>* GetMapChipPtr();
 
 	uint8_t GetPosElement(int32_t x,int32_t y)const;
+	Vector2 GetPos(int32_t x,int32_t y)const;
 	uint8_t GetNumOfArrayElement(int32_t x,int32_t y)const;
 
 	void Draw(const Vector2& screenPos);
