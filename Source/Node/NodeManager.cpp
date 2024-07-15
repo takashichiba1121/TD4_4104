@@ -185,7 +185,14 @@ void NodeManager::NodeDrew()
 		{
 			if ( nodes_[ i ][ j ].type.value != NodeType::NO_CHILDREN )
 			{
-				DrawCircle(100 + j * 30,( 60 + FLOORS * 30 ) - ( 60 + i * 30 ),3,GetColor(255,255,255));
+				if ( i == selectNode_->row && j == selectNode_->column )
+				{
+					DrawCircle(100 + j * 30,( 60 + FLOORS * 30 ) - ( 60 + i * 30 ),3,GetColor(255,0,0));
+				}
+				else
+				{
+					DrawCircle(100 + j * 30,( 60 + FLOORS * 30 ) - ( 60 + i * 30 ),3,GetColor(255,255,255));
+				}
 
 				for ( size_t k = 0; k < nodes_[ i ][ j ].nexts.size(); k++ )
 				{
@@ -317,7 +324,10 @@ int NodeManager::SetupConnection(int i,int j)
 		}
 	}
 
-	if (std::find_if(currentRoom->nexts.begin(), currentRoom->nexts.end(), [&] (Node* node){return node->column == nextRoom->column && node->row == nextRoom->row;}) == currentRoom->nexts.end() )
+	if ( std::find_if(currentRoom->nexts.begin(),currentRoom->nexts.end(),[ & ] (Node* node)
+		{
+			return node->column == nextRoom->column && node->row == nextRoom->row;
+		}) == currentRoom->nexts.end() )
 	{
 		currentRoom->nexts.push_back(nextRoom);
 		currentRoom->nextDoorsNum += 1;
