@@ -12,7 +12,7 @@ private:
 
 	const size_t BLOCK_SIZE = 32;
 	std::forward_list<IObject*>mapChipObjects_;
-	std::vector<std::vector<uint8_t>>mapChip_;
+	std::vector<std::vector<uint8_t>>* mapChip_;
 
 
 public:
@@ -20,7 +20,7 @@ public:
 	void AddObject(IObject* object);
 	void RemoveObject(IObject* object);
 
-	void SetMapChip(const std::vector<std::vector<uint8_t>>&mapChip);
+	void SetMapChip(std::vector<std::vector<uint8_t>>* mapChip);
 
 	void Update();
 

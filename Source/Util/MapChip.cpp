@@ -81,14 +81,29 @@ void MapChip::MapLoad(const std::string& path)
 
 }
 
+void MapChip::MapWrite(int32_t x,int32_t y,uint8_t index)
+{
+	map_[ y ][ x ] = index;
+}
+
 const std::vector<std::vector<uint8_t>>& MapChip::GetMapChip() const
 {
 	return map_;
 }
 
+std::vector<std::vector<uint8_t>>* MapChip::GetMapChipPtr()
+{
+	return &map_;
+}
+
 uint8_t MapChip::GetPosElement(int32_t x, int32_t y)const
 {
 	return map_[y / BLOCK_SIZE][x / BLOCK_SIZE];
+}
+
+Vector2 MapChip::GetPos(int32_t x,int32_t y) const
+{
+	return Vector2(x / BLOCK_SIZE, y / BLOCK_SIZE);
 }
 
 uint8_t MapChip::GetNumOfArrayElement(int32_t x, int32_t y) const

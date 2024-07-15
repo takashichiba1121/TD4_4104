@@ -370,6 +370,12 @@ void Player::Draw()
 	}
 }
 
+void Player::Reset()
+{
+	pos_.x = GameConfig::GetGameConfig()->windowWidth / 2;
+	pos_.y = GameConfig::GetGameConfig()->windowHeight / 2;
+}
+
 void Player::Load()
 {
 	std::ifstream file;
