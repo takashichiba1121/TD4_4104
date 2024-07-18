@@ -6,7 +6,6 @@ class StartNode :public BaseNode
 {
 private:
 
-	std::vector<NextDoor> nextdoors_;
 
 public:
 

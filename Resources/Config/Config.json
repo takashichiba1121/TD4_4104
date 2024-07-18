@@ -1,16 +1,39 @@
 {
-    "name": "Config",
-    "Title": "Config",
-    "WindowSize": [
-        1280,
-        704
-    ],
-    "BackGroundColor": [
-        "0x10",
-        "0x00",
-        "0x00"
-    ],
-    "VSync":true,
-    "FPS":60,
-    "FullScreen":false
+   "Config":{
+
+        "name": "Config",  
+        "Title": "Config",
+        "VSync":true,
+        "FPS":60,
+        "FullScreen":false,
+
+        "WindowSize": [
+            1280,
+            704
+        ],
+
+        "BackGroundColor": [
+            "0x10",
+            "0x00",
+            "0x00"
+        ]
+    },
+    "Node":{
+        "name": "Node",
+        "XDistance":30,
+        "YDistance":25,
+        "PlacementRandomness": 10,
+        "Floors":15,
+        "Width":7,
+        "Paths":5,
+        "StartPoints":3,
+        "NodeProbabilities":[
+            20, 
+            30, 
+            10, 
+            15, 
+            25
+        ]
+
+    }
 }

@@ -55,7 +55,7 @@ void GameScene::Draw()
 	player_->Draw();
 	enemys_->Draw();
 
-	nodeManager_->NodeDrew();
+	nodeManager_->NodeDrew(100,600);
 }
 
 void GameScene::SpriteDraw()
