@@ -48,7 +48,6 @@ void TransactionNode::Reset()
 			tmpNextdoors.pop_back();
 
 		}
-
 	}
 
 	CollisionManager::GetInstance()->SetMapChip(mapChip_->GetMapChipPtr());

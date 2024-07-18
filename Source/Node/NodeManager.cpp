@@ -1,5 +1,4 @@
 #include "NodeManager.h"
-#include<cassert>
 #include<algorithm>
 #include<DxlibInclude.h>
 #include"Vector2.h"
@@ -70,7 +69,6 @@ void NodeManager::Initialize()
 		for ( int i = 0; i < FLOORS - 1; ++i )
 		{
 			current_j = SetupConnection(i,current_j);
-
 		}
 	}
 
@@ -354,6 +352,7 @@ int NodeManager::SetupConnection(int i,int j)
 		currentRoom->nextDoorsNum += 1;
 		nextRoom->previews.push_back(currentRoom);
 		currentRoom->type.value = NodeType::NONE;
+		drawNode_.push_back(currentRoom);
 	}
 
 	return nextRoom->column;
