@@ -13,22 +13,23 @@ class NodeManager
 {
 private:
 
-	static constexpr int X_DIST = 30;
-	static constexpr int Y_DIST = 25;
-	static constexpr int PLACEMENT_RANDOMNESS = 5;
-	static constexpr int FLOORS = 15;
-	static constexpr int MAP_WIDTH = 7;
-	static constexpr int PATHS = 5;
-	static constexpr int START_POINT = 3;
+	int32_t X_DIST = 0;
+	int32_t Y_DIST = 0;
+	int32_t PLACEMENT_RANDOMNESS = 0;
+	int32_t FLOORS = 0;
+	int32_t MAP_WIDTH =0;
+	int32_t PATHS =0;
+	int32_t START_POINT =0;
 
 	int oldRand = 0;
 	int oldRandomJ = 0;
 
-	const int probabilities[ NodeType::TYPE_NUM ] = { 20, 30, 10, 15, 25 ,0,0 }; // A: 20%, B: 30%, C: 10%, D: 15%, E: 25%
+	int32_t nodeProbabilities[ NodeType::TYPE_NUM ] = {};
 
 	// 確率分布を作成する
 	std::discrete_distribution<int> distribution;
 	std::array<std::unique_ptr<BaseNode>,NodeType::TYPE_NUM - 1>rooms_;
+	std::list<Node*> drawNode_;
 
 	BaseNode* node_ = nullptr;
 	Node* nextNode_ = nullptr;
@@ -49,7 +50,7 @@ public:
 	void Draw();
 	void Reset();
 
-	void NodeDrew();
+	void NodeDrew(int32_t leftBottomX,int32_t leftBottomY);
 
 	void ChangeNode(size_t doorNo);
 	void StartNodeSet(size_t nodeNo);

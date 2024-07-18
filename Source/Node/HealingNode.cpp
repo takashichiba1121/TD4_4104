@@ -10,23 +10,7 @@ void HealingNode::Initialize()
 
 void HealingNode::Update()
 {
-	Vector2 playerPos = mapChip_->GetPos(player_->GetPos().x,player_->GetPos().y);
-	NextDoor nextDoor;
-
-	if ( mapChip_->GetNumOfArrayElement(playerPos.x,playerPos.y + 1) == ChipIndex::NEXT )
-	{
-		for ( auto& door : nextdoors_ )
-		{
-			if ( door.pos.x == playerPos.x )
-			{
-				nextDoor = door;
-
-				break;
-			}
-		}
-
-		nodeManager_->ChangeNode(nextDoor.id);
-	}
+	PlayerNodeMove();
 
 }
 
