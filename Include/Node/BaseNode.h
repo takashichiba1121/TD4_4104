@@ -30,6 +30,8 @@ protected:
 		int32_t id;
 	};
 
+	std::vector<NextDoor> nextdoors_;
+
 public:
 
 	virtual void Initialize() = 0;
@@ -43,6 +45,8 @@ public:
 	void SetMapChip(MapChip* mapChip);
 	void SetPlayer(Player* player);
 	void SetNodeManagerr(NodeManager* nodeManager);
+
+	void PlayerNodeMove();
 
 	BaseNode() = default;
 	virtual ~BaseNode() = default;
