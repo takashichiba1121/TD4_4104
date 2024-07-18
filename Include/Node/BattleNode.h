@@ -4,7 +4,7 @@
 class BattleNode :public BaseNode
 {
 private:
-	std::vector<NextDoor> nextdoors_;
+
 public:
 
 	BattleNode() = default;

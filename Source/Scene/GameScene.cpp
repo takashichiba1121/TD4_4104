@@ -88,7 +88,7 @@ void GameScene::Draw()
 	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");
 	DrawFormatString(0,40,0xffffff,"ATTACK:Z X");
 
-	nodeManager_->NodeDrew();
+	nodeManager_->NodeDrew(100,600);
 }
 
 void GameScene::SpriteDraw()

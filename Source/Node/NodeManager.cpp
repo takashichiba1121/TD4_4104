@@ -1,5 +1,4 @@
 #include "NodeManager.h"
-#include<cassert>
 #include<algorithm>
 #include<DxlibInclude.h>
 #include"Vector2.h"
@@ -10,6 +9,7 @@
 #include<ShopNode.h>
 #include<HealingNode.h>
 #include<StartNode.h>
+#include<GameConfig.h>
 
 int GetRand(int min_,int max_)
 {
@@ -32,7 +32,23 @@ NodeManager* NodeManager::GetInstance()
 
 void NodeManager::Initialize()
 {
-	distribution = std::discrete_distribution<int>(probabilities,probabilities + NodeType::TYPE_NUM);
+	{
+		GameConfig::Node* config = GameConfig::GetNodeConfig();
+		X_DIST = config->xDistance;
+		Y_DIST = config->yDistance;
+		PLACEMENT_RANDOMNESS = config->placementRandomness;
+		FLOORS = config->floors;
+		MAP_WIDTH = config->width;
+		PATHS = config->paths;
+		START_POINT = config->startPoints;
+
+		for ( size_t i = 0; i < config->nodeProbabilities.size(); i++ )
+		{
+			nodeProbabilities[ i ] = config->nodeProbabilities[ i ];
+		}
+	}
+	
+	distribution = std::discrete_distribution<int>(nodeProbabilities,nodeProbabilities + NodeType::TYPE_NUM);
 
 	GenerateInitialGrid();
 
@@ -46,7 +62,6 @@ void NodeManager::Initialize()
 		for ( int i = 0; i < FLOORS - 1; ++i )
 		{
 			current_j = SetupConnection(i,current_j);
-
 		}
 	}
 
@@ -59,6 +74,14 @@ void NodeManager::Initialize()
 	}
 
 	SetupRoomTypes();
+
+	for ( auto& node : drawNode_ )
+	{
+		std::vector<Node*>& nodes = node->nexts;
+		std::sort(nodes.begin(),nodes.end());
+	}
+
+	std::sort(startNodes_.begin(),startNodes_.end());
 
 	rooms_[ NodeType::REINFORCEMENT ] = std::make_unique<ReinforcementNode>();
 	rooms_[ NodeType::TRANSACTION ] = std::make_unique<TransactionNode>();
@@ -113,6 +136,8 @@ void NodeManager::Reset()
 		}
 	}
 
+	drawNode_.clear();
+
 	std::vector<int> startingPoints = GetRandomStartingPoints();
 
 	for ( int k = 0; k < PATHS; k++ )
@@ -137,32 +162,29 @@ void NodeManager::Reset()
 		}
 	}
 
+	for ( auto& node : drawNode_ )
+	{
+		std::vector<Node*>& nodes = node->nexts;
+		std::sort(nodes.begin(),nodes.end());
+	}
+
+	std::sort(startNodes_.begin(),startNodes_.end());
+
 }
 
-void NodeManager::NodeDrew()
+void NodeManager::NodeDrew(int32_t leftBottomX,int32_t leftBottomY)
 {
-	for ( int i = 0; i < FLOORS; ++i )
+	for (auto& node : drawNode_ )
 	{
-		for ( int j = 0; j < MAP_WIDTH; ++j )
-		{
-			if ( nodes_[ i ][ j ].type.value != NodeType::NO_CHILDREN )
-			{
-				if ( i == selectNode_->row && j == selectNode_->column )
-				{
-					DrawCircle(100 + j * 30,( 60 + FLOORS * 30 ) - ( 60 + i * 30 ),3,GetColor(255,0,0));
-				}
-				else
-				{
-					DrawCircle(100 + j * 30,( 60 + FLOORS * 30 ) - ( 60 + i * 30 ),3,GetColor(255,255,255));
-				}
+		DrawCircle(leftBottomX +node->position.x,leftBottomY + node->position.y,3,GetColor(255,255,255));
 
-				for ( size_t k = 0; k < nodes_[ i ][ j ].nexts.size(); k++ )
-				{
-					DrawLine(100 + j * 30,( 60 + FLOORS * 30 ) - ( 60 + i * 30 ),100 + nodes_[ i ][ j ].nexts[ k ]->column * 30,( 60 + FLOORS * 30 ) - ( 60 + nodes_[ i ][ j ].nexts[ k ]->row * 30 ),GetColor(255,255,255));
-				}
-			}
+		for ( size_t k = 0; k < node->nexts.size(); k++ )
+		{
+			DrawLine(leftBottomX + node->position.x,leftBottomY +node->position.y,leftBottomX + node->nexts[ k ]->position.x,leftBottomY + node->nexts[ k ]->position.y,GetColor(255,255,255));
 		}
 	}
+
+	DrawCircle(leftBottomX + selectNode_->position.x,leftBottomY + selectNode_->position.y,3,GetColor(255,0,0));
 }
 
 void NodeManager::ChangeNode(size_t doorNo)
@@ -196,7 +218,7 @@ void NodeManager::GenerateInitialGrid()
 		for ( int j = 0; j < MAP_WIDTH; ++j )
 		{
 			Node currentRoom;
-			Vector2 offset(GetRand(0,PLACEMENT_RANDOMNESS),GetRand(0,PLACEMENT_RANDOMNESS));
+			Vector2 offset(DxLib::GetRand(PLACEMENT_RANDOMNESS),DxLib::GetRand(PLACEMENT_RANDOMNESS));
 			currentRoom.position = Vector2(j * X_DIST,i * -Y_DIST) + offset;
 			currentRoom.row = i;
 			currentRoom.column = j;
@@ -292,6 +314,7 @@ int NodeManager::SetupConnection(int i,int j)
 		currentRoom->nextDoorsNum += 1;
 		nextRoom->previews.push_back(currentRoom);
 		currentRoom->type.value = NodeType::NONE;
+		drawNode_.push_back(currentRoom);
 	}
 
 	return nextRoom->column;

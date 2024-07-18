@@ -10,24 +10,7 @@ void TransactionNode::Initialize()
 
 void TransactionNode::Update()
 {
-	Vector2 playerPos = mapChip_->GetPos(player_->GetPos().x,player_->GetPos().y);
-	NextDoor nextDoor;
-
-	if ( mapChip_->GetNumOfArrayElement(playerPos.x,playerPos.y + 1) == ChipIndex::NEXT )
-	{
-		for ( auto& door : nextdoors_ )
-		{
-			if ( door.pos.x == playerPos.x )
-			{
-				nextDoor = door;
-
-				break;
-			}
-		}
-
-		nodeManager_->ChangeNode(nextDoor.id);
-	}
-
+	PlayerNodeMove();
 }
 
 void TransactionNode::Draw()
@@ -36,6 +19,7 @@ void TransactionNode::Draw()
 
 void TransactionNode::Reset()
 {
+	player_->Reset();
 
 	int32_t i = 0;
 	int32_t count = 0;
@@ -64,7 +48,6 @@ void TransactionNode::Reset()
 			tmpNextdoors.pop_back();
 
 		}
-
 	}
 
 	CollisionManager::GetInstance()->SetMapChip(mapChip_->GetMapChipPtr());
