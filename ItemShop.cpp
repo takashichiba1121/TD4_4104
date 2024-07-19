@@ -36,14 +36,7 @@ void ItemShop::Initialize()
 
 		temp->itemName = static_cast< string >( obj[ "itemName" ] );
 
-		products_[ static_cast< string >( obj[ "Type" ] ) ].push_back(std::move(temp));
-	}
-
-	for ( auto itr = products_.begin(); itr != products_.end(); ++itr )
-	{
-		string temp = itr->first;
-		productKey_.push_back(temp);
-
+		products_.push_back(std::move(temp));
 	}
 
 	SetPriducts();
@@ -86,10 +79,9 @@ void ItemShop::SetSlect(uint8_t selectNum)
 
 void ItemShop::SetPriducts()
 {
-	nowProductType = productKey_[ GetRand(productKey_.size() - 1) ];
 	for ( int i = 0; i < selectProducts_.size(); i++ )
 	{
-		selectProducts_[ i ] = products_[ nowProductType ][ GetRand(products_[ nowProductType ].size() - 1) ].get();
+		selectProducts_[ i ] = products_[ GetRand(products_.size() - 1) ].get();
 
 	}
 }
