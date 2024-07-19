@@ -113,7 +113,8 @@
     <ClCompile Include="Source\NPC\DealDaemon.cpp" />
     <ClCompile Include="Source\NPC\NPCManager.cpp" />
     <ClCompile Include="Source\NPC\NPC.cpp" />
-    <ClCompile Include="ItemShop.cpp" />
+
+    <ClCompile Include="Source\Deal\ItemShop.cpp" />
     <ClCompile Include="Source\Scene\ClearScene.cpp" />
     <ClCompile Include="Source\Scene\GameOverScene.cpp" />
     <ClCompile Include="Source\Base\BaseEnemy.cpp" />
@@ -199,13 +200,13 @@
     <ClInclude Include="Include\Collision\IShape.h" />
     <ClInclude Include="Include\Collision\RectShape.h" />
     <ClInclude Include="Include\Util\MapChip.h" />
+    <ClInclude Include="Include\Deal\ItemShop.h" />
     <ClInclude Include="Include\NPC\NPC.h" />
     <ClInclude Include="Include\NPC\NPCManager.h" />
     <ClInclude Include="Include\NPC\PowerUpCave.h" />
     <ClInclude Include="PowerUpCave.h" />
     <ClInclude Include="Include\Player\PlayerLeg.h" />
     <ClInclude Include="Include\Player\PlayerLegNormal.h" />
-    <ClInclude Include="ItemShop.h" />
     <ClInclude Include="ThirdParty\imgui\imconfig.h" />
     <ClInclude Include="ThirdParty\imgui\imgui.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_impl_dx11.h" />
