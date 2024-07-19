@@ -395,6 +395,12 @@ void Player::Draw()
 	DrawFormatString(0,GameConfig::GetWindowHeight()-20,0xffffff,"PlayerHP:%d/%d",hp_,maxHp_);
 }
 
+void Player::Reset()
+{
+	pos_.x = GameConfig::GetGameConfig()->windowWidth / 2;
+	pos_.y = GameConfig::GetGameConfig()->windowHeight / 2;
+}
+
 void Player::Load()
 {
 	std::ifstream file;

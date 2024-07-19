@@ -8,5 +8,6 @@ enum ChipIndex : uint8_t
 	DOOR,
 	ROOM,
 	LOCK_ROOM,
-	WALL
+	WALL,
+	NEXT
 };

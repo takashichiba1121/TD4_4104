@@ -18,14 +18,16 @@ void GameScene::Initialize()
 	
 	mapChip_ = std::make_unique<MapChip>();
 	mapChip_->Initialize();
-	mapChip_->MapLoad("Resources/Export/Map/TestMap.json");
-
-	CollisionManager::GetInstance()->SetMapChip(mapChip_->GetMapChip());
 
 	enemys_ = std::make_unique<EnemyManager>();
 	enemys_->Initialize();
 	enemys_->SetPlayerPtr(player_.get());
 
+	nodeManager_ = NodeManager::GetInstance();
+	nodeManager_->SetMapChip(mapChip_.get());
+	nodeManager_->SetPlayer(player_.get());
+	nodeManager_->Initialize();
+	nodeManager_->StartNodeSet(0);
 	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
 
 }
@@ -36,11 +38,14 @@ void GameScene::Update()
 
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_R) )
 	{
-		SceneManager::GetInstance()->ChangeScene("TITLE");
+		nodeManager_->Reset();
 	}
+
+	nodeManager_->Update();
 
 	player_->Update();
 	enemys_->Update();
+
 
 	CollisionManager::GetInstance()->Update();
 
@@ -66,6 +71,8 @@ void GameScene::Draw()
 	player_->Draw();
 	enemys_->Draw();
 
+	nodeManager_->NodeDrew(100,600);
+	
 	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
 	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");
 	DrawFormatString(0,40,0xffffff,"ATTACK:Z X");

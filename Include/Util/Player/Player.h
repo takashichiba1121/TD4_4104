@@ -114,6 +114,7 @@ public:
 
 	void Draw() override;
 
+	void Reset();
 
 
 private:
