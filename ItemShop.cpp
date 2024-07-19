@@ -61,7 +61,7 @@ void ItemShop::SetPriducts()
 	selectProducts_.clear();
 	for ( int i = 0; selectProducts_.size() < shopNum_; i++ )
 	{
-		if ( products_.size() < 3 )
+		if ( products_.size() < shopNum_ )
 		{
 			for ( int j = 0; j < products_.size(); j++ )
 			{
