@@ -115,6 +115,13 @@
     <ClCompile Include="Source\NPC\NPC.cpp" />
     <ClCompile Include="Source\Deal\ItemShop.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackSpider.cpp" />
+    <ClCompile Include="Source\Node\BaseNode.cpp" />
+    <ClCompile Include="Source\Node\BattleNode.cpp" />
+    <ClCompile Include="Source\Node\HealingNode.cpp" />
+    <ClCompile Include="Source\Node\NodeManager.cpp" />
+    <ClCompile Include="Source\Node\ReinforcementNode.cpp" />
+    <ClCompile Include="Source\Node\ShopNode.cpp" />
+    <ClCompile Include="Source\Node\TransactionNode.cpp" />
     <ClCompile Include="Source\Scene\ClearScene.cpp" />
     <ClCompile Include="Source\Scene\GameOverScene.cpp" />
     <ClCompile Include="Source\Base\BaseEnemy.cpp" />
