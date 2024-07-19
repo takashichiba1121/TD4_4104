@@ -7,6 +7,7 @@ private:
 	Vector2 gravity_;
 	RectShape* shape_;
 
+	int8_t nextElement;
 	ObjectUserData user;
 public:
 

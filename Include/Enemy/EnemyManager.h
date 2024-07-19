@@ -4,6 +4,7 @@
 #include <list>
 #include <memory>
 
+class MapChip;
 class EnemyManager
 {
 private:
@@ -11,8 +12,8 @@ private:
 	int32_t popTime_;
 	const uint32_t POP_INTERVAL = 30;
 	const uint32_t MAX_POP_ENEMY_NUM = 15;
-	const uint32_t MAX_ENEMY_NUM = 3;
-
+	const uint32_t MAX_ENEMY_NUM = 1;
+	MapChip* mapchip_;
 	static BaseObject* playerPtr_;
 	size_t popEnemyCount_;
 	size_t deadEnemyCount_;
@@ -23,6 +24,7 @@ public:
 	void Initialize();
 	void Update();
 	void Draw();
+	void SetMapChip(MapChip* mapchip);
 	size_t GetEnemyCount();
 	bool GameEnd();
 	void EnemysClear();

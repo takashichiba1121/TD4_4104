@@ -24,3 +24,8 @@ void BaseEnemy::SetPlayerPtr(BaseObject* ptr)
 {
 	playerPtr_ = ptr;
 }
+
+void BaseEnemy::SetMapChip(MapChip* mapptr)
+{
+	mapchip_ = mapptr;
+}

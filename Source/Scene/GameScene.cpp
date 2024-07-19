@@ -21,6 +21,7 @@ void GameScene::Initialize()
 
 	enemys_ = std::make_unique<EnemyManager>();
 	enemys_->Initialize();
+	enemys_->SetMapChip(mapChip_.get());
 	enemys_->SetPlayerPtr(player_.get());
 
 	nodeManager_ = NodeManager::GetInstance();

@@ -2,6 +2,7 @@
 #include"DxlibInclude.h"
 #include "CollisionManager.h"
 #include "Player.h"
+#include "MapChip.h"
 
 using namespace std;
 void WalkEnemy::Initialize()
@@ -22,6 +23,7 @@ void WalkEnemy::Initialize()
 	{
 		velocity_ = { -1,0 };
 	}
+	speed_ = 1;
 	user.tag = "WalkEnemy";
 	userData_ = &user;
 
@@ -66,9 +68,20 @@ void WalkEnemy::Move()
 	{
 		gravity_ = { 0,0 };
 	}
+	 nextElement = mapchip_->GetPosElement(pos_.x +(( velocity_.x * speed_ )) + ( drawSize_.x / 2 ),
+		pos_.y + ( drawSize_.y / 2 ) + 1);
+
+	if (nextElement == NEXT || nextElement == NONE)
+	{
+		velocity_.x *= -1;
+	}
+
 
 	SetMapChipSpeed({ velocity_ * speed_,gravity_ });
 	shape_->SetCenter(pos_);
+
+
+	
 }
 
 void WalkEnemy::Draw()
@@ -76,6 +89,8 @@ void WalkEnemy::Draw()
 	if ( !islive_ ) return;
 	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2,
 		pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,0),true);
+	DrawFormatString(100,100,0xffffff,"%d",nextElement);
+
 
 }
 
