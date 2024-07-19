@@ -13,6 +13,7 @@ struct Item
 {
 	int32_t power;
 	int32_t prise;
+	int32_t time;
 	std::string itemName;
 	std::string statusName;
 };

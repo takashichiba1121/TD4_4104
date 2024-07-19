@@ -32,6 +32,8 @@ void ItemShop::Initialize()
 
 		temp->prise = static_cast< int32_t >( obj[ "prise" ] );
 
+		temp->time = static_cast< int32_t >( obj[ "Time" ] );
+
 		temp->statusName = static_cast< string >( obj[ "statusName" ] );
 
 		temp->itemName = static_cast< string >( obj[ "itemName" ] );

@@ -109,7 +109,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ItemShop.cpp" />
+    <ClCompile Include="Source\Deal\ItemShop.cpp" />
     <ClCompile Include="Source\Scene\ClearScene.cpp" />
     <ClCompile Include="Source\Scene\GameOverScene.cpp" />
     <ClCompile Include="Source\Base\BaseEnemy.cpp" />
@@ -193,7 +193,7 @@
     <ClInclude Include="Include\Collision\IShape.h" />
     <ClInclude Include="Include\Collision\RectShape.h" />
     <ClInclude Include="Include\Util\MapChip.h" />
-    <ClInclude Include="ItemShop.h" />
+    <ClInclude Include="Include\Deal\ItemShop.h" />
     <ClInclude Include="ThirdParty\imgui\imconfig.h" />
     <ClInclude Include="ThirdParty\imgui\imgui.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_impl_dx11.h" />
