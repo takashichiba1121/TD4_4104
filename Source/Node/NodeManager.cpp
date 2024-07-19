@@ -47,7 +47,14 @@ void NodeManager::Initialize()
 			nodeProbabilities[ i ] = config->nodeProbabilities[ i ];
 		}
 	}
-	
+
+	reinforcementImg = LoadGraph("Resources/Node/reinforcement.png");
+	transactionImg = LoadGraph("Resources/Node/transaction.png");
+	battleImg = LoadGraph("Resources/Node/battle.png");
+	shopImg = LoadGraph("Resources/Node/shop.png");
+	healingImg = LoadGraph("Resources/Node/healing.png");
+	startImg = LoadGraph("Resources/Node/start.png");
+
 	distribution = std::discrete_distribution<int>(nodeProbabilities,nodeProbabilities + NodeType::TYPE_NUM);
 
 		for ( size_t i = 0; i < config->nodeProbabilities.size(); i++ )
@@ -71,7 +78,7 @@ void NodeManager::Initialize()
 
 	for ( int k = 0; k < PATHS; k++ )
 	{
-		int j = startingPoints[ GetRand(0,startingPoints.size() - 1) ];
+		int j = startingPoints[ DxLib::GetRand(startingPoints.size() - 1) ];
 
 		int current_j = j;
 		for ( int i = 0; i < FLOORS - 1; ++i )
@@ -105,7 +112,7 @@ void NodeManager::Initialize()
 	rooms_[ NodeType::BATTLE ] = std::make_unique<BattleNode>();
 	rooms_[ NodeType::SHOP ] = std::make_unique<ShopNode>();
 	rooms_[ NodeType::HEALING ] = std::make_unique<HealingNode>();
-	rooms_[ NodeType::NONE ] = std::make_unique<StartNode>();
+	rooms_[ NodeType::START ] = std::make_unique<StartNode>();
 
 	for ( auto& room : rooms_ )
 	{
@@ -159,7 +166,7 @@ void NodeManager::Reset()
 
 	for ( int k = 0; k < PATHS; k++ )
 	{
-		int j = startingPoints[ GetRand(0,startingPoints.size() - 1) ];
+		int j = startingPoints[ DxLib::GetRand(startingPoints.size() - 1) ];
 
 		int current_j = j;
 		for ( int i = 0; i < FLOORS - 1; ++i )
@@ -178,7 +185,6 @@ void NodeManager::Reset()
 			startNodes_.push_back(&nodes_[ 0 ][ point ]);
 			nodes_[ 0 ][ point ].type.value = NodeType::START;
 			drawNode_.push_back(&nodes_[ 0 ][ point ]);
-		}
 		}
 
 	for ( auto& node : drawNode_ )
@@ -199,14 +205,41 @@ void NodeManager::Reset()
 
 void NodeManager::NodeDrew(int32_t leftBottomX,int32_t leftBottomY)
 {
-	for (auto& node : drawNode_ )
+	for ( auto& node : drawNode_ )
 	{
-		DrawCircle(leftBottomX +node->position.x,leftBottomY + node->position.y,3,GetColor(255,255,255));
-
 		for ( size_t k = 0; k < node->nexts.size(); k++ )
 		{
-			DrawLine(leftBottomX + node->position.x,leftBottomY +node->position.y,leftBottomX + node->nexts[ k ]->position.x,leftBottomY + node->nexts[ k ]->position.y,GetColor(255,255,255));
+			DrawLine(leftBottomX + node->position.x,leftBottomY + node->position.y,leftBottomX + node->nexts[ k ]->position.x,leftBottomY + node->nexts[ k ]->position.y,GetColor(255,255,255));
 		}
+	}
+
+	for ( auto& node : drawNode_ )
+	{
+		switch ( node->type.value )
+		{
+		case NodeType::Type::REINFORCEMENT:
+			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,reinforcementImg,true);
+			break;
+		case NodeType::Type::TRANSACTION:
+			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,transactionImg,true);
+			break;
+		case NodeType::Type::BATTLE:
+			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,battleImg,true);
+			break;
+		case NodeType::Type::SHOP:
+			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,shopImg,true);
+			break;
+		case NodeType::Type::HEALING:
+			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,healingImg,true);
+			break;
+		case NodeType::Type::START:
+			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,startImg,true);
+			break;
+		default:
+			DrawCircle(leftBottomX + selectNode_->position.x,leftBottomY + selectNode_->position.y,32,GetColor(255,255,255));
+			break;
+		}
+
 	}
 
 	DrawCircle(leftBottomX + selectNode_->position.x,leftBottomY + selectNode_->position.y,3,GetColor(255,0,0));
@@ -273,7 +306,7 @@ std::vector<int> NodeManager::GetRandomStartingPoints()
 
 		for ( int i = 0; i < START_POINT; ++i )
 		{
-			int startingPoint = GetRand(0,MAP_WIDTH - 1);
+			int startingPoint = DxLib::GetRand(MAP_WIDTH - 1);
 
 			if ( find(yCoordinates.begin(),yCoordinates.end(),startingPoint) == yCoordinates.end() )
 			{
@@ -339,7 +372,6 @@ int NodeManager::SetupConnection(int i,int j)
 		currentRoom->nextDoorsNum += 1;
 		nextRoom->previews.push_back(currentRoom);
 		currentRoom->type.value = NodeType::NONE;
-		drawNode_.push_back(currentRoom);
 	}
 
 	return nextRoom->column;
@@ -397,10 +429,10 @@ void NodeManager::SetupRoomTypes()
 					SetRoomRandomly(next_room);
 					drawNode_.push_back(next_room);
 				}
-				}
 			}
 		}
 	}
+}
 
 void NodeManager::SetRoomRandomly(Node* roomToSet)
 {
@@ -447,12 +479,4 @@ bool NodeManager::RoomHasParentOfType(Node* room,NodeType type)
 	}
 
 	return false;
-}
-
-void NodeManager::SetRoomRandomly(Node* roomToSet)
-{
-	NodeType typeCandidate;
-	std::mt19937 gen(std::time(nullptr));
-	typeCandidate.value = static_cast< NodeType::Type >( distribution(gen) );
-	roomToSet->type = typeCandidate;
 }

@@ -20,9 +20,9 @@
     },
     "Node":{
         "name": "Node",
-        "XDistance":30,
-        "YDistance":25,
-        "PlacementRandomness": 10,
+        "XDistance":60,
+        "YDistance":50,
+        "PlacementRandomness": 20,
         "Floors":15,
         "Width":7,
         "Paths":5,
