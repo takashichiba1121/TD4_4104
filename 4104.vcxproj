@@ -110,7 +110,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Enemy\BaseEnemy.cpp" />
     <ClCompile Include="Source\Node\BaseNode.cpp" />
     <ClCompile Include="Source\Node\BattleNode.cpp" />
     <ClCompile Include="Source\Node\HealingNode.cpp" />
