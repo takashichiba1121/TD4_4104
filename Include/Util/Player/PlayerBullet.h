@@ -2,7 +2,9 @@
 #include"Vector2.h"
 #include"Vector3.h"
 #include<memory>
-class PlayerBullet
+#include"IObject.h"
+#include"RectShape.h"
+class PlayerBullet:public IObject
 {
 public:
 	enum class Phase
@@ -26,7 +28,15 @@ protected:
 
 	uint32_t chageTimer_ = 0;
 
+	float playerPow_;
+
 	Phase phase_ = Phase::Charge;
+
+	const Vector2 SIZE_ = { 10,10 };
+
+	RectShape* shape_;
+
+	const uint32_t POW_ = 5;
 
 public:
 
@@ -36,7 +46,7 @@ public:
 	///<param name="velocity">速度</param>
 	///<param name="position">初期位置</param>
 	///<param name="life">消えるまでの時間</param>
-	void Initialize(Vector2 velocity,Vector2 position,uint32_t life);
+	void Initialize(Vector2 velocity,Vector2 position,uint32_t life,float PlayerPow);
 
 	///<summary>
 	///毎フレーム処理
@@ -53,7 +63,7 @@ public:
 	///<summary>
 	///衝突を検出したら呼び出されたるコールバック関数
 	///</summary>
-	virtual void OnCollision();
+	void OnCollision() override;
 
 /// <summary>
 /// 消えるべきか

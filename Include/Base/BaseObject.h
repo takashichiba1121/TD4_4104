@@ -6,6 +6,13 @@
 #include "IObject.h"
 #include "RectShape.h"
 #include "IShape.h"
+
+struct ObjectUserData
+{
+	std::string tag;
+
+};
+
 class BaseObject:public IObject
 {
 protected:
@@ -18,6 +25,7 @@ protected:
 	Vector2 drawSize_ = { 35,61 };
 	float speed_;
 	Vector2 velocity_;
+	ObjectUserData tag;
 public:
 	virtual void Initialize() = 0;
 	virtual void Update() = 0;

@@ -1,10 +1,12 @@
 #include "EnemyManager.h"
 #include "DxlibInclude.h"
+#include "GameConfig.h"
 using namespace std;
 std::list<std::unique_ptr<BaseEnemy>> EnemyManager::enemylist_;
 BaseObject* EnemyManager::playerPtr_ = nullptr;
 void EnemyManager::Initialize()
 {
+	enemylist_.clear();
 	popTime_ = POP_INTERVAL;
 }
 
@@ -13,15 +15,16 @@ void EnemyManager::Pop()
 	popTime_--;
 	if ( popTime_ <= 0 )
 	{
-		if ( enemylist_.size() >= MAX_ENEMY_NUM ) return;
+		if ( enemylist_.size() >= MAX_ENEMY_NUM || popEnemyCount_ >= MAX_POP_ENEMY_NUM) return;
 		popTime_ = POP_INTERVAL;
-		if (GetRand(2))
+		if (GetRand(2) - 1)
 		{
 			unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
 			temp->Initialize();
 			temp->SetPlayerPtr(playerPtr_);
 			temp->SetPos({ GetRand(850) + 50.f,100.f });
 			enemylist_.push_back(move(temp));
+			popEnemyCount_++;
 		}
 		else
 		{
@@ -29,6 +32,7 @@ void EnemyManager::Pop()
 			temp->Initialize();
 			temp->SetPos({ GetRand(850) + 50.f,100.f });
 			enemylist_.push_back(move(temp));
+			popEnemyCount_++;
 		}
 	}
 }
@@ -66,6 +70,11 @@ void EnemyManager::Update()
 	{
 		itr->Update();
 	}
+
+	deadEnemyCount_ += enemylist_.remove_if([](unique_ptr<BaseEnemy>& enemy )
+	{
+		return enemy->IsLive() == false;
+	});
 }
 
 void EnemyManager::Draw()
@@ -74,4 +83,24 @@ void EnemyManager::Draw()
 	{
 		itr->Draw();
 	}
+	DrawFormatString(GameConfig::GetWindowWidth() - 200,10,0xffffff,"KillEnemy %d / %d",deadEnemyCount_,MAX_POP_ENEMY_NUM);
+}
+
+size_t EnemyManager::GetEnemyCount()
+{
+	return enemylist_.size();
+}
+
+bool EnemyManager::GameEnd()
+{
+	if ( enemylist_.empty() && popEnemyCount_ >= MAX_POP_ENEMY_NUM )
+	{
+		return true;
+	}
+	return false;
+}
+
+void EnemyManager::EnemysClear()
+{
+	enemylist_.clear();
 }

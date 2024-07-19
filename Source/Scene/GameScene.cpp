@@ -6,10 +6,10 @@
 
 #include"DxlibInclude.h"
 #include"Input.h"
+#include"PlayerBulletManager.h"
+#include"GameConfig.h"
 
-#include<DxLib.h>
-
-
+#include<SceneManager.h>
 
 void GameScene::Initialize()
 {
@@ -28,6 +28,8 @@ void GameScene::Initialize()
 	nodeManager_->SetPlayer(player_.get());
 	nodeManager_->Initialize();
 	nodeManager_->StartNodeSet(0);
+	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
+
 }
 
 void GameScene::Update()
@@ -46,16 +48,34 @@ void GameScene::Update()
 
 
 	CollisionManager::GetInstance()->Update();
+
+	//TODO
+	if ( enemys_->GameEnd())
+	{
+		SceneManager::GetInstance()->ChangeScene("CLEAR");
+	}
+
+	//TODO
+	if ( player_->GetHp()<=0 )
+	{
+		SceneManager::GetInstance()->ChangeScene("GAMEOVER");
+	}
 }
 
 void GameScene::Draw()
 {
+	DrawGraph(0,0,backGround_,true);
+
 	mapChip_->Draw({0,0});
 	
 	player_->Draw();
 	enemys_->Draw();
 
 	nodeManager_->NodeDrew(100,600);
+	
+	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
+	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");
+	DrawFormatString(0,40,0xffffff,"ATTACK:Z X");
 }
 
 void GameScene::SpriteDraw()
@@ -64,4 +84,5 @@ void GameScene::SpriteDraw()
 
 void GameScene::Finalize()
 {
+	PlayerBulletManager::Instance()->Clear();
 }

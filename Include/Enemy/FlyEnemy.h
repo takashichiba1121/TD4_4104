@@ -14,6 +14,8 @@ private:
 	const int64_t ATTACK_INTERVAL = 120;
 	const int64_t ATTACK_TIME = 10;
 	RectShape* shape_;
+
+	ObjectUserData user;
 public:
 
 	void Initialize() override;

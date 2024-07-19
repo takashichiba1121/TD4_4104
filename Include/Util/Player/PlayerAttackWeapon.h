@@ -1,5 +1,6 @@
 #pragma once
 #include "PlayerAttack.h"
+#include"RectShape.h"
 class PlayerAttackWeapon :
     public PlayerAttack
 {
@@ -10,16 +11,24 @@ private:
 
 	const float LAST_ATTACK_TIME_ = 1;
 
-	Vector2 attackPos_ = { 0,0 };
+	Vector2 ATTACK_POS_ = { 0,0 };
 
-	Vector2 colisionSize_ = { 200,50 };
+	Vector2 COLISION_SIZE_ = { 200,50 };
 
 	const uint32_t INTERVAL_ = 30;
 
-	const float Pow = 0;
+	const float POW = 0;
+
+	float playerPow;
+
+	Vector2 DrawPos_;
+
+	RectShape* shape_;
 
 public:
-	void AttackInit(const Vector2& playerPos,bool direction) override;
+	void Initialize() override;
+
+	void AttackInit(const Vector2& playerPos,bool direction,float pow) override;
 
 	void Attack() override;
 
@@ -34,7 +43,7 @@ public:
 	}
 
 	float GetPow() override {
-		return Pow;
+		return POW;
 	}
 };
 

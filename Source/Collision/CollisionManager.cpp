@@ -38,7 +38,7 @@ void CollisionManager::Update()
 
 		objectA->Update();
 
-		if ( !objectA->isCollision_ )
+		if ( !objectA->isCollision_ || !objectA ->shape_)
 		{
 			continue;
 		}
@@ -48,11 +48,12 @@ void CollisionManager::Update()
 
 		for ( ; itrB != objects_.end(); ++itrB )
 		{
-			IObject* objectB = *itrB;
+			IObject* objectA = itrA._Ptr->_Myval;
+			IObject* objectB = itrB._Ptr->_Myval;
 
 			objectB->Update();
 
-			if ( !objectB->isCollision_ )
+			if ( !objectB->isCollision_ || !objectB->shape_ )
 			{
 				continue;
 			}

@@ -22,6 +22,9 @@ void WalkEnemy::Initialize()
 	{
 		velocity_ = { -1,0 };
 	}
+	user.tag = "WalkEnemy";
+	userData_ = &user;
+
 	islive_ = true;
 	shape_ = new RectShape();
 	shape_->SetRadius(drawSize_ / 2);
@@ -30,10 +33,18 @@ void WalkEnemy::Initialize()
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
 	CollisionManager::GetInstance()->AddObject(this);
 	attackPower_ = 1;
+
+	hp_ = 10;
+
 }
 
 void WalkEnemy::Update()
 {
+	immotalTime_--;
+	if ( immotalTime_ <= 0 )
+	{
+		immortal_ = false;
+	}
 	Move();
 	shape_->SetCenter({ pos_.x , pos_.y });
 }
@@ -57,7 +68,7 @@ void WalkEnemy::Move()
 	}
 
 	SetMapChipSpeed({ velocity_ * speed_,gravity_ });
-
+	shape_->SetCenter(pos_);
 }
 
 void WalkEnemy::Draw()
@@ -70,8 +81,11 @@ void WalkEnemy::Draw()
 
 void WalkEnemy::OnCollision()
 {
-	if ( GetCollisionInfo().object->GetCollisionAttribute() & COLLISION_ATTRIBUTE_PLAYRE )
+	if ( GetCollisionInfo().userData )
 	{
-		dynamic_cast< Player* >( GetCollisionInfo().object )->Damage(attackPower_);
+		if ( static_cast< UserData* >( GetCollisionInfo().userData )->tag == "Player" )
+		{
+			dynamic_cast< Player* >( GetCollisionInfo().object )->Damage(attackPower_);
+		}
 	}
 }

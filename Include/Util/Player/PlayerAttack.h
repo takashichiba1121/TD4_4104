@@ -1,19 +1,15 @@
 #pragma once
 #include"Vector2.h"
 #include<memory>
-class PlayerAttack
+#include"IObject.h"
+#include"RectShape.h"
+class PlayerAttack:public IObject
 {
 public:
 
-	enum class AttackType
-	{
-		Small,
-		Big,
-	};
+	virtual void Initialize()=0;
 
-public:
-
-	virtual void AttackInit(const Vector2& playerPos,bool direction) = 0;
+	virtual void AttackInit(const Vector2& playerPos,bool direction,float pow) = 0;
 
 	virtual void Attack() = 0;
 
