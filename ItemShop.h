@@ -39,7 +39,7 @@ private:
 	int32_t boxDist_ = 400;
 public:
 	void Initialize();
-	bool StatusChenge();
+	bool ItemSelect();
 	void SetSlect(uint8_t selectNum);
 	void SetPriducts();
 	void SetPlayer(Player* player);

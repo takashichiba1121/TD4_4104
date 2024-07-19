@@ -42,32 +42,10 @@ void ItemShop::Initialize()
 	SetPriducts();
 }
 
-bool ItemShop::StatusChenge()
+bool ItemShop::ItemSelect()
 {
 	Item* product = selectProducts_[ selectNum_ ];
 	bool isBuy = false;
-	switch ( magic_enum::enum_cast< Status >( product->statusName ).value() )
-	{
-	case HP:
-		break;
-	case ATK:
-		
-		break;
-	case DEF:
-		
-		break;
-	case SPD:
-
-		break;
-	case CRIT:
-
-		break;
-	case CDMG:
-
-		break;
-	default:
-		break;
-	}
 	
 	return isBuy;
 }
