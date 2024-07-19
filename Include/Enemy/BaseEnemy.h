@@ -1,9 +1,12 @@
 #pragma once
 #include "BaseObject.h"
 
+
+class MapChip;
 class BaseEnemy:public BaseObject
 {
 protected:
+	MapChip* mapchip_;
 	ObjectUserData name_;
 	uint32_t id_;
 	bool immortal_ = false;
@@ -18,5 +21,6 @@ public:
 	void SetPos(Vector2 pos);
 	void SetVelocity(Vector2 velocity);
 	void SetPlayerPtr(BaseObject* ptr);
+	void SetMapChip(MapChip* mapptr);
 };
 
