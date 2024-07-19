@@ -113,6 +113,7 @@
     <ClCompile Include="Source\NPC\DealDaemon.cpp" />
     <ClCompile Include="Source\NPC\NPCManager.cpp" />
     <ClCompile Include="Source\NPC\NPC.cpp" />
+    <ClCompile Include="ItemShop.cpp" />
     <ClCompile Include="Source\Scene\ClearScene.cpp" />
     <ClCompile Include="Source\Scene\GameOverScene.cpp" />
     <ClCompile Include="Source\Base\BaseEnemy.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="PowerUpCave.h" />
     <ClInclude Include="Include\Util\Player\PlayerLeg.h" />
     <ClInclude Include="Include\Util\Player\PlayerLegNormal.h" />
+    <ClInclude Include="ItemShop.h" />
     <ClInclude Include="ThirdParty\imgui\imconfig.h" />
     <ClInclude Include="ThirdParty\imgui\imgui.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_impl_dx11.h" />
