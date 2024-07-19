@@ -7,6 +7,7 @@
 #include"BaseObject.h"
 #include"PlayerLeg.h"
 #include"PlayerLegNormal.h"
+#include"ItemShop.h"
 
 struct UserData
 {
@@ -18,7 +19,7 @@ class Player:public BaseObject
 private:
 
 #pragma region 変更ステータス
-	float changeAcl_=1;
+	float changeSpd_=1;
 
 	float changePow_=1;
 
@@ -50,6 +51,10 @@ private:
 	const uint32_t DAMAGE_INTERVAL_MAX_ = 16;
 
 	uint32_t DamageInterval_ = DAMAGE_INTERVAL_MAX_;
+
+	std::list<Item> items_;
+
+	uint32_t selectItems_ = 1;
 public:
 	void Initialize() override;
 
@@ -96,4 +101,8 @@ public:
 	}
 
 	void Draw() override;
+
+	bool ItemGet(Item newItem);
+
+	void UseItem();
 };

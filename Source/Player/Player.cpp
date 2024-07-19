@@ -53,7 +53,15 @@ void Player::Initialize()
 
 	leg_ = std::make_unique<PlayerLegNormal>();
 
-	leg_->Initialize(&velocity_,&direction_,&changeAcl_);
+	leg_->Initialize(&velocity_,&direction_,&changeSpd_);
+
+	Item item;
+
+	item.power = 50;
+
+	item.statusName = "ATK";
+
+	ItemGet(item);
 }
 
 void Player::Update()
@@ -61,6 +69,24 @@ void Player::Update()
 	if ( DamageInterval_ < DAMAGE_INTERVAL_MAX_ )
 	{
 		DamageInterval_++;
+	}
+
+	if (Input::Instance()->TriggerKey(KEY_INPUT_1) )
+	{
+		selectItems_ = 1;
+	}
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_2) )
+	{
+		selectItems_ = 2;
+	}
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_3) )
+	{
+		selectItems_ = 3;
+	}
+
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_RETURN) )
+	{
+		UseItem();
 	}
 
 	leg_->Move(GetOnDir() & 0b1 << OnDir::BOTTOM,leftArm_->IsAttack() || rightArm_->IsAttack());
@@ -85,7 +111,7 @@ void Player::Update()
 
 	ImGui::Text("Pow:%1.2f",changePow_);
 
-	ImGui::Text("Acl:%1.2f",changeAcl_);
+	ImGui::Text("Acl:%1.2f",changeSpd_);
 
 	ImGui::Text("Def:%1.2f",changeDef_);
 
@@ -187,12 +213,12 @@ bool Player::ChangeLeg(std::string legName,uint32_t cost)
 
 	leg_->cost = cost;
 
-	leg_->Initialize(&velocity_,&direction_,&changeAcl_);
+	leg_->Initialize(&velocity_,&direction_,&changeSpd_);
 }
 
 bool Player::AddSpd(int32_t spd)
 {
-	changeAcl_ += float(spd) / 100.0f;//パーセントを実数値に戻す
+	changeSpd_ += float(spd) / 100.0f;//パーセントを実数値に戻す
 
 	return true;
 }
@@ -234,11 +260,11 @@ bool Player::AddCdmg(int32_t Cdmg)
 }
 bool Player::SubSpd(int32_t spd)
 {
-	if ( changeAcl_ - float(spd) / 100.0f <= 0 )
+	if ( changeSpd_ - float(spd) / 100.0f <= 0 )
 	{
 		return false;
 	}
-	changeAcl_ -= float(spd) / 100.0f;//パーセントを実数値に戻す
+	changeSpd_ -= float(spd) / 100.0f;//パーセントを実数値に戻す
 
 	return true;
 }
@@ -326,4 +352,66 @@ void Player::Draw()
 	}
 
 	DrawFormatString(0,GameConfig::GetWindowHeight() - 20,0xffffff,"PlayerHP:%d/%d",hp_,maxHp_);
+}
+
+bool Player::ItemGet(Item newItem)
+{
+	if ( items_.size() < 3 )
+	{
+		items_.push_back(newItem);
+
+		return true;
+	}
+	return false;
+}
+
+void Player::UseItem()
+{
+	if ( items_.size() == 0 && items_.size() < selectItems_ )
+	{
+		return ;
+	}
+
+	std::list<Item>::iterator  itr = items_.begin();
+	uint16_t num = 0;
+
+	while ( itr != items_.end() )
+	{
+		num++;
+		if(num==selectItems_)
+		{
+			if (itr->statusName=="HP" )
+			{
+				hp_ += itr->power;
+				if(hp_>maxHp_)
+				{
+					hp_ = maxHp_;
+				}
+			}
+			if ( itr->statusName == "ATK" )
+			{
+				changePow_ += float(itr->power) / 100.0f;
+			}
+			if ( itr->statusName == "DEF" )
+			{
+				changeDef_ += float(itr->power) / 100.0f;
+			}
+			if ( itr->statusName == "SPD" )
+			{
+				changeSpd_ += float(itr->power) / 100.0f;
+			}
+			if ( itr->statusName == "CRIT" )
+			{
+				changeCrit_ += float(itr->power) / 100.0f;
+			}
+			if ( itr->statusName == "CDMG" )
+			{
+				changeCdmg_ += float(itr->power) / 100.0f;
+			}
+			items_.erase(itr);
+			break;
+		}
+
+		itr++;
+	}
 }

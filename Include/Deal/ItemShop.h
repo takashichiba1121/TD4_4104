@@ -18,15 +18,6 @@ struct Item
 	std::string statusName;
 };
 
-enum Status
-{
-	HP,
-	ATK,
-	DEF,
-	SPD,
-	CRIT,
-	CDMG
-};
 
 class ItemShop
 {
