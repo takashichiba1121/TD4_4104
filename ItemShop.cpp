@@ -57,10 +57,36 @@ void ItemShop::SetSlect(uint8_t selectNum)
 
 void ItemShop::SetPriducts()
 {
-	for ( int i = 0; i < selectProducts_.size(); i++ )
+	int inputItem = 0;
+	selectProducts_.clear();
+	for ( int i = 0; selectProducts_.size() < shopNum_; i++ )
 	{
-		selectProducts_[ i ] = products_[ GetRand(products_.size() - 1) ].get();
+		if ( products_.size() < 3 )
+		{
+			for ( int j = 0; j < products_.size(); j++ )
+			{
+				selectProducts_.push_back(products_[ j ].get());
+			}
+			break;
+		}
 
+		Item* temp = products_[ GetRand(products_.size() - 1) ].get();
+		bool inputedItem = false;
+		for ( int j = 0; j < selectProducts_.size(); j++ )
+		{
+			if ( temp == selectProducts_[ j ] )
+			{
+				inputedItem = true;
+				break;
+			}
+		}
+
+		if ( inputedItem )
+		{
+			continue;
+		}
+
+		selectProducts_.push_back(temp);
 	}
 }
 

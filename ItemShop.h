@@ -31,8 +31,9 @@ class ItemShop
 {
 private:
 	Player* playerPtr_;
-	std::array<Item*,3> selectProducts_;
+	std::vector<Item*> selectProducts_;
 	uint8_t selectNum_ = 0;
+	uint8_t shopNum_ = 0;
 	std::vector<std::unique_ptr<Item>> products_;
 	Vector2 boxLeftTop_ = { 200,200 };
 	Vector2 boxSize_ = { 200,300 };
