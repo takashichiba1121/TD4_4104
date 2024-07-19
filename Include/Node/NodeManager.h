@@ -24,11 +24,18 @@ private:
 	int oldRand = 0;
 	int oldRandomJ = 0;
 
+	int32_t reinforcementImg;
+	int32_t transactionImg;
+	int32_t battleImg;
+	int32_t shopImg;
+	int32_t healingImg;
+	int32_t startImg;
+
 	int32_t nodeProbabilities[ NodeType::TYPE_NUM ] = {};
 
 	// 確率分布を作成する
 	std::discrete_distribution<int> distribution;
-	std::array<std::unique_ptr<BaseNode>,NodeType::TYPE_NUM - 1>rooms_;
+	std::array<std::unique_ptr<BaseNode>,NodeType::TYPE_NUM - 2>rooms_;
 	std::list<Node*> drawNode_;
 
 	BaseNode* node_ = nullptr;

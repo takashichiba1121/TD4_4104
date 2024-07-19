@@ -9,6 +9,7 @@ public:
 		BATTLE,//バトル
 		SHOP,//アイテム
 		HEALING,//回復
+		START,//スタート
 		NONE,//設定なし
 		NO_CHILDREN,//子なし
 
