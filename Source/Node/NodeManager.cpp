@@ -352,7 +352,6 @@ int NodeManager::SetupConnection(int i,int j)
 		currentRoom->nextDoorsNum += 1;
 		nextRoom->previews.push_back(currentRoom);
 		currentRoom->type.value = NodeType::NONE;
-		drawNode_.push_back(currentRoom);
 	}
 
 	return nextRoom->column;
@@ -460,12 +459,4 @@ bool NodeManager::RoomHasParentOfType(Node* room,NodeType type)
 	}
 
 	return false;
-}
-
-void NodeManager::SetRoomRandomly(Node* roomToSet)
-{
-	NodeType typeCandidate;
-	std::mt19937 gen(std::time(nullptr));
-	typeCandidate.value = static_cast< NodeType::Type >( distribution(gen) );
-	roomToSet->type = typeCandidate;
 }
