@@ -96,5 +96,4 @@ public:
 	}
 
 	void Draw() override;
-
 };

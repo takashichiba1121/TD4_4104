@@ -102,10 +102,10 @@
     <ClCompile Include="GameCore\Input.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Util\Player\Player.cpp">
+    <ClCompile Include="Source\Player\Player.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Util\Player\PlayerAttackFist.cpp">
+    <ClCompile Include="Source\Player\PlayerAttackFist.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
     <ClCompile Include="Source\Util\Math\Vector2.cpp">
@@ -117,13 +117,13 @@
     <ClCompile Include="Source\Enemy\WalkEnemy.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Util\Player\PlayerAttackWeapon.cpp">
+    <ClCompile Include="Source\Player\PlayerAttackWeapon.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Util\Player\PlayerBulletManager.cpp">
+    <ClCompile Include="Source\Player\PlayerBulletManager.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
-    <ClCompile Include="Include\Util\Player\PlayerBullet.cpp">
+    <ClCompile Include="Include\Player\PlayerBullet.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
     <ClCompile Include="Source\Collision\IShape.cpp">
@@ -195,14 +195,14 @@
     <ClCompile Include="Source\NPC\PowerUpCave.cpp">
       <Filter>ソース ファイル\PowerUp</Filter>
     </ClCompile>
-    <ClCompile Include="Source\NPC\ATKUpCave.cpp">
-      <Filter>ソース ファイル\PowerUp</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Base\BaseEnemy.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Util\Player\PlayerLegNormal.cpp">
+    <ClCompile Include="Source\Player\PlayerLegNormal.cpp">
       <Filter>ソース ファイル\player</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemShop.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -254,13 +254,13 @@
     <ClInclude Include="GameCore\Input.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Util\Player\Player.h">
+    <ClInclude Include="Include\Player\Player.h">
       <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Util\Player\PlayerAttack.h">
+    <ClInclude Include="Include\Player\PlayerAttack.h">
       <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Util\Player\PlayerAttackFist.h">
+    <ClInclude Include="Include\Player\PlayerAttackFist.h">
       <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Util\Math\Vector2.h">
@@ -275,13 +275,13 @@
     <ClInclude Include="Include\Enemy\WalkEnemy.h">
       <Filter>ヘッダー ファイル\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Util\Player\PlayerAttackWeapon.h">
+    <ClInclude Include="Include\Player\PlayerAttackWeapon.h">
       <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Util\Player\PlayerBulletManager.h">
+    <ClInclude Include="Include\Player\PlayerBulletManager.h">
       <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Util\Player\PlayerBullet.h">
+    <ClInclude Include="Include\Player\PlayerBullet.h">
       <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Collision\IObject.h">
@@ -356,17 +356,20 @@
     <ClInclude Include="Include\NPC\PowerUpCave.h">
       <Filter>ヘッダー ファイル\PowerUp</Filter>
     </ClInclude>
-    <ClInclude Include="Include\NPC\ATKUpCave.h">
-      <Filter>ヘッダー ファイル\PowerUp</Filter>
-    </ClInclude>
     <ClInclude Include="ThirdParty\magic_enum.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Util\Player\PlayerLeg.h">
+    <ClInclude Include="Include\Player\PlayerLeg.h">
       <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Util\Player\PlayerLegNormal.h">
+    <ClInclude Include="Include\Player\PlayerLegNormal.h">
       <Filter>ヘッダー ファイル\player</Filter>
+    </ClInclude>
+    <ClInclude Include="PowerUpCave.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemShop.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
