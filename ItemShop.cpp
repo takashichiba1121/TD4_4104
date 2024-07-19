@@ -105,7 +105,8 @@ void ItemShop::Draw()
 			color = 0xf00f00;
 		}
 		DrawBox(( boxLeftTop_.x + i * boxDist_ ),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,color,true);
-		//DrawFormatString(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,
-		//	0xffffff,"%s\n");
+		DrawFormatString(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,
+			0xffffff,"%s\n値段:%d\n%s: +%d",selectProducts_[i]->itemName,selectProducts_[ i ]->prise,
+			selectProducts_[ i ]->statusName,selectProducts_[ i ]->power);
 	}
 }
