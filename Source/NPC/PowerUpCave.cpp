@@ -4,6 +4,7 @@
 #include <json.hpp>
 #include <fstream>
 #include "DxlibInclude.h"
+#include "CollisionManager.h"
 
 using namespace nlohmann;
 using namespace std;
@@ -44,12 +45,6 @@ void PowerUpCave::Initialize()
 		temp->powerRandRange.first = static_cast< int32_t >( obj[ "PowerRange" ][ 0 ] );
 		temp->powerRandRange.second = static_cast< int32_t >( obj[ "PowerRange" ][ 1 ] );
 
-	for ( json& obj : jsonObject)
-	{
-		unique_ptr<PowerUp> temp = make_unique<PowerUp>();
-		temp->powerRandRange.first = static_cast< int32_t >( obj[ "PowerRange" ][ 0 ] );
-		temp->powerRandRange.second = static_cast< int32_t >( obj[ "PowerRange" ][ 1 ] );
-
 		temp->costRandRange.first = static_cast< int32_t >( obj[ "CostRange" ][ 0 ] );
 		temp->costRandRange.second = static_cast< int32_t >( obj[ "CostRange" ][ 1 ] );
 
@@ -66,10 +61,28 @@ void PowerUpCave::Initialize()
 	}
 
 	SetPriducts();
+
+	name_.tag = "PowerUpCave";
+}
+
+
+void PowerUpCave::Update()
+{
+	
+	
+
+}
+
+void PowerUpCave::OnCollision()
+{
 }
 
 bool PowerUpCave::StatusChenge()
 {
+	if ( dealed_ )
+	{
+		return true;
+	}
 	PowerUp* product = selectProducts_[ selectNum_ ];
 	bool isBuy = false;
 	switch ( magic_enum::enum_cast< Status >( product->statusNames.second ).value() )
@@ -152,16 +165,24 @@ void PowerUpCave::SetPlayer(Player* player)
 
 void PowerUpCave::Draw()
 {
-	for ( int i = 0; i < selectProducts_.size(); i++ )
+	if ( selectmode_ && !dealed_)
 	{
-		int64_t color = 0x000000;
-		if ( i == selectNum_ )
+		for ( int i = 0; i < selectProducts_.size(); i++ )
 		{
-			color = 0xf00f00;
+			int64_t color = 0x000000;
+			if ( i == selectNum_ )
+			{
+				color = 0xf00f00;
+			}
+			DrawBox(( boxLeftTop_.x + i * boxDist_ ),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,color,true);
+			DrawFormatString(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,
+				0xffffff,"%s\nPowerUp\nStatus:%s \nUP:%d\nCost\nStatus:%s \nDown:%d",nowProductType.c_str(),selectProducts_[ i ]->statusNames.first.c_str(),
+				selectProducts_[ i ]->power,selectProducts_[ i ]->statusNames.second.c_str(),selectProducts_[ i ]->cost);
 		}
-		DrawBox((boxLeftTop_.x + i * boxDist_),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,color,true);
-		DrawFormatString(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,
-			0xffffff,"%s\nPowerUp\nStatus:%s \nUP:%d\nCost\nStatus:%s \nDown:%d",nowProductType.c_str(),selectProducts_[i]->statusNames.first.c_str(),
-			selectProducts_[i]->power,selectProducts_[i]->statusNames.second.c_str(),selectProducts_[i]->cost);
+	}
+
+	if ( !dealed_ )
+	{
+		DrawBox(pos_.x - hitboxSize_.x/2,pos_.y - hitboxSize_.y/2,pos_.x + hitboxSize_.x/2,pos_.y + hitboxSize_.y/2,0xffffff,true);
 	}
 }
