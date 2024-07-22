@@ -116,4 +116,8 @@ public:
 	void PowerUp();
 
 	void StartPowerUp();
+
+	bool IsPowerUp() {
+		return isPowerUp;
+	}
 };
