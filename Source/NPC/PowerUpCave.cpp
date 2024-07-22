@@ -69,7 +69,7 @@ void PowerUpCave::Initialize()
 void PowerUpCave::Update()
 {
 	
-	
+	selectmode_ = playerPtr_->IsPowerUp();
 
 }
 
