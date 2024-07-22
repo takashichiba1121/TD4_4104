@@ -12,7 +12,7 @@ void WalkEnemy::Initialize()
 	SetMapChipCenter(&pos_);
 	SetMapChipRadius({ drawSize_.x / 2,drawSize_.y / 2 });
 
-
+	ternInverval = 2;
 	gravity_ = { 0,1 };
 	speed_ = GetRand(4)+1;
 	if ( GetRand(2) >= 2 )
@@ -71,11 +71,21 @@ void WalkEnemy::Move()
 	 nextElement = mapchip_->GetPosElement(pos_.x +(( velocity_.x * speed_ )) + ( drawSize_.x / 2 ),
 		pos_.y + ( drawSize_.y / 2 ) + 1);
 
-	if (nextElement == NEXT || nextElement == NONE)
+	if ((nextElement == NEXT || nextElement == NONE) && !tern)
 	{
-		velocity_.x *= -1;
+		velocity_ *= -1;
+		tern = true;
 	}
 
+	if ( tern )
+	{
+		ternInvervalTimer++;
+		if ( ternInverval < ternInvervalTimer )
+		{
+			tern = false;
+			ternInvervalTimer = 0;
+		}
+	}
 
 	SetMapChipSpeed({ velocity_ * speed_,gravity_ });
 	shape_->SetCenter(pos_);
