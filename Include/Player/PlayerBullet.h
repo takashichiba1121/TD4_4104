@@ -4,6 +4,7 @@
 #include<memory>
 #include"IObject.h"
 #include"RectShape.h"
+#include"PlayerAttack.h"
 class PlayerBullet:public IObject
 {
 public:

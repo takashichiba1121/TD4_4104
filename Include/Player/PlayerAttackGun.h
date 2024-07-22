@@ -1,7 +1,7 @@
 #pragma once
 #include "PlayerAttack.h"
 #include"RectShape.h"
-class PlayerAttackWeapon :
+class PlayerAttackGun :
     public PlayerAttack
 {
 private:

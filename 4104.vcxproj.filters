@@ -117,9 +117,6 @@
     <ClCompile Include="Source\Enemy\WalkEnemy.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Player\PlayerAttackWeapon.cpp">
-      <Filter>ソース ファイル\player</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Player\PlayerBulletManager.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
@@ -204,6 +201,12 @@
     <ClCompile Include="Source\Deal\ItemShop.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Player\PlayerAttackGun.cpp">
+      <Filter>ソース ファイル\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player\PlayerAttackSpider.cpp">
+      <Filter>ソース ファイル\player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ThirdParty\imgui\imconfig.h">
@@ -239,9 +242,6 @@
     <ClInclude Include="Include\GameMain.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Scene\GameScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="GameCore\FPS.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -271,9 +271,6 @@
     </ClInclude>
     <ClInclude Include="Include\Enemy\WalkEnemy.h">
       <Filter>ヘッダー ファイル\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Player\PlayerAttackWeapon.h">
-      <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerBulletManager.h">
       <Filter>ヘッダー ファイル\player</Filter>
@@ -370,6 +367,15 @@
     </ClInclude>
     <ClInclude Include="Include\Player\Player.h">
       <Filter>ヘッダー ファイル\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Player\PlayerAttackGun.h">
+      <Filter>ヘッダー ファイル\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Player\PlayerAttackSpider.h">
+      <Filter>ヘッダー ファイル\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\GameScene.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

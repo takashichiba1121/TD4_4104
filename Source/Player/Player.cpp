@@ -4,7 +4,8 @@
 #include"Input.h"
 #include"imgui.h"
 #include"PlayerAttackFist.h"
-#include"PlayerAttackWeapon.h"
+#include"PlayerAttackGun.h"
+#include"PlayerAttackSpider.h"
 #include"PlayerBulletManager.h"
 #include"json.hpp"
 #include <fstream>
@@ -25,7 +26,7 @@ void Player::Initialize()
 
 	leftArm_->Initialize(&pos_,&velocity_,&direction_);
 
-	rightArm_ = std::make_unique<PlayerAttackFist>();
+	rightArm_ = std::make_unique<PlayerAttackSpider>();
 
 	rightArm_->Initialize(&pos_,&velocity_,&direction_);
 
@@ -62,42 +63,54 @@ void Player::Initialize()
 	item.statusName = "ATK";
 
 	ItemGet(item);
+
+	powerUp_ = std::make_unique<PowerUpCave>();
+	powerUp_->Initialize();
+	powerUp_->SetPlayer(this);
 }
 
 void Player::Update()
 {
-	if ( DamageInterval_ < DAMAGE_INTERVAL_MAX_ )
+	if ( isPowerUp )
 	{
-		DamageInterval_++;
+		PowerUp();
 	}
-
-	if (Input::Instance()->TriggerKey(KEY_INPUT_1) )
+	else
 	{
-		selectItems_ = 1;
+
+		if ( DamageInterval_ < DAMAGE_INTERVAL_MAX_ )
+		{
+			DamageInterval_++;
+		}
+
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_1) )
+		{
+			selectItems_ = 1;
+		}
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_2) )
+		{
+			selectItems_ = 2;
+		}
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_3) )
+		{
+			selectItems_ = 3;
+		}
+
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_RETURN) )
+		{
+			UseItem();
+		}
+
+		leg_->Move(GetOnDir() & 0b1 << OnDir::BOTTOM,leftArm_->IsAttack() || rightArm_->IsAttack());
+
+		Attack();
+
+		PlayerBulletManager::Instance()->Update();
+
+		SetMapChipSpeed(velocity_);
+
+		shape_->SetCenter(pos_);
 	}
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_2) )
-	{
-		selectItems_ = 2;
-	}
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_3) )
-	{
-		selectItems_ = 3;
-	}
-
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_RETURN) )
-	{
-		UseItem();
-	}
-
-	leg_->Move(GetOnDir() & 0b1 << OnDir::BOTTOM,leftArm_->IsAttack() || rightArm_->IsAttack());
-
-	Attack();
-
-	PlayerBulletManager::Instance()->Update();
-
-	SetMapChipSpeed(velocity_);
-
-	shape_->SetCenter(pos_);
 
 #ifdef _DEBUG
 
@@ -170,7 +183,7 @@ bool Player::ChangeLeftArm(std::string attackName,uint32_t cost)
 	}
 	if ( attackName == "Weapon" )
 	{
-		leftArm_ = std::make_unique<PlayerAttackWeapon>();
+		leftArm_ = std::make_unique<PlayerAttackGun>();
 	}
 
 	leftArm_->cost = cost;
@@ -191,7 +204,7 @@ bool Player::ChangeRightArm(std::string attackName,uint32_t cost)
 	}
 	if ( attackName == "Weapon" )
 	{
-		rightArm_ = std::make_unique<PlayerAttackWeapon>();
+		rightArm_ = std::make_unique<PlayerAttackGun>();
 	}
 
 	rightArm_->cost = cost;
@@ -351,6 +364,11 @@ void Player::Draw()
 		rightArm_->Draw();
 	}
 
+	if ( isPowerUp )
+	{
+		powerUp_->Draw();
+	}
+
 	DrawFormatString(0,GameConfig::GetWindowHeight() - 20,0xffffff,"PlayerHP:%d/%d",hp_,maxHp_);
 }
 
@@ -414,4 +432,42 @@ void Player::UseItem()
 
 		itr++;
 	}
+}
+
+void Player::PowerUp()
+{
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_LEFT) || Input::Instance()->TriggerKey(KEY_INPUT_A) )
+	{
+		if ( powerUpNum == 0 )
+		{
+			powerUpNum = 2;
+		}
+		else
+		{
+			powerUpNum--;
+		}
+	}
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_RIGHT) || Input::Instance()->TriggerKey(KEY_INPUT_D) )
+	{
+		powerUpNum++;
+		if ( powerUpNum >= 3 )
+		{
+			powerUpNum = 0;
+		}
+	}
+
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) )
+	{
+		powerUp_->StatusChenge();
+
+		isPowerUp = false;
+	}
+	powerUp_->SetSlect(powerUpNum);
+}
+
+void Player::StartPowerUp()
+{
+	isPowerUp = true;
+
+	powerUp_->Initialize();
 }

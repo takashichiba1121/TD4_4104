@@ -114,6 +114,7 @@
     <ClCompile Include="Source\NPC\NPCManager.cpp" />
     <ClCompile Include="Source\NPC\NPC.cpp" />
     <ClCompile Include="Source\Deal\ItemShop.cpp" />
+    <ClCompile Include="Source\Player\PlayerAttackSpider.cpp" />
     <ClCompile Include="Source\Scene\ClearScene.cpp" />
     <ClCompile Include="Source\Scene\GameOverScene.cpp" />
     <ClCompile Include="Source\Base\BaseEnemy.cpp" />
@@ -146,7 +147,7 @@
     <ClCompile Include="Source\Scene\SceneFactrory.cpp" />
     <ClCompile Include="GameCore\SceneManager.cpp" />
     <ClCompile Include="Source\Player\Player.cpp" />
-    <ClCompile Include="Source\Player\PlayerAttackWeapon.cpp" />
+    <ClCompile Include="Source\Player\PlayerAttackGun.cpp" />
     <ClCompile Include="Source\Player\PlayerBulletManager.cpp" />
     <ClCompile Include="Source\Player\PlayerLegNormal.cpp" />
     <ClCompile Include="ThirdParty\imgui\imgui.cpp" />
@@ -164,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\NPC\DealDaemon.h" />
+    <ClInclude Include="Include\Player\PlayerAttackSpider.h" />
     <ClInclude Include="Include\Scene\ClearScene.h" />
     <ClInclude Include="Include\Scene\GameOverScene.h" />
     <ClInclude Include="Include\Util\ChipIndex.h" />
@@ -192,7 +194,7 @@
     <ClInclude Include="Include\Player\Player.h" />
     <ClInclude Include="Include\Player\PlayerAttack.h" />
     <ClInclude Include="Include\Player\PlayerAttackFist.h" />
-    <ClInclude Include="Include\Player\PlayerAttackWeapon.h" />
+    <ClInclude Include="Include\Player\PlayerAttackGun.h" />
     <ClInclude Include="Include\Player\PlayerBullet.h" />
     <ClInclude Include="Include\Player\PlayerBulletManager.h" />
     <ClInclude Include="Include\Collision\IObject.h" />

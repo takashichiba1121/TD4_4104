@@ -1,9 +1,9 @@
-#include "PlayerAttackFist.h"
+#include "PlayerAttackSpider.h"
 #include"DxlibInclude.h"
 #include"CollisionManager.h"
 #include"FlyEnemy.h"
 #include"WalkEnemy.h"
-void PlayerAttackFist::Initialize(Vector2* playerPos,Vector2* velocity,bool* direction)
+void PlayerAttackSpider::Initialize(Vector2* playerPos,Vector2* velocity,bool* direction)
 {
 	playerPos_ = playerPos;
 
@@ -21,7 +21,7 @@ void PlayerAttackFist::Initialize(Vector2* playerPos,Vector2* velocity,bool* dir
 
 	CollisionDisable();
 }
-void PlayerAttackFist::AttackInit(float pow)
+void PlayerAttackSpider::AttackInit(float pow)
 {
 	switch ( attackType_ )
 	{
@@ -56,7 +56,7 @@ void PlayerAttackFist::AttackInit(float pow)
 	}
 }
 
-void PlayerAttackFist::Attack()
+void PlayerAttackSpider::Attack()
 {
 
 	switch ( attackType_ )
@@ -84,7 +84,7 @@ void PlayerAttackFist::Attack()
 				AttackTime_ = combo1.INTERVAL_;
 			}
 		}
-		if( AttackTime_ >= combo1.INTERVAL_)
+		if ( AttackTime_ >= combo1.INTERVAL_ )
 		{
 			if ( nextAttack_ == 0 )
 			{
@@ -92,7 +92,7 @@ void PlayerAttackFist::Attack()
 				AttackTime_ = 0;
 				isGiveDamage_ = false;
 			}
-			else if(nextAttack_==2)
+			else if ( nextAttack_ == 2 )
 			{
 				attackType_ = nextAttack_;
 				nextAttack_ = 0;
@@ -100,7 +100,7 @@ void PlayerAttackFist::Attack()
 				isGiveDamage_ = false;
 				isAttack_ = true;
 				CollisionEnable();
-				shape_->SetRadius(combo2.COLISION_SIZE_/2);
+				shape_->SetRadius(combo2.COLISION_SIZE_ / 2);
 
 				if ( *direction_ )
 				{
@@ -136,7 +136,7 @@ void PlayerAttackFist::Attack()
 				AttackTime_ = combo2.INTERVAL_;
 			}
 		}
-		if( AttackTime_ >= combo2.INTERVAL_)
+		if ( AttackTime_ >= combo2.INTERVAL_ )
 		{
 			if ( nextAttack_ == 0 )
 			{
@@ -194,9 +194,9 @@ void PlayerAttackFist::Attack()
 
 }
 
-void PlayerAttackFist::Draw()
+void PlayerAttackSpider::Draw()
 {
-	if (isAttack_ )
+	if ( isAttack_ )
 	{
 		if ( attackType_ == 1 )
 		{
@@ -219,7 +219,7 @@ void PlayerAttackFist::Draw()
 	}
 }
 
-void PlayerAttackFist::OnCollision()
+void PlayerAttackSpider::OnCollision()
 {
 	if ( GetCollisionInfo().userData && isGiveDamage_ == false )
 	{
@@ -262,3 +262,5 @@ void PlayerAttackFist::OnCollision()
 		}
 	}
 }
+
+

@@ -1,8 +1,8 @@
-#include "PlayerAttackWeapon.h"
+#include "PlayerAttackGun.h"
 #include"DxlibInclude.h"
 #include"PlayerBulletManager.h"
 
-void PlayerAttackWeapon::Initialize(Vector2* playerPos,Vector2* velocity,bool* direction)
+void PlayerAttackGun::Initialize(Vector2* playerPos,Vector2* velocity,bool* direction)
 {
 	playerPos_ = playerPos;
 
@@ -11,7 +11,7 @@ void PlayerAttackWeapon::Initialize(Vector2* playerPos,Vector2* velocity,bool* d
 	velocity_ = velocity;
 }
 
-void PlayerAttackWeapon::AttackInit(float pow)
+void PlayerAttackGun::AttackInit(float pow)
 {
 	if ( isAttack_ == false )
 	{
@@ -36,7 +36,7 @@ void PlayerAttackWeapon::AttackInit(float pow)
 	}
 }
 
-void PlayerAttackWeapon::Attack()
+void PlayerAttackGun::Attack()
 {
 	if ( isAttack_ )
 	{
@@ -51,7 +51,7 @@ void PlayerAttackWeapon::Attack()
 
 }
 
-void PlayerAttackWeapon::Draw()
+void PlayerAttackGun::Draw()
 {
 
 }

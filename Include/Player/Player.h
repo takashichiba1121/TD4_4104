@@ -8,6 +8,7 @@
 #include"PlayerLeg.h"
 #include"PlayerLegNormal.h"
 #include"ItemShop.h"
+#include"PowerUpCave.h"
 
 struct UserData
 {
@@ -55,6 +56,12 @@ private:
 	std::list<Item> items_;
 
 	uint32_t selectItems_ = 1;
+
+	std::unique_ptr<PowerUpCave>powerUp_;
+
+	bool isPowerUp = true;
+
+	uint32_t powerUpNum = 0;
 public:
 	void Initialize() override;
 
@@ -105,4 +112,8 @@ public:
 	bool ItemGet(Item newItem);
 
 	void UseItem();
+
+	void PowerUp();
+
+	void StartPowerUp();
 };

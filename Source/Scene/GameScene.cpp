@@ -25,10 +25,6 @@ void GameScene::Initialize()
 	enemys_ = std::make_unique<EnemyManager>();
 	enemys_->Initialize();
 	enemys_->SetPlayerPtr(player_.get());
-
-	powerUp_ = std::make_unique<PowerUpCave>();
-	powerUp_->Initialize();
-	powerUp_->SetPlayer(player_.get());
 	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
 
 }
@@ -40,37 +36,6 @@ void GameScene::Update()
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_R) )
 	{
 		SceneManager::GetInstance()->ChangeScene("TITLE");
-	}
-
-	if ( isPowerUp )
-	{
-		if ( Input::Instance()->TriggerKey(KEY_INPUT_LEFT) || Input::Instance()->TriggerKey(KEY_INPUT_A) )
-		{
-			if ( powerUpNum == 0 )
-			{
-				powerUpNum = 2;
-			}
-			else
-			{
-				powerUpNum--;
-			}
-		}
-		if ( Input::Instance()->TriggerKey(KEY_INPUT_RIGHT) || Input::Instance()->TriggerKey(KEY_INPUT_D) )
-		{
-			powerUpNum++;
-			if ( powerUpNum >= 3 )
-			{
-				powerUpNum = 0;
-			}
-		}
-
-		if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) )
-		{
-			powerUp_->StatusChenge();
-
-			isPowerUp = false;
-		}
-		powerUp_->SetSlect(powerUpNum);
 	}
 	else
 	{
@@ -101,10 +66,6 @@ void GameScene::Draw()
 
 	player_->Draw();
 	enemys_->Draw();
-	if ( isPowerUp )
-	{
-		powerUp_->Draw();
-	}
 	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
 	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");
 	DrawFormatString(0,40,0xffffff,"ATTACK:Z X");
