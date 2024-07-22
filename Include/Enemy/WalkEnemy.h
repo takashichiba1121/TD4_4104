@@ -9,6 +9,10 @@ private:
 
 	int8_t nextElement;
 	ObjectUserData user;
+
+	bool tern = false;
+	int8_t ternInverval;
+	int8_t ternInvervalTimer;
 public:
 
 	void Initialize() override;
