@@ -57,5 +57,6 @@ public:
 	void SetSlect(uint8_t selectNum);
 	void SetPriducts();
 	void SetPlayer(Player* player);
+	void Draw();
 };
 

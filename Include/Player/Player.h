@@ -5,6 +5,10 @@
 #include<memory>
 #include<string>
 #include"BaseObject.h"
+#include"PlayerLeg.h"
+#include"PlayerLegNormal.h"
+#include"ItemShop.h"
+#include"PowerUpCave.h"
 
 struct UserData
 {
@@ -14,40 +18,13 @@ struct UserData
 class Player:public BaseObject
 {
 private:
-#pragma region ステータス
-
-	//移動
-
-	float topSpeed_ = 0;
-
-	float acceleration_ = 0;
-
-	float airAcceleration_ = 0;
-
-	float deccelaration_ = 1;
-
-	float airDeccelaration_ = 0;
-
-	//戦闘
-
-	//ジャンプ
-
-	float gravityAcceleration_ = 0;
-
-	float jumpAcceleration_ = 0;
-
-	float jumpInitialVelocity_ = 0;
-
-#pragma endregion
 
 #pragma region 変更ステータス
-	float changeAcl_=1;
+	float changeSpd_=1;
 
 	float changePow_=1;
 
 	float changeDef_=1;
-
-	float changeMaxHp_=1;
 
 	float changeCrit_ = 0.1;
 
@@ -60,23 +37,15 @@ private:
 
 	Vector2 colisionSift_ = { 5,5 };
 
-	bool isAttack_ = false;
-
-	uint32_t attackInterval_ = 0;
-
 	RectShape* shape_;
 
 	std::unique_ptr<PlayerAttack> leftArm_;
 
 	std::unique_ptr<PlayerAttack> rightArm_;
 
+	std::unique_ptr<PlayerLeg> leg_;
+
 	int32_t maxHp_ = 100;
-
-	bool onGround_ = false;
-
-	bool isJump_ = false;
-
-	float fallSpeed_ = 0;
 
 	UserData name_;
 
@@ -84,31 +53,29 @@ private:
 
 	uint32_t DamageInterval_ = DAMAGE_INTERVAL_MAX_;
 
-	bool isEvasionRoll_ = false;
+	std::list<Item> items_;
+
+	uint32_t selectItems_ = 1;
+
+	std::unique_ptr<PowerUpCave>powerUp_;
+
+	bool isPowerUp = true;
+
+	uint32_t powerUpNum = 0;
 public:
 	void Initialize() override;
 
 	void Update() override;
 
-	void Move();
-
-	void JumpStart();
-
-	void Jump();
-
-	void EvasionRoll();
-
-	void Falling();
-
 	void Attack();
-
-	float IsDamage();
 
 	void Damage(int32_t Damage) override;
 
-	void ChangeLeftArm(std::string attackName);
+	bool ChangeLeftArm(std::string attackName,uint32_t cost);
 
-	void ChangeRightArm(std::string attackName);
+	bool ChangeRightArm(std::string attackName,uint32_t cost);
+
+	bool ChangeLeg(std::string legName,uint32_t cost);
 
 	bool AddSpd(int32_t spd);
 
@@ -142,10 +109,15 @@ public:
 
 	void Draw() override;
 
+	bool ItemGet(Item newItem);
 
+	void UseItem();
 
-private:
+	void PowerUp();
 
-	void Load();
+	void StartPowerUp();
 
+	bool IsPowerUp() {
+		return isPowerUp;
+	}
 };
