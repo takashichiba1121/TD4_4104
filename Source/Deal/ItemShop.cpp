@@ -48,7 +48,7 @@ bool ItemShop::ItemSelect()
 {
 	Item* product = selectProducts_[ selectNum_ ];
 	bool isBuy = false;
-	
+	isBuy = playerPtr_->ItemGet(*product);
 	return isBuy;
 }
 
