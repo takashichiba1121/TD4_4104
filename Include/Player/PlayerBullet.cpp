@@ -6,13 +6,13 @@
 #include"FlyEnemy.h"
 #include"WalkEnemy.h"
 
-void PlayerBullet::Initialize(Vector2 velocity,Vector2 position,uint32_t life,float playerPow)
+void PlayerBullet::Initialize(Vector2 velocity,Vector2 position,uint32_t life,float pow)
 {
 	velocity_ = velocity;
 
 	position_ = position;
 
-	playerPow_ = playerPow;
+	pow_ = pow;
 
 	life_ = life;
 
@@ -60,11 +60,11 @@ void PlayerBullet::OnCollision()
 	{
 		if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "FlyEnemy" )
 		{
-			dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_);
+			dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(pow_);
 		}
 		if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "WalkEnemy" )
 		{
-			dynamic_cast< WalkEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_);
+			dynamic_cast< WalkEnemy* >( GetCollisionInfo().object )->Damage(pow_);
 		}
 	}
 	isDead_ = true;
