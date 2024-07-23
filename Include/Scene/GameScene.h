@@ -20,6 +20,7 @@ private:
 
 	std::unique_ptr<MapChip>mapChip_;
 	std::unique_ptr<PowerUpCave>powerUp_;
+	NodeManager* nodeManager_;
 
 	uint32_t backGround_;
 	uint8_t num;

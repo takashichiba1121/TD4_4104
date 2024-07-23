@@ -105,6 +105,7 @@ public:
 
 	void Reset();
 
+
 private:
 
 	void Load();

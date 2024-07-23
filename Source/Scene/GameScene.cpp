@@ -26,6 +26,12 @@ void GameScene::Initialize()
 	powerUp_ = std::make_unique<PowerUpCave>();
 	powerUp_->Initialize();
 	powerUp_->SetPlayer(player_.get());
+	
+	nodeManager_ = NodeManager::GetInstance();
+	nodeManager_->SetMapChip(mapChip_.get());
+	nodeManager_->SetPlayer(player_.get());
+	nodeManager_->Initialize();
+	nodeManager_->StartNodeSet(0);
 	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
 
 	nodeManager_ = NodeManager::GetInstance();
@@ -41,17 +47,11 @@ void GameScene::Update()
 
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_R) )
 	{
-		SceneManager::GetInstance()->ChangeScene("TITLE");
-	}
-	else
-	{
-		player_->Update();
-		enemys_->Update();
-
-		CollisionManager::GetInstance()->Update();
+		nodeManager_->Reset();
 	}
 
-	if ( enemys_->GameEnd() )
+	//TODO
+	if ( enemys_->GameEnd())
 	{
 		SceneManager::GetInstance()->ChangeScene("CLEAR");
 	}
@@ -83,7 +83,11 @@ void GameScene::Draw()
 
 	player_->Draw();
 	enemys_->Draw();
+	
 	if(!chenged) powerUp_->Draw();
+
+	nodeManager_->NodeDrew(100,600);
+	
 	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
 	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");
 	DrawFormatString(0,40,0xffffff,"ATTACK:Z X");
