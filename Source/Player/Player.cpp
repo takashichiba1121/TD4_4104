@@ -471,3 +471,9 @@ void Player::StartPowerUp()
 
 	powerUp_->Initialize();
 }
+
+void Player::Reset()
+{
+	pos_.x = GameConfig::GetGameConfig()->windowWidth / 2;
+	pos_.y = GameConfig::GetGameConfig()->windowHeight / 2;
+}
