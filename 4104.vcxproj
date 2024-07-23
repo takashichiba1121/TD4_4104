@@ -59,7 +59,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;$(ProjectDir)\ThirdParty\imgui;$(ProjectDir)\Include\Util\Player</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Collision;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;$(ProjectDir)\Include\Base;$(ProjectDir)\ThirdParty\imgui;$(ProjectDir)\Include\Util\Player;$(ProjectDir)\Include\NPC;$(ProjectDir)\Include\Deal;$(ProjectDir)\Include\Player</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Collision;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include\Node;$(ProjectDir)\Include\Base;$(ProjectDir)\Include\Util\Player;$(ProjectDir)\Include;$(ProjectDir)\Include\NPC;$(ProjectDir)\Include\Deal;$(ProjectDir)\Include\Player;$(ProjectDir)\ThirdParty\imgui</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>Core.h</PrecompiledHeaderFile>
@@ -96,6 +96,8 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Collision;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;$(ProjectDir)\Include\Base;$(ProjectDir)\ThirdParty\imgui;$(ProjectDir)\Include\Util\Player;$(ProjectDir)\Include\NPC</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Collision;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include\Node;$(ProjectDir)\Include\Base;$(ProjectDir)\Include\Util\Player;$(ProjectDir)\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Collision;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;$(ProjectDir)\Include\Base;$(ProjectDir)\ThirdParty\imgui;$(ProjectDir)\Include\Util\Player</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <DisableSpecificWarnings>4244</DisableSpecificWarnings>
@@ -114,6 +116,13 @@
     <ClCompile Include="Source\NPC\NPCManager.cpp" />
     <ClCompile Include="Source\NPC\NPC.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackSpider.cpp" />
+    <ClCompile Include="Source\Node\BaseNode.cpp" />
+    <ClCompile Include="Source\Node\BattleNode.cpp" />
+    <ClCompile Include="Source\Node\HealingNode.cpp" />
+    <ClCompile Include="Source\Node\NodeManager.cpp" />
+    <ClCompile Include="Source\Node\ReinforcementNode.cpp" />
+    <ClCompile Include="Source\Node\ShopNode.cpp" />
+    <ClCompile Include="Source\Node\TransactionNode.cpp" />
     <ClCompile Include="Source\Scene\ClearScene.cpp" />
     <ClCompile Include="Source\Scene\GameOverScene.cpp" />
     <ClCompile Include="Source\Base\BaseEnemy.cpp" />
@@ -149,6 +158,7 @@
     <ClCompile Include="Source\Player\PlayerAttackGun.cpp" />
     <ClCompile Include="Source\Player\PlayerBulletManager.cpp" />
     <ClCompile Include="Source\Player\PlayerLegNormal.cpp" />
+    <ClCompile Include="Source\Node\StartNode.cpp" />
     <ClCompile Include="ThirdParty\imgui\imgui.cpp" />
     <ClCompile Include="ThirdParty\imgui\imgui_demo.cpp" />
     <ClCompile Include="ThirdParty\imgui\imgui_draw.cpp" />
@@ -165,6 +175,14 @@
   <ItemGroup>
     <ClInclude Include="Include\NPC\DealDaemon.h" />
     <ClInclude Include="Include\Player\PlayerAttackSpider.h" />
+    <ClInclude Include="Include\Node\BaseNode.h" />
+    <ClInclude Include="Include\Node\BattleNode.h" />
+    <ClInclude Include="Include\Node\HealingNode.h" />
+    <ClInclude Include="Include\Node\NodeManager.h" />
+    <ClInclude Include="Include\Node\NodeType.h" />
+    <ClInclude Include="Include\Node\ReinforcementNode.h" />
+    <ClInclude Include="Include\Node\ShopNode.h" />
+    <ClInclude Include="Include\Node\TransactionNode.h" />
     <ClInclude Include="Include\Scene\ClearScene.h" />
     <ClInclude Include="Include\Scene\GameOverScene.h" />
     <ClInclude Include="Include\Util\ChipIndex.h" />
@@ -207,6 +225,7 @@
     <ClInclude Include="PowerUpCave.h" />
     <ClInclude Include="Include\Player\PlayerLeg.h" />
     <ClInclude Include="Include\Player\PlayerLegNormal.h" />
+    <ClInclude Include="Include\Node\StartNode.h" />
     <ClInclude Include="ThirdParty\imgui\imconfig.h" />
     <ClInclude Include="ThirdParty\imgui\imgui.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_impl_dx11.h" />

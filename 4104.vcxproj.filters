@@ -40,6 +40,12 @@
     <Filter Include="ヘッダー ファイル\Collision">
       <UniqueIdentifier>{52e3dfaa-c62c-40de-9d37-ca7e55789659}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Node">
+      <UniqueIdentifier>{fa511455-1997-47b5-b2a4-9faa8fec00f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Node">
+      <UniqueIdentifier>{744e79e3-b9aa-4477-948b-7d04ac14bb49}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ソース ファイル\Scene">
       <UniqueIdentifier>{e01c7345-fd7a-4116-bb4e-634da9a7af6c}</UniqueIdentifier>
     </Filter>
@@ -155,6 +161,36 @@
     </ClCompile>
     <ClCompile Include="Source\Enemy\EnemyManager.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\BaseEnemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\BaseEnemy.cpp">
+      <Filter>ソース ファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Node\BattleNode.cpp">
+      <Filter>ソース ファイル\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Node\HealingNode.cpp">
+      <Filter>ソース ファイル\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Node\NodeManager.cpp">
+      <Filter>ソース ファイル\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Node\ReinforcementNode.cpp">
+      <Filter>ソース ファイル\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Node\ShopNode.cpp">
+      <Filter>ソース ファイル\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Node\TransactionNode.cpp">
+      <Filter>ソース ファイル\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Node\BaseNode.cpp">
+      <Filter>ソース ファイル\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Node\StartNode.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene\SceneFactrory.cpp">
       <Filter>ソース ファイル\Scene</Filter>
@@ -319,6 +355,33 @@
     </ClInclude>
     <ClInclude Include="Include\Enemy\EnemyManager.h">
       <Filter>ヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Node\BaseNode.h">
+      <Filter>ヘッダー ファイル\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Node\BattleNode.h">
+      <Filter>ヘッダー ファイル\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Node\HealingNode.h">
+      <Filter>ヘッダー ファイル\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Node\NodeManager.h">
+      <Filter>ヘッダー ファイル\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Node\NodeType.h">
+      <Filter>ヘッダー ファイル\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Node\ReinforcementNode.h">
+      <Filter>ヘッダー ファイル\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Node\ShopNode.h">
+      <Filter>ヘッダー ファイル\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Node\TransactionNode.h">
+      <Filter>ヘッダー ファイル\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Node\StartNode.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="GameCore\BaseScene.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
