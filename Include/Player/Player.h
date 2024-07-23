@@ -117,6 +117,8 @@ public:
 
 	void StartPowerUp();
 
+	void Reset();
+
 	bool IsPowerUp() {
 		return isPowerUp;
 	}
