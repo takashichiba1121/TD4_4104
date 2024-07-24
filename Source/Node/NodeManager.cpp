@@ -57,21 +57,6 @@ void NodeManager::Initialize()
 
 	distribution = std::discrete_distribution<int>(nodeProbabilities,nodeProbabilities + NodeType::TYPE_NUM);
 
-		for ( size_t i = 0; i < config->nodeProbabilities.size(); i++ )
-		{
-			nodeProbabilities[ i ] = config->nodeProbabilities[ i ];
-		}
-	}
-
-	reinforcementImg = LoadGraph("Resources/Node/reinforcement.png");
-	transactionImg = LoadGraph("Resources/Node/transaction.png");
-	battleImg = LoadGraph("Resources/Node/battle.png");
-	shopImg = LoadGraph("Resources/Node/shop.png");
-	healingImg = LoadGraph("Resources/Node/healing.png");
-	startImg = LoadGraph("Resources/Node/start.png");
-
-	distribution = std::discrete_distribution<int>(nodeProbabilities,nodeProbabilities + NodeType::TYPE_NUM);
-
 	GenerateInitialGrid();
 
 	std::vector<int> startingPoints = GetRandomStartingPoints();
@@ -187,20 +172,15 @@ void NodeManager::Reset()
 			drawNode_.push_back(&nodes_[ 0 ][ point ]);
 		}
 
-	for ( auto& node : drawNode_ )
-	{
-		std::vector<Node*>& nodes = node->nexts;
-		std::sort(nodes.begin(),nodes.end());
+		for ( auto& node : drawNode_ )
+		{
+			std::vector<Node*>& nodes = node->nexts;
+			std::sort(nodes.begin(),nodes.end());
+		}
+
+		std::sort(startNodes_.begin(),startNodes_.end());
+
 	}
-
-	for ( auto& node : drawNode_ )
-	{
-		std::vector<Node*>& nodes = node->nexts;
-		std::sort(nodes.begin(),nodes.end());
-	}
-
-	std::sort(startNodes_.begin(),startNodes_.end());
-
 }
 
 void NodeManager::NodeDrew(int32_t leftBottomX,int32_t leftBottomY)

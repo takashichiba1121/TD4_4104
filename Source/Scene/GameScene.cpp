@@ -28,6 +28,10 @@ void GameScene::Initialize()
 	nodeManager_->SetPlayer(player_.get());
 	nodeManager_->Initialize();
 	nodeManager_->StartNodeSet(0);
+
+	powerUp_ = std::make_unique<PowerUpCave>();
+	powerUp_->Initialize();
+	powerUp_->SetPlayer(player_.get());
 }
 
 void GameScene::Update()
@@ -41,7 +45,25 @@ void GameScene::Update()
 
 	nodeManager_->Update();
 
-	player_->Update();
+	if ( player_->IsPowerUp() )
+	{
+		powerUp_->Update();
+
+		uint32_t powerUpNum=player_->PowerUp();
+
+		powerUp_->SetSlect(powerUpNum);
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) )
+		{
+			powerUp_->StatusChenge();
+
+			player_->EndPowerUp();
+		}
+	}
+	else
+	{
+		player_->Update();
+	}
+
 	enemys_->Update();
 
 
@@ -68,6 +90,8 @@ void GameScene::Draw()
 
 	player_->Draw();
 	enemys_->Draw();
+
+	powerUp_->Draw();
 
 	nodeManager_->NodeDrew(100,600);
 }
