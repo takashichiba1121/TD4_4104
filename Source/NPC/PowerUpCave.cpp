@@ -63,6 +63,7 @@ void PowerUpCave::Initialize()
 	SetPriducts();
 
 	name_.tag = "PowerUpCave";
+	userData_ = &name_;
 }
 
 
