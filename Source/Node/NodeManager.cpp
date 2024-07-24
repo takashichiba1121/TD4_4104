@@ -106,10 +106,16 @@ void NodeManager::Initialize()
 		room->SetNodeManagerr(this);
 		room->Initialize();
 	}
+
+	playerNodePos = 0;
+	leftBottomX = 100;
+	leftBottomY = 600;
 }
 
 void NodeManager::Update()
 {
+	isNodeDraw = false;
+
 	if ( nextNode_ )
 	{
 		if ( node_ )
@@ -183,46 +189,59 @@ void NodeManager::Reset()
 
 }
 
-void NodeManager::NodeDrew(int32_t leftBottomX,int32_t leftBottomY)
+void NodeManager::NodeMapDraw()
 {
-	for ( auto& node : drawNode_ )
+	isNodeDraw = false;
+
+	playerNodePos = selectNode_->row +3;
+	playerNodePos = min(playerNodePos,FLOORS);
+
+	for ( int i = 0; i < playerNodePos; ++i )
 	{
-		for ( size_t k = 0; k < node->nexts.size(); k++ )
+		for ( int j = 0; j < MAP_WIDTH; ++j )
 		{
-			DrawLine(leftBottomX + node->position.x,leftBottomY + node->position.y,leftBottomX + node->nexts[ k ]->position.x,leftBottomY + node->nexts[ k ]->position.y,GetColor(255,255,255));
+			bool line = !( i == playerNodePos - 1 );
+
+			NodeDrew(leftBottomX,leftBottomY,nodes_[ i ][ j ],line);
 		}
 	}
 
-	for ( auto& node : drawNode_ )
-	{
-		switch ( node->type.value )
-		{
-		case NodeType::Type::REINFORCEMENT:
-			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,reinforcementImg,true);
-			break;
-		case NodeType::Type::TRANSACTION:
-			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,transactionImg,true);
-			break;
-		case NodeType::Type::BATTLE:
-			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,battleImg,true);
-			break;
-		case NodeType::Type::SHOP:
-			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,shopImg,true);
-			break;
-		case NodeType::Type::HEALING:
-			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,healingImg,true);
-			break;
-		case NodeType::Type::START:
-			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,startImg,true);
-			break;
-		default:
-			DrawCircle(leftBottomX + selectNode_->position.x,leftBottomY + selectNode_->position.y,32,GetColor(255,255,255));
-			break;
-		}
+}
 
+void NodeManager::NodeDrew(int32_t leftBottomX,int32_t leftBottomY,const Node& node,bool line)
+{
+	if ( line )
+	{
+		for ( size_t k = 0; k < node.nexts.size(); k++ )
+		{
+			DrawLine(leftBottomX + node.position.x,leftBottomY + node.position.y,leftBottomX + node.nexts[ k ]->position.x,leftBottomY + node.nexts[ k ]->position.y,GetColor(255,255,255));
+		}
 	}
 
-	DrawCircle(leftBottomX + selectNode_->position.x,leftBottomY + selectNode_->position.y,3,GetColor(255,0,0));
+	switch ( node.type.value )
+	{
+	case NodeType::Type::REINFORCEMENT:
+		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,0.5,0,reinforcementImg,true);
+		break;
+	case NodeType::Type::TRANSACTION:
+		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,0.5,0,transactionImg,true);
+		break;
+	case NodeType::Type::BATTLE:
+		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,0.5,0,battleImg,true);
+		break;
+	case NodeType::Type::SHOP:
+		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,0.5,0,shopImg,true);
+		break;
+	case NodeType::Type::HEALING:
+		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,0.5,0,healingImg,true);
+		break;
+	case NodeType::Type::START:
+		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,0.5,0,startImg,true);
+		break;
+	default:
+		DrawCircle(leftBottomX + selectNode_->position.x,leftBottomY + selectNode_->position.y,32,GetColor(255,255,255));
+		break;
+	}
 }
 
 void NodeManager::ChangeNode(size_t doorNo)

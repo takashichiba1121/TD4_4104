@@ -71,7 +71,7 @@ void GameScene::Draw()
 	player_->Draw();
 	enemys_->Draw();
 
-	nodeManager_->NodeDrew(100,600);
+	nodeManager_->NodeMapDraw();
 	
 	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
 	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");
