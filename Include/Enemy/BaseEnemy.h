@@ -1,6 +1,6 @@
 #pragma once
 #include "BaseObject.h"
-
+#include "Util.h"
 
 class MapChip;
 class BaseEnemy:public BaseObject
@@ -14,6 +14,7 @@ protected:
 	int32_t attackPower_;
 	int32_t defense_;
 	int32_t immotalTime_;
+	int8_t statusEffects_;
 public:
 	virtual void Move() {};
 	virtual void Attack() {};
@@ -22,5 +23,7 @@ public:
 	void SetVelocity(Vector2 velocity);
 	void SetPlayerPtr(BaseObject* ptr);
 	void SetMapChip(MapChip* mapptr);
+	void SetEffect(Effects effect);
+	void OutEffect(Effects effect);
 };
 

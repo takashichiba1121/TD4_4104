@@ -12,3 +12,10 @@ double OutOutRelayQuad(double startPos,double endPos,double relayPos,double maxT
 double EaseInBack(double startPos,double endPos,double maxTime,double time);
 double EaseInBack2(double startPos,double endPos,double maxTime,double time);
 double EaseOutBounce(double startPos,double endPos,double time,double maxTime);
+
+enum Effects
+{
+	POISON = 0b1,
+	BURN = 0b1 << 1,
+	STUN = 0b1 << 2
+};

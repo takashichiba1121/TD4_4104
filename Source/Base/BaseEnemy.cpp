@@ -29,3 +29,13 @@ void BaseEnemy::SetMapChip(MapChip* mapptr)
 {
 	mapchip_ = mapptr;
 }
+
+void BaseEnemy::SetEffect(Effects effect)
+{
+	statusEffects_ |= effect;
+}
+
+void BaseEnemy::ReleaseEffect(Effects effect)
+{
+	statusEffects_ &= ~effect;
+}
