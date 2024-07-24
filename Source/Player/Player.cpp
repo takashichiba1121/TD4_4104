@@ -14,9 +14,9 @@
 
 void Player::Initialize()
 {
-	hitboxSize_ = { 28,54 };
+	hitboxSize_ = { 64,128 };
 
-	drawSize_ = { 34,60 };
+	drawSize_ = { 128,128 };
 
 	pos_.x = GameConfig::GetGameConfig()->windowWidth / 2;
 
