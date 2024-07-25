@@ -79,6 +79,7 @@ void EnemyManager::Update()
 	});
 
 	int32_t time = -10;
+		
 	for ( auto& itr : enemylist_ )
 	{
 		if ( itr->IsImmortal() )
