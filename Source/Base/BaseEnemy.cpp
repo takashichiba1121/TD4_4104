@@ -2,6 +2,37 @@
 
 void BaseEnemy::EffectUpdate()
 {
+
+	for ( int i = 0; i < effectTimer.size(); i++ )
+	{
+		Effects ef = static_cast< Effects >( i );
+		effectTimer[ i ].CountUp();
+		if (IsEffect(ef) && !effectTimer[i].IsCountEnd())
+		{
+			switch ( ef )
+			{
+			case POISON:
+				if ( effectTimer[ i ].GetCount() % effectDamageInterval )
+				{
+					hp_ -= effectDamage;
+				}
+				break;
+			case BURN:
+				if ( effectTimer[ i ].GetCount() % effectDamageInterval )
+				{
+					hp_ -= effectDamage;
+				}
+				break;
+			default:
+				break;
+			}
+		}
+		else if ( effectTimer[ i ].IsCountEnd() )
+		{
+			ReleaseEffect(ef);
+		}
+	}
+
 }
 
 void BaseEnemy::Damage(int32_t damage)
@@ -38,6 +69,7 @@ void BaseEnemy::SetEffect(Effects effect)
 {
 	int8_t effectBit = 0b1 << effect;
 	statusEffects_ |= effectBit;
+	effectTimer[ effect ].SetEndCount(60);
 }
 
 void BaseEnemy::ReleaseEffect(Effects effect)

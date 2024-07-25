@@ -50,27 +50,40 @@ void FlyEnemy::Update()
 	{
 		immortal_ = false;
 	}
-	if ( isAttack_ )
+
+	if ( IsEffect(DELAY) )
 	{
-		Attack();
+		speed_ = 1;
 	}
 	else
 	{
-		attackIntervalTime_--;
-		if ( attackIntervalTime_ <= 0 && playerPtr_)
-		{
-			back_ = false;
-			isAttack_ = true;
-			targetPos_ = playerPtr_->GetPos();
-			attackIntervalTime_ = ATTACK_INTERVAL;
-			attackTimer_ = 0;
-			attackBeforePos_ = pos_;
-			velocity_ = GetVector2d(targetPos_,pos_);
-		}
+		speed_ = originalSpeed_;
 	}
 
-	Move();
 
+	if ( !IsEffect(BIND) && !IsEffect(ICED) )
+	{
+		if ( isAttack_ )
+		{
+			Attack();
+		}
+		else
+		{
+			attackIntervalTime_--;
+			if ( attackIntervalTime_ <= 0 && playerPtr_ )
+			{
+				back_ = false;
+				isAttack_ = true;
+				targetPos_ = playerPtr_->GetPos();
+				attackIntervalTime_ = ATTACK_INTERVAL;
+				attackTimer_ = 0;
+				attackBeforePos_ = pos_;
+				velocity_ = GetVector2d(targetPos_,pos_);
+			}
+		}
+
+		Move();
+	}
 }
 
 void FlyEnemy::Move()

@@ -24,6 +24,7 @@ protected:
 	Vector2 hitboxSize_;
 	Vector2 drawSize_;
 	float speed_;
+	float originalSpeed_;
 	Vector2 velocity_;
 	ObjectUserData tag;
 public:
