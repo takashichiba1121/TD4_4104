@@ -14,7 +14,7 @@ void WalkEnemy::Initialize()
 
 	ternInverval = 2;
 	gravity_ = { 0,1 };
-	speed_ = GetRand(4)+1;
+	originalSpeed_ = GetRand(4)+1;
 	if ( GetRand(2) >= 2 )
 	{
 		velocity_ = { 1,0 };
@@ -23,7 +23,6 @@ void WalkEnemy::Initialize()
 	{
 		velocity_ = { -1,0 };
 	}
-	speed_ = 1;
 	user.tag = "WalkEnemy";
 	userData_ = &user;
 
@@ -47,7 +46,20 @@ void WalkEnemy::Update()
 	{
 		immortal_ = false;
 	}
-	Move();
+
+	if ( IsEffect(DELAY) )
+	{
+		speed_ = 1;
+	}
+	else
+	{
+		speed_ = originalSpeed_;
+	}
+
+	if ( !IsEffect(BIND) && !IsEffect(ICED) )
+	{
+		Move();
+	}
 	shape_->SetCenter({ pos_.x , pos_.y });
 }
 

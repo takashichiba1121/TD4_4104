@@ -151,3 +151,13 @@ void Counter::CountUp(uint32_t up)
 {
 	nowCount_ += up;
 }
+
+int32_t Counter::GetCount()
+{
+	return nowCount_;
+}
+
+int32_t Counter::GetEndCount()
+{
+	return endCount_;
+}

@@ -17,7 +17,8 @@ protected:
 	int32_t immotalTime_;
 	int8_t statusEffects_;
 	std::array<Counter,ICED + 1> effectTimer;
-
+	int8_t effectDamageInterval = 10;
+	int8_t effectDamage = 1;
 public:
 	virtual void Move() {};
 	virtual void Attack() {};

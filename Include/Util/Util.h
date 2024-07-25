@@ -17,7 +17,7 @@ enum Effects
 {
 	POISON,
 	BURN,
-	STUN,
+	BIND,
 	DELAY,
 	ICED
 };
@@ -35,5 +35,7 @@ public:
 	bool IsCountUnderZero();
 	void SetEndCount(int32_t endCount);
 	void ReSetCount();
+	int32_t GetCount();
+	int32_t GetEndCount();
 
 };
