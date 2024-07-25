@@ -1,5 +1,9 @@
 #include "BaseEnemy.h"
 
+void BaseEnemy::EffectUpdate()
+{
+}
+
 void BaseEnemy::Damage(int32_t damage)
 {
 	if (true)
@@ -32,10 +36,23 @@ void BaseEnemy::SetMapChip(MapChip* mapptr)
 
 void BaseEnemy::SetEffect(Effects effect)
 {
-	statusEffects_ |= effect;
+	int8_t effectBit = 0b1 << effect;
+	statusEffects_ |= effectBit;
 }
 
 void BaseEnemy::ReleaseEffect(Effects effect)
 {
-	statusEffects_ &= ~effect;
+	int8_t effectBit = 0b1 << effect;
+	statusEffects_ &= ~effectBit;
+}
+
+bool BaseEnemy::IsEffect(Effects effect)
+{
+	int8_t judge = statusEffects_;
+	judge = judge >> effect;
+	if ( judge & 0b1 )
+	{
+		return true;
+	}
+	return false;
 }
