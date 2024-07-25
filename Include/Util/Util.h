@@ -19,7 +19,8 @@ enum Effects
 	BIND,
 	DELAY,
 	ICED,
-	CURSE
+	CURSE,
+	END //配列制御のための目印として使用。実際の状態異常では使用しない。
 };
 
 class Counter

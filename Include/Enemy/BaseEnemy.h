@@ -16,9 +16,10 @@ protected:
 	int32_t defense_;
 	int32_t immortalTime_;
 	int8_t statusEffects_;
-	std::array<Counter,ICED + 1> effectTimer;
+	std::array<Counter,END> effectTimer;
 	int8_t effectDamageInterval = 10;
 	int8_t effectDamage = 1;
+	int32_t curseStack = 0;
 public:
 	virtual void Move() {};
 	virtual void Attack() {};
@@ -33,5 +34,6 @@ public:
 	bool IsEffect(Effects effect);
 	bool IsImmortal();
 	int32_t GetImmortalTime();
+	int32_t GetCurseStack();
 };
 
