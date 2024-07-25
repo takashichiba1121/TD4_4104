@@ -109,12 +109,24 @@ void NodeManager::Initialize()
 
 	playerNodePos = 0;
 	leftBottomX = 100;
-	leftBottomY = 600;
+	leftBottomY = 650;
 }
 
 void NodeManager::Update()
 {
-	isNodeDraw = false;
+	if ( isNodeDraw )
+	{
+		int32_t scroll = GetMouseWheelRotVol();
+		if ( scroll == -1 && leftBottomY > STARTNODE_DREW_MAX_Y )
+		{
+			leftBottomY += 1.0f * scroll;
+		}
+
+		if ( scroll == 1 && nodes_[ playerNodePos - 1 ][ 0 ].position.y+ leftBottomY < NODE_DREW_MIN_Y )
+		{
+			leftBottomY += 1.0f * scroll;
+		}
+	}
 
 	if ( nextNode_ )
 	{
@@ -132,6 +144,8 @@ void NodeManager::Update()
 	}
 
 	node_->Update();
+
+	isNodeDraw = false;
 }
 
 void NodeManager::Draw()
@@ -191,7 +205,7 @@ void NodeManager::Reset()
 
 void NodeManager::NodeMapDraw()
 {
-	isNodeDraw = false;
+	isNodeDraw = true;
 
 	playerNodePos = selectNode_->row +3;
 	playerNodePos = min(playerNodePos,FLOORS);
@@ -200,9 +214,7 @@ void NodeManager::NodeMapDraw()
 	{
 		for ( int j = 0; j < MAP_WIDTH; ++j )
 		{
-			bool line = !( i == playerNodePos - 1 );
-
-			NodeDrew(leftBottomX,leftBottomY,nodes_[ i ][ j ],line);
+			NodeDrew(leftBottomX,leftBottomY,nodes_[ i ][ j ],true);
 		}
 	}
 
@@ -239,7 +251,7 @@ void NodeManager::NodeDrew(int32_t leftBottomX,int32_t leftBottomY,const Node& n
 		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,0.5,0,startImg,true);
 		break;
 	default:
-		DrawCircle(leftBottomX + selectNode_->position.x,leftBottomY + selectNode_->position.y,32,GetColor(255,255,255));
+		DrawCircle(leftBottomX + selectNode_->position.x,leftBottomY + selectNode_->position.y,5,GetColor(255,0,0));
 		break;
 	}
 }

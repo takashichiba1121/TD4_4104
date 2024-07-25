@@ -22,6 +22,9 @@ private:
 	int32_t START_POINT =0;
 	int32_t nodeProbabilities[ NodeType::TYPE_NUM ] = {};
 
+	const int32_t STARTNODE_DREW_MAX_Y = 650;
+	const int32_t NODE_DREW_MIN_Y = 100;
+
 	int oldRand = 0;
 	int oldRandomJ = 0;
 
@@ -33,8 +36,8 @@ private:
 	int32_t startImg;
 	int32_t playerNodePos;
 
-	int32_t leftBottomX;
-	int32_t leftBottomY;
+	float leftBottomX;
+	float leftBottomY;
 
 
 	// 確率分布を作成する

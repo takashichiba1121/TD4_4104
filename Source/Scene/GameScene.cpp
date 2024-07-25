@@ -46,7 +46,7 @@ void GameScene::Update()
 	player_->Update();
 	enemys_->Update();
 
-
+	CollisionManager::GetInstance()->SetScreenPos(mapChip_->GetScreenPos());
 	CollisionManager::GetInstance()->Update();
 
 	//TODO
