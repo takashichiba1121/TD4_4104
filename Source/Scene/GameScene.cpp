@@ -86,14 +86,16 @@ void GameScene::Draw()
 {
 	DrawGraph(0,0,backGround_,true);
 
-	mapChip_->Draw({ 0,0 });
-
 	player_->Draw();
 	enemys_->Draw();
 
 	powerUp_->Draw();
 
+	mapChip_->Draw({ 0,0 });
+
 	nodeManager_->NodeDrew(100,600);
+
+
 }
 
 void GameScene::SpriteDraw()

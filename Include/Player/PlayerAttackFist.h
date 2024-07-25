@@ -16,11 +16,11 @@ private:
 
 	Vector2 DrawPos_;
 
-	Combo combo1 = { 10,{15,-10},{30,30},70,5,5 };
+	Combo combo1 = { 10,{15,-10},{64,64},70,5,5 };
 
-	Combo combo2 = { 20,{20,-10},{45,30},80,10,5 };
+	Combo combo2 = { 20,{20,-10},{79,64},80,10,5 };
 
-	Combo combo3 = { 30,{25,-10},{60,30},90,20,5 };
+	Combo combo3 = { 30,{25,-10},{94,64},90,20,5 };
 
 	float playerPow_;
 

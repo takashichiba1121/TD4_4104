@@ -181,6 +181,9 @@
     <ClInclude Include="Include\Node\ReinforcementNode.h" />
     <ClInclude Include="Include\Node\ShopNode.h" />
     <ClInclude Include="Include\Node\TransactionNode.h" />
+    <ClInclude Include="Include\Player\PlayerAttackSpider.h" />
+    <ClInclude Include="Include\Player\PlayerLeg.h" />
+    <ClInclude Include="Include\Player\PlayerLegNormal.h" />
     <ClInclude Include="Include\Util\ChipIndex.h" />
     <ClInclude Include="Include\Enemy\EnemyManager.h" />
     <ClInclude Include="Include\Base\BaseObject.h" />
