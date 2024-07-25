@@ -26,7 +26,10 @@ void BaseEnemy::EffectUpdate()
 			ReleaseEffect(ef);
 		}
 	}
-
+	if ( !IsEffect(CURSE) )
+	{
+		curseStack = 0;
+	}
 }
 
 void BaseEnemy::Damage(int32_t damage)
@@ -36,6 +39,10 @@ void BaseEnemy::Damage(int32_t damage)
 		immortal_ = true;
 		hp_ -= damage;
 		immortalTime_ = 10;
+		if ( IsEffect(CURSE) )
+		{
+			curseStack++;
+		}
 	}
 }
 
@@ -91,4 +98,9 @@ bool BaseEnemy::IsImmortal()
 int32_t BaseEnemy::GetImmortalTime()
 {
 	return immortalTime_;
+}
+
+int32_t BaseEnemy::GetCurseStack()
+{
+	return curseStack;
 }

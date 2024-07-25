@@ -84,6 +84,8 @@ void FlyEnemy::Update()
 
 		Move();
 	}
+
+	EffectUpdate();
 }
 
 void FlyEnemy::Move()

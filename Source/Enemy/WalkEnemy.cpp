@@ -41,7 +41,6 @@ void WalkEnemy::Initialize()
 
 void WalkEnemy::Update()
 {
-	damaged_ = false;
 	immortalTime_--;
 	if ( immortalTime_ <= 0 )
 	{
@@ -62,6 +61,7 @@ void WalkEnemy::Update()
 		Move();
 	}
 	shape_->SetCenter({ pos_.x , pos_.y });
+	EffectUpdate();
 }
 
 void WalkEnemy::Move()
@@ -84,7 +84,7 @@ void WalkEnemy::Move()
 	 nextElement = mapchip_->GetPosElement(pos_.x +(( velocity_.x * speed_ )) + ( drawSize_.x / 2 ),
 		pos_.y + ( drawSize_.y / 2 ) + 1);
 
-	if ((nextElement == NEXT || nextElement == NONE) && !tern)
+	if ((nextElement == NEXT || (nextElement == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM )) && !tern )
 	{
 		velocity_ *= -1;
 		tern = true;
