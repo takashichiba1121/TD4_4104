@@ -45,24 +45,25 @@ void GameScene::Update()
 	}
 	else
 	{
-	nodeManager_->Update();
+		nodeManager_->Update();
 
-	player_->Update();
-	enemys_->Update();
+		player_->Update();
+		enemys_->Update();
 
-	CollisionManager::GetInstance()->SetScreenPos(mapChip_->GetScreenPos());
-	CollisionManager::GetInstance()->Update();
+		CollisionManager::GetInstance()->SetScreenPos(mapChip_->GetScreenPos());
+		CollisionManager::GetInstance()->Update();
 
-	//TODO
-	if ( enemys_->GameEnd() )
-	{
-		SceneManager::GetInstance()->ChangeScene("CLEAR");
-	}
+		//TODO
+		if ( enemys_->GameEnd() )
+		{
+			SceneManager::GetInstance()->ChangeScene("CLEAR");
+		}
 
-	//TODO
-	if ( player_->GetHp() <= 0 )
-	{
-		SceneManager::GetInstance()->ChangeScene("GAMEOVER");
+		//TODO
+		if ( player_->GetHp() <= 0 )
+		{
+			SceneManager::GetInstance()->ChangeScene("GAMEOVER");
+		}
 	}
 }
 
