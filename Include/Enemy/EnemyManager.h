@@ -8,6 +8,7 @@ class MapChip;
 class EnemyManager
 {
 private:
+
 	static std::list<std::unique_ptr<BaseEnemy>> enemylist_;
 	int32_t popTime_;
 	const uint32_t POP_INTERVAL = 30;
@@ -17,6 +18,7 @@ private:
 	static BaseObject* playerPtr_;
 	size_t popEnemyCount_;
 	size_t deadEnemyCount_;
+	BaseEnemy* cursedEnemy_;
 	void Pop();//自動ランダム生成
 public:
 	static void SetEnemyPOP(std::string enemyType,Vector2 pos,Vector2 Velocity);//指定生成

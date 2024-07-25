@@ -41,8 +41,9 @@ void WalkEnemy::Initialize()
 
 void WalkEnemy::Update()
 {
-	immotalTime_--;
-	if ( immotalTime_ <= 0 )
+	damaged_ = false;
+	immortalTime_--;
+	if ( immortalTime_ <= 0 )
 	{
 		immortal_ = false;
 	}
@@ -123,6 +124,7 @@ void WalkEnemy::OnCollision()
 		if ( static_cast< UserData* >( GetCollisionInfo().userData )->tag == "Player" )
 		{
 			dynamic_cast< Player* >( GetCollisionInfo().object )->Damage(attackPower_);
+
 		}
 	}
 }

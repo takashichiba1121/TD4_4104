@@ -14,7 +14,7 @@ protected:
 	BaseObject* playerPtr_;
 	int32_t attackPower_;
 	int32_t defense_;
-	int32_t immotalTime_;
+	int32_t immortalTime_;
 	int8_t statusEffects_;
 	std::array<Counter,ICED + 1> effectTimer;
 	int8_t effectDamageInterval = 10;
@@ -31,5 +31,7 @@ public:
 	void SetEffect(Effects effect);
 	void ReleaseEffect(Effects effect);
 	bool IsEffect(Effects effect);
+	bool IsImmortal();
+	int32_t GetImmortalTime();
 };
 

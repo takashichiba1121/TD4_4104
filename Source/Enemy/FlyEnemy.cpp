@@ -45,8 +45,8 @@ void FlyEnemy::Initialize()
 
 void FlyEnemy::Update()
 {
-	immotalTime_--;
-	if ( immotalTime_ <= 0 )
+	immortalTime_--;
+	if ( immortalTime_ <= 0 )
 	{
 		immortal_ = false;
 	}

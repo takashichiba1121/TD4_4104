@@ -18,7 +18,8 @@ enum Effects
 	BURN,
 	BIND,
 	DELAY,
-	ICED
+	ICED,
+	CURSE
 };
 
 class Counter
