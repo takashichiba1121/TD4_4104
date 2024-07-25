@@ -50,8 +50,8 @@ void GameScene::Update()
 	player_->Update();
 	enemys_->Update();
 
-		CollisionManager::GetInstance()->Update();
-	}
+	CollisionManager::GetInstance()->SetScreenPos(mapChip_->GetScreenPos());
+	CollisionManager::GetInstance()->Update();
 
 	//TODO
 	if ( enemys_->GameEnd() )
@@ -76,7 +76,7 @@ void GameScene::Draw()
 	enemys_->Draw();
 	if(!chenged) powerUp_->Draw();
 
-	nodeManager_->NodeDrew(100,600);
+	nodeManager_->NodeMapDraw();
 	
 	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
 	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");
