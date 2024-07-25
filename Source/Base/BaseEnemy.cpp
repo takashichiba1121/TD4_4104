@@ -11,12 +11,6 @@ void BaseEnemy::EffectUpdate()
 		{
 			switch ( ef )
 			{
-			case POISON:
-				if ( effectTimer[ i ].GetCount() % effectDamageInterval )
-				{
-					hp_ -= effectDamage;
-				}
-				break;
 			case BURN:
 				if ( effectTimer[ i ].GetCount() % effectDamageInterval )
 				{
@@ -41,7 +35,7 @@ void BaseEnemy::Damage(int32_t damage)
 	{
 		immortal_ = true;
 		hp_ -= damage;
-		immotalTime_ = 10;
+		immortalTime_ = 10;
 	}
 }
 
@@ -87,4 +81,14 @@ bool BaseEnemy::IsEffect(Effects effect)
 		return true;
 	}
 	return false;
+}
+
+bool BaseEnemy::IsImmortal()
+{
+	return immortal_;
+}
+
+int32_t BaseEnemy::GetImmortalTime()
+{
+	return immortalTime_;
 }

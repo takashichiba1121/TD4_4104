@@ -77,6 +77,26 @@ void EnemyManager::Update()
 	{
 		return enemy->IsLive() == false;
 	});
+
+	int32_t time = -10;
+	for ( auto& itr : enemylist_ )
+	{
+		if ( itr->IsImmortal() )
+		{
+			if ( time < itr->GetImmortalTime() )
+			{
+				if ( cursedEnemy_ )
+				{
+					cursedEnemy_->ReleaseEffect(CURSE);
+				}
+				cursedEnemy_ = itr.get();
+				cursedEnemy_->SetEffect(CURSE);
+				time = itr->GetImmortalTime();
+			}
+		}
+
+	}
+
 }
 
 void EnemyManager::Draw()
