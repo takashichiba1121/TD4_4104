@@ -15,7 +15,25 @@ double EaseOutBounce(double startPos,double endPos,double time,double maxTime);
 
 enum Effects
 {
-	POISON = 0b1,
-	BURN = 0b1 << 1,
-	STUN = 0b1 << 2
+	POISON,
+	BURN,
+	STUN,
+	DELAY,
+	ICED
+};
+
+class Counter
+{
+private:
+	int32_t nowCount_;
+	int32_t endCount_;
+public:
+	void CountUp(uint32_t up = 1);
+	void CountDown(uint32_t down = 1);
+	bool IsCountEnd();
+	bool IsCountZero();
+	bool IsCountUnderZero();
+	void SetEndCount(int32_t endCount);
+	void ReSetCount();
+
 };
