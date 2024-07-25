@@ -15,7 +15,6 @@ double EaseOutBounce(double startPos,double endPos,double time,double maxTime);
 
 enum Effects
 {
-	POISON,
 	BURN,
 	BIND,
 	DELAY,
