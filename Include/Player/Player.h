@@ -59,9 +59,13 @@ private:
 
 	std::unique_ptr<PowerUpCave>powerUp_;
 
-	bool isPowerUp = true;
+	bool isPowerUp = false;
 
 	uint32_t powerUpNum = 0;
+
+	bool isDealed_ = false;
+
+	bool powerUpText=false;
 public:
 	void Initialize() override;
 
@@ -113,13 +117,15 @@ public:
 
 	void UseItem();
 
-	void PowerUp();
+	uint32_t PowerUp();
 
-	void StartPowerUp();
+	void EndPowerUp();
 
 	void Reset();
 
 	bool IsPowerUp() {
 		return isPowerUp;
 	}
+
+	void OnCollision() override;
 };

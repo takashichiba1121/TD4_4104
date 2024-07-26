@@ -70,6 +70,7 @@ private:
 
 	MapChip* mapChip_;
 	Player* player_;
+	PowerUpCave* powerUp_;
 
 	bool isNodeDraw;
 
@@ -91,6 +92,7 @@ public:
 
 	void SetMapChip(MapChip* mapChip);
 	void SetPlayer(Player* player);
+	void SetPowerUp(PowerUpCave* powerUp);
 
 private:
 
