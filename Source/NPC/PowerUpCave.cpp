@@ -13,7 +13,8 @@ void PowerUpCave::Initialize()
 {
 
 	selectmode_ = false;
-	dealed_ = false;
+	dealed_ = true;
+	CollisionDisable();
 	hitboxSize_ = { 128,128 };
 	pos_ = { 650,640 };
 
@@ -195,4 +196,12 @@ void PowerUpCave::ReSet()
 	hitboxSize_ = { 128,128 };
 	pos_ = { 650,640 };
 	SetPriducts();
+	CollisionEnable();
+}
+
+void PowerUpCave::NoDeal()
+{
+	dealed_ = true;
+	selectmode_ = false;
+	CollisionEnable();
 }
