@@ -187,3 +187,12 @@ void PowerUpCave::Draw()
 		DrawBox(pos_.x - hitboxSize_.x/2,pos_.y - hitboxSize_.y/2,pos_.x + hitboxSize_.x/2,pos_.y + hitboxSize_.y/2,0xffffff,true);
 	}
 }
+
+void PowerUpCave::ReSet()
+{
+	selectmode_ = false;
+	dealed_ = false;
+	hitboxSize_ = { 128,128 };
+	pos_ = { 650,640 };
+	SetPriducts();
+}

@@ -47,7 +47,7 @@ private:
 
 	MapChip* mapChip_;
 	Player* player_;
-
+	PowerUpCave* powerUp_;
 public:
 
 	static NodeManager* GetInstance();
@@ -64,6 +64,7 @@ public:
 
 	void SetMapChip(MapChip* mapChip);
 	void SetPlayer(Player* player);
+	void SetPowerUp(PowerUpCave* powerUp);
 
 private:
 

@@ -5,16 +5,18 @@
 void ReinforcementNode::Initialize()
 {
 	mapChip_->MapLoad("Resources/Export/Map/TestMap.json");
-
+	powerUp_->ReSet();
 }
 
 void ReinforcementNode::Update()
 {
 	PlayerNodeMove();
+	powerUp_->Update();
 }
 
 void ReinforcementNode::Draw()
 {
+	powerUp_->Draw();
 }
 
 void ReinforcementNode::Reset()

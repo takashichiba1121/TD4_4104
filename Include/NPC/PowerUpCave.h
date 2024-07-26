@@ -53,6 +53,7 @@ public:
 	void Update() override;
 	void OnCollision() override;
 	void Draw() override;
+	void ReSet();
 	bool StatusChenge();
 	void SetSlect(uint8_t selectNum);
 	void SetPriducts();

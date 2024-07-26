@@ -104,6 +104,7 @@ void NodeManager::Initialize()
 		room->SetMapChip(mapChip_);
 		room->SetPlayer(player_);
 		room->SetNodeManagerr(this);
+		room->SetPowerUp(powerUp_);
 		room->Initialize();
 	}
 }
@@ -245,6 +246,11 @@ void NodeManager::SetMapChip(MapChip* mapChip)
 void NodeManager::SetPlayer(Player* player)
 {
 	player_ = player;
+}
+
+void NodeManager::SetPowerUp(PowerUpCave* powerUp)
+{
+	powerUp_ = powerUp;
 }
 
 void NodeManager::GenerateInitialGrid()
