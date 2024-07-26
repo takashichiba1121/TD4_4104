@@ -13,7 +13,8 @@ void PowerUpCave::Initialize()
 {
 
 	selectmode_ = false;
-	dealed_ = false;
+	dealed_ = true;
+	CollisionDisable();
 	hitboxSize_ = { 128,128 };
 	pos_ = { 650,640 };
 
@@ -168,15 +169,15 @@ void PowerUpCave::Draw()
 {
 	if ( selectmode_ && !dealed_)
 	{
-		for ( int i = 0; i < selectProducts_.size(); i++ )
+	for ( int i = 0; i < selectProducts_.size(); i++ )
+	{
+		int64_t color = 0x000000;
+		if ( i == selectNum_ )
 		{
-			int64_t color = 0x000000;
-			if ( i == selectNum_ )
-			{
-				color = 0xf00f00;
-			}
+			color = 0xf00f00;
+		}
 			DrawBox(( boxLeftTop_.x + i * boxDist_ ),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,color,true);
-			DrawFormatString(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,
+		DrawFormatString(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,
 				0xffffff,"%s\nPowerUp\nStatus:%s \nUP:%d\nCost\nStatus:%s \nDown:%d",nowProductType.c_str(),selectProducts_[ i ]->statusNames.first.c_str(),
 				selectProducts_[ i ]->power,selectProducts_[ i ]->statusNames.second.c_str(),selectProducts_[ i ]->cost);
 		}
@@ -186,4 +187,21 @@ void PowerUpCave::Draw()
 	{
 		DrawBox(pos_.x - hitboxSize_.x/2,pos_.y - hitboxSize_.y/2,pos_.x + hitboxSize_.x/2,pos_.y + hitboxSize_.y/2,0xffffff,true);
 	}
+}
+
+void PowerUpCave::ReSet()
+{
+	selectmode_ = false;
+	dealed_ = false;
+	hitboxSize_ = { 128,128 };
+	pos_ = { 650,640 };
+	SetPriducts();
+	CollisionEnable();
+}
+
+void PowerUpCave::NoDeal()
+{
+	dealed_ = true;
+	selectmode_ = false;
+	CollisionDisable();
 }

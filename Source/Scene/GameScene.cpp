@@ -24,15 +24,17 @@ void GameScene::Initialize()
 	enemys_->SetMapChip(mapChip_.get());
 	enemys_->SetPlayerPtr(player_.get());
 
-	nodeManager_ = NodeManager::GetInstance();
-	nodeManager_->SetMapChip(mapChip_.get());
-	nodeManager_->SetPlayer(player_.get());
-	nodeManager_->Initialize();
-	nodeManager_->StartNodeSet(0);
-
 	powerUp_ = std::make_unique<PowerUpCave>();
 	powerUp_->Initialize();
 	powerUp_->SetPlayer(player_.get());
+
+	nodeManager_ = NodeManager::GetInstance();
+	nodeManager_->SetMapChip(mapChip_.get());
+	nodeManager_->SetPlayer(player_.get());
+	nodeManager_->SetPowerUp(powerUp_.get());
+	nodeManager_->Initialize();
+	nodeManager_->StartNodeSet(0);
+	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
 }
 
 void GameScene::Update()
@@ -62,41 +64,41 @@ void GameScene::Update()
 	}
 	else
 	{
+		nodeManager_->Update();
+
 		player_->Update();
-	}
+		enemys_->Update();
 
-	enemys_->Update();
+		CollisionManager::GetInstance()->SetScreenPos(mapChip_->GetScreenPos());
+		CollisionManager::GetInstance()->Update();
 
+		//TODO
+		if ( enemys_->GameEnd() )
+		{
+			SceneManager::GetInstance()->ChangeScene("CLEAR");
+		}
 
-	CollisionManager::GetInstance()->Update();
-
-	//TODO
-	if ( enemys_->GameEnd() )
-	{
-		SceneManager::GetInstance()->ChangeScene("CLEAR");
-	}
-
-	//TODO
-	if ( player_->GetHp() <= 0 )
-	{
-		SceneManager::GetInstance()->ChangeScene("GAMEOVER");
+		//TODO
+		if ( player_->GetHp() <= 0 )
+		{
+			SceneManager::GetInstance()->ChangeScene("GAMEOVER");
+		}
 	}
 }
 
 void GameScene::Draw()
 {
 	DrawGraph(0,0,backGround_,true);
-
+	mapChip_->Draw({ 0,0 });
+	nodeManager_->Draw();
 	player_->Draw();
 	enemys_->Draw();
 
-	powerUp_->Draw();
-
-	mapChip_->Draw({ 0,0 });
-
-	nodeManager_->NodeDrew(100,600);
-
-
+	nodeManager_->NodeMapDraw();
+	
+	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
+	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");
+	DrawFormatString(0,40,0xffffff,"ATTACK:Z X");
 }
 
 void GameScene::SpriteDraw()

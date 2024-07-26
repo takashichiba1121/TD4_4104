@@ -9,6 +9,8 @@
 #include<ShopNode.h>
 #include<HealingNode.h>
 #include<StartNode.h>
+#include<BossNode.h>
+
 #include<GameConfig.h>
 
 int GetRand(int min_,int max_)
@@ -59,6 +61,7 @@ void NodeManager::Initialize()
 
 	GenerateInitialGrid();
 
+
 	std::vector<int> startingPoints = GetRandomStartingPoints();
 
 	for ( int k = 0; k < PATHS; k++ )
@@ -82,6 +85,15 @@ void NodeManager::Initialize()
 		}
 	}
 
+	for ( int i = 0; i < MAP_WIDTH; ++i )
+	{
+		if ( !nodes_[ FLOORS - 1 ][ i ].previews.empty() )
+		{
+			nodes_[ FLOORS - 1 ][ i ].nexts.push_back(&bossNode_);
+			nodes_[ FLOORS - 1 ][ i ].type.value = NodeType::Type::NONE;
+		}
+	}
+
 	SetupRoomTypes();
 
 	for ( auto& node : drawNode_ )
@@ -99,17 +111,66 @@ void NodeManager::Initialize()
 	rooms_[ NodeType::HEALING ] = std::make_unique<HealingNode>();
 	rooms_[ NodeType::START ] = std::make_unique<StartNode>();
 
+	bossRoom_ = std::make_unique<BossNode>();
+
 	for ( auto& room : rooms_ )
 	{
 		room->SetMapChip(mapChip_);
 		room->SetPlayer(player_);
 		room->SetNodeManagerr(this);
+		room->SetPowerUp(powerUp_);
 		room->Initialize();
 	}
+
+	bossRoom_->SetMapChip(mapChip_);
+	bossRoom_->SetPlayer(player_);
+	bossRoom_->SetNodeManagerr(this);
+	bossRoom_->Initialize();
+
+	bossNode_.type.value = NodeType::BOSS;
+
+	playerNodePos = 0;
+	leftBottomX = 100;
+	leftBottomY = 650;
+
+	int32_t bossNodeX = 0;
+	int32_t nodeCount = 0;
+
+	for ( size_t i = 0; i < MAP_WIDTH; i++ )
+	{
+		if ( !nodes_[ FLOORS - 1 ][ i ].previews.empty() )
+		{
+			nodeCount++;
+			bossNodeX += nodes_[ FLOORS - 1 ][ i ].position.x;
+
+			if ( bossNode_.position.y > nodes_[ FLOORS - 1 ][ i ].position.y )
+			{
+				bossNode_.position.y = nodes_[ FLOORS - 1 ][ i ].position.y;
+			}
+		}
+	}
+
+	bossNode_.position.y -= Y_DIST;
+	bossNode_.position.x = bossNodeX / nodeCount;
+	bossNode_.row = FLOORS;
 }
 
 void NodeManager::Update()
 {
+	if ( isNodeDraw )
+	{
+		int32_t scroll = GetMouseWheelRotVol();
+		if ( scroll == -1 && leftBottomY > STARTNODE_DREW_MAX_Y )
+		{
+			leftBottomY += 1.0f * scroll;
+		}
+
+		if ( scroll == 1 && nodes_[ playerNodePos - 1 ][ 0 ].position.y + leftBottomY < NODE_DREW_MIN_Y )
+		{
+			leftBottomY += 1.0f * scroll;
+		}
+	}
+
 	if ( nextNode_ )
 	{
 		if ( node_ )
@@ -117,7 +178,16 @@ void NodeManager::Update()
 			node_->Finalize();
 		}
 
-		node_ = rooms_[ nextNode_->type.value ].get();
+		if ( nextNode_->type.value == NodeType::BOSS )
+		{
+			node_ = bossRoom_.get();
+		}
+		else
+		{
+			node_ = rooms_[ nextNode_->type.value ].get();
+
+		}
+
 		node_->SetNode(nextNode_);
 		node_->Reset();
 
@@ -126,6 +196,8 @@ void NodeManager::Update()
 	}
 
 	node_->Update();
+
+	isNodeDraw = false;
 }
 
 void NodeManager::Draw()
@@ -183,46 +255,65 @@ void NodeManager::Reset()
 
 }
 
-void NodeManager::NodeDrew(int32_t leftBottomX,int32_t leftBottomY)
+void NodeManager::NodeMapDraw()
 {
-	for ( auto& node : drawNode_ )
+	isNodeDraw = true;
+
+	playerNodePos = selectNode_->row + 3;
+	playerNodePos = min(playerNodePos,FLOORS);
+
+	for ( int i = 0; i < playerNodePos; ++i )
 	{
-		for ( size_t k = 0; k < node->nexts.size(); k++ )
+		for ( int j = 0; j < MAP_WIDTH; ++j )
 		{
-			DrawLine(leftBottomX + node->position.x,leftBottomY + node->position.y,leftBottomX + node->nexts[ k ]->position.x,leftBottomY + node->nexts[ k ]->position.y,GetColor(255,255,255));
+			NodeDrew(leftBottomX,leftBottomY,nodes_[ i ][ j ],true);
+
+			if ( playerNodePos == FLOORS )
+			{
+				NodeDrew(leftBottomX,leftBottomY,bossNode_,true);
+			}
 		}
 	}
 
-	for ( auto& node : drawNode_ )
-	{
-		switch ( node->type.value )
-		{
-		case NodeType::Type::REINFORCEMENT:
-			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,reinforcementImg,true);
-			break;
-		case NodeType::Type::TRANSACTION:
-			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,transactionImg,true);
-			break;
-		case NodeType::Type::BATTLE:
-			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,battleImg,true);
-			break;
-		case NodeType::Type::SHOP:
-			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,shopImg,true);
-			break;
-		case NodeType::Type::HEALING:
-			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,healingImg,true);
-			break;
-		case NodeType::Type::START:
-			DrawRotaGraph(leftBottomX + node->position.x,leftBottomY + node->position.y,0.5,0,startImg,true);
-			break;
-		default:
-			DrawCircle(leftBottomX + selectNode_->position.x,leftBottomY + selectNode_->position.y,32,GetColor(255,255,255));
-			break;
-		}
+}
 
+void NodeManager::NodeDrew(int32_t leftBottomX,int32_t leftBottomY,const Node& node,bool line)
+{
+	if ( line )
+	{
+		for ( size_t k = 0; k < node.nexts.size(); k++ )
+		{
+			DrawLine(leftBottomX + node.position.x,leftBottomY + node.position.y,leftBottomX + node.nexts[ k ]->position.x,leftBottomY + node.nexts[ k ]->position.y,GetColor(255,255,255));
+		}
 	}
 
-	DrawCircle(leftBottomX + selectNode_->position.x,leftBottomY + selectNode_->position.y,3,GetColor(255,0,0));
+	switch ( node.type.value )
+	{
+	case NodeType::Type::REINFORCEMENT:
+		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,0.5,0,reinforcementImg,true);
+		break;
+	case NodeType::Type::TRANSACTION:
+		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,0.5,0,transactionImg,true);
+		break;
+	case NodeType::Type::BATTLE:
+		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,0.5,0,battleImg,true);
+		break;
+	case NodeType::Type::SHOP:
+		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,0.5,0,shopImg,true);
+		break;
+	case NodeType::Type::HEALING:
+		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,0.5,0,healingImg,true);
+		break;
+	case NodeType::Type::START:
+		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,0.5,0,startImg,true);
+		break;
+	case NodeType::Type::BOSS:
+		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,0.5,0,startImg,true);
+		break;
+	default:
+		DrawCircle(leftBottomX + selectNode_->position.x,leftBottomY + selectNode_->position.y,5,GetColor(255,0,0));
+		break;
+	}
 }
 
 void NodeManager::ChangeNode(size_t doorNo)
@@ -245,6 +336,11 @@ void NodeManager::SetMapChip(MapChip* mapChip)
 void NodeManager::SetPlayer(Player* player)
 {
 	player_ = player;
+}
+
+void NodeManager::SetPowerUp(PowerUpCave* powerUp)
+{
+	powerUp_ = powerUp;
 }
 
 void NodeManager::GenerateInitialGrid()
@@ -402,13 +498,9 @@ void NodeManager::SetupRoomTypes()
 	{
 		for ( Node& room : current_floor )
 		{
-			for ( Node* next_room : room.nexts )
+			if ( room.type.value == NodeType::NONE )
 			{
-				if ( next_room->type.value == NodeType::NONE )
-				{
-					SetRoomRandomly(next_room);
-					drawNode_.push_back(next_room);
-				}
+				SetRoomRandomly(&room);
 			}
 		}
 	}

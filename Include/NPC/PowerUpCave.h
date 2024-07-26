@@ -9,7 +9,6 @@
 #include "BaseObject.h"
 
 
-
 class Player;
 
 struct PowerUp
@@ -54,6 +53,8 @@ public:
 	void Update() override;
 	void OnCollision() override;
 	void Draw() override;
+	void ReSet();
+	void NoDeal();
 	bool StatusChenge();
 	void SetSlect(uint8_t selectNum);
 	void SetPriducts();

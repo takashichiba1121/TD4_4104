@@ -1,24 +1,26 @@
-#include "BattleNode.h"
+#include "BossNode.h"
+
 #include<CollisionManager.h>
 #include<NodeManager.h>
 
-void BattleNode::Initialize()
+void BossNode::Initialize()
 {
-	mapChip_->MapLoad("Resources/Export/Map/TestMap.json");
-
+	mapChip_->MapLoad("Resources/Export/Map/TestBossMap.json");
 }
 
-void BattleNode::Update()
+void BossNode::Update()
 {
 	PlayerNodeMove();
 }
 
-void BattleNode::Draw()
+void BossNode::Draw()
 {
 }
 
-void BattleNode::Reset()
+void BossNode::Reset()
 {
+	mapChip_->MapLoad("Resources/Export/Map/TestBossMap.json");
+
 	player_->Reset();
 
 	int32_t i = 0;
@@ -54,7 +56,7 @@ void BattleNode::Reset()
 	CollisionManager::GetInstance()->SetMapChip(mapChip_->GetMapChipPtr());
 }
 
-void BattleNode::Finalize()
+void BossNode::Finalize()
 {
 	for ( auto& door : nextdoors_ )
 	{
@@ -63,10 +65,9 @@ void BattleNode::Finalize()
 
 	nextdoors_.clear();
 	nextDoorsNum_ = 0;
-
 }
 
-Vector2 BattleNode::GetPlayerStartPos()
+Vector2 BossNode::GetPlayerStartPos()
 {
 	return Vector2();
 }

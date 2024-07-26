@@ -5,6 +5,7 @@
 #include<cstdint>
 #include<MapChip.h>
 #include<Player.h>
+#include<PowerUpCave.h>
 
 struct Node;
 class NodeManager;
@@ -23,6 +24,7 @@ protected:
 	MapChip* mapChip_;
 	Player* player_;
 	NodeManager* nodeManager_;
+	PowerUpCave* powerUp_;
 
 	struct NextDoor
 	{
@@ -44,6 +46,7 @@ public:
 	void SetNode(Node* node);
 	void SetMapChip(MapChip* mapChip);
 	void SetPlayer(Player* player);
+	void SetPowerUp(PowerUpCave* powerUp);
 	void SetNodeManagerr(NodeManager* nodeManager);
 
 	void PlayerNodeMove();
