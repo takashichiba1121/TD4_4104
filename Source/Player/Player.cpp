@@ -50,7 +50,7 @@ void Player::Initialize()
 
 	CollisionManager::GetInstance()->AddObject(this);
 
-	textureId_ = LoadGraph("Resources/Player/PlayerStand.png");
+	LoadDivGraph("Resources/Player/PlayerStand_sheet.png",10,10,1,128,128,(int*)PlayerStandTexture_);
 
 	leg_ = std::make_unique<PlayerLegNormal>();
 
@@ -75,6 +75,12 @@ void Player::Update()
 	}
 	else
 	{
+		PlayerStandTextureCount_++;
+		if ( PlayerStandTextureCount_==20 )
+		{
+			PlayerStandTextureCount_ = 0;
+		}
+
 
 		if ( DamageInterval_ < DAMAGE_INTERVAL_MAX_ )
 		{
@@ -346,11 +352,11 @@ void Player::Draw()
 
 		if ( direction_ )
 		{
-			DrawExtendGraph(leftPos,upPos,rightPos,downPos,textureId_,TRUE);
+			DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerStandTexture_[PlayerStandTextureCount_/2],TRUE);
 		}
 		else
 		{
-			DrawExtendGraph(rightPos,upPos,leftPos,downPos,textureId_,TRUE);
+			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_/2 ],TRUE);
 		}
 	}
 

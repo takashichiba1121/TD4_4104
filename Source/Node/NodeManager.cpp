@@ -182,7 +182,6 @@ void NodeManager::Reset()
 	std::sort(startNodes_.begin(),startNodes_.end());
 
 }
-}
 
 void NodeManager::NodeDrew(int32_t leftBottomX,int32_t leftBottomY)
 {
