@@ -9,6 +9,18 @@
 #include<BaseNode.h>
 #include<MapChip.h>
 
+struct Node
+{
+	NodeType type;
+	Vector2 position;
+	int32_t row = 0;
+	int32_t column = 0;
+	int32_t nextDoorsNum = 0;
+
+	std::vector<Node*> previews;
+	std::vector<Node*>nexts;
+};
+
 class NodeManager
 {
 private:
@@ -42,7 +54,7 @@ private:
 
 	// 確率分布を作成する
 	std::discrete_distribution<int> distribution;
-	std::array<std::unique_ptr<BaseNode>,NodeType::TYPE_NUM - 2>rooms_;
+	std::array<std::unique_ptr<BaseNode>,NodeType::TYPE_NUM - 3>rooms_;
 	std::list<Node*> drawNode_;
 
 	
@@ -52,6 +64,9 @@ private:
 
 	std::vector<std::vector<Node>>nodes_;
 	std::vector<Node*>startNodes_;
+
+	Node bossNode_;
+	std::unique_ptr<BaseNode>bossRoom_;
 
 	MapChip* mapChip_;
 	Player* player_;
@@ -89,16 +104,4 @@ private:
 
 	NodeManager() = default;
 	~NodeManager() = default;
-};
-
-struct Node
-{
-	NodeType type;
-	Vector2 position;
-	int32_t row = 0;
-	int32_t column = 0;
-	int32_t nextDoorsNum = 0;
-
-	std::vector<Node*> previews;
-	std::vector<Node*>nexts;
 };
