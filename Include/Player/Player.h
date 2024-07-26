@@ -123,8 +123,6 @@ public:
 
 	void Reset();
 
-	void Reset();
-
 	bool IsPowerUp() {
 		return isPowerUp;
 	}

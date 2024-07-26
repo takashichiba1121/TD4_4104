@@ -35,10 +35,6 @@ void GameScene::Initialize()
 	nodeManager_->Initialize();
 	nodeManager_->StartNodeSet(0);
 	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
-
-	powerUp_ = std::make_unique<PowerUpCave>();
-	powerUp_->Initialize();
-	powerUp_->SetPlayer(player_.get());
 }
 
 void GameScene::Update()
@@ -92,12 +88,12 @@ void GameScene::Update()
 void GameScene::Draw()
 {
 	DrawGraph(0,0,backGround_,true);
-
+	mapChip_->Draw({ 0,0 });
+	nodeManager_->Draw();
 	player_->Draw();
 	enemys_->Draw();
 
 	nodeManager_->NodeDrew(100,600);
-	nodeManager_->Draw();
 	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
 	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");
 	DrawFormatString(0,40,0xffffff,"ATTACK:Z X");

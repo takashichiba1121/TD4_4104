@@ -23,8 +23,6 @@ private:
 	NodeManager* nodeManager_;
 	std::unique_ptr<PowerUpCave>powerUp_;
 
-	std::unique_ptr<PowerUpCave>powerUp_;
-
 	uint32_t backGround_;
 	uint8_t num;
 	bool chenged;

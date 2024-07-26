@@ -452,6 +452,7 @@ void Player::Reset()
 {
 	pos_.x = GameConfig::GetGameConfig()->windowWidth / 2;
 	pos_.y = GameConfig::GetGameConfig()->windowHeight / 2;
+	isDealed_ = false;
 }
 
 void Player::OnCollision()
@@ -468,10 +469,4 @@ void Player::OnCollision()
 			isDealed_ = true;
 		}
 	}
-}
-
-void Player::Reset()
-{
-	pos_.x = GameConfig::GetGameConfig()->windowWidth / 2;
-	pos_.y = GameConfig::GetGameConfig()->windowHeight / 2;
 }
