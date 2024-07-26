@@ -6,15 +6,6 @@ class PlayerLeg
 
 public:
 
-	enum class Situation
-	{
-		Stand,
-		Walk,
-		Dash,
-		Jump,
-		Fall,
-	};
-
 	uint32_t cost = 0;
 
 public:

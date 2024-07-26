@@ -75,8 +75,6 @@ private:
 
 	bool isDirBottom_;
 
-	Situation situation;
-
 #pragma endregion
 };
 
