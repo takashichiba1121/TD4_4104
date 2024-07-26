@@ -203,5 +203,5 @@ void PowerUpCave::NoDeal()
 {
 	dealed_ = true;
 	selectmode_ = false;
-	CollisionEnable();
+	CollisionDisable();
 }
