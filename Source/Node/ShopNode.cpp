@@ -62,7 +62,7 @@ void ShopNode::Finalize()
 
 	nextdoors_.clear();
 	nextDoorsNum_ = 0;
-	powerUp_->NoDeal();
+
 }
 
 Vector2 ShopNode::GetPlayerStartPos()
