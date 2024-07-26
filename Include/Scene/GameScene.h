@@ -11,6 +11,7 @@
 
 #include"MapChip.h"
 
+
 class GameScene : public BaseScene
 {
 private:
@@ -20,6 +21,8 @@ private:
 
 	std::unique_ptr<MapChip>mapChip_;
 	NodeManager* nodeManager_;
+	std::unique_ptr<PowerUpCave>powerUp_;
+
 	std::unique_ptr<PowerUpCave>powerUp_;
 
 	uint32_t backGround_;

@@ -14,9 +14,9 @@
 
 void Player::Initialize()
 {
-	hitboxSize_ = { 28,54 };
+	hitboxSize_ = { 64,128 };
 
-	drawSize_ = { 34,60 };
+	drawSize_ = { 128,128 };
 
 	pos_.x = GameConfig::GetGameConfig()->windowWidth / 2;
 
@@ -50,8 +50,6 @@ void Player::Initialize()
 
 	CollisionManager::GetInstance()->AddObject(this);
 
-	textureId_ = LoadGraph("Resources/Player/PlayerStand.png");
-
 	leg_ = std::make_unique<PlayerLegNormal>();
 
 	leg_->Initialize(&velocity_,&direction_,&changeSpd_);
@@ -63,21 +61,18 @@ void Player::Initialize()
 	item.statusName = "ATK";
 
 	ItemGet(item);
-
-	powerUp_ = std::make_unique<PowerUpCave>();
-	powerUp_->Initialize();
-	powerUp_->SetPlayer(this);
 }
 
 void Player::Update()
 {
+	powerUpText = false;
+
 	if ( isPowerUp )
 	{
 		PowerUp();
 	}
 	else
 	{
-
 		if ( DamageInterval_ < DAMAGE_INTERVAL_MAX_ )
 		{
 			DamageInterval_++;
@@ -110,6 +105,8 @@ void Player::Update()
 		SetMapChipSpeed(velocity_);
 
 		shape_->SetCenter(pos_);
+
+
 	}
 
 #ifdef _DEBUG
@@ -141,7 +138,7 @@ void Player::Update()
 
 void Player::Attack()
 {
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && leftArm_ != nullptr&&!rightArm_->IsAttack() )
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && leftArm_ != nullptr && !rightArm_->IsAttack() )
 	{
 		leftArm_->AttackInit(changePow_);
 	}
@@ -193,7 +190,7 @@ bool Player::ChangeLeftArm(std::string attackName,uint32_t cost)
 
 bool Player::ChangeRightArm(std::string attackName,uint32_t cost)
 {
-	if ( nowCost + cost- rightArm_->cost > 100 )
+	if ( nowCost + cost - rightArm_->cost > 100 )
 	{
 		return false;
 	}
@@ -209,7 +206,7 @@ bool Player::ChangeRightArm(std::string attackName,uint32_t cost)
 
 	rightArm_->cost = cost;
 
-	rightArm_->Initialize(&pos_,&velocity_ ,&direction_);
+	rightArm_->Initialize(&pos_,&velocity_,&direction_);
 }
 
 bool Player::ChangeLeg(std::string legName,uint32_t cost)
@@ -305,12 +302,12 @@ bool Player::SubDef(int32_t def)
 
 bool Player::SubMaxHp(int32_t maxHp)
 {
-	if (maxHp_ - maxHp <= 0 )
+	if ( maxHp_ - maxHp <= 0 )
 	{
 		return false;
 	}
 	maxHp_ -= maxHp;
-	
+
 	if ( hp_ >= maxHp_ )
 	{
 		hp_ = maxHp_;
@@ -337,21 +334,9 @@ void Player::Draw()
 {
 	PlayerBulletManager::Instance()->Draw();
 
-	float leftPos = pos_.x - drawSize_.x / 2;
-	float rightPos = pos_.x + drawSize_.x / 2;
-	float upPos = pos_.y - drawSize_.y / 2;
-	float downPos = pos_.y + drawSize_.y / 2;
 	if ( DamageInterval_ % 2 == 0 )
 	{
-
-		if ( direction_ )
-		{
-			DrawExtendGraph(leftPos,upPos,rightPos,downPos,textureId_,TRUE);
-		}
-		else
-		{
-			DrawExtendGraph(rightPos,upPos,leftPos,downPos,textureId_,TRUE);
-		}
+		leg_->Draw(pos_,drawSize_);
 	}
 
 	if ( leftArm_ != nullptr )
@@ -364,12 +349,12 @@ void Player::Draw()
 		rightArm_->Draw();
 	}
 
-	if ( isPowerUp )
-	{
-		powerUp_->Draw();
-	}
-
 	DrawFormatString(0,GameConfig::GetWindowHeight() - 20,0xffffff,"PlayerHP:%d/%d",hp_,maxHp_);
+
+	if (powerUpText&&isPowerUp==false )
+	{
+		DrawFormatString(pos_.x,pos_.y-drawSize_.y+40,0xffffff,"Push to KEY Z",hp_,maxHp_);
+	}
 }
 
 bool Player::ItemGet(Item newItem)
@@ -387,7 +372,7 @@ void Player::UseItem()
 {
 	if ( items_.size() == 0 && items_.size() < selectItems_ )
 	{
-		return ;
+		return;
 	}
 
 	std::list<Item>::iterator  itr = items_.begin();
@@ -396,12 +381,12 @@ void Player::UseItem()
 	while ( itr != items_.end() )
 	{
 		num++;
-		if(num==selectItems_)
+		if ( num == selectItems_ )
 		{
-			if (itr->statusName=="HP" )
+			if ( itr->statusName == "HP" )
 			{
 				hp_ += itr->power;
-				if(hp_>maxHp_)
+				if ( hp_ > maxHp_ )
 				{
 					hp_ = maxHp_;
 				}
@@ -434,7 +419,7 @@ void Player::UseItem()
 	}
 }
 
-void Player::PowerUp()
+uint32_t Player::PowerUp()
 {
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_LEFT) || Input::Instance()->TriggerKey(KEY_INPUT_A) )
 	{
@@ -455,21 +440,34 @@ void Player::PowerUp()
 			powerUpNum = 0;
 		}
 	}
-
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) )
-	{
-		powerUp_->StatusChenge();
-
-		isPowerUp = false;
-	}
-	powerUp_->SetSlect(powerUpNum);
+	return powerUpNum;
 }
 
-void Player::StartPowerUp()
+void Player::EndPowerUp()
 {
-	isPowerUp = true;
+	isPowerUp = false;
+}
 
-	powerUp_->Initialize();
+void Player::Reset()
+{
+	pos_.x = GameConfig::GetGameConfig()->windowWidth / 2;
+	pos_.y = GameConfig::GetGameConfig()->windowHeight / 2;
+}
+
+void Player::OnCollision()
+{
+	if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "PowerUpCave"&&isDealed_==false )
+	{
+		powerUpText = true;
+		if (Input::Instance()->TriggerKey(KEY_INPUT_Z) )
+		{
+			dynamic_cast< PowerUpCave* >( GetCollisionInfo().object )->SetPriducts();
+
+			isPowerUp = true;
+
+			isDealed_ = true;
+		}
+	}
 }
 
 void Player::Reset()

@@ -52,7 +52,7 @@ void PowerUpCave::Initialize()
 		temp->statusNames.first = static_cast< string >( obj[ "PowerName" ] );
 		temp->statusNames.second = static_cast< string >( obj[ "CostName" ] );
 		products_[ static_cast< string >( obj[ "Type" ] ) ].push_back(std::move(temp));
-}
+	}
 
 	for ( auto itr = products_.begin(); itr != products_.end(); ++itr )
 	{

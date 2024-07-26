@@ -2,6 +2,7 @@
 #include"DxlibInclude.h"
 #include "CollisionManager.h"
 #include "Player.h"
+#include "MapChip.h"
 
 using namespace std;
 void WalkEnemy::Initialize()
@@ -11,9 +12,9 @@ void WalkEnemy::Initialize()
 	SetMapChipCenter(&pos_);
 	SetMapChipRadius({ drawSize_.x / 2,drawSize_.y / 2 });
 
-
+	ternInverval = 2;
 	gravity_ = { 0,1 };
-	speed_ = GetRand(4)+1;
+	originalSpeed_ = GetRand(4)+1;
 	if ( GetRand(2) >= 2 )
 	{
 		velocity_ = { 1,0 };
@@ -40,13 +41,27 @@ void WalkEnemy::Initialize()
 
 void WalkEnemy::Update()
 {
-	immotalTime_--;
-	if ( immotalTime_ <= 0 )
+	immortalTime_--;
+	if ( immortalTime_ <= 0 )
 	{
 		immortal_ = false;
 	}
-	Move();
+
+	if ( IsEffect(DELAY) )
+	{
+		speed_ = 1;
+	}
+	else
+	{
+		speed_ = originalSpeed_;
+	}
+
+	if ( !IsEffect(BIND) && !IsEffect(ICED) )
+	{
+		Move();
+	}
 	shape_->SetCenter({ pos_.x , pos_.y });
+	EffectUpdate();
 }
 
 void WalkEnemy::Move()
@@ -66,9 +81,30 @@ void WalkEnemy::Move()
 	{
 		gravity_ = { 0,0 };
 	}
+	 nextElement = mapchip_->GetPosElement(pos_.x +(( velocity_.x * speed_ )) + ( drawSize_.x / 2 ),
+		pos_.y + ( drawSize_.y / 2 ) + 1);
+
+	if ((nextElement == NEXT || (nextElement == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM )) && !tern )
+	{
+		velocity_ *= -1;
+		tern = true;
+	}
+
+	if ( tern )
+	{
+		ternInvervalTimer++;
+		if ( ternInverval < ternInvervalTimer )
+		{
+			tern = false;
+			ternInvervalTimer = 0;
+		}
+	}
 
 	SetMapChipSpeed({ velocity_ * speed_,gravity_ });
 	shape_->SetCenter(pos_);
+
+
+	
 }
 
 void WalkEnemy::Draw()
@@ -76,6 +112,8 @@ void WalkEnemy::Draw()
 	if ( !islive_ ) return;
 	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2,
 		pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,0),true);
+	DrawFormatString(100,100,0xffffff,"%d",nextElement);
+
 
 }
 
@@ -86,6 +124,7 @@ void WalkEnemy::OnCollision()
 		if ( static_cast< UserData* >( GetCollisionInfo().userData )->tag == "Player" )
 		{
 			dynamic_cast< Player* >( GetCollisionInfo().object )->Damage(attackPower_);
+
 		}
 	}
 }

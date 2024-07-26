@@ -17,12 +17,13 @@ void EnemyManager::Pop()
 	{
 		if ( enemylist_.size() >= MAX_ENEMY_NUM || popEnemyCount_ >= MAX_POP_ENEMY_NUM) return;
 		popTime_ = POP_INTERVAL;
-		if (GetRand(2) - 1)
+		if (false)
 		{
 			unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
 			temp->Initialize();
 			temp->SetPlayerPtr(playerPtr_);
 			temp->SetPos({ GetRand(850) + 50.f,100.f });
+			temp->SetMapChip(mapchip_);
 			enemylist_.push_back(move(temp));
 			popEnemyCount_++;
 		}
@@ -31,6 +32,7 @@ void EnemyManager::Pop()
 			unique_ptr<WalkEnemy> temp = make_unique<WalkEnemy>();
 			temp->Initialize();
 			temp->SetPos({ GetRand(850) + 50.f,100.f });
+			temp->SetMapChip(mapchip_);
 			enemylist_.push_back(move(temp));
 			popEnemyCount_++;
 		}
@@ -75,6 +77,27 @@ void EnemyManager::Update()
 	{
 		return enemy->IsLive() == false;
 	});
+
+	int32_t time = -10;
+		
+	for ( auto& itr : enemylist_ )
+	{
+		if ( itr->IsImmortal() )
+		{
+			if ( time < itr->GetImmortalTime() )
+			{
+				if ( cursedEnemy_ )
+				{
+					cursedEnemy_->ReleaseEffect(CURSE);
+				}
+				cursedEnemy_ = itr.get();
+				cursedEnemy_->SetEffect(CURSE);
+				time = itr->GetImmortalTime();
+			}
+		}
+
+	}
+
 }
 
 void EnemyManager::Draw()
@@ -84,6 +107,11 @@ void EnemyManager::Draw()
 		itr->Draw();
 	}
 	DrawFormatString(GameConfig::GetWindowWidth() - 200,10,0xffffff,"KillEnemy %d / %d",deadEnemyCount_,MAX_POP_ENEMY_NUM);
+}
+
+void EnemyManager::SetMapChip(MapChip* mapchip)
+{
+	mapchip_ = mapchip;
 }
 
 size_t EnemyManager::GetEnemyCount()

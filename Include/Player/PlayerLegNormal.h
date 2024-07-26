@@ -17,7 +17,7 @@ class PlayerLegNormal :
 
 	void Falling() override;
 
-	void Draw() override;
+	void Draw(Vector2 pos,Vector2 size) override;
 
 	void Load() override;
 
@@ -33,7 +33,19 @@ private:
 
 	bool isJump_;
 
+	bool isWalk;
+
 	bool isEvasionRoll_;
+
+	uint32_t PlayerStandTexture_[ 10 ];
+
+	uint32_t PlayerStandTextureCount_ = 0;
+
+	uint32_t PlayerJumpTexture_[ 4 ];
+
+	uint32_t PlayerJumpTextureCount_ = 0;
+
+
 
 #pragma region ステータス
 
