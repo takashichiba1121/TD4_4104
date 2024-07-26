@@ -171,16 +171,17 @@ void NodeManager::Reset()
 			nodes_[ 0 ][ point ].type.value = NodeType::START;
 			drawNode_.push_back(&nodes_[ 0 ][ point ]);
 		}
-
-		for ( auto& node : drawNode_ )
-		{
-			std::vector<Node*>& nodes = node->nexts;
-			std::sort(nodes.begin(),nodes.end());
-		}
-
-		std::sort(startNodes_.begin(),startNodes_.end());
-
 	}
+
+	for ( auto& node : drawNode_ )
+	{
+		std::vector<Node*>& nodes = node->nexts;
+		std::sort(nodes.begin(),nodes.end());
+	}
+
+	std::sort(startNodes_.begin(),startNodes_.end());
+
+}
 }
 
 void NodeManager::NodeDrew(int32_t leftBottomX,int32_t leftBottomY)

@@ -40,6 +40,12 @@
     <Filter Include="ヘッダー ファイル\Collision">
       <UniqueIdentifier>{52e3dfaa-c62c-40de-9d37-ca7e55789659}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Node">
+      <UniqueIdentifier>{fa511455-1997-47b5-b2a4-9faa8fec00f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Node">
+      <UniqueIdentifier>{744e79e3-b9aa-4477-948b-7d04ac14bb49}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ソース ファイル\Scene">
       <UniqueIdentifier>{e01c7345-fd7a-4116-bb4e-634da9a7af6c}</UniqueIdentifier>
     </Filter>
