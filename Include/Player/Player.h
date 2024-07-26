@@ -64,6 +64,8 @@ private:
 	uint32_t powerUpNum = 0;
 
 	bool isDealed_ = false;
+
+	bool powerUpText=false;
 public:
 	void Initialize() override;
 

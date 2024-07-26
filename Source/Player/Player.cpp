@@ -65,11 +65,11 @@ void Player::Initialize()
 
 void Player::Update()
 {
+	powerUpText = false;
+
 	if ( isPowerUp )
 	{
 		PowerUp();
-
-
 	}
 	else
 	{
@@ -350,6 +350,11 @@ void Player::Draw()
 	}
 
 	DrawFormatString(0,GameConfig::GetWindowHeight() - 20,0xffffff,"PlayerHP:%d/%d",hp_,maxHp_);
+
+	if (powerUpText&&isPowerUp==false )
+	{
+		DrawFormatString(pos_.x,pos_.y-drawSize_.y+40,0xffffff,"Push to KEY Z",hp_,maxHp_);
+	}
 }
 
 bool Player::ItemGet(Item newItem)
@@ -453,10 +458,14 @@ void Player::OnCollision()
 {
 	if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "PowerUpCave"&&isDealed_==false )
 	{
-		dynamic_cast< PowerUpCave* >( GetCollisionInfo().object )->SetPriducts();
+		powerUpText = true;
+		if (Input::Instance()->TriggerKey(KEY_INPUT_Z) )
+		{
+			dynamic_cast< PowerUpCave* >( GetCollisionInfo().object )->SetPriducts();
 
-		isPowerUp = true;
+			isPowerUp = true;
 
-		isDealed_ = true;
+			isDealed_ = true;
+		}
 	}
 }
