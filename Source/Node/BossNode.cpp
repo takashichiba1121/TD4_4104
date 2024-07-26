@@ -1,25 +1,25 @@
-#include "StartNode.h"
+#include "BossNode.h"
+
 #include<CollisionManager.h>
 #include<NodeManager.h>
 
-void StartNode::Initialize()
+void BossNode::Initialize()
 {
-	mapChip_->MapLoad("Resources/Export/Map/TestMap.json");
-
+	mapChip_->MapLoad("Resources/Export/Map/TestBossMap.json");
 }
 
-void StartNode::Update()
+void BossNode::Update()
 {
 	PlayerNodeMove();
 }
 
-void StartNode::Draw()
+void BossNode::Draw()
 {
 }
 
-void StartNode::Reset()
+void BossNode::Reset()
 {
-	mapChip_->MapLoad("Resources/Export/Map/TestMap.json");
+	mapChip_->MapLoad("Resources/Export/Map/TestBossMap.json");
 
 	player_->Reset();
 
@@ -56,7 +56,7 @@ void StartNode::Reset()
 	CollisionManager::GetInstance()->SetMapChip(mapChip_->GetMapChipPtr());
 }
 
-void StartNode::Finalize()
+void BossNode::Finalize()
 {
 	for ( auto& door : nextdoors_ )
 	{
@@ -67,7 +67,7 @@ void StartNode::Finalize()
 	nextDoorsNum_ = 0;
 }
 
-Vector2 StartNode::GetPlayerStartPos()
+Vector2 BossNode::GetPlayerStartPos()
 {
-    return Vector2();
+	return Vector2();
 }

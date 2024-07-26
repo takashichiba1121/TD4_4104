@@ -13,19 +13,19 @@ void FPS::FpsControlEnd()
 	//今の時間を取得
 	QueryPerformanceCounter(&timeEnd);
 	//経過時間
-	float lElapsedFramee = static_cast< float >( timeEnd.QuadPart - timeStart.QuadPart ) / static_cast< float >( cpuClock.QuadPart );
+	float lElapsedFrame = static_cast< float >( timeEnd.QuadPart - timeStart.QuadPart ) / static_cast< float >( cpuClock.QuadPart );
 	//余裕があるときは待つ
-	if ( lElapsedFramee < frameTime )
+	if ( lElapsedFrame < frameTime )
 	{
 		//sleep時間
-		DWORD sleepTime = static_cast< DWORD >( ( frameTime - lElapsedFramee ) * 1000.0f );
+		DWORD sleepTime = static_cast< DWORD >( ( frameTime - lElapsedFrame ) * 1000.0f );
 		timeBeginPeriod(1);
 		//寝る
 		Sleep(sleepTime);
 		timeEndPeriod(1);
 	}
 
-	fps = 1 / lElapsedFramee;
+	fps = 1 / lElapsedFrame;
 
 	QueryPerformanceCounter(&timeEnd);
 	deltaTime = static_cast< float >( timeEnd.QuadPart - timeStart.QuadPart ) / static_cast< float >( cpuClock.QuadPart );
