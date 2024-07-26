@@ -6,6 +6,15 @@ class PlayerLeg
 
 public:
 
+	enum class Situation
+	{
+		Stand,
+		Walk,
+		Dash,
+		Jump,
+		Fall,
+	};
+
 	uint32_t cost = 0;
 
 public:
@@ -22,7 +31,7 @@ public:
 
 	virtual void Falling()=0;
 
-	virtual void Draw() = 0;
+	virtual void Draw(Vector2 pos,Vector2 size) = 0;
 
 	virtual void Load() = 0;
 };

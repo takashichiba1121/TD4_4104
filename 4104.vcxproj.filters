@@ -168,9 +168,6 @@
     <ClCompile Include="Source\Enemy\EnemyManager.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Enemy\BaseEnemy.cpp">
-      <Filter>ソース ファイル\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Node\BattleNode.cpp">
       <Filter>ソース ファイル\Node</Filter>
     </ClCompile>
@@ -207,9 +204,6 @@
     <ClCompile Include="Source\NPC\NPC.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Player\PlayerAttackSpider.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scene\ClearScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -235,10 +229,13 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Player\PlayerAttackGun.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player\PlayerAttackSpider.cpp">
+      <Filter>ソース ファイル\player</Filter>
     </ClCompile>
     <ClCompile Include="Source\Player\PlayerLegNormal.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -374,9 +371,6 @@
     <ClInclude Include="Include\Node\TransactionNode.h">
       <Filter>ヘッダー ファイル\Node</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Node\StartNode.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="GameCore\AbstractSceneFactory.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -392,10 +386,19 @@
     <ClInclude Include="GameCore\SceneManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Player\PlayerAttackGun.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Player\Player.h">
+      <Filter>ヘッダー ファイル\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Player\PlayerAttackSpider.h">
+      <Filter>ヘッダー ファイル\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Player\PlayerAttackGun.h">
+      <Filter>ヘッダー ファイル\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Player\PlayerLeg.h">
+      <Filter>ヘッダー ファイル\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Player\PlayerLegNormal.h">
       <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
   </ItemGroup>

@@ -50,8 +50,6 @@ void Player::Initialize()
 
 	CollisionManager::GetInstance()->AddObject(this);
 
-	LoadDivGraph("Resources/Player/PlayerStand_sheet.png",10,10,1,128,128,(int*)PlayerStandTexture_);
-
 	leg_ = std::make_unique<PlayerLegNormal>();
 
 	leg_->Initialize(&velocity_,&direction_,&changeSpd_);
@@ -75,13 +73,6 @@ void Player::Update()
 	}
 	else
 	{
-		PlayerStandTextureCount_++;
-		if ( PlayerStandTextureCount_==20 )
-		{
-			PlayerStandTextureCount_ = 0;
-		}
-
-
 		if ( DamageInterval_ < DAMAGE_INTERVAL_MAX_ )
 		{
 			DamageInterval_++;
@@ -343,21 +334,9 @@ void Player::Draw()
 {
 	PlayerBulletManager::Instance()->Draw();
 
-	float leftPos = pos_.x - drawSize_.x / 2;
-	float rightPos = pos_.x + drawSize_.x / 2;
-	float upPos = pos_.y - drawSize_.y / 2;
-	float downPos = pos_.y + drawSize_.y / 2;
 	if ( DamageInterval_ % 2 == 0 )
 	{
-
-		if ( direction_ )
-		{
-			DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerStandTexture_[PlayerStandTextureCount_/2],TRUE);
-		}
-		else
-		{
-			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_/2 ],TRUE);
-		}
+		leg_->Draw(pos_,drawSize_);
 	}
 
 	if ( leftArm_ != nullptr )

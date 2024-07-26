@@ -64,10 +64,6 @@ private:
 	uint32_t powerUpNum = 0;
 
 	bool isDealed_ = false;
-
-	uint32_t PlayerStandTexture_[ 10 ];
-
-	uint32_t PlayerStandTextureCount_ = 0;
 public:
 	void Initialize() override;
 

@@ -14,13 +14,17 @@ void PlayerLegNormal::Initialize(Vector2* playerVelocity,bool* direction,float* 
 	changeAcl_ = changeAcl;
 
 	Load();
+
+	LoadDivGraph("Resources/Player/PlayerStand_sheet.png",10,10,1,128,128,( int* ) PlayerStandTexture_);
+
+	LoadDivGraph("Resources/Player/PlayerJumpUp.png",4,4,1,128,128,( int* ) PlayerJumpTexture_);
 }
 
 void PlayerLegNormal::Move(bool DirBOTTOM,bool isAttack)
 {
 	isDirBottom_ = DirBOTTOM;
 
-	if ( (Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A)) && !isEvasionRoll_&&!isAttack )
+	if ( ( Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A) ) && !isEvasionRoll_ && !isAttack )
 	{
 		*direction_ = false;
 		if ( playerVelocity_->x > topSpeed_ * *changeAcl_ )
@@ -38,6 +42,8 @@ void PlayerLegNormal::Move(bool DirBOTTOM,bool isAttack)
 		{
 			playerVelocity_->x = -topSpeed_ * *changeAcl_;
 		}
+
+		isWalk = true;
 	}
 	else if ( playerVelocity_->x < 0 )
 	{
@@ -53,8 +59,15 @@ void PlayerLegNormal::Move(bool DirBOTTOM,bool isAttack)
 		{
 			playerVelocity_->x = 0;
 		}
+		isWalk = false;
+
+		PlayerStandTextureCount_++;
+		if ( PlayerStandTextureCount_ == 20 )
+		{
+			PlayerStandTextureCount_ = 0;
+		}
 	}
-	if ( (Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D)) && !isEvasionRoll_&&!isAttack )
+	if ( ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) ) && !isEvasionRoll_ && !isAttack )
 	{
 		*direction_ = true;
 		if ( playerVelocity_->x < topSpeed_ * *changeAcl_ )
@@ -72,6 +85,8 @@ void PlayerLegNormal::Move(bool DirBOTTOM,bool isAttack)
 		{
 			playerVelocity_->x = topSpeed_ * *changeAcl_;
 		}
+
+		isWalk = true;
 	}
 	else if ( playerVelocity_->x > 0 )
 	{
@@ -87,6 +102,14 @@ void PlayerLegNormal::Move(bool DirBOTTOM,bool isAttack)
 		{
 			playerVelocity_->x = 0;
 		}
+
+		isWalk = false;
+
+		PlayerStandTextureCount_++;
+		if ( PlayerStandTextureCount_ == 20 )
+		{
+			PlayerStandTextureCount_ = 0;
+		}
 	}
 
 	if ( Input::Instance()->PushKey(KEY_INPUT_SPACE) && !onGround_ )
@@ -96,7 +119,7 @@ void PlayerLegNormal::Move(bool DirBOTTOM,bool isAttack)
 
 	EvasionRoll();
 
-	if (!DirBOTTOM )
+	if ( !DirBOTTOM )
 	{
 		onGround_ = true;
 	}
@@ -121,11 +144,19 @@ void PlayerLegNormal::JumpStart()
 	isJump_ = true;
 
 	playerVelocity_->y += jumpInitialVelocity_;
+
+	PlayerJumpTextureCount_ = 0;
 }
 
 void PlayerLegNormal::Jump()
 {
 	playerVelocity_->y += jumpAcceleration_;
+
+	PlayerJumpTextureCount_++;
+	if ( PlayerJumpTextureCount_ == 4 )
+	{
+		PlayerJumpTextureCount_ = 0;
+	}
 
 	if ( Input::Instance()->ReleaseKey(KEY_INPUT_SPACE) || playerVelocity_->y >= 0 )
 	{
@@ -174,7 +205,7 @@ void PlayerLegNormal::Falling()
 {
 	playerVelocity_->y += gravityAcceleration_;
 
-	if (isDirBottom_)
+	if ( isDirBottom_ )
 	{
 		onGround_ = false;
 
@@ -183,9 +214,71 @@ void PlayerLegNormal::Falling()
 	}
 }
 
-void PlayerLegNormal::Draw()
+void PlayerLegNormal::Draw(Vector2 pos,Vector2 size)
 {
+	float leftPos = pos.x - size.x / 2;
+	float rightPos = pos.x + size.x / 2;
+	float upPos = pos.y - size.y / 2;
+	float downPos = pos.y + size.y / 2;
 
+	if (isEvasionRoll_ )
+	{
+		if ( *direction_ )
+		{
+			DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_ / 2 ],TRUE);
+		}
+		else
+		{
+			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_ / 2 ],TRUE);
+		}
+	}
+	else if (onGround_ )
+	{
+		if ( isJump_ )
+		{
+			if ( *direction_ )
+			{
+				DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerJumpTexture_[ PlayerJumpTextureCount_ ],TRUE);
+			}
+			else
+			{
+				DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerJumpTexture_[ PlayerJumpTextureCount_ ],TRUE);
+			}
+		}
+		else
+		{
+			if ( *direction_ )
+			{
+				DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_ / 2 ],TRUE);
+			}
+			else
+			{
+				DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_ / 2 ],TRUE);
+			}
+		}
+	}
+	else if(isWalk)
+	{
+		if ( *direction_ )
+		{
+			DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_ / 2 ],TRUE);
+		}
+		else
+		{
+			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_ / 2 ],TRUE);
+		}
+	}
+	else
+	{
+		if ( *direction_ )
+		{
+			DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_ / 2 ],TRUE);
+		}
+		else
+		{
+			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_ / 2 ],TRUE);
+		}
+	}
 }
 
 void PlayerLegNormal::Load()
