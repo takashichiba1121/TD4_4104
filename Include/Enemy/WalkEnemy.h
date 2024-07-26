@@ -8,6 +8,7 @@ private:
 	RectShape* shape_;
 
 	int8_t nextElement;
+	int8_t prevElement;
 	ObjectUserData user;
 
 	bool tern = false;
