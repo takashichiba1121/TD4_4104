@@ -12,6 +12,7 @@
 #include<BossNode.h>
 
 #include<GameConfig.h>
+#include<Input.h>
 
 int GetRand(int min_,int max_)
 {
@@ -56,7 +57,7 @@ void NodeManager::Initialize()
 	shopImg = LoadGraph("Resources/Node/shop.png");
 	healingImg = LoadGraph("Resources/Node/healing.png");
 	startImg = LoadGraph("Resources/Node/start.png");
-	backGroundImg = LoadGraph("Resources/Node/start.png");
+	backGroundImg = LoadGraph("Resources/BackGround/mapBackGround.png");
 
 	distribution = std::discrete_distribution<int>(nodeProbabilities,nodeProbabilities + NodeType::TYPE_NUM);
 
@@ -131,7 +132,7 @@ void NodeManager::Initialize()
 	bossNode_.type.value = NodeType::BOSS;
 
 	playerNodePos = 0;
-	leftBottomX = 100;
+	leftBottomX = 450;
 	leftBottomY = 650;
 
 	int32_t bossNodeX = 0;
@@ -196,13 +197,28 @@ void NodeManager::Update()
 		nextNode_ = nullptr;
 	}
 
-	node_->Update();
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_M) )
+	{
+		if ( isNodeDraw )
+		{
+			isNodeDraw = false;
+		}
+		else
+		{
+			isNodeDraw = true;
+		}
+	}
 
-	isNodeDraw = false;
+	node_->Update();
 }
 
 void NodeManager::Draw()
 {
+	if ( isNodeDraw )
+	{
+		NodeMapDraw();
+	}
+
 	node_->Draw();
 }
 
@@ -258,10 +274,11 @@ void NodeManager::Reset()
 
 void NodeManager::NodeMapDraw()
 {
-	isNodeDraw = true;
 
 	playerNodePos = selectNode_->row + 3;
 	playerNodePos = min(playerNodePos,FLOORS);
+
+	DrawRotaGraph(GameConfig::GetWindowWidth()/2,GameConfig::GetWindowHeight()/2-2,1.0f,0.0,backGroundImg,true);
 
 	DrawCircle(leftBottomX + selectNode_->position.x,leftBottomY + selectNode_->position.y,20,GetColor(255,0,0));
 	for ( int i = 0; i < playerNodePos; ++i )
