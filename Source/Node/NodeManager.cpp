@@ -56,6 +56,7 @@ void NodeManager::Initialize()
 	shopImg = LoadGraph("Resources/Node/shop.png");
 	healingImg = LoadGraph("Resources/Node/healing.png");
 	startImg = LoadGraph("Resources/Node/start.png");
+	backGroundImg = LoadGraph("Resources/Node/start.png");
 
 	distribution = std::discrete_distribution<int>(nodeProbabilities,nodeProbabilities + NodeType::TYPE_NUM);
 
@@ -261,6 +262,7 @@ void NodeManager::NodeMapDraw()
 	playerNodePos = selectNode_->row + 3;
 	playerNodePos = min(playerNodePos,FLOORS);
 
+	DrawCircle(leftBottomX + selectNode_->position.x,leftBottomY + selectNode_->position.y,20,GetColor(255,0,0));
 	for ( int i = 0; i < playerNodePos; ++i )
 	{
 		for ( int j = 0; j < MAP_WIDTH; ++j )
@@ -310,7 +312,6 @@ void NodeManager::NodeDrew(int32_t leftBottomX,int32_t leftBottomY,const Node& n
 		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,0.5,0,startImg,true);
 		break;
 	default:
-		DrawCircle(leftBottomX + selectNode_->position.x,leftBottomY + selectNode_->position.y,5,GetColor(255,0,0));
 		break;
 	}
 }
