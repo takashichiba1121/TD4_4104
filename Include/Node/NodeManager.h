@@ -46,6 +46,8 @@ private:
 	int32_t shopImg;
 	int32_t healingImg;
 	int32_t startImg;
+	int32_t backGroundImg;
+
 	int32_t playerNodePos;
 
 	float leftBottomX;
