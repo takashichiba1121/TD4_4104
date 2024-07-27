@@ -75,9 +75,8 @@ void GameScene::Draw()
 
 	player_->Draw();
 	enemys_->Draw();
+	nodeManager_->Draw();
 	if(!chenged) powerUp_->Draw();
-
-	nodeManager_->NodeMapDraw();
 	
 	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
 	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");
