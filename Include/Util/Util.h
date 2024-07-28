@@ -15,10 +15,10 @@ double EaseOutBounce(double startPos,double endPos,double time,double maxTime);
 
 enum Effects
 {
-	BURN,
 	BIND,
-	DELAY,
 	ICED,
+	BURN,
+	DELAY,
 	CURSE,
 	END //配列制御のための目印として使用。実際の状態異常では使用しない。
 };
