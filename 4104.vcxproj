@@ -111,6 +111,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Node\BossNode.cpp" />
+    <ClCompile Include="Source\Player\PlayerAttackCerberus.cpp" />
+    <ClCompile Include="Source\Player\PlayerAttackFenrir.cpp" />
+    <ClCompile Include="Source\Player\PlayerAttackMars.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackSpider.cpp" />
     <ClCompile Include="Source\Node\BaseNode.cpp" />
     <ClCompile Include="Source\Node\BattleNode.cpp" />
@@ -124,6 +127,7 @@
     <ClCompile Include="Source\NPC\NPCManager.cpp" />
     <ClCompile Include="Source\NPC\NPC.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackSpider.cpp" />
+    <ClCompile Include="Source\Player\PlayerAttackVine.cpp" />
     <ClCompile Include="Source\Player\PlayerMouth.cpp" />
     <ClCompile Include="Source\Scene\ClearScene.cpp" />
     <ClCompile Include="Source\Scene\GameOverScene.cpp" />
@@ -185,6 +189,10 @@
     <ClInclude Include="Include\Node\ReinforcementNode.h" />
     <ClInclude Include="Include\Node\ShopNode.h" />
     <ClInclude Include="Include\Node\TransactionNode.h" />
+    <ClInclude Include="Include\Player\PlayerAttackCerberus.h" />
+    <ClInclude Include="Include\Player\PlayerAttackFenrir.h" />
+    <ClInclude Include="Include\Player\PlayerAttackMars.h" />
+    <ClInclude Include="Include\Player\PlayerAttackVine.h" />
     <ClInclude Include="Include\Scene\ClearScene.h" />
     <ClInclude Include="Include\Scene\GameOverScene.h" />
     <ClInclude Include="Include\Player\PlayerAttackSpider.h" />

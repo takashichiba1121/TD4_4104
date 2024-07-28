@@ -5,6 +5,10 @@
 #include"imgui.h"
 #include"PlayerAttackFist.h"
 #include"PlayerAttackGun.h"
+#include"PlayerAttackCerberus.h"
+#include"PlayerAttackFenrir.h"
+#include"PlayerAttackMars.h"
+#include"PlayerAttackVine.h"
 #include"PlayerAttackSpider.h"
 #include"PlayerBulletManager.h"
 #include"json.hpp"
@@ -26,7 +30,7 @@ void Player::Initialize()
 
 	leftArm_->Initialize(&pos_,&velocity_,&direction_);
 
-	rightArm_ = std::make_unique<PlayerAttackSpider>();
+	rightArm_ = std::make_unique<PlayerAttackFenrir>();
 
 	rightArm_->Initialize(&pos_,&velocity_,&direction_);
 

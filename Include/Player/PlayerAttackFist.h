@@ -16,13 +16,13 @@ private:
 
 	const float LAST_ATTACK_TIME_=10;
 
-	const Vector2 ATTACK_POS_ = {15,-10};
+	const Vector2 ATTACK_POS_ = {30,0};
 
 	const Vector2 COLISION_SIZE_ = {64,64};
 
-	const uint32_t INTERVAL_=60;
+	const uint32_t INTERVAL_=20;
 
-	const float POW_=5;
+	const float POW_=100;
 
 	const float MOVE_=5;
 
