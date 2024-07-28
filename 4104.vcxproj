@@ -114,7 +114,6 @@
     <ClCompile Include="Source\Player\PlayerAttackCerberus.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackFenrir.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackMars.cpp" />
-    <ClCompile Include="Source\Player\PlayerAttackSpider.cpp" />
     <ClCompile Include="Source\Node\BaseNode.cpp" />
     <ClCompile Include="Source\Node\BattleNode.cpp" />
     <ClCompile Include="Source\Node\HealingNode.cpp" />
@@ -196,8 +195,6 @@
     <ClInclude Include="Include\Scene\ClearScene.h" />
     <ClInclude Include="Include\Scene\GameOverScene.h" />
     <ClInclude Include="Include\Player\PlayerAttackSpider.h" />
-    <ClInclude Include="Include\Player\PlayerLeg.h" />
-    <ClInclude Include="Include\Player\PlayerLegNormal.h" />
     <ClInclude Include="Include\Player\PlayerMouth.h" />
     <ClInclude Include="Include\Util\ChipIndex.h" />
     <ClInclude Include="Include\Enemy\EnemyManager.h" />
@@ -237,8 +234,6 @@
     <ClInclude Include="Include\NPC\PowerUpCave.h" />
     <ClInclude Include="Include\Deal\ItemShop.h" />
     <ClInclude Include="PowerUpCave.h" />
-    <ClInclude Include="Include\Player\PlayerLeg.h" />
-    <ClInclude Include="Include\Player\PlayerLegNormal.h" />
     <ClInclude Include="Include\Node\StartNode.h" />
     <ClInclude Include="ThirdParty\imgui\imconfig.h" />
     <ClInclude Include="ThirdParty\imgui\imgui.h" />
