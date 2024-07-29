@@ -35,5 +35,22 @@
             25
         ]
 
+    },
+    "Boss":{
+        "Name": "Boss",
+        "Hp":10,
+        "AttackInterval":1.5,
+        "ApproachHitBox":[
+                128,
+                128
+        ],
+        "Attack":{
+            "Time":60,
+            "Size":[
+                96, 
+                192
+            ],
+            "Power":1
+        }
     }
 }

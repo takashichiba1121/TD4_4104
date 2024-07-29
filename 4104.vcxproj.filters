@@ -126,7 +126,7 @@
     <ClCompile Include="Source\Player\PlayerBulletManager.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
-    <ClCompile Include="Include\Player\PlayerBullet.cpp">
+    <ClCompile Include="Source\Player\PlayerBullet.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
     <ClCompile Include="Source\Collision\IShape.cpp">
@@ -160,12 +160,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Enemy\EnemyManager.cpp">
-      <Filter>ソース ファイル\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Enemy\BaseEnemy.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Enemy\BaseEnemy.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Source\Node\BattleNode.cpp">
@@ -228,23 +222,23 @@
     <ClCompile Include="Source\NPC\PowerUpCave.cpp">
       <Filter>ソース ファイル\PowerUp</Filter>
     </ClCompile>
-    <ClCompile Include="Source\NPC\ATKUpCave.cpp">
-      <Filter>ソース ファイル\PowerUp</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Base\BaseEnemy.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Player\PlayerLegNormal.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Deal\ItemShop.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Player\PlayerAttackGun.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
     <ClCompile Include="Source\Player\PlayerAttackSpider.cpp">
       <Filter>ソース ファイル\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Boss\BossEnemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Boss\BossPunchAttack.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -416,9 +410,6 @@
     <ClInclude Include="Include\NPC\PowerUpCave.h">
       <Filter>ヘッダー ファイル\PowerUp</Filter>
     </ClInclude>
-    <ClInclude Include="Include\NPC\ATKUpCave.h">
-      <Filter>ヘッダー ファイル\PowerUp</Filter>
-    </ClInclude>
     <ClInclude Include="ThirdParty\magic_enum.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -448,6 +439,12 @@
     </ClInclude>
     <ClInclude Include="Include\Scene\GameScene.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Enemy\Boss\BossEnemy.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Enemy\Boss\BossPunchAttack.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

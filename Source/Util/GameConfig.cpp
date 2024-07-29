@@ -69,6 +69,31 @@ void GameConfig::Load(const std::string& filePath)
 			node.nodeProbabilities[i] = object[ "NodeProbabilities" ][i];
 		}
 	}
+	{
+		nlohmann::json& object = jsonObject[ "Boss" ];
+		assert(object.is_object());
+		assert(object.contains("Name"));
+		assert(object[ "Name" ].is_string());
+
+		std::string lName = object[ "Name" ].get<std::string>();
+
+		assert(lName.compare("Boss") == 0);
+
+		Boss& boss = GetInstance()->boss_;
+
+		boss.hp = object[ "Hp" ];
+		boss.attackInterval = object[ "AttackInterval" ];
+		boss.approachHitBoxX = object[ "ApproachHitBox" ][0];
+		boss.approachHitBoxY = object[ "ApproachHitBox" ][1];
+
+		{
+			nlohmann::json& attackObject = object[ "Attack" ];
+			boss.attack.sizeX = attackObject[ "Size" ][0];
+			boss.attack.sizeY = attackObject[ "Size" ][1];
+			boss.attack.time = attackObject[ "Time" ];
+			boss.attack.power = attackObject[ "Power" ];
+		}
+	}
 }
 
 int32_t GameConfig::GetWindowWidth()
@@ -89,6 +114,11 @@ GameConfig::Config* GameConfig::GetGameConfig()
 GameConfig::Node* GameConfig::GetNodeConfig()
 {
 	return &GetInstance()->node_;
+}
+
+GameConfig::Boss* GameConfig::GetBossConfig()
+{
+	return &GetInstance()->boss_;
 }
 
 GameConfig* GameConfig::GetInstance()

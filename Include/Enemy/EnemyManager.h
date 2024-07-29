@@ -17,6 +17,8 @@ private:
 	size_t popEnemyCount_;
 	size_t deadEnemyCount_;
 	void Pop();//自動ランダム生成
+
+	void BossPop();
 public:
 	static void SetEnemyPOP(std::string enemyType,Vector2 pos,Vector2 Velocity);//指定生成
 	void SetPlayerPtr(BaseObject* playerPtr);
