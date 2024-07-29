@@ -192,6 +192,8 @@
     <ClInclude Include="Include\Player\PlayerAttackFenrir.h" />
     <ClInclude Include="Include\Player\PlayerAttackMars.h" />
     <ClInclude Include="Include\Player\PlayerAttackVine.h" />
+    <ClInclude Include="Include\Player\PlayerLeg.h" />
+    <ClInclude Include="Include\Player\PlayerLegNormal.h" />
     <ClInclude Include="Include\Scene\ClearScene.h" />
     <ClInclude Include="Include\Scene\GameOverScene.h" />
     <ClInclude Include="Include\Player\PlayerAttackSpider.h" />

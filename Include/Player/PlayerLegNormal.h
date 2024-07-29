@@ -3,24 +3,6 @@
 class PlayerLegNormal :
     public PlayerLeg
 {
-
-
-	void Initialize(Vector2* playerPos,bool* direction,float* changeAcl) override;
-
-	void Move(bool DirBOTTOM,bool isAttack) override;
-
-	void JumpStart() override;
-
-	void Jump() override;
-
-	void EvasionRoll() override;
-
-	void Falling() override;
-
-	void Draw(Vector2 pos,Vector2 size) override;
-
-	void Load() override;
-
 private:
 
 	Vector2* playerVelocity_;
@@ -45,7 +27,13 @@ private:
 
 	uint32_t PlayerJumpTextureCount_ = 0;
 
+	uint32_t PlayerDownTexture_[ 4 ];
 
+	uint32_t PlayerDownTextureCount_ = 0;
+
+	uint32_t PlayerDushTexture_[ 5 ];
+
+	uint32_t PlayerDushTextureCount_ = 0;
 
 #pragma region ステータス
 
@@ -76,5 +64,24 @@ private:
 	bool isDirBottom_;
 
 #pragma endregion
+
+public:
+
+	void Initialize(Vector2* playerPos,bool* direction,float* changeAcl) override;
+
+	void Move(bool DirBOTTOM,bool isAttack) override;
+
+	void JumpStart() override;
+
+	void Jump() override;
+
+	void EvasionRoll() override;
+
+	void Falling() override;
+
+	void Draw(Vector2 pos,Vector2 size) override;
+
+	void Load() override;
+
 };
 

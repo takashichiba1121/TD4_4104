@@ -18,6 +18,10 @@ void PlayerLegNormal::Initialize(Vector2* playerVelocity,bool* direction,float* 
 	LoadDivGraph("Resources/Player/PlayerStand_sheet.png",10,10,1,128,128,( int* ) PlayerStandTexture_);
 
 	LoadDivGraph("Resources/Player/PlayerJumpUp.png",4,4,1,128,128,( int* ) PlayerJumpTexture_);
+
+	LoadDivGraph("Resources/Player/PlayerJumpDown.png",4,4,1,128,128,( int* ) PlayerDownTexture_);
+
+	LoadDivGraph("Resources/Player/PlayerDush.png",5,5,1,128,128,( int* ) PlayerDushTexture_);
 }
 
 void PlayerLegNormal::Move(bool DirBOTTOM,bool isAttack)
@@ -153,7 +157,7 @@ void PlayerLegNormal::Jump()
 	playerVelocity_->y += jumpAcceleration_;
 
 	PlayerJumpTextureCount_++;
-	if ( PlayerJumpTextureCount_ == 4 )
+	if ( PlayerJumpTextureCount_ == 40 )
 	{
 		PlayerJumpTextureCount_ = 0;
 	}
@@ -184,12 +188,19 @@ void PlayerLegNormal::EvasionRoll()
 	}
 	if ( isEvasionRoll_ )
 	{
+		PlayerDushTextureCount_++;
+		if ( PlayerDushTextureCount_ == 4 )
+		{
+			PlayerDushTextureCount_ = 0;
+		}
+
 		if ( *direction_ )
 		{
 			if ( playerVelocity_->x < 6 )
 			{
 				isEvasionRoll_ = false;
 			}
+			PlayerDushTextureCount_ = 0;
 		}
 		else
 		{
@@ -197,6 +208,7 @@ void PlayerLegNormal::EvasionRoll()
 			{
 				isEvasionRoll_ = false;
 			}
+			PlayerDushTextureCount_ = 0;
 		}
 	}
 }
@@ -205,11 +217,19 @@ void PlayerLegNormal::Falling()
 {
 	playerVelocity_->y += gravityAcceleration_;
 
+	PlayerDownTextureCount_++;
+	if ( PlayerDownTextureCount_ == 40 )
+	{
+		PlayerDownTextureCount_ = 0;
+	}
+
 	if ( isDirBottom_ )
 	{
 		onGround_ = false;
 
 		playerVelocity_->y = 0;
+
+		PlayerDownTextureCount_ = 0;
 
 	}
 }
@@ -221,43 +241,43 @@ void PlayerLegNormal::Draw(Vector2 pos,Vector2 size)
 	float upPos = pos.y - size.y / 2;
 	float downPos = pos.y + size.y / 2;
 
-	if (isEvasionRoll_ )
+	if ( isEvasionRoll_ )
 	{
 		if ( *direction_ )
 		{
-			DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_ / 2 ],TRUE);
+			DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerDushTexture_[ PlayerDushTextureCount_ ],TRUE);
 		}
 		else
 		{
-			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_ / 2 ],TRUE);
+			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerDushTexture_[ PlayerDushTextureCount_ ],TRUE);
 		}
 	}
-	else if (onGround_ )
+	else if ( onGround_ )
 	{
 		if ( isJump_ )
 		{
 			if ( *direction_ )
 			{
-				DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerJumpTexture_[ PlayerJumpTextureCount_ ],TRUE);
+				DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerJumpTexture_[ PlayerJumpTextureCount_ / 10 ],TRUE);
 			}
 			else
 			{
-				DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerJumpTexture_[ PlayerJumpTextureCount_ ],TRUE);
+				DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerJumpTexture_[ PlayerJumpTextureCount_ / 10 ],TRUE);
 			}
 		}
 		else
 		{
 			if ( *direction_ )
 			{
-				DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_ / 2 ],TRUE);
+				DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerDownTexture_[ PlayerDownTextureCount_ / 10 ],TRUE);
 			}
 			else
 			{
-				DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_ / 2 ],TRUE);
+				DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerDownTexture_[ PlayerDownTextureCount_ / 10 ],TRUE);
 			}
 		}
 	}
-	else if(isWalk)
+	else if ( isWalk )
 	{
 		if ( *direction_ )
 		{
