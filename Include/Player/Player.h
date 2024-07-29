@@ -6,7 +6,6 @@
 #include<string>
 #include"BaseObject.h"
 #include"PlayerLeg.h"
-#include"PlayerLegNormal.h"
 #include"ItemShop.h"
 #include"PowerUpCave.h"
 

@@ -255,6 +255,9 @@
     <ClCompile Include="Source\Player\PlayerAttackCerberus.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Player\PlayerLegFenrir.cpp">
+      <Filter>ソース ファイル\player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ThirdParty\imgui\imconfig.h">
@@ -462,6 +465,9 @@
       <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerLegNormal.h">
+      <Filter>ヘッダー ファイル\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Player\PlayerLegFenrir.h">
       <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
   </ItemGroup>

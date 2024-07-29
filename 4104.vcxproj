@@ -127,6 +127,7 @@
     <ClCompile Include="Source\NPC\NPC.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackSpider.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackVine.cpp" />
+    <ClCompile Include="Source\Player\PlayerLegFenrir.cpp" />
     <ClCompile Include="Source\Player\PlayerMouth.cpp" />
     <ClCompile Include="Source\Scene\ClearScene.cpp" />
     <ClCompile Include="Source\Scene\GameOverScene.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="Include\Player\PlayerAttackMars.h" />
     <ClInclude Include="Include\Player\PlayerAttackVine.h" />
     <ClInclude Include="Include\Player\PlayerLeg.h" />
+    <ClInclude Include="Include\Player\PlayerLegFenrir.h" />
     <ClInclude Include="Include\Player\PlayerLegNormal.h" />
     <ClInclude Include="Include\Scene\ClearScene.h" />
     <ClInclude Include="Include\Scene\GameOverScene.h" />

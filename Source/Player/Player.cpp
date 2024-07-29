@@ -11,6 +11,8 @@
 #include"PlayerAttackVine.h"
 #include"PlayerAttackSpider.h"
 #include"PlayerBulletManager.h"
+#include"PlayerLegNormal.h"
+#include"PlayerLegFenrir.h"
 #include"json.hpp"
 #include <fstream>
 
@@ -190,6 +192,7 @@ bool Player::ChangeLeftArm(std::string attackName,uint32_t cost)
 	leftArm_->cost = cost;
 
 	leftArm_->Initialize(&pos_,&velocity_,&direction_);
+	return true;
 }
 
 bool Player::ChangeRightArm(std::string attackName,uint32_t cost)
@@ -211,6 +214,8 @@ bool Player::ChangeRightArm(std::string attackName,uint32_t cost)
 	rightArm_->cost = cost;
 
 	rightArm_->Initialize(&pos_,&velocity_,&direction_);
+
+	return true;
 }
 
 bool Player::ChangeLeg(std::string legName,uint32_t cost)
@@ -228,6 +233,8 @@ bool Player::ChangeLeg(std::string legName,uint32_t cost)
 	leg_->cost = cost;
 
 	leg_->Initialize(&velocity_,&direction_,&changeSpd_);
+
+	return true;
 }
 
 bool Player::AddSpd(int32_t spd)
