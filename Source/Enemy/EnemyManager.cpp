@@ -33,6 +33,7 @@ void EnemyManager::Pop()
 			temp->Initialize();
 			temp->SetPos({ GetRand(850) + 50.f,100.f });
 			temp->SetMapChip(mapchip_);
+			temp->SetPlayerPtr(playerPtr_);
 			enemylist_.push_back(move(temp));
 			popEnemyCount_++;
 		}

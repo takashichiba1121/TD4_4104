@@ -3,6 +3,14 @@
 #include "Util.h"
 #include <array>
 
+enum ActionMode
+{
+	STAY,
+	MOVE,
+	APPROACH,
+	ATTACK
+};
+
 class MapChip;
 class Player;
 class BaseEnemy:public BaseObject
@@ -22,6 +30,7 @@ protected:
 	const std::array<int32_t,END> effectDamageInterval = { 120,240,120,0,0 };
 	std::array<float,END> effectDamage = { 0.15f,0.5f,0.25f,0.f,0.f };
 	int32_t curseStack = 0;
+	int32_t actionMode = MOVE;
 public:
 	virtual void Move() {};
 	virtual void Attack() {};

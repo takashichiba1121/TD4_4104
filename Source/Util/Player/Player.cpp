@@ -52,6 +52,7 @@ void Player::Initialize()
 
 void Player::Update()
 {
+	hp_ = 1000;
 	if ( DamageInterval_ < DAMAGE_INTERVAL_MAX_ )
 	{
 		DamageInterval_++;

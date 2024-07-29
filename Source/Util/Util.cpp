@@ -104,6 +104,11 @@ double EaseOutBounce(double startPos,double endPos,double time,double maxTime)
 	}
 }
 
+int32_t sign(float num)
+{
+	return ( num > 0 ) - ( num < 0 );
+}
+
 void Counter::ReSetCount()
 {
 	nowCount_ = 0;
@@ -149,7 +154,10 @@ void Counter::CountDown(uint32_t down)
 
 void Counter::CountUp(uint32_t up)
 {
-	nowCount_ += up;
+	if ( !IsCountEnd() )
+	{
+		nowCount_ += up;
+	}
 }
 
 int32_t Counter::GetCount()

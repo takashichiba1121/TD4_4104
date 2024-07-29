@@ -15,7 +15,7 @@ private:
 	const int64_t ATTACK_TIME = 10;
 	RectShape* shape_;
 
-	ObjectUserData user;
+	ObjectUserData user_;
 public:
 
 	void Initialize() override;

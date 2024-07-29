@@ -29,8 +29,8 @@ void FlyEnemy::Initialize()
 	{
 		velocity_ = { -1,0 };
 	}
-	user.tag = "FlyEnemy";
-	userData_ = &user;
+	user_.tag = "FlyEnemy";
+	userData_ = &user_;
 
 	islive_ = true;
 	shape_ = new RectShape();

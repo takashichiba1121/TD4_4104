@@ -13,6 +13,8 @@ double EaseInBack(double startPos,double endPos,double maxTime,double time);
 double EaseInBack2(double startPos,double endPos,double maxTime,double time);
 double EaseOutBounce(double startPos,double endPos,double time,double maxTime);
 
+int32_t sign(float num);
+
 enum Effects
 {
 	BIND,
