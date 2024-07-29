@@ -5,16 +5,21 @@
 void BattleNode::Initialize()
 {
 	mapChip_->MapLoad("Resources/Export/Map/TestMap.json");
-
+	enemys_ = std::make_unique<EnemyManager>();
+	enemys_->Initialize();
+	enemys_->SetMapChip(mapChip_);
+	enemys_->SetPlayerPtr(player_);
 }
 
 void BattleNode::Update()
 {
 	PlayerNodeMove();
+	enemys_->Update();
 }
 
 void BattleNode::Draw()
 {
+	enemys_->Draw();
 }
 
 void BattleNode::Reset()
@@ -63,6 +68,7 @@ void BattleNode::Finalize()
 
 	nextdoors_.clear();
 	nextDoorsNum_ = 0;
+	enemys_->EnemysClear();
 }
 
 Vector2 BattleNode::GetPlayerStartPos()

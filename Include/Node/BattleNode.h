@@ -1,10 +1,11 @@
 #pragma once
 #include<BaseNode.h>
+#include <EnemyManager.h>
 
 class BattleNode :public BaseNode
 {
 private:
-
+	std::unique_ptr<EnemyManager> enemys_;
 public:
 
 	BattleNode() = default;

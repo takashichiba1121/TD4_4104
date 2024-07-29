@@ -19,10 +19,7 @@ void GameScene::Initialize()
 	mapChip_ = std::make_unique<MapChip>();
 	mapChip_->Initialize();
 
-	enemys_ = std::make_unique<EnemyManager>();
-	enemys_->Initialize();
-	enemys_->SetMapChip(mapChip_.get());
-	enemys_->SetPlayerPtr(player_.get());
+
 
 	nodeManager_ = NodeManager::GetInstance();
 	nodeManager_->SetMapChip(mapChip_.get());
@@ -45,16 +42,15 @@ void GameScene::Update()
 	nodeManager_->Update();
 
 	player_->Update();
-	enemys_->Update();
 
 
 	CollisionManager::GetInstance()->Update();
 
 	//TODO
-	if ( enemys_->GameEnd())
-	{
-		SceneManager::GetInstance()->ChangeScene("CLEAR");
-	}
+	//if ( enemys_->GameEnd())
+	//{
+	//	SceneManager::GetInstance()->ChangeScene("CLEAR");
+	//}
 
 	//TODO
 	if ( player_->GetHp()<=0 )
@@ -70,9 +66,10 @@ void GameScene::Draw()
 	mapChip_->Draw({0,0});
 	
 	player_->Draw();
-	enemys_->Draw();
 
 	nodeManager_->NodeDrew(100,600);
+
+	nodeManager_->Draw();
 	
 	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
 	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");

@@ -15,7 +15,6 @@ class GameScene : public BaseScene
 private:
 
 	std::unique_ptr<Player> player_;
-	std::unique_ptr<EnemyManager> enemys_;
 
 	std::unique_ptr<MapChip>mapChip_;
 	NodeManager* nodeManager_;
