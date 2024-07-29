@@ -160,9 +160,6 @@
       <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Source\Enemy\BaseEnemy.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Enemy\BaseEnemy.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Source\Node\BattleNode.cpp">
@@ -209,6 +206,12 @@
     </ClCompile>
     <ClCompile Include="Source\Scene\GameOverScene.cpp">
       <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Base\BaseEnemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\ShootEnemy.cpp">
+      <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -376,6 +379,9 @@
     </ClInclude>
     <ClInclude Include="Include\Scene\TitleScene.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Enemy\ShootEnemy.h">
+      <Filter>ヘッダー ファイル\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
