@@ -15,7 +15,7 @@ void GameScene::Initialize()
 {
 	player_ = std::make_unique<Player>();
 	player_->Initialize();
-	
+
 	mapChip_ = std::make_unique<MapChip>();
 	mapChip_->Initialize();
 
@@ -26,6 +26,9 @@ void GameScene::Initialize()
 	nodeManager_->SetPlayer(player_.get());
 	nodeManager_->Initialize();
 	nodeManager_->StartNodeSet(0);
+	powerUp_ = std::make_unique<PowerUpCave>();
+	powerUp_->Initialize();
+	powerUp_->SetPlayer(player_.get());
 	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
 
 }
@@ -38,13 +41,14 @@ void GameScene::Update()
 	{
 		nodeManager_->Reset();
 	}
-
-	nodeManager_->Update();
+	else
+	{
+		nodeManager_->Update();
 
 	player_->Update();
 
-
-	CollisionManager::GetInstance()->Update();
+		CollisionManager::GetInstance()->SetScreenPos(mapChip_->GetScreenPos());
+		CollisionManager::GetInstance()->Update();
 
 	//TODO
 	//if ( enemys_->GameEnd())
@@ -52,10 +56,11 @@ void GameScene::Update()
 	//	SceneManager::GetInstance()->ChangeScene("CLEAR");
 	//}
 
-	//TODO
-	if ( player_->GetHp()<=0 )
-	{
-		SceneManager::GetInstance()->ChangeScene("GAMEOVER");
+		//TODO
+		if ( player_->GetHp() <= 0 )
+		{
+			SceneManager::GetInstance()->ChangeScene("GAMEOVER");
+		}
 	}
 }
 
@@ -63,9 +68,11 @@ void GameScene::Draw()
 {
 	DrawGraph(0,0,backGround_,true);
 
-	mapChip_->Draw({0,0});
-	
+	mapChip_->Draw({ 0,0 });
+
 	player_->Draw();
+
+	if (!chenged) powerUp_->Draw();
 
 	nodeManager_->NodeDrew(100,600);
 
