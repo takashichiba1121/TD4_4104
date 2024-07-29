@@ -7,6 +7,7 @@
 void BossPunchAttack::Attack()
 {
 	isAttack_ = true;
+	CollisionEnable();
 }
 
 void BossPunchAttack::Initialize()
@@ -31,6 +32,7 @@ void BossPunchAttack::Update()
 		if ( !time_ )
 		{
 			isAttack_ = false;
+			CollisionDisable();
 		}
 
 		shape_->SetCenter({ bossPos_.x + ( bossSize_.x / 2 + size_.x / 2 ) * -dir_ , bossPos_.y });
