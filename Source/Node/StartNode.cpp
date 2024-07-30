@@ -19,6 +19,8 @@ void StartNode::Draw()
 
 void StartNode::Reset()
 {
+	mapChip_->MapLoad("Resources/Export/Map/TestMap.json");
+
 	player_->Reset();
 
 	int32_t i = 0;

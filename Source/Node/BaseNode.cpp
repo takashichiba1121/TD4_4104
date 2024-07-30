@@ -23,6 +23,11 @@ void BaseNode::SetPlayer(Player* player)
 	player_ = player;
 }
 
+void BaseNode::SetPowerUp(PowerUpCave* powerUp)
+{
+	powerUp_ = powerUp;
+}
+
 void BaseNode::SetNodeManagerr(NodeManager* nodeManager)
 {
 	nodeManager_ = nodeManager;
