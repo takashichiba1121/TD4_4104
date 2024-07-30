@@ -99,6 +99,10 @@ void ShootEnemy::Update()
 	}
 	shape_->SetCenter({ pos_.x , pos_.y });
 
+	for ( auto& itr : bullets )
+	{
+		itr->Update();
+	}
 
 	EffectUpdate();
 }
@@ -164,7 +168,11 @@ void ShootEnemy::Attack()
 	else if ( !attackCounter_.IsCountEnd() )
 	{
 		attackCounter_.CountUp();
-
+		unique_ptr<EnemyBullet> bullet = make_unique<EnemyBullet>();
+		bullet->Initialize();
+		bullet->SetMapChip(mapchip_);
+		bullet->SetVelocity(Vector2(pos_,playerPtr_->GetPos()));
+		bullets.push_back(move(bullet));
 		attackIntervalCounter_.SetEndCount(attackInterval_);
 	}
 	else
@@ -181,18 +189,10 @@ void ShootEnemy::Draw()
 	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.y / 2,
 		pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,0),true);
 
-
-	if ( actionMode == ATTACK )
+	for ( auto& itr : bullets )
 	{
-		DrawBox(attackArea_->GetCenter().x - attackArea_->GetRadius().x ,attackArea_->GetCenter().y - attackArea_->GetRadius().y,
-		attackArea_->GetCenter().x + attackArea_->GetRadius().x ,attackArea_->GetCenter().y + attackArea_->GetRadius().y,GetColor(155,0,0),false);
+		itr->Draw();
 	}
-	else
-	{
-		DrawBox(searchArea_->GetCenter().x - searchArea_->GetRadius().x,pos_.y - searchArea_->GetRadius().y,
-		searchArea_->GetCenter().x + searchArea_->GetRadius().x,pos_.y + searchArea_->GetRadius().y,GetColor(155,0,0),false);
-	}
-
 
 	DrawFormatString(100,100,0xffffff,"%d",nextElement_);
 

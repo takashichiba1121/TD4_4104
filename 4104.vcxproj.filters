@@ -237,8 +237,8 @@
     <ClCompile Include="Source\Player\PlayerAttackSpider.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyBullet.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Source\Enemy\EnemyBullet.cpp">
+      <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -443,8 +443,8 @@
     <ClInclude Include="Include\Scene\GameScene.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyBullet.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Include\Enemy\EnemyBullet.h">
+      <Filter>ヘッダー ファイル\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

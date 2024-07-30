@@ -1,6 +1,8 @@
 #pragma once
 #include "BaseEnemy.h"
 #include "RectShape.h"
+#include "EnemyBullet.h"
+#include <list>
 class ShootEnemy:public BaseEnemy
 {
 private:
@@ -25,6 +27,9 @@ private:
 	int8_t ternInvervalTimer_;
 	std::unique_ptr<RectShape> searchArea_;
 	std::unique_ptr<RectShape> attackArea_;
+
+	std::list<std::unique_ptr<EnemyBullet>> bullets;
+
 public:
 
 	void Initialize() override;

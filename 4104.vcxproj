@@ -111,7 +111,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="EnemyBullet.cpp" />
+    <ClCompile Include="Source\Enemy\EnemyBullet.cpp" />
     <ClCompile Include="Source\Enemy\ShootEnemy.cpp" />
     <ClCompile Include="Source\NPC\PowerUpCave.cpp" />
     <ClCompile Include="Source\NPC\DealDaemon.cpp" />
@@ -175,7 +175,7 @@
     <ClCompile Include="Source\Scene\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EnemyBullet.h" />
+    <ClInclude Include="Include\Enemy\EnemyBullet.h" />
     <ClInclude Include="Include\Enemy\ShootEnemy.h" />
     <ClInclude Include="Include\NPC\DealDaemon.h" />
     <ClInclude Include="Include\Player\PlayerAttackSpider.h" />
