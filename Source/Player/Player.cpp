@@ -71,6 +71,8 @@ void Player::Initialize()
 
 void Player::Update()
 {
+
+
 	if ( isPowerUp )
 	{
 		PowerUp();

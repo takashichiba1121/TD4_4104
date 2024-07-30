@@ -16,6 +16,12 @@ class Player;
 class BaseEnemy:public BaseObject
 {
 protected:
+	Counter attackCounter_;
+	Counter beforeAttackCounter_;
+	Counter attackIntervalCounter_;
+	int32_t attackInterval_ = 60;
+	int32_t beforeAttackFrame_ = 5;
+	int32_t attackFrame_ = 25;
 	MapChip* mapchip_;
 	ObjectUserData name_;
 	uint32_t id_;

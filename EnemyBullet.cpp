@@ -13,20 +13,24 @@ void EnemyBullet::SetVelocity(Vector2 velocity)
 
 void EnemyBullet::Initialize()
 {
+	islive_ = true;
 	shape_ = new RectShape();
 	shape_->SetRadius(drawSize_ / 2);
 	SetShape(shape_);
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
 	CollisionManager::GetInstance()->AddObject(this);
-	damage_ = 100;
+	damage_ = 70;
 }
 
 void EnemyBullet::Update()
 {
 	pos_ += velocity_ * speed_;
 
-
+	if ( mapchip_->GetPosElement(pos_.x,pos_.y ) != NONE)
+	{
+		islive_ = false;
+	}
 }
 
 void EnemyBullet::OnCollision()
@@ -36,6 +40,7 @@ void EnemyBullet::OnCollision()
 		if ( static_cast< UserData* >( GetCollisionInfo().userData )->tag == "Player" )
 		{
 			dynamic_cast< Player* >( GetCollisionInfo().object )->Damage(damage_);
+			islive_ = false;
 		}
 	}
 }

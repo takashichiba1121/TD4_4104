@@ -20,6 +20,7 @@ private:
 	int32_t attackFrame_ = 25;
 
 	bool tern_ = false;
+	bool shootReady_ = false;
 	int8_t ternInverval_;
 	int8_t ternInvervalTimer_;
 	std::unique_ptr<RectShape> searchArea_;
@@ -32,6 +33,5 @@ public:
 	void Attack() override;
 	void Draw() override;
 	void OnCollision() override;
-	void Approach();
 };
 

@@ -1,6 +1,6 @@
 #pragma once
-#include "BaseObject.h"
-class EnemyBullet:public BaseObject
+#include "BaseEnemy.h"
+class EnemyBullet:public BaseEnemy
 {
 private:
 	int32_t damage_;

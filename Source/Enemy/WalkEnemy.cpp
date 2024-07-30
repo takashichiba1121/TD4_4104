@@ -40,8 +40,10 @@ void WalkEnemy::Initialize()
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
 	CollisionManager::GetInstance()->AddObject(this);
 	attackPower_ = 100;
-
-	hp_ = 10;
+	attackInterval_ = 60;
+	beforeAttackFrame_ = 5;
+	attackFrame_ = 25;
+	hp_ = 150;
 
 }
 
@@ -129,12 +131,11 @@ void WalkEnemy::Move()
 	if ( GetOnDir() & 0b1 << OnDir::BOTTOM )
 	{
 		gravity_ = { 0,0 };
-		prevElement_ = mapchip_->GetPosElement(pos_.x,pos_.y + ( drawSize_.y / 2 ) + 1);
+		prevElement_ = mapchip_->GetPosElement(pos_.x,pos_.y + ( drawSize_.y / 2 ) + 64);
 	}
-	 nextElement_ = mapchip_->GetPosElement(pos_.x +(( velocity_.x * speed_ )) + ( drawSize_.x / 2 ),
-		pos_.y + ( drawSize_.y / 2 ) + 1);
-
-	if ((nextElement_ == NEXT || (nextElement_ == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM )) && !tern_ )
+	 nextPos_ = { pos_.x + ( ( velocity_.x * speed_ ) ) + ( (drawSize_.x / 2 + 32)* -sign(velocity_.x) ),pos_.y + ( drawSize_.y / 2 )};
+	 nextElement_ = mapchip_->GetPosElement(static_cast<int32_t>(nextPos_.x),static_cast< int32_t >( nextPos_.y)+64);
+	if ((nextElement_ == NEXT ||(nextElement_ == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM )) &&  !tern_ )
 	{
 		velocity_ *= -1;
 		tern_ = true;
@@ -186,8 +187,8 @@ void WalkEnemy::Approach()
 		gravity_ = { 0,0 };
 		prevElement_ = mapchip_->GetPosElement(pos_.x,pos_.y + ( drawSize_.y / 2 ) + 1);
 	}
-	nextElement_ = mapchip_->GetPosElement(pos_.x + ( ( velocity_.x * speed_ ) ) + ( drawSize_.x / 2 ),
-	   pos_.y + ( drawSize_.y / 2 ) + 1);
+	nextElement_ = mapchip_->GetPosElement(pos_.x + ( ( velocity_.x * speed_ ) ) + ( drawSize_.x / 2 * sign(velocity_.x) ),
+	   pos_.y + ( drawSize_.y / 2 ) + 5);
 
 	if ( ( nextElement_ == NEXT || ( nextElement_ == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM ) ) && !tern_ )
 	{
@@ -262,7 +263,7 @@ void WalkEnemy::Draw()
 
 
 	DrawFormatString(100,100,0xffffff,"%d",nextElement_);
-
+	DrawCircle(nextPos_.x,nextPos_.y,10,0xffffff);
 
 }
 

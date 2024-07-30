@@ -5,6 +5,9 @@ class WalkEnemy:public BaseEnemy
 {
 private:
 	Vector2 gravity_;
+
+	Vector2 nextPos_;
+
 	RectShape* shape_;
 
 	int8_t nextElement_;
@@ -12,12 +15,8 @@ private:
 
 	ObjectUserData user_;
 
-	Counter attackCounter_;
-	Counter beforeAttackCounter_;
-	Counter attackIntervalCounter_;
-	int32_t attackInterval_ = 60;
-	int32_t beforeAttackFrame_ = 5;
-	int32_t attackFrame_ = 25;
+	
+
 
 	bool tern_ = false;
 	int8_t ternInverval_;
