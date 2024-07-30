@@ -1,34 +1,30 @@
 #pragma once
 #include "PlayerAttack.h"
-class PlayerAttackSpider :
-    public PlayerAttack
+class PlayerAttackCerberus :
+	public PlayerAttack
 {
 private:
 	bool isAttack_ = false;
-
-	uint32_t attackType_ = 0;
-
-	uint32_t nextAttack_ = 0;
 
 	bool isGiveDamage_ = false;
 
 	float AttackTime_ = 0;
 
-	Vector2 DrawPos_;
-
 	float AttackInterval_ = 0;
 
-	const float LAST_ATTACK_TIME_ = 10;
+	Vector2 DrawPos_;
 
-	const Vector2 ATTACK_POS_ = {30,0 };
+	const float LAST_ATTACK_TIME_=10;
 
-	const Vector2 COLISION_SIZE_ = { 64,64 };
+	const Vector2 ATTACK_POS_ = {30,0};
 
-	const uint32_t INTERVAL_ = 10;
+	const Vector2 COLISION_SIZE_ = {64,64};
 
-	const float POW_ = 60;
+	const uint32_t INTERVAL_=20;
 
-	const float MOVE_ = 3;
+	const float POW_=120;
+
+	const float MOVE_=5;
 
 	float playerPow_;
 

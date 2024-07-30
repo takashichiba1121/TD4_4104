@@ -63,6 +63,7 @@ void BattleNode::Finalize()
 
 	nextdoors_.clear();
 	nextDoorsNum_ = 0;
+
 }
 
 Vector2 BattleNode::GetPlayerStartPos()

@@ -21,18 +21,20 @@ void GameScene::Initialize()
 
 	enemys_ = std::make_unique<EnemyManager>();
 	enemys_->Initialize();
+	enemys_->SetMapChip(mapChip_.get());
 	enemys_->SetPlayerPtr(player_.get());
+
+	powerUp_ = std::make_unique<PowerUpCave>();
+	powerUp_->Initialize();
+	powerUp_->SetPlayer(player_.get());
 
 	nodeManager_ = NodeManager::GetInstance();
 	nodeManager_->SetMapChip(mapChip_.get());
 	nodeManager_->SetPlayer(player_.get());
+	nodeManager_->SetPowerUp(powerUp_.get());
 	nodeManager_->Initialize();
 	nodeManager_->StartNodeSet(0);
-	powerUp_ = std::make_unique<PowerUpCave>();
-	powerUp_->Initialize();
-	powerUp_->SetPlayer(player_.get());
 	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
-
 }
 
 void GameScene::Update()
@@ -42,6 +44,23 @@ void GameScene::Update()
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_R) )
 	{
 		nodeManager_->Reset();
+	}
+
+	nodeManager_->Update();
+
+	if ( player_->IsPowerUp() )
+	{
+		powerUp_->Update();
+
+		uint32_t powerUpNum=player_->PowerUp();
+
+		powerUp_->SetSlect(powerUpNum);
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) )
+		{
+			powerUp_->StatusChenge();
+
+			player_->EndPowerUp();
+		}
 	}
 	else
 	{
@@ -70,9 +89,8 @@ void GameScene::Update()
 void GameScene::Draw()
 {
 	DrawGraph(0,0,backGround_,true);
-
 	mapChip_->Draw({ 0,0 });
-
+	nodeManager_->Draw();
 	player_->Draw();
 	enemys_->Draw();
 	nodeManager_->Draw();

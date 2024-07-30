@@ -1,6 +1,6 @@
 #pragma once
 #include"PlayerLeg.h"
-class PlayerLegNormal :
+class PlayerLegFenrir :
     public PlayerLeg
 {
 private:
@@ -49,7 +49,7 @@ private:
 
 	float airDeccelaration_ = 0;
 
-	float evasionRollSpeed_=16;
+	float evasionRollSpeed_ = 32;
 
 	//戦闘
 
