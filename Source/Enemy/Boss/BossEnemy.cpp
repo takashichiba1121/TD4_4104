@@ -8,28 +8,40 @@
 
 void BossEnemy::Initialize()
 {
+	textureId_ = LoadGraph("Resources/Enemy/boss.png");
+
+
+	int32_t graphSizeX;
+	int32_t graphSizeY;
+	GetGraphSize(textureId_,&graphSizeX,&graphSizeY);
+
+	animeNum_ = graphSizeX / 192;
+
 	drawSize_ = { 192,192 };
 
 
-	attack_ = std::make_unique<BossPunchAttack>();
+	punch_ = std::make_unique<BossPunchAttack>();
+	charge_ = std::make_unique<BossChargeAttack>();
 
 	{
 		GameConfig::Boss* bossConfig = GameConfig::GetBossConfig();
 
 		{
 			hp_ = bossConfig->hp;
-			attackInterval_ = 60 * bossConfig->attackInterval;
-			approachHitBox_.SetRadius({ float(bossConfig->approachHitBoxX),float( bossConfig->approachHitBoxY ) });
+			attackInterval_ = ATTACK_INTERVAL = 60 * bossConfig->attackInterval;
+			approachHitBox_.SetRadius({ float(bossConfig->approachHitBoxX),float(bossConfig->approachHitBoxY) });
 		}
 		{
-			attack_->SetTime(bossConfig->attack.time);
-			attack_->SetSize({ float(bossConfig->attack.sizeX),float(bossConfig->attack.sizeY) });
-			attack_->SetPower(bossConfig->attack.power);
+			punch_->SetTime(bossConfig->attack.time);
+			punch_->SetSize({ float(bossConfig->attack.sizeX),float(bossConfig->attack.sizeY) });
+			punch_->SetPower(bossConfig->attack.power);
 		}
 	}
 
-	attack_->SetBossSize({ drawSize_ });
-	attack_->Initialize();
+	punch_->SetBossSize({ drawSize_ });
+	punch_->Initialize();
+
+	charge_->Initialize();
 
 	MapChipObjectEnable();
 	SetMapChipCenter(&pos_);
@@ -56,6 +68,8 @@ void BossEnemy::Initialize()
 
 void BossEnemy::Update()
 {
+	AnimeUpdate();
+
 	Move();
 }
 
@@ -71,18 +85,13 @@ void BossEnemy::Move()
 		gravity_ = { 0,0 };
 	}
 
-	switch ( phase_ )
+	if ( phase_ == APPROACH )
 	{
-	case APPROACH:
-
 		ApproachMove();
-
-		break;
-	case ATTACK:
+	}
+	else
+	{
 		AttackMove();
-		break;
-	default:
-		break;
 	}
 
 	SetMapChipSpeed({ velocity_ * speed_,gravity_ });
@@ -91,9 +100,10 @@ void BossEnemy::Move()
 
 void BossEnemy::Draw()
 {
-	if ( !islive_ ) return;
-	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2,
-		pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,0),true);
+	DrawRectGraphF(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.y / 2,
+		 0 + drawSize_.x * anime_,0,
+		drawSize_.x,drawSize_.y,
+		textureId_,true,playerDir_ == 1);
 
 #ifdef _DEBUG
 
@@ -117,6 +127,9 @@ void BossEnemy::DebugDraw()
 {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA,100);
 
+	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2,
+	pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,0),true);
+
 	switch ( phase_ )
 	{
 	case APPROACH:
@@ -124,8 +137,8 @@ void BossEnemy::DebugDraw()
 			approachHitBox_.GetCenter().x + approachHitBox_.GetRadius().x,approachHitBox_.GetCenter().y + approachHitBox_.GetRadius().y,
 			GetColor(255,255,255),true);
 		break;
-	case ATTACK:
-		attack_->Draw();
+	case PUNCH:
+		punch_->Draw();
 		break;
 	default:
 		break;
@@ -137,14 +150,14 @@ void BossEnemy::DebugDraw()
 
 void BossEnemy::ApproachMove()
 {
-	velocity_.x = PlayerDir();
+	playerDir_ = velocity_.x = PlayerDir();
 
 	playerRect_.SetCenter(playerPtr_->GetPos());
 	approachHitBox_.SetCenter({ pos_.x + ( shape_->GetRadius().x + approachHitBox_.GetRadius().x ) * -velocity_.x,pos_.y });
 
 	if ( Collision::Rect2Rect(playerRect_,approachHitBox_) )
 	{
-		phase_ = Phase::ATTACK;
+		phase_ = Phase::CHARGE;
 		velocity_.x = 0;
 	}
 }
@@ -153,28 +166,69 @@ void BossEnemy::AttackMove()
 {
 	if ( attackInterval_ == 0 )
 	{
+		playerDir_ = PlayerDir();
 		attackInterval_ = -1;
-		attack_->SetDir(int32_t(PlayerDir()));
+		switch ( phase_ )
+		{
+		case PUNCH:
+			punch_->SetDir(playerDir_);
+			break;
+		case CHARGE:
+			charge_->SetDir(playerDir_);
+			charge_->SetBossPos(pos_);
+			break;
+		}
+
 		Attack();
 	}
 	else if ( attackInterval_ > 0 )
 	{
 		attackInterval_--;
 	}
-
-	if ( phase_ == Phase::ATTACK )
+	else
 	{
-		attack_->Update();
-		attack_->SetBossPos(pos_);
+		switch ( phase_ )
+		{
+		case PUNCH:
+			punch_->Update();
+			punch_->SetBossPos(pos_);
 
+			if ( !punch_->IsAttack() )
+			{
+				phase_ = APPROACH;
+				attackInterval_ = ATTACK_INTERVAL;
+				approachHitBox_.SetCenter({ pos_.x + ( shape_->GetRadius().x + approachHitBox_.GetRadius().x ) * -velocity_.x,pos_.y });
+			}
+			break;
+		case CHARGE:
+			charge_->Update();
+
+			SetMapChipSpeed(Vector2( charge_->GetSpeed(),0.0f ));
+			shape_->SetCenter(pos_);
+
+			if ( !punch_->IsAttack() )
+			{
+				phase_ = APPROACH;
+				attackInterval_ = ATTACK_INTERVAL;
+				approachHitBox_.SetCenter({ pos_.x + ( shape_->GetRadius().x + approachHitBox_.GetRadius().x ) * -velocity_.x,pos_.y });
+				CollisionEnable();
+			}
+			break;
+		}
 	}
 }
 
 void BossEnemy::Attack()
 {
-	if ( phase_ == Phase::ATTACK )
+	switch ( phase_ )
 	{
-		attack_->Attack();
+	case PUNCH:
+		punch_->Attack();
+		break;
+	case CHARGE:
+		charge_->Attack();
+		CollisionDisable();
+		break;
 	}
 }
 
@@ -189,6 +243,21 @@ float BossEnemy::PlayerDir()
 	else
 	{
 		return 1.0f;
+	}
+}
+
+void BossEnemy::AnimeUpdate()
+{
+	animeTimer_++;
+
+	if ( animeTimer_ == 60 )
+	{
+		animeTimer_ = 0;
+		anime_++;
+		if ( anime_ == animeNum_ )
+		{
+			anime_ = 0;
+		}
 	}
 }
 

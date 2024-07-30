@@ -111,6 +111,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Enemy\Boss\BossChargeAttack.cpp" />
     <ClCompile Include="Source\Enemy\Boss\BossPunchAttack.cpp" />
     <ClCompile Include="Source\Enemy\Boss\BossEnemy.cpp" />
     <ClCompile Include="Source\NPC\PowerUpCave.cpp" />
@@ -175,6 +176,7 @@
     <ClCompile Include="Source\Scene\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Enemy\Boss\BossChargeAttack.h" />
     <ClInclude Include="Include\Enemy\Boss\BossPunchAttack.h" />
     <ClInclude Include="Include\Enemy\Boss\BossEnemy.h" />
     <ClInclude Include="Include\NPC\DealDaemon.h" />

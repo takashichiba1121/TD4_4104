@@ -8,6 +8,7 @@ void BossPunchAttack::Attack()
 {
 	isAttack_ = true;
 	CollisionEnable();
+	time_ = TIME;
 }
 
 void BossPunchAttack::Initialize()
@@ -17,10 +18,12 @@ void BossPunchAttack::Initialize()
 	SetShape(shape_);
 
 	userData_ = &tag;
-	
+
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
 	CollisionManager::GetInstance()->AddObject(this);
+
+	CollisionDisable();
 }
 
 void BossPunchAttack::Update()
@@ -29,7 +32,7 @@ void BossPunchAttack::Update()
 	{
 		time_--;
 
-		if ( !time_ )
+		if ( 0 > time_ )
 		{
 			isAttack_ = false;
 			CollisionDisable();
@@ -41,13 +44,9 @@ void BossPunchAttack::Update()
 
 void BossPunchAttack::Draw()
 {
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA,100);
-
 	DrawBox(shape_->GetCenter().x - shape_->GetRadius().x,shape_->GetCenter().y - shape_->GetRadius().y,
 		shape_->GetCenter().x + shape_->GetRadius().x,shape_->GetCenter().y + shape_->GetRadius().y,
 		GetColor(255,255,255),true);
-
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 }
 
 void BossPunchAttack::SetBossPos(const Vector2& pos)
@@ -62,7 +61,7 @@ void BossPunchAttack::SetBossSize(const Vector2& size)
 
 void BossPunchAttack::SetTime(int32_t time)
 {
-	time_ = time;
+	time_ = TIME = time;
 }
 
 void BossPunchAttack::SetSize(const Vector2& size)
@@ -78,6 +77,11 @@ void BossPunchAttack::SetDir(int32_t dir)
 void BossPunchAttack::SetPower(int32_t power)
 {
 	attackPower_ = power;
+}
+
+bool BossPunchAttack::IsAttack() const
+{
+	return isAttack_;
 }
 
 void BossPunchAttack::OnCollision()

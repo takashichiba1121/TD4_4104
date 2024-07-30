@@ -45,6 +45,7 @@ void GameConfig::Load(const std::string& filePath)
 		object[ "BackGroundColor" ][ 1 ];
 		config.backGroundColorB = strtol(color.c_str(),nullptr,0);
 	}
+
 	{
 		nlohmann::json& object = jsonObject[ "Node" ];
 		assert(object.is_object());
@@ -69,6 +70,7 @@ void GameConfig::Load(const std::string& filePath)
 			node.nodeProbabilities[i] = object[ "NodeProbabilities" ][i];
 		}
 	}
+
 	{
 		nlohmann::json& object = jsonObject[ "Boss" ];
 		assert(object.is_object());
@@ -92,6 +94,15 @@ void GameConfig::Load(const std::string& filePath)
 			boss.attack.sizeY = attackObject[ "Size" ][1];
 			boss.attack.time = attackObject[ "Time" ];
 			boss.attack.power = attackObject[ "Power" ];
+		}
+
+		{
+			nlohmann::json& chargeObject = object[ "Charge" ];
+			boss.charge.sizeX = chargeObject[ "Size" ][ 0 ];
+			boss.charge.sizeY = chargeObject[ "Size" ][ 1 ];
+			boss.charge.time = chargeObject[ "Time" ];
+			boss.charge.power = chargeObject[ "Power" ];
+			boss.charge.speed = chargeObject[ "Speed" ];
 		}
 	}
 }

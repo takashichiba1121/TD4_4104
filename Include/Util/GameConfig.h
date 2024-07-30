@@ -33,10 +33,6 @@ public:
 
 	struct Boss
 	{
-		int32_t hp;
-		float attackInterval;
-		int32_t approachHitBoxX;
-		int32_t approachHitBoxY;
 		struct Attack
 		{
 			int32_t time;
@@ -45,7 +41,21 @@ public:
 			int32_t power;
 		};
 
+		struct Charge
+		{
+			int32_t time;
+			int32_t speed;
+			int32_t sizeX;
+			int32_t sizeY;
+			int32_t power;
+		};
+
+		int32_t hp;
+		float attackInterval;
+		int32_t approachHitBoxX;
+		int32_t approachHitBoxY;
 		Attack attack;
+		Charge charge;
 	};
 
 private:

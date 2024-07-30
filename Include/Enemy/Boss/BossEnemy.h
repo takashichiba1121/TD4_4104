@@ -2,11 +2,12 @@
 #include "BaseEnemy.h"
 #include "RectShape.h"
 #include<BossPunchAttack.h>
-
+#include<BossChargeAttack.h>
 enum Phase
 {
 	APPROACH,
-	ATTACK,
+	PUNCH,
+	CHARGE
 };
 
 
@@ -14,6 +15,9 @@ enum Phase
 class BossEnemy :public BaseEnemy
 {
 private:
+
+	int32_t ATTACK_INTERVAL;
+
 	Vector2 gravity_;
 	RectShape* shape_;
 
@@ -25,7 +29,15 @@ private:
 
 	int32_t attackInterval_;
 
-	std::unique_ptr<BossPunchAttack>attack_;
+	std::unique_ptr<BossPunchAttack>punch_;
+	std::unique_ptr<BossChargeAttack>charge_;
+
+	int32_t anime_;
+	int32_t animeTimer_;
+	int32_t animeNum_ = 0;
+	int32_t playerDir_;
+
+	
 public:
 
 	void Initialize() override;
@@ -43,5 +55,7 @@ private:
 	void Attack();
 
 	float PlayerDir();
+
+	void AnimeUpdate();
 };
 
