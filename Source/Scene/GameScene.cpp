@@ -45,7 +45,7 @@ void GameScene::Update()
 	{
 		nodeManager_->Update();
 
-	player_->Update();
+		player_->Update();
 
 		CollisionManager::GetInstance()->SetScreenPos(mapChip_->GetScreenPos());
 		CollisionManager::GetInstance()->Update();
@@ -72,9 +72,9 @@ void GameScene::Draw()
 
 	player_->Draw();
 
-	if (!chenged) powerUp_->Draw();
+	//if (!chenged) powerUp_->Draw();
 
-	nodeManager_->NodeDrew(100,600);
+	nodeManager_->NodeMapDraw();
 
 	nodeManager_->Draw();
 	
