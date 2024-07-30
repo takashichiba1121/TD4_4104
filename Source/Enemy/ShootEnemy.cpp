@@ -89,9 +89,6 @@ void ShootEnemy::Update()
 		case MOVE:
 			Move();
 			break;
-		case APPROACH:
-			Approach();
-			break;
 		case ATTACK:
 			Attack();
 			break;
