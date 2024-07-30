@@ -27,6 +27,16 @@ void EnemyManager::Pop()
 			enemylist_.push_back(move(temp));
 			popEnemyCount_++;
 		}
+		else if ( true )
+		{
+			unique_ptr<ShootEnemy> temp = make_unique<ShootEnemy>();
+			temp->Initialize();
+			temp->SetPos({ GetRand(850) + 50.f,100.f });
+			temp->SetMapChip(mapchip_);
+			temp->SetPlayerPtr(playerPtr_);
+			enemylist_.push_back(move(temp));
+			popEnemyCount_++;
+		}
 		else
 		{
 			unique_ptr<WalkEnemy> temp = make_unique<WalkEnemy>();

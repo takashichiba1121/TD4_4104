@@ -13,6 +13,8 @@ void EnemyBullet::SetVelocity(Vector2 velocity)
 
 void EnemyBullet::Initialize()
 {
+	speed_ = 3;
+	drawSize_ = {32,32};
 	islive_ = true;
 	shape_ = new RectShape();
 	shape_->SetRadius(drawSize_ / 2);
@@ -25,12 +27,15 @@ void EnemyBullet::Initialize()
 
 void EnemyBullet::Update()
 {
+	hp_ = 1;
+	velocity_.Normalize();
 	pos_ += velocity_ * speed_;
-
+	CollisionEnable();
 	if ( mapchip_->GetPosElement(pos_.x,pos_.y ) != NONE)
 	{
 		islive_ = false;
 	}
+	shape_->SetCenter({ pos_.x , pos_.y });
 }
 
 void EnemyBullet::OnCollision()
@@ -46,5 +51,6 @@ void EnemyBullet::OnCollision()
 }
 void EnemyBullet::Draw()
 {
-
+	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.y / 2,
+		pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,0),true);
 }

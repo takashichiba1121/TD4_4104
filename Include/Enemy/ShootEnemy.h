@@ -18,7 +18,7 @@ private:
 	Counter beforeAttackCounter_;
 	Counter attackIntervalCounter_;
 	int32_t attackInterval_ = 60;
-	int32_t beforeAttackFrame_ = 5;
+	int32_t beforeAttackFrame_ = 2;
 	int32_t attackFrame_ = 25;
 
 	bool tern_ = false;
@@ -31,7 +31,7 @@ private:
 	std::list<std::unique_ptr<EnemyBullet>> bullets;
 
 public:
-
+	~ShootEnemy();
 	void Initialize() override;
 	void Update() override;
 	void Move() override;

@@ -6,6 +6,10 @@
 #include "Collision.h"
 
 using namespace std;
+ShootEnemy::~ShootEnemy()
+{
+	bullets.clear();
+}
 void ShootEnemy::Initialize()
 {
 
@@ -56,15 +60,9 @@ void ShootEnemy::Update()
 
 	searchArea_->SetCenter({ ( sign(-velocity_.x) * searchArea_->GetRadius().x ) + pos_.x,pos_.y });
 
-	attackArea_->SetCenter({ ( sign(-velocity_.x) * attackArea_->GetRadius().x ) + pos_.x,pos_.y });
 
-	if ( Collision::Rect2Rect(*dynamic_cast< RectShape* >( playerPtr_->GetShape() ),*attackArea_.get()) && attackIntervalCounter_.IsCountEnd() )
+	if ( Collision::Rect2Rect(*dynamic_cast< RectShape* >( playerPtr_->GetShape() ),*searchArea_.get()))
 	{
-		if ( actionMode != ATTACK )
-		{
-			beforeAttackCounter_.SetEndCount(beforeAttackFrame_);
-			attackCounter_.SetEndCount(attackFrame_);
-		}
 		actionMode = ATTACK;
 	}
 
@@ -103,19 +101,21 @@ void ShootEnemy::Update()
 	{
 		itr->Update();
 	}
-
+	bullets.remove_if([ ] (unique_ptr<EnemyBullet>& bullet)
+	{
+		return bullet->IsLive() == false;
+	});
 	EffectUpdate();
 }
 
 void ShootEnemy::Move()
 {
-
 	velocity_.Normalize();
 
 	gravity_.y += 0.5f;
 	gravity_.y = max(gravity_.y,4);
 
-	if ( GetOnDir() & 0b1 << OnDir::RIGHT | OnDir::LEFT)
+	if ( GetOnDir() & 0b1 << OnDir::RIGHT | OnDir::LEFT )
 	{
 		velocity_ *= -1;
 	}
@@ -123,12 +123,11 @@ void ShootEnemy::Move()
 	if ( GetOnDir() & 0b1 << OnDir::BOTTOM )
 	{
 		gravity_ = { 0,0 };
-		prevElement_ = mapchip_->GetPosElement(pos_.x,pos_.y + ( drawSize_.y / 2 ) + 1);
+		prevElement_ = mapchip_->GetPosElement(pos_.x,pos_.y + ( drawSize_.y / 2 ) + 64);
 	}
-	 nextElement_ = mapchip_->GetPosElement(pos_.x +(( velocity_.x * speed_ )) + ( drawSize_.x / 2 ),
-		pos_.y + ( drawSize_.y / 2 ) + 1);
-
-	if ((nextElement_ == NEXT || (nextElement_ == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM )) && !tern_ )
+	Vector2 nextPos_ = { pos_.x + ( ( velocity_.x * speed_ ) ) + ( ( drawSize_.x / 2 + 32 ) * -sign(velocity_.x) ),pos_.y + ( drawSize_.y / 2 ) };
+	nextElement_ = mapchip_->GetPosElement(static_cast< int32_t >( nextPos_.x ),static_cast< int32_t >( nextPos_.y ) + 64);
+	if ( ( nextElement_ == NEXT || ( nextElement_ == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM ) ) && !tern_ )
 	{
 		velocity_ *= -1;
 		tern_ = true;
@@ -153,14 +152,23 @@ void ShootEnemy::Move()
 
 	SetMapChipSpeed({ velocity_ * speed_,gravity_ });
 	shape_->SetCenter(pos_);
-
 	
 }
 
 
 void ShootEnemy::Attack()
 {
-	
+	if ( attackIntervalCounter_.IsCountEnd() )
+	{
+		if ( beforeAttackCounter_.IsCountEnd() && attackCounter_.IsCountEnd() )
+		{
+			beforeAttackCounter_.SetEndCount(beforeAttackFrame_);
+			attackCounter_.SetEndCount(attackFrame_);
+			shootReady_ = true;
+		}
+	}
+
+
 	if ( !beforeAttackCounter_.IsCountEnd() )
 	{
 		beforeAttackCounter_.CountUp();
@@ -168,18 +176,24 @@ void ShootEnemy::Attack()
 	else if ( !attackCounter_.IsCountEnd() )
 	{
 		attackCounter_.CountUp();
+
+	}
+
+	if(shootReady_)
+	{
 		unique_ptr<EnemyBullet> bullet = make_unique<EnemyBullet>();
 		bullet->Initialize();
 		bullet->SetMapChip(mapchip_);
 		bullet->SetVelocity(Vector2(pos_,playerPtr_->GetPos()));
+		bullet->SetPos(pos_);
 		bullets.push_back(move(bullet));
 		attackIntervalCounter_.SetEndCount(attackInterval_);
-	}
-	else
-	{
 		actionMode = MOVE;
+		shootReady_ = false;
 	}
 	SetMapChipSpeed({ 0.f,gravity_.y });
+
+
 
 }
 
