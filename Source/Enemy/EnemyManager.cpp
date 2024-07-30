@@ -3,7 +3,7 @@
 #include "GameConfig.h"
 using namespace std;
 std::list<std::unique_ptr<BaseEnemy>> EnemyManager::enemylist_;
-BaseObject* EnemyManager::playerPtr_ = nullptr;
+Player* EnemyManager::playerPtr_ = nullptr;
 void EnemyManager::Initialize()
 {
 	enemylist_.clear();
@@ -60,7 +60,7 @@ void EnemyManager::SetEnemyPOP(std::string enemyType,Vector2 pos,Vector2 Velocit
 	}
 }
 
-void EnemyManager::SetPlayerPtr(BaseObject* playerPtr)
+void EnemyManager::SetPlayerPtr(Player* playerPtr)
 {
 	playerPtr_ = playerPtr;
 }

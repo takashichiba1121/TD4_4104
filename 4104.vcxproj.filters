@@ -210,9 +210,6 @@
     <ClCompile Include="Source\Scene\GameOverScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\NPC\ATKUpCave.cpp">
-      <Filter>ソース ファイル\PowerUp</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Base\BaseEnemy.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -238,6 +235,27 @@
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
     <ClCompile Include="Source\Player\PlayerLegNormal.cpp">
+      <Filter>ソース ファイル\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Node\BossNode.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player\PlayerMouth.cpp">
+      <Filter>ソース ファイル\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player\PlayerAttackVine.cpp">
+      <Filter>ソース ファイル\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player\PlayerAttackMars.cpp">
+      <Filter>ソース ファイル\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player\PlayerAttackFenrir.cpp">
+      <Filter>ソース ファイル\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player\PlayerAttackCerberus.cpp">
+      <Filter>ソース ファイル\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player\PlayerLegFenrir.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
   </ItemGroup>
@@ -395,19 +413,61 @@
     <ClInclude Include="Include\Player\PlayerAttackSpider.h">
       <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
-    <ClInclude Include="Include\NPC\ATKUpCave.h">
-      <Filter>ヘッダー ファイル\PowerUp</Filter>
+    <ClInclude Include="Include\Player\PlayerAttackGun.h">
+      <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
-    <ClInclude Include="ThirdParty\magic_enum.hpp">
+    <ClInclude Include="Include\Node\BossNode.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Player\PlayerAttackGun.h">
+    <ClInclude Include="Include\NPC\DealDaemon.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\ClearScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\GameOverScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\NPC\NPC.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\NPC\NPCManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\NPC\PowerUpCave.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Deal\ItemShop.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="PowerUpCave.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Node\StartNode.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Player\PlayerMouth.h">
+      <Filter>ヘッダー ファイル\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Player\PlayerAttackVine.h">
+      <Filter>ヘッダー ファイル\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Player\PlayerAttackMars.h">
+      <Filter>ヘッダー ファイル\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Player\PlayerAttackFenrir.h">
+      <Filter>ヘッダー ファイル\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Player\PlayerAttackCerberus.h">
       <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerLeg.h">
       <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerLegNormal.h">
+      <Filter>ヘッダー ファイル\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Player\PlayerLegFenrir.h">
       <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,6 +5,7 @@
 #include <memory>
 
 class MapChip;
+class Player;
 class EnemyManager
 {
 private:
@@ -15,14 +16,14 @@ private:
 	const uint32_t MAX_POP_ENEMY_NUM = 15;
 	const uint32_t MAX_ENEMY_NUM = 1;
 	MapChip* mapchip_;
-	static BaseObject* playerPtr_;
+	static Player* playerPtr_;
 	size_t popEnemyCount_;
 	size_t deadEnemyCount_;
 	BaseEnemy* cursedEnemy_;
 	void Pop();//自動ランダム生成
 public:
 	static void SetEnemyPOP(std::string enemyType,Vector2 pos,Vector2 Velocity);//指定生成
-	void SetPlayerPtr(BaseObject* playerPtr);
+	void SetPlayerPtr(Player* playerPtr);
 	void Initialize();
 	void Update();
 	void Draw();

@@ -9,7 +9,7 @@ private:
 
 	float AttackTime_ = 0;
 
-	const float LAST_ATTACK_TIME_ = 0;
+	const float LAST_ATTACK_TIME_ = 20;
 
 	const Vector2 ATTACK_POS_ = { 0,0 };
 
@@ -17,7 +17,7 @@ private:
 
 	const uint32_t INTERVAL_ = 30;
 
-	const float POW_ = 0;
+	const float POW_ = 90;
 
 	const float MOVE_ = 0;
 

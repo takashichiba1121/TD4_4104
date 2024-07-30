@@ -1,4 +1,5 @@
 #include "BaseEnemy.h"
+#include <Player.h>
 
 void BaseEnemy::EffectUpdate()
 {
@@ -12,16 +13,28 @@ void BaseEnemy::EffectUpdate()
 			switch ( ef )
 			{
 			case BURN:
-				if ( effectTimer[ i ].GetCount() % effectDamageInterval )
+				if ( effectTimer[ i ].GetCount() % effectDamageInterval[i] == 0)
 				{
-					hp_ -= effectDamage;
+					playerPtr_->Damage(effectDamage[ ef ]);
+				}
+				break;
+			case ICED:
+				if ( effectTimer[ i ].GetCount() % effectDamageInterval[ i ] == 0 )
+				{
+					playerPtr_->Damage(effectDamage[ ef ]);
+				}
+				break;
+			case BIND:
+				if ( effectTimer[ i ].GetCount() % effectDamageInterval[ i ] == 0 )
+				{
+					playerPtr_->Damage(effectDamage[ ef ]);
 				}
 				break;
 			default:
 				break;
 			}
 		}
-		else if ( effectTimer[ i ].IsCountEnd() )
+		else if ( effectTimer[ i ].IsCountEnd() && !ef == CURSE)
 		{
 			ReleaseEffect(ef);
 		}
@@ -32,10 +45,29 @@ void BaseEnemy::EffectUpdate()
 	}
 }
 
-void BaseEnemy::Damage(int32_t damage)
+void BaseEnemy::Damage(int32_t damage,Effects effect)
 {
-	if (true)
+	if (!immortal_)
 	{
+		SetEffect(effect);
+		switch ( effect )
+		{
+		case BIND:
+			effectDamage[ effect ] = damage * 0.15f;
+			break;
+		case ICED:
+			effectDamage[ effect ] = damage * 0.50f;
+			break;
+		case BURN:
+			effectDamage[ effect ] = damage * 0.25f;
+			break;
+		default:
+			break;
+		}
+		if ( IsEffect(ICED) )
+		{
+			damage = static_cast<int32_t>(static_cast<float>(damage) * 0.25f);
+		}
 		immortal_ = true;
 		hp_ -= damage;
 		immortalTime_ = 10;
@@ -56,7 +88,7 @@ void BaseEnemy::SetVelocity(Vector2 velocity)
 	velocity_ = velocity;
 }
 
-void BaseEnemy::SetPlayerPtr(BaseObject* ptr)
+void BaseEnemy::SetPlayerPtr(Player* ptr)
 {
 	playerPtr_ = ptr;
 }

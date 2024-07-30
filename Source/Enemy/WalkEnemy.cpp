@@ -80,6 +80,32 @@ void WalkEnemy::Move()
 	if ( GetOnDir() & 0b1 << OnDir::BOTTOM )
 	{
 		gravity_ = { 0,0 };
+		prevElement = mapchip_->GetPosElement(pos_.x,pos_.y + ( drawSize_.y / 2 ) + 1);
+	}
+	 nextElement = mapchip_->GetPosElement(pos_.x +(( velocity_.x * speed_ )) + ( drawSize_.x / 2 ),
+		pos_.y + ( drawSize_.y / 2 ) + 1);
+
+	if ((nextElement == NEXT || (nextElement == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM )) && !tern )
+	{
+		velocity_ *= -1;
+		tern = true;
+	}
+
+	if ( prevElement != NONE )
+	{
+		velocity_.y = 0;
+		gravity_.y = 0;
+	}
+
+
+	if ( tern )
+	{
+		ternInvervalTimer++;
+		if ( ternInverval < ternInvervalTimer )
+		{
+			tern = false;
+			ternInvervalTimer = 0;
+		}
 	}
 	 nextElement = mapchip_->GetPosElement(pos_.x +(( velocity_.x * speed_ )) + ( drawSize_.x / 2 ),
 		pos_.y + ( drawSize_.y / 2 ) + 1);

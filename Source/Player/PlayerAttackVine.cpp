@@ -1,9 +1,9 @@
-#include "PlayerAttackSpider.h"
+#include "PlayerAttackVine.h"
 #include"DxlibInclude.h"
 #include"CollisionManager.h"
 #include"FlyEnemy.h"
 #include"WalkEnemy.h"
-void PlayerAttackSpider::Initialize(Vector2* playerPos,Vector2* velocity,bool* direction)
+void PlayerAttackVine::Initialize(Vector2* playerPos,Vector2* velocity,bool* direction)
 {
 	playerPos_ = playerPos;
 
@@ -21,9 +21,9 @@ void PlayerAttackSpider::Initialize(Vector2* playerPos,Vector2* velocity,bool* d
 
 	CollisionDisable();
 }
-void PlayerAttackSpider::AttackInit(float pow)
+void PlayerAttackVine::AttackInit(float pow)
 {
-	if ( INTERVAL_ <= AttackInterval_ )
+	if (INTERVAL_<=AttackInterval_ )
 	{
 		playerPow_ = pow;
 
@@ -39,16 +39,15 @@ void PlayerAttackSpider::AttackInit(float pow)
 		{
 			velocity_->x -= MOVE_;
 		}
-		AttackInterval_ = 0;
 
 		CollisionEnable();
 	}
 }
 
-void PlayerAttackSpider::Attack()
+void PlayerAttackVine::Attack()
 {
 
-	if ( isAttack_ )
+	if (isAttack_ )
 	{
 		if ( *direction_ )
 		{
@@ -75,7 +74,7 @@ void PlayerAttackSpider::Attack()
 	}
 }
 
-void PlayerAttackSpider::Draw()
+void PlayerAttackVine::Draw()
 {
 	if ( isAttack_ )
 	{
@@ -85,18 +84,19 @@ void PlayerAttackSpider::Draw()
 	}
 }
 
-void PlayerAttackSpider::OnCollision()
+void PlayerAttackVine::OnCollision()
 {
 	if ( GetCollisionInfo().userData && isGiveDamage_ == false )
 	{
+
 		if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "FlyEnemy" )
 		{
-			dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_,Effects::DELAY);
+			dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_,Effects::BIND);
 			isGiveDamage_ = true;
 		}
 		if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "WalkEnemy" )
 		{
-			dynamic_cast< WalkEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_,Effects::DELAY);
+			dynamic_cast< WalkEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_,Effects::BIND);
 
 			isGiveDamage_ = true;
 		}
