@@ -32,15 +32,8 @@ void DealDaemon::Initialize()
 		temp->uiPartsName = static_cast< string >( obj[ "partsName" ] );
 		temp->partsName = static_cast<string>(obj["codeName"]);
 		temp->partsInfo = static_cast<string>(obj["partsInfo"]);
-
-		products_[static_cast<string>(obj["Type"])].push_back(std::move(temp));
-	}
-
-	for (auto itr = products_.begin(); itr != products_.end(); ++itr)
-	{
-		string temp = itr->first;
-		productKey_.push_back(temp);
-
+		temp->productType = static_cast< string >( obj[ "Type" ] );
+		products_.push_back(std::move(temp));
 	}
 
 	SetPriducts();
@@ -52,10 +45,10 @@ bool DealDaemon::PartsChenge()
 
 	Parts* product = selectProducts_[selectNum_];
 	bool isBuy = false;
-	switch (magic_enum::enum_cast<PartsName>(nowProductType).value())
+	switch (magic_enum::enum_cast<PartsName>( product ->productType).value())
 	{
 	case ARM:
-		if ( isLeft )
+		if ( product ->isLeft )
 		{
 			playerPtr_->ChangeLeftArm(product->partsName,product->cost);
 		}
@@ -68,7 +61,7 @@ bool DealDaemon::PartsChenge()
 		playerPtr_->ChangeLeg(product->partsName,product->cost);
 		break;
 	case EYE:
-
+		
 		break;
 	case MOUTH:
 
@@ -102,35 +95,21 @@ void DealDaemon::SetSlect(uint8_t selectNum)
 
 void DealDaemon::SetPriducts(bool deal)
 {
-	if (deal)
-	{
-		string type = productKey_[GetRand(productKey_.size() - 1)];
-		while (nowProductType == type)
-		{
-			type = productKey_[GetRand(productKey_.size() - 1)];
-		}
-		nowProductType = type;
-	}
-	else
-	{
-		nowProductType = productKey_[GetRand(productKey_.size() - 1)];
-	}
-
-	if ( nowProductType == "ARM" )
-	{
-		if ( GetRand(10) <= 5)
-		{
-			isLeft = true;
-		}
-		else
-		{
-			isLeft = false;
-		}
-	}
 
 	for (int i = 0; i < selectProducts_.size(); i++)
 	{
-		selectProducts_[i] = products_[nowProductType][GetRand(products_[nowProductType].size() - 1)].get();
+		selectProducts_[i] = products_[GetRand(products_.size() - 1)].get();
+		if ( selectProducts_[ i ]->productType == "ARM" )
+		{
+			if ( GetRand(10) <= 5 )
+			{
+				selectProducts_[ i ]->isLeft = true;
+			}
+			else
+			{
+				selectProducts_[ i ]->isLeft = false;
+			}
+		}
 	}
 
 }
@@ -142,7 +121,7 @@ void DealDaemon::SetPlayer(Player* player)
 
 void DealDaemon::Draw()
 {
-	string type = productKey_[GetRand(productKey_.size() - 1)];
+
 	for (int i = 0; i < selectProducts_.size(); i++)
 	{
 		int64_t color = 0x000000;
