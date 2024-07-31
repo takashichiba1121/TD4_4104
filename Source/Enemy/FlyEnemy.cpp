@@ -4,6 +4,8 @@
 #include "Util.h"
 #include "Player.h"
 #include "Collision.h"
+#include "GameConfig.h"
+
 
 using namespace std;
 void FlyEnemy::Initialize()
@@ -13,8 +15,8 @@ void FlyEnemy::Initialize()
 	islive_ = true;
 	shape_ = new RectShape();
 	shape_->SetRadius(drawSize_ / 2);
-	pos_.x = GetRand(850) + 50.f;
-	pos_.y = 100.f;
+	pos_.x = GameConfig::GetWindowWidth() / 2;
+	pos_.y = GameConfig::GetWindowHeight() / 2+ 50;
 	for ( int i = 0; i < moveCheckPoint_.size(); i++ )
 	{
 		int8_t r = GetRand(200) + 300;
@@ -64,7 +66,7 @@ void FlyEnemy::Update()
 	}
 	else if(actionMode != ATTACK)
 	{
-		targetPos_ = Vector2(playerPtr_->GetPos(),pos_);
+		targetPos_ = playerPtr_->GetPos();
 	}
 
 	if ( immortalTime_ <= 0 )
@@ -134,9 +136,11 @@ void FlyEnemy::Move()
 
 void FlyEnemy::Attack()
 {
+	attackIntervalCounter_.SetEndCount(attackInterval_);
 	if ( !beforeAttackCounter_.IsCountEnd() )
 	{
 		beforeAttackCounter_.CountUp();
+		speed_ = 0;
 	}
 	else if ( !attackCounter_.IsCountEnd() )
 	{
@@ -146,16 +150,13 @@ void FlyEnemy::Attack()
 
 		attackIntervalCounter_.SetEndCount(attackInterval_);
 	}
-	else if(Vector2(pos_,targetPos_).GetLenge() <= 10 )
+	speed_ = InQuad(0,5,attackCounter_.GetEndCount(),attackCounter_.GetCount());
+	Vector2 targetVelo(pos_,targetPos_);
+	targetVelo.Normalize();
+	pos_ += targetVelo * speed_;
+	if ( Vector2(pos_,targetPos_).GetLenge() <= 10 )
 	{
 		actionMode = MOVE;
-	}
-
-	if ( beforeAttackCounter_.IsCountEnd() )
-	{
-		Vector2 targetVelo(targetPos_,pos_);
-		targetVelo.Normalize();
-		pos_ += targetVelo * speed_;
 	}
 }
 
@@ -164,7 +165,7 @@ void FlyEnemy::Draw()
 	if ( !islive_ ) return;
 	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2,
 		pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,155),true);
-	DrawFormatString(100,100,0xffffff,"%f",Vector2(pos_,moveCheckPoint_[ targetCheckPoint_ ]).GetLenge());
+	DrawFormatString(100,100,0xffffff,"%f",Vector2(pos_,targetPos_).GetLenge());
 }
 
 void FlyEnemy::OnCollision()
