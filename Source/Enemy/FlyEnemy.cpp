@@ -5,33 +5,11 @@
 #include "Player.h"
 #include "Collision.h"
 
-
+using namespace std;
 void FlyEnemy::Initialize()
 {
-
-	MapChipObjectEnable();
-	SetMapChipCenter(&pos_);
-	SetMapChipRadius({ drawSize_.x / 2,drawSize_.y / 2 });
-
-
-	CollisionManager::GetInstance()->AddObject(this);
-	speed_ = 1;
-	velocity_ = { 1,0 };
-	islive_ = true;
-	attackIntervalTime_ = ATTACK_INTERVAL;
-	MapChipObjectEnable();
-	SetMapChipCenter(&pos_);
-	SetMapChipRadius({ drawSize_.x / 2,drawSize_.y / 2 });
-	hp_ = 10;
-	if ( GetRand(2) >= 2 )
-	{
-		velocity_ = { 1,0 };
-	}
-	else
-	{
-		velocity_ = { -1,0 };
-	}
-	user_.tag = "FlyEnemy";
+	hp_ = 1;
+	user_.tag = "Enemy";
 	userData_ = &user_;
 
 	islive_ = true;
@@ -48,15 +26,18 @@ void FlyEnemy::Initialize()
 	}
 	pos_ = moveCheckPoint_[ 0 ];
 	targetCheckPoint_ = 0;
-
+	searchArea_ = make_unique<CircleShape>();
+	searchArea_->SetRadius({ ( drawSize_.x * 3 / 2 )});
 	SetShape(shape_);
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
 	CollisionManager::GetInstance()->AddObject(this);
 	attackPower_ = 1;
 
-
-
+	moveTimer_.SetEndCount(20);
+	beforeAttackFrame_ = 40;
+	attackInterval_ = 120;
+	attackFrame_ = 5;
 }
 
 void FlyEnemy::Update()
@@ -76,6 +57,10 @@ void FlyEnemy::Update()
 			attackCounter_.SetEndCount(attackFrame_);
 		}
 		actionMode = ATTACK;
+	}
+	else if(actionMode != ATTACK)
+	{
+		targetPos_ = Vector2(playerPtr_->GetPos(),pos_);
 	}
 
 	if ( immortalTime_ <= 0 )
@@ -127,38 +112,45 @@ void FlyEnemy::Move()
 		velocity_.y = 0;
 	}
 
-	velocity_ = Vector2();
+	velocity_ = Vector2(moveCheckPoint_[targetCheckPoint_ ],pos_);
+	velocity_.Normalize();
+	speed_ = InQuad(0,2,moveTimer_.GetCount(),moveTimer_.GetEndCount());
 
-	SetMapChipSpeed({ velocity_.x * speed_,velocity_.y * speed_ });
+	pos_ += velocity_ * speed_;
+
+
+	if ( Vector2(pos_,moveCheckPoint_[ targetCheckPoint_ ]).GetLenge() <= 10 )
+	{
+		int num = targetCheckPoint_;
+		while ( targetCheckPoint_ == num )
+		{
+			targetCheckPoint_ = GetRand(moveCheckPoint_.size() - 1);
+		}
+		moveTimer_.ReSetCount();
+	}
+
 	shape_->SetCenter(pos_);
 
 }
 
 void FlyEnemy::Attack()
 {
-	if ( ATTACK_TIME >= attackTimer_ )
+	if ( !beforeAttackCounter_.IsCountEnd() )
 	{
-		attackTimer_++;
+		beforeAttackCounter_.CountUp();
 	}
-	if ( GetOnDir() & 0b1 << OnDir::BOTTOM && !back_)
+	else if ( !attackCounter_.IsCountEnd() )
 	{
-		velocity_.y = -1;
-		back_ = true;
-		attackTimer_ = 0;
+		attackCounter_.CountUp();
+		speed_ = InQuad(0,5,attackCounter_.GetCount(),attackCounter_.GetEndCount());
+		Vector2 targetVelo(targetPos_,pos_);
+		targetVelo.Normalize();
+		pos_ += targetVelo * speed_;
+		attackIntervalCounter_.SetEndCount(attackInterval_);
 	}
-	if ( velocity_.y > 0 )
+	else if(Vector2(pos_,targetPos_).GetLenge() <= 10 )
 	{
-		speed_ = InQuad(0.f,6.f,ATTACK_TIME,attackTimer_);
-	}
-	else
-	{
-		speed_ = OutQuad(0.f,5.f,ATTACK_TIME,attackTimer_);
-	}
-	if ( pos_.y - 1 <= attackBeforePos_.y && back_  )
-	{
-		isAttack_ = false;
-		velocity_.y = 0.f;
-		speed_ = GetRand(4) + 1;
+		actionMode = MOVE;
 	}
 
 

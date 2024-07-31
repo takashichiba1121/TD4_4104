@@ -93,7 +93,7 @@ void EnemyManager::Update()
 		
 	for ( auto& itr : enemylist_ )
 	{
-		if ( itr->IsImmortal() && itr->IsCursedDamage)
+		if ( itr->IsImmortal() && itr->IsCursedDamage())
 		{
 			if ( time < itr->GetImmortalTime() )
 			{

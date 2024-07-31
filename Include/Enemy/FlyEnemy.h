@@ -10,7 +10,6 @@ private:
 	int64_t attackTimer_;
 	int64_t attackIntervalTime_;
 	int64_t tackleTime_;
-	Vector2 targetPos_;
 	Vector2 attackBeforePos_;
 	bool isAttack_;
 	bool back_;
@@ -19,6 +18,7 @@ private:
 	RectShape* shape_;
 	std::unique_ptr<CircleShape> searchArea_;
 	Counter moveTimer_;
+	Vector2 targetPos_;
 	std::array<Vector2,5> moveCheckPoint_;
 
 	int8_t targetCheckPoint_;

@@ -24,7 +24,7 @@ void WalkEnemy::Initialize()
 	{
 		velocity_ = { -1,0 };
 	}
-	user_.tag = "WalkEnemy";
+	user_.tag = "Enemy";
 	userData_ = &user_;
 
 	islive_ = true;
