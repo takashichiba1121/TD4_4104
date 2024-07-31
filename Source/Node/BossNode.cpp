@@ -1,28 +1,28 @@
-#include "ReinforcementNode.h"
+#include "BossNode.h"
+
 #include<CollisionManager.h>
 #include<NodeManager.h>
 
-void ReinforcementNode::Initialize()
+void BossNode::Initialize()
 {
-	mapChip_->MapLoad("Resources/Export/Map/TestMap.json");
-	
+	mapChip_->MapLoad("Resources/Export/Map/TestBossMap.json");
 }
 
-void ReinforcementNode::Update()
+void BossNode::Update()
 {
 	PlayerNodeMove();
-	powerUp_->Update();
 }
 
-void ReinforcementNode::Draw()
+void BossNode::Draw()
 {
-	powerUp_->Draw();
 }
 
-void ReinforcementNode::Reset()
+void BossNode::Reset()
 {
+	mapChip_->MapLoad("Resources/Export/Map/TestBossMap.json");
+
 	player_->Reset();
-	powerUp_->ReSet();
+
 	int32_t i = 0;
 	int32_t count = 0;
 	for ( auto& chip : mapChip_->GetMapChip()[ mapChip_->GetMapChip().size() - 2 ] )
@@ -56,7 +56,7 @@ void ReinforcementNode::Reset()
 	CollisionManager::GetInstance()->SetMapChip(mapChip_->GetMapChipPtr());
 }
 
-void ReinforcementNode::Finalize()
+void BossNode::Finalize()
 {
 	for ( auto& door : nextdoors_ )
 	{
@@ -65,10 +65,9 @@ void ReinforcementNode::Finalize()
 
 	nextdoors_.clear();
 	nextDoorsNum_ = 0;
-	powerUp_->NoDeal();
 }
 
-Vector2 ReinforcementNode::GetPlayerStartPos()
+Vector2 BossNode::GetPlayerStartPos()
 {
 	return Vector2();
 }

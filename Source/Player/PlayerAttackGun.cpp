@@ -21,13 +21,13 @@ void PlayerAttackGun::AttackInit(float pow)
 
 		if ( *direction_ )
 		{
-			newBullet->Initialize({ 10,0 },*playerPos_,60,pow*combo1.POW_);
+			newBullet->Initialize({ 10,0 },*playerPos_,60,pow*POW_);
 
 			velocity_->x -= 5;
 		}
 		else
 		{
-			newBullet->Initialize({ -10,0 },*playerPos_,60,pow*combo1.POW_);
+			newBullet->Initialize({ -10,0 },*playerPos_,60,pow*POW_);
 
 			velocity_->x += 5;
 		}
@@ -42,7 +42,7 @@ void PlayerAttackGun::Attack()
 	{
 		AttackTime_++;
 
-		if ( AttackTime_ > combo1.LAST_ATTACK_TIME_ )
+		if ( AttackTime_ > LAST_ATTACK_TIME_ )
 		{
 			isAttack_ = false;
 			AttackTime_ = 0;

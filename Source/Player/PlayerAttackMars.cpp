@@ -1,9 +1,9 @@
-#include "PlayerAttackFist.h"
+#include "PlayerAttackMars.h"
 #include"DxlibInclude.h"
 #include"CollisionManager.h"
 #include"FlyEnemy.h"
 #include"WalkEnemy.h"
-void PlayerAttackFist::Initialize(Vector2* playerPos,Vector2* velocity,bool* direction)
+void PlayerAttackMars::Initialize(Vector2* playerPos,Vector2* velocity,bool* direction)
 {
 	playerPos_ = playerPos;
 
@@ -21,7 +21,7 @@ void PlayerAttackFist::Initialize(Vector2* playerPos,Vector2* velocity,bool* dir
 
 	CollisionDisable();
 }
-void PlayerAttackFist::AttackInit(float pow)
+void PlayerAttackMars::AttackInit(float pow)
 {
 	if (INTERVAL_<=AttackInterval_ )
 	{
@@ -44,7 +44,7 @@ void PlayerAttackFist::AttackInit(float pow)
 	}
 }
 
-void PlayerAttackFist::Attack()
+void PlayerAttackMars::Attack()
 {
 
 	if (isAttack_ )
@@ -74,7 +74,7 @@ void PlayerAttackFist::Attack()
 	}
 }
 
-void PlayerAttackFist::Draw()
+void PlayerAttackMars::Draw()
 {
 	if ( isAttack_ )
 	{
@@ -84,7 +84,7 @@ void PlayerAttackFist::Draw()
 	}
 }
 
-void PlayerAttackFist::OnCollision()
+void PlayerAttackMars::OnCollision()
 {
 	if ( GetCollisionInfo().userData && isGiveDamage_ == false )
 	{

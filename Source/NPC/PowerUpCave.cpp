@@ -13,7 +13,8 @@ void PowerUpCave::Initialize()
 {
 
 	selectmode_ = false;
-	dealed_ = false;
+	dealed_ = true;
+	CollisionDisable();
 	hitboxSize_ = { 128,128 };
 	pos_ = { 650,640 };
 
@@ -51,7 +52,7 @@ void PowerUpCave::Initialize()
 		temp->statusNames.first = static_cast< string >( obj[ "PowerName" ] );
 		temp->statusNames.second = static_cast< string >( obj[ "CostName" ] );
 		products_[ static_cast< string >( obj[ "Type" ] ) ].push_back(std::move(temp));
-}
+	}
 
 	for ( auto itr = products_.begin(); itr != products_.end(); ++itr )
 	{
@@ -63,6 +64,7 @@ void PowerUpCave::Initialize()
 	SetPriducts();
 
 	name_.tag = "PowerUpCave";
+	userData_ = &name_;
 }
 
 
@@ -185,4 +187,21 @@ void PowerUpCave::Draw()
 	{
 		DrawBox(pos_.x - hitboxSize_.x/2,pos_.y - hitboxSize_.y/2,pos_.x + hitboxSize_.x/2,pos_.y + hitboxSize_.y/2,0xffffff,true);
 	}
+}
+
+void PowerUpCave::ReSet()
+{
+	selectmode_ = false;
+	dealed_ = false;
+	hitboxSize_ = { 128,128 };
+	pos_ = { 650,640 };
+	SetPriducts();
+	CollisionEnable();
+}
+
+void PowerUpCave::NoDeal()
+{
+	dealed_ = true;
+	selectmode_ = false;
+	CollisionDisable();
 }

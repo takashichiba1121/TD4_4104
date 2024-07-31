@@ -1,11 +1,11 @@
-#include "PlayerLegNormal.h"
+#include"PLayerLegFenrir.h"
 #include"Input.h"
 #include"DxlibInclude.h"
 #include"json.hpp"
 #include <fstream>
 #include"GameConfig.h"
 
-void PlayerLegNormal::Initialize(Vector2* playerVelocity,bool* direction,float* changeAcl)
+void PlayerLegFenrir::Initialize(Vector2* playerVelocity,bool* direction,float* changeAcl)
 {
 	playerVelocity_ = playerVelocity;
 
@@ -24,7 +24,7 @@ void PlayerLegNormal::Initialize(Vector2* playerVelocity,bool* direction,float* 
 	LoadDivGraph("Resources/Player/PlayerDush.png",5,5,1,128,128,( int* ) PlayerDushTexture_);
 }
 
-void PlayerLegNormal::Move(bool DirBOTTOM,bool isAttack)
+void PlayerLegFenrir::Move(bool DirBOTTOM,bool isAttack)
 {
 	isDirBottom_ = DirBOTTOM;
 
@@ -141,7 +141,7 @@ void PlayerLegNormal::Move(bool DirBOTTOM,bool isAttack)
 	}
 }
 
-void PlayerLegNormal::JumpStart()
+void PlayerLegFenrir::JumpStart()
 {
 	onGround_ = true;
 
@@ -150,9 +150,18 @@ void PlayerLegNormal::JumpStart()
 	playerVelocity_->y += jumpInitialVelocity_;
 
 	PlayerJumpTextureCount_ = 0;
+
+	if ( *direction_ )
+	{
+		playerVelocity_->x += evasionRollSpeed_ / 2;
+	}
+	else
+	{
+		playerVelocity_->x += -evasionRollSpeed_ / 2;
+	}
 }
 
-void PlayerLegNormal::Jump()
+void PlayerLegFenrir::Jump()
 {
 	playerVelocity_->y += jumpAcceleration_;
 
@@ -171,7 +180,7 @@ void PlayerLegNormal::Jump()
 
 }
 
-void PlayerLegNormal::EvasionRoll()
+void PlayerLegFenrir::EvasionRoll()
 {
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_Q) && isEvasionRoll_ == false )
 	{
@@ -213,7 +222,7 @@ void PlayerLegNormal::EvasionRoll()
 	}
 }
 
-void PlayerLegNormal::Falling()
+void PlayerLegFenrir::Falling()
 {
 	playerVelocity_->y += gravityAcceleration_;
 
@@ -234,7 +243,7 @@ void PlayerLegNormal::Falling()
 	}
 }
 
-void PlayerLegNormal::Draw(Vector2 pos,Vector2 size)
+void PlayerLegFenrir::Draw(Vector2 pos,Vector2 size)
 {
 	float leftPos = pos.x - size.x / 2;
 	float rightPos = pos.x + size.x / 2;
@@ -301,7 +310,7 @@ void PlayerLegNormal::Draw(Vector2 pos,Vector2 size)
 	}
 }
 
-void PlayerLegNormal::Load()
+void PlayerLegFenrir::Load()
 {
 	std::ifstream file;
 
@@ -324,11 +333,11 @@ void PlayerLegNormal::Load()
 
 	assert(lName.compare("Player") == 0);
 
-	topSpeed_ = jsonObject[ "TopSpeed" ];
-	acceleration_ = jsonObject[ "Acceleration" ];
-	airAcceleration_ = jsonObject[ "AirAcceleration" ];
-	deccelaration_ = jsonObject[ "Deccelaration" ];
-	airDeccelaration_ = jsonObject[ "AirDeccelaration" ];
+	topSpeed_ = 12.0f;
+	acceleration_ = 60.0f;
+	airAcceleration_ = 24.0f;
+	deccelaration_ = 88.0;
+	airDeccelaration_ = 124.0f;
 	gravityAcceleration_ = jsonObject[ "GravityAcceleration" ];
 	jumpAcceleration_ = jsonObject[ "JumpAcceleration" ];
 	jumpInitialVelocity_ = jsonObject[ "JumpInitialVelocity" ];

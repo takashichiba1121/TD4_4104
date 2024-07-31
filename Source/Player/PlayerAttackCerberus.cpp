@@ -1,9 +1,9 @@
-#include "PlayerAttackFist.h"
+#include "PlayerAttackCerberus.h"
 #include"DxlibInclude.h"
 #include"CollisionManager.h"
 #include"FlyEnemy.h"
 #include"WalkEnemy.h"
-void PlayerAttackFist::Initialize(Vector2* playerPos,Vector2* velocity,bool* direction)
+void PlayerAttackCerberus::Initialize(Vector2* playerPos,Vector2* velocity,bool* direction)
 {
 	playerPos_ = playerPos;
 
@@ -21,7 +21,7 @@ void PlayerAttackFist::Initialize(Vector2* playerPos,Vector2* velocity,bool* dir
 
 	CollisionDisable();
 }
-void PlayerAttackFist::AttackInit(float pow)
+void PlayerAttackCerberus::AttackInit(float pow)
 {
 	if (INTERVAL_<=AttackInterval_ )
 	{
@@ -44,7 +44,7 @@ void PlayerAttackFist::AttackInit(float pow)
 	}
 }
 
-void PlayerAttackFist::Attack()
+void PlayerAttackCerberus::Attack()
 {
 
 	if (isAttack_ )
@@ -74,7 +74,7 @@ void PlayerAttackFist::Attack()
 	}
 }
 
-void PlayerAttackFist::Draw()
+void PlayerAttackCerberus::Draw()
 {
 	if ( isAttack_ )
 	{
@@ -84,19 +84,19 @@ void PlayerAttackFist::Draw()
 	}
 }
 
-void PlayerAttackFist::OnCollision()
+void PlayerAttackCerberus::OnCollision()
 {
 	if ( GetCollisionInfo().userData && isGiveDamage_ == false )
 	{
 
 		if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "FlyEnemy" )
 		{
-			dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_);
+			dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_,Effects::BURN);
 			isGiveDamage_ = true;
 		}
 		if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "WalkEnemy" )
 		{
-			dynamic_cast< WalkEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_);
+			dynamic_cast< WalkEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_,Effects::BURN);
 
 			isGiveDamage_ = true;
 		}

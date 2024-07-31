@@ -9,17 +9,17 @@ private:
 
 	float AttackTime_ = 0;
 
-	const float LAST_ATTACK_TIME_ = 1;
+	const float LAST_ATTACK_TIME_ = 20;
 
-	Vector2 ATTACK_POS_ = { 0,0 };
+	const Vector2 ATTACK_POS_ = { 0,0 };
 
-	Vector2 COLISION_SIZE_ = { 200,50 };
+	const Vector2 COLISION_SIZE_ = { 200,50 };
 
 	const uint32_t INTERVAL_ = 30;
 
-	const float POW = 0;
+	const float POW_ = 90;
 
-	Combo combo1 = { 1,{0,0},{200,50},30 ,5};
+	const float MOVE_ = 0;
 
 	Vector2 DrawPos_;
 

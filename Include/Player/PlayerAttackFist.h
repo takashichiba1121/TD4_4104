@@ -6,21 +6,25 @@ class PlayerAttackFist :
 private:
 	bool isAttack_ = false;
 
-	uint32_t attackType_ = 0;
-
-	uint32_t nextAttack_ = 0;
-
 	bool isGiveDamage_ = false;
 
 	float AttackTime_ = 0;
 
+	float AttackInterval_ = 0;
+
 	Vector2 DrawPos_;
 
-	Combo combo1 = { 10,{15,-10},{30,30},70,5,5 };
+	const float LAST_ATTACK_TIME_=10;
 
-	Combo combo2 = { 20,{20,-10},{45,30},80,10,5 };
+	const Vector2 ATTACK_POS_ = {30,0};
 
-	Combo combo3 = { 30,{25,-10},{60,30},90,20,5 };
+	const Vector2 COLISION_SIZE_ = {64,64};
+
+	const uint32_t INTERVAL_=20;
+
+	const float POW_=100;
+
+	const float MOVE_=5;
 
 	float playerPow_;
 
