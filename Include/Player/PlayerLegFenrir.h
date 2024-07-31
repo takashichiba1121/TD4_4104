@@ -19,6 +19,8 @@ private:
 
 	bool isEvasionRoll_;
 
+	bool isBullet=false;
+
 	uint32_t PlayerStandTexture_[ 10 ];
 
 	uint32_t PlayerStandTextureCount_ = 0;
@@ -63,13 +65,17 @@ private:
 
 	bool isDirBottom_;
 
+	uint32_t bulletInterval_;
+
+	const uint32_t MAX_BULLET_INTERVAL_=10;
+
 #pragma endregion
 
 public:
 
 	void Initialize(Vector2* playerPos,bool* direction,float* changeAcl) override;
 
-	void Move(bool DirBOTTOM,bool isAttack) override;
+	void Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const float pow) override;
 
 	void JumpStart() override;
 
@@ -79,7 +85,7 @@ public:
 
 	void Falling() override;
 
-	void Draw(Vector2 pos,Vector2 size) override;
+	void Draw(const Vector2& pos,const Vector2& size) override;
 
 	void Load() override;
 

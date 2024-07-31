@@ -24,7 +24,7 @@ void PlayerLegNormal::Initialize(Vector2* playerVelocity,bool* direction,float* 
 	LoadDivGraph("Resources/Player/PlayerDush.png",5,5,1,128,128,( int* ) PlayerDushTexture_);
 }
 
-void PlayerLegNormal::Move(bool DirBOTTOM,bool isAttack)
+void PlayerLegNormal::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const float pow)
 {
 	isDirBottom_ = DirBOTTOM;
 
@@ -234,7 +234,7 @@ void PlayerLegNormal::Falling()
 	}
 }
 
-void PlayerLegNormal::Draw(Vector2 pos,Vector2 size)
+void PlayerLegNormal::Draw(const Vector2& pos,const Vector2& size)
 {
 	float leftPos = pos.x - size.x / 2;
 	float rightPos = pos.x + size.x / 2;

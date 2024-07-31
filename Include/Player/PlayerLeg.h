@@ -12,7 +12,7 @@ public:
 
 	virtual void Initialize(Vector2* playerPos,bool* direction,float* changeAcl) = 0;
 
-	virtual void Move(bool DirBOTTOM,bool isAttack) = 0;
+	virtual void Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const float pow) = 0;
 
 	virtual void JumpStart()=0;
 
@@ -22,7 +22,7 @@ public:
 
 	virtual void Falling()=0;
 
-	virtual void Draw(Vector2 pos,Vector2 size) = 0;
+	virtual void Draw(const Vector2& pos,const Vector2& size) = 0;
 
 	virtual void Load() = 0;
 };

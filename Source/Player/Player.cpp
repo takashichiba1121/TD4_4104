@@ -56,7 +56,7 @@ void Player::Initialize()
 
 	CollisionManager::GetInstance()->AddObject(this);
 
-	leg_ = std::make_unique<PlayerLegNormal>();
+	leg_ = std::make_unique<PlayerLegFenrir>();
 
 	leg_->Initialize(&velocity_,&direction_,&changeSpd_);
 
@@ -106,7 +106,7 @@ void Player::Update()
 			UseItem();
 		}
 
-		leg_->Move(GetOnDir() & 0b1 << OnDir::BOTTOM,leftArm_->IsAttack() || rightArm_->IsAttack());
+		leg_->Move(GetOnDir() & 0b1 << OnDir::BOTTOM,leftArm_->IsAttack() || rightArm_->IsAttack(),pos_,changePow_);
 
 		Attack();
 

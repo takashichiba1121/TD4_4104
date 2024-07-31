@@ -19,9 +19,6 @@
     <Filter Include="ソース ファイル\player">
       <UniqueIdentifier>{29b8397c-e123-46e6-9b9e-eb6f058b6e76}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\player">
-      <UniqueIdentifier>{1afd2eae-3abb-474e-b2a0-f18516c6f13b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Enemy">
       <UniqueIdentifier>{11d37f02-5fff-4b2f-9f9b-b275c2a9ea39}</UniqueIdentifier>
     </Filter>
@@ -63,6 +60,9 @@
     </Filter>
     <Filter Include="ヘッダー ファイル\Node">
       <UniqueIdentifier>{744e79e3-b9aa-4477-948b-7d04ac14bb49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Player">
+      <UniqueIdentifier>{1afd2eae-3abb-474e-b2a0-f18516c6f13b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -240,9 +240,6 @@
     <ClCompile Include="Source\Node\BossNode.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Player\PlayerMouth.cpp">
-      <Filter>ソース ファイル\player</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Player\PlayerAttackVine.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
@@ -306,10 +303,10 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerAttack.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerAttackFist.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Util\Math\Vector2.h">
       <Filter>ヘッダー ファイル\Math</Filter>
@@ -324,10 +321,10 @@
       <Filter>ヘッダー ファイル\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerBulletManager.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerBullet.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Collision\IObject.h">
       <Filter>ヘッダー ファイル\Collision</Filter>
@@ -408,13 +405,13 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\Player.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerAttackSpider.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerAttackGun.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Node\BossNode.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -446,29 +443,26 @@
     <ClInclude Include="Include\Node\StartNode.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Player\PlayerMouth.h">
-      <Filter>ヘッダー ファイル\player</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Player\PlayerAttackVine.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerAttackMars.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerAttackFenrir.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerAttackCerberus.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerLeg.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerLegNormal.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerLegFenrir.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

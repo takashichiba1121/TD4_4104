@@ -4,6 +4,7 @@
 #include"json.hpp"
 #include <fstream>
 #include"GameConfig.h"
+#include"PlayerBulletManager.h"
 
 void PlayerLegFenrir::Initialize(Vector2* playerVelocity,bool* direction,float* changeAcl)
 {
@@ -24,7 +25,7 @@ void PlayerLegFenrir::Initialize(Vector2* playerVelocity,bool* direction,float* 
 	LoadDivGraph("Resources/Player/PlayerDush.png",5,5,1,128,128,( int* ) PlayerDushTexture_);
 }
 
-void PlayerLegFenrir::Move(bool DirBOTTOM,bool isAttack)
+void PlayerLegFenrir::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const float pow)
 {
 	isDirBottom_ = DirBOTTOM;
 
@@ -139,6 +140,19 @@ void PlayerLegFenrir::Move(bool DirBOTTOM,bool isAttack)
 			Falling();
 		}
 	}
+
+	if ( isBullet )
+	{
+		bulletInterval_++;
+		if ( bulletInterval_ == MAX_BULLET_INTERVAL_ )
+		{
+			std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
+			newBullet->Initialize({ 0,0 },pos,60,pow,1,1,PlayerBullet::Type::ICED);
+			PlayerBulletManager::Instance()->AddBullet(std::move(newBullet));
+
+			bulletInterval_ = 0;
+		}
+	}
 }
 
 void PlayerLegFenrir::JumpStart()
@@ -151,13 +165,15 @@ void PlayerLegFenrir::JumpStart()
 
 	PlayerJumpTextureCount_ = 0;
 
+	isBullet = true;
+
 	if ( *direction_ )
 	{
-		playerVelocity_->x += evasionRollSpeed_ / 2;
+		playerVelocity_->x += evasionRollSpeed_;
 	}
 	else
 	{
-		playerVelocity_->x += -evasionRollSpeed_ / 2;
+		playerVelocity_->x += -evasionRollSpeed_;
 	}
 }
 
@@ -240,10 +256,12 @@ void PlayerLegFenrir::Falling()
 
 		PlayerDownTextureCount_ = 0;
 
+		isBullet = false;
+
 	}
 }
 
-void PlayerLegFenrir::Draw(Vector2 pos,Vector2 size)
+void PlayerLegFenrir::Draw(const Vector2& pos,const Vector2& size)
 {
 	float leftPos = pos.x - size.x / 2;
 	float rightPos = pos.x + size.x / 2;

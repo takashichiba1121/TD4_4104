@@ -14,6 +14,23 @@ struct UserData
 	std::string tag;
 };
 
+enum class PlayerParts
+{
+	AttackFist,
+	AttackCerberus,
+	AttackFenrir,
+	AttackGun,
+	AttackMars,
+	AttackSpider,
+	AttackVine,
+	LegNormal,
+	LegFenrir,
+	MouthNormal,
+	Mouthsoul,
+	EyeNormal,
+	EyeClairvoyance,
+};
+
 class Player:public BaseObject
 {
 private:

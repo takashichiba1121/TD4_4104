@@ -69,7 +69,7 @@ public:
 
 	void Initialize(Vector2* playerPos,bool* direction,float* changeAcl) override;
 
-	void Move(bool DirBOTTOM,bool isAttack) override;
+	void Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const float pow) override;
 
 	void JumpStart() override;
 
@@ -79,7 +79,7 @@ public:
 
 	void Falling() override;
 
-	void Draw(Vector2 pos,Vector2 size) override;
+	void Draw(const Vector2& pos,const Vector2& size) override;
 
 	void Load() override;
 
