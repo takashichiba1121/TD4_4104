@@ -36,7 +36,15 @@ void BossEnemy::Initialize()
 			punch_->SetSize({ float(bossConfig->attack.sizeX),float(bossConfig->attack.sizeY) });
 			punch_->SetPower(bossConfig->attack.power);
 		}
+
+		{
+			charge_->SetTime(bossConfig->charge.time);
+			charge_->SetSize({ float(bossConfig->charge.sizeX),float(bossConfig->charge.sizeY) });
+			charge_->SetPower(bossConfig->charge.power);
+			charge_->SetSpeed(bossConfig->charge.speed);
+		}
 	}
+
 
 	punch_->SetBossSize({ drawSize_ });
 	punch_->Initialize();
@@ -88,14 +96,14 @@ void BossEnemy::Move()
 	if ( phase_ == APPROACH )
 	{
 		ApproachMove();
+
+		SetMapChipSpeed({ velocity_ * speed_,gravity_ });
+		shape_->SetCenter(pos_);
 	}
 	else
 	{
 		AttackMove();
 	}
-
-	SetMapChipSpeed({ velocity_ * speed_,gravity_ });
-	shape_->SetCenter(pos_);
 }
 
 void BossEnemy::Draw()
@@ -140,9 +148,12 @@ void BossEnemy::DebugDraw()
 	case PUNCH:
 		punch_->Draw();
 		break;
+	case CHARGE:
+		break;
 	default:
 		break;
 	}
+	charge_->Draw();
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
@@ -175,7 +186,6 @@ void BossEnemy::AttackMove()
 			break;
 		case CHARGE:
 			charge_->SetDir(playerDir_);
-			charge_->SetBossPos(pos_);
 			break;
 		}
 
@@ -203,15 +213,16 @@ void BossEnemy::AttackMove()
 		case CHARGE:
 			charge_->Update();
 
-			SetMapChipSpeed(Vector2( charge_->GetSpeed(),0.0f ));
-			shape_->SetCenter(pos_);
+			pos_ = charge_->GetPos();
 
-			if ( !punch_->IsAttack() )
+			if ( !charge_->IsAttack() )
 			{
 				phase_ = APPROACH;
 				attackInterval_ = ATTACK_INTERVAL;
 				approachHitBox_.SetCenter({ pos_.x + ( shape_->GetRadius().x + approachHitBox_.GetRadius().x ) * -velocity_.x,pos_.y });
 				CollisionEnable();
+				MapChipObjectEnable();
+
 			}
 			break;
 		}
@@ -228,6 +239,8 @@ void BossEnemy::Attack()
 	case CHARGE:
 		charge_->Attack();
 		CollisionDisable();
+		MapChipObjectDisable();
+		charge_->SetBossPos(pos_);
 		break;
 	}
 }

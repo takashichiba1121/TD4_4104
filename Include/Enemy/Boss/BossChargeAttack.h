@@ -34,7 +34,7 @@ public:
 	bool IsAttack()const;
 	void SetSpeed(float speed);
 
-	float GetSpeed()const;
+	const Vector2& GetPos()const;
 
 	void OnCollision()override;
 

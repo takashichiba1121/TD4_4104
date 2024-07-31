@@ -10,7 +10,9 @@ void BossChargeAttack::Attack()
 	isAttack_ = true;
 	velocity_.x = dir_;
 	velocity_.y = 0;
+	shape_->SetCenter(pos_);
 	CollisionEnable();
+	MapChipObjectEnable();
 }
 
 void BossChargeAttack::Initialize()
@@ -21,26 +23,30 @@ void BossChargeAttack::Initialize()
 
 	userData_ = &tag;
 
+	CollisionDisable();
+	SetMapChipCenter(&pos_);
+	SetMapChipRadius({ size_.x / 2,size_.y / 2 });
+
+	MapChipObjectEnable();
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
 	CollisionManager::GetInstance()->AddObject(this);
-
-	CollisionDisable();
-	MapChipObjectEnable();
-	SetMapChipCenter(&pos_);
-	SetMapChipRadius({ size_.x / 2,size_.y / 2 });
+	MapChipObjectDisable();
 }
 
 void BossChargeAttack::Update()
 {
 	if ( isAttack_ )
 	{
-		time_--;
+		time_++;
 
-		if ( 0 > time_ )
+		if ( TIME < time_ )
 		{
-			isAttack_ = false;
 			CollisionDisable();
+			MapChipObjectDisable();
+
+			isAttack_ = false;
+			time_ = 0;
 		}
 
 		speed_ = InQuad(SPEED,0,TIME,time_);
@@ -54,7 +60,7 @@ void BossChargeAttack::Draw()
 {
 	DrawBox(shape_->GetCenter().x - shape_->GetRadius().x,shape_->GetCenter().y - shape_->GetRadius().y,
 	shape_->GetCenter().x + shape_->GetRadius().x,shape_->GetCenter().y + shape_->GetRadius().y,
-	GetColor(255,255,255),true);
+	GetColor(255,0,255),true);
 }
 
 void BossChargeAttack::SetBossPos(const Vector2& pos)
@@ -69,7 +75,7 @@ void BossChargeAttack::SetTime(int32_t time)
 
 void BossChargeAttack::SetSize(const Vector2& size)
 {
-	size_ = size_;
+	size_ = size;
 }
 
 void BossChargeAttack::SetDir(int32_t dir)
@@ -92,9 +98,9 @@ void BossChargeAttack::SetSpeed(float speed)
 	SPEED = speed_ = speed;
 }
 
-float BossChargeAttack::GetSpeed() const
+const Vector2& BossChargeAttack::GetPos() const
 {
-	return  velocity_.x * speed_;
+	return pos_;
 }
 
 void BossChargeAttack::OnCollision()

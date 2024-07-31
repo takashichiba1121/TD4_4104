@@ -129,6 +129,12 @@ void CollisionManager::Update()
 
 	for ( auto itr : mapChipObjects_ )
 	{
+
+		if (! itr->mapChipObject_ )
+		{
+			continue;
+		}
+
 		itr->dir_ = 0;
 
 		if ( itr->speed_.x < 0 )

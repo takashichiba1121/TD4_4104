@@ -54,8 +54,8 @@
         }
         ,
         "Charge":{
-            "Time":60,
-            "Speed":10,
+            "Time":200,
+            "Speed":3,
             "Size":[
                 210, 
                 192
