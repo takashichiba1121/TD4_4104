@@ -57,15 +57,15 @@ bool DealDaemon::PartsChenge()
 	case ARM:
 		if ( isLeft )
 		{
-			playerPtr_->ChangeLeftArm(product->partsName);
+			playerPtr_->ChangeLeftArm(product->partsName,product->cost);
 		}
 		else
 		{
-			playerPtr_->ChangeRightArm(product->partsName);
+			playerPtr_->ChangeRightArm(product->partsName,product->cost);
 		}
 		break;
 	case LEG:
-		playerPtr_->ChangeLeg(product->partsName);
+		playerPtr_->ChangeLeg(product->partsName,product->cost);
 		break;
 	case EYE:
 
