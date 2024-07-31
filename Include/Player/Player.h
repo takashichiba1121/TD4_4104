@@ -138,4 +138,9 @@ public:
 	}
 
 	void OnCollision() override;
+
+	CircleShape* GetCircleShape()
+	{
+		return circelShape.get() ;
+	}
 };
