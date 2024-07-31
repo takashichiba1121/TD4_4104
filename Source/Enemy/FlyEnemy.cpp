@@ -51,7 +51,7 @@ void FlyEnemy::Update()
 
 	searchArea_->SetCenter({ pos_.x,pos_.y });
 
-	if ( Collision::Circle2Circle(*dynamic_cast< CircleShape* >( playerPtr_->GetShape() ),*searchArea_.get()))
+	if ( Collision::Circle2Circle(*playerPtr_->GetCircleShape() ,*searchArea_.get()))
 	{
 		if ( actionMode != ATTACK )
 		{
