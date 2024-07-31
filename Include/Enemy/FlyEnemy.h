@@ -1,6 +1,9 @@
 #pragma once
 
 #include "BaseEnemy.h"
+#include "Util.h"
+#include "CircleShape.h"
+
 class FlyEnemy :public BaseEnemy
 {
 private:
@@ -14,7 +17,12 @@ private:
 	const int64_t ATTACK_INTERVAL = 120;
 	const int64_t ATTACK_TIME = 10;
 	RectShape* shape_;
+	std::unique_ptr<CircleShape> searchArea_;
+	Counter moveTimer_;
+	std::array<Vector2,5> moveCheckPoint_;
 
+	int8_t targetCheckPoint_;
+	Counter moveTime;
 	ObjectUserData user_;
 public:
 

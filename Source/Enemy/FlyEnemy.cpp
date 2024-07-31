@@ -3,6 +3,8 @@
 #include "CollisionManager.h"
 #include "Util.h"
 #include "Player.h"
+#include "Collision.h"
+
 
 void FlyEnemy::Initialize()
 {
@@ -36,16 +38,46 @@ void FlyEnemy::Initialize()
 	shape_ = new RectShape();
 	shape_->SetRadius(drawSize_ / 2);
 
+	for ( int i = 0; i < moveCheckPoint_.size(); i++ )
+	{
+		int8_t r = GetRand(100) + 10;
+		float theta = 2 * PI * ( GetRand(360) / 360 );
+
+		moveCheckPoint_[ i ].x = r * cos(theta);
+		moveCheckPoint_[ i ].y = r * sin(theta);
+	}
+	pos_ = moveCheckPoint_[ 0 ];
+	targetCheckPoint_ = 0;
+
 	SetShape(shape_);
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
 	CollisionManager::GetInstance()->AddObject(this);
 	attackPower_ = 1;
+
+
+
 }
 
 void FlyEnemy::Update()
 {
+	if ( !islive_ ) return;
 	immortalTime_--;
+	attackIntervalCounter_.CountUp();
+
+
+	searchArea_->SetCenter({ pos_.x,pos_.y });
+
+	if ( Collision::Circle2Circle(*dynamic_cast< CircleShape* >( playerPtr_->GetShape() ),*searchArea_.get()))
+	{
+		if ( actionMode != ATTACK )
+		{
+			beforeAttackCounter_.SetEndCount(beforeAttackFrame_);
+			attackCounter_.SetEndCount(attackFrame_);
+		}
+		actionMode = ATTACK;
+	}
+
 	if ( immortalTime_ <= 0 )
 	{
 		immortal_ = false;
@@ -60,30 +92,23 @@ void FlyEnemy::Update()
 		speed_ = originalSpeed_;
 	}
 
-
 	if ( !IsEffect(BIND) && !IsEffect(ICED) )
 	{
-		if ( isAttack_ )
+		switch ( actionMode )
 		{
+		case MOVE:
+			Move();
+			break;
+		case ATTACK:
 			Attack();
-		}
-		else
-		{
-			attackIntervalTime_--;
-			if ( attackIntervalTime_ <= 0 && playerPtr_ )
-			{
-				back_ = false;
-				isAttack_ = true;
-				targetPos_ = playerPtr_->GetPos();
-				attackIntervalTime_ = ATTACK_INTERVAL;
-				attackTimer_ = 0;
-				attackBeforePos_ = pos_;
-				velocity_ = GetVector2d(targetPos_,pos_);
-			}
+			break;
+		default:
+			break;
 		}
 
-		Move();
 	}
+	shape_->SetCenter({ pos_.x , pos_.y });
+
 
 	EffectUpdate();
 }
@@ -101,6 +126,9 @@ void FlyEnemy::Move()
 	{
 		velocity_.y = 0;
 	}
+
+	velocity_ = Vector2();
+
 	SetMapChipSpeed({ velocity_.x * speed_,velocity_.y * speed_ });
 	shape_->SetCenter(pos_);
 

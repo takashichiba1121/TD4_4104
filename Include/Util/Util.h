@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#define  PI 3.14159265358979323846
 
 double Lerp(double startPos,double endPos,double maxTime,double time);
 double Lerp(double startPos,double endPos,double time);

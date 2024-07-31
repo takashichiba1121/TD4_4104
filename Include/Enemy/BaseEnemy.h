@@ -26,6 +26,7 @@ protected:
 	ObjectUserData name_;
 	uint32_t id_;
 	bool immortal_ = false;
+	bool isCursedDamage_ = false;
 	Player* playerPtr_;
 	int32_t attackPower_;
 	int32_t defense_;
@@ -49,6 +50,7 @@ public:
 	void SetEffect(Effects effect);
 	void ReleaseEffect(Effects effect);
 	bool IsEffect(Effects effect);
+	bool IsCursedDamage();
 	bool IsImmortal();
 	int32_t GetImmortalTime();
 	int32_t GetCurseStack();

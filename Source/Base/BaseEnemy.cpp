@@ -122,6 +122,11 @@ bool BaseEnemy::IsEffect(Effects effect)
 	return false;
 }
 
+bool BaseEnemy::IsCursedDamage()
+{
+	return isCursedDamage_;
+}
+
 bool BaseEnemy::IsImmortal()
 {
 	return immortal_;
