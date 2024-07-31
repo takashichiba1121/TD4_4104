@@ -9,8 +9,6 @@ using namespace std;
 void FlyEnemy::Initialize()
 {
 	hp_ = 1;
-	user_.tag = "Enemy";
-	userData_ = &user_;
 
 	islive_ = true;
 	shape_ = new RectShape();
@@ -38,6 +36,10 @@ void FlyEnemy::Initialize()
 	beforeAttackFrame_ = 40;
 	attackInterval_ = 120;
 	attackFrame_ = 5;
+
+	tag.tag = "Enemy";
+	userData_ = &tag;
+
 }
 
 void FlyEnemy::Update()

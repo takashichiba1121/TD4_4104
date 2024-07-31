@@ -23,6 +23,10 @@ void EnemyBullet::Initialize()
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
 	CollisionManager::GetInstance()->AddObject(this);
 	damage_ = 70;
+
+	tag.tag = "EnemyBullet";
+	userData_ = &tag;
+
 }
 
 void EnemyBullet::Update()

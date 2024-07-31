@@ -24,8 +24,6 @@ void WalkEnemy::Initialize()
 	{
 		velocity_ = { -1,0 };
 	}
-	user_.tag = "Enemy";
-	userData_ = &user_;
 
 	islive_ = true;
 
@@ -44,6 +42,9 @@ void WalkEnemy::Initialize()
 	beforeAttackFrame_ = 5;
 	attackFrame_ = 25;
 	hp_ = 150;
+
+	tag.tag = "Enemy";
+	userData_ = &tag;
 
 }
 
@@ -157,22 +158,22 @@ void WalkEnemy::Move()
 			ternInvervalTimer_ = 0;
 		}
 	}
-	 nextElement = mapchip_->GetPosElement(pos_.x +(( velocity_.x * speed_ )) + ( drawSize_.x / 2 ),
+	 nextElement_ = mapchip_->GetPosElement(pos_.x +(( velocity_.x * speed_ )) + ( drawSize_.x / 2 ),
 		pos_.y + ( drawSize_.y / 2 ) + 1);
 
-	if ((nextElement == NEXT || (nextElement == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM )) && !tern )
+	if (( nextElement_ == NEXT || ( nextElement_ == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM )) && !tern_ )
 	{
 		velocity_ *= -1;
-		tern = true;
+		tern_ = true;
 	}
 
-	if ( tern )
+	if ( tern_ )
 	{
-		ternInvervalTimer++;
-		if ( ternInverval < ternInvervalTimer )
+		ternInvervalTimer_++;
+		if ( ternInverval_ < ternInvervalTimer_)
 		{
-			tern = false;
-			ternInvervalTimer = 0;
+			tern_ = false;
+			ternInvervalTimer_ = 0;
 		}
 	}
 

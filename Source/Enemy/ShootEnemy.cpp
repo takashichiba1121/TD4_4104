@@ -28,8 +28,8 @@ void ShootEnemy::Initialize()
 	{
 		velocity_ = { -1,0 };
 	}
-	user_.tag = "Enemy";
-	userData_ = &user_;
+	tag.tag = "Enemy";
+	userData_ = &tag;
 
 	islive_ = true;
 

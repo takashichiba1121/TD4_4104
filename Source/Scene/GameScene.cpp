@@ -19,7 +19,9 @@ void GameScene::Initialize()
 	mapChip_ = std::make_unique<MapChip>();
 	mapChip_->Initialize();
 
-
+	powerUp_ = std::make_unique<PowerUpCave>();
+	powerUp_->Initialize();
+	powerUp_->SetPlayer(player_.get());
 
 	nodeManager_ = NodeManager::GetInstance();
 	nodeManager_->SetMapChip(mapChip_.get());
