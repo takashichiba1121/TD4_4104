@@ -36,7 +36,7 @@ void Player::Initialize()
 
 	rightArm_->Initialize(&pos_,&velocity_,&direction_);
 
-	hp_ = maxHp_;
+	hp_ = MAX_HP_;
 
 	name_.tag = "Player";
 	userData_ = &name_;
@@ -67,6 +67,10 @@ void Player::Initialize()
 	item.statusName = "ATK";
 
 	ItemGet(item);
+
+	circelShape = std::make_unique<CircleShape>();
+
+	circelShape->SetRadius(hitboxSize_.y);
 }
 
 void Player::Update()
@@ -112,7 +116,7 @@ void Player::Update()
 
 		shape_->SetCenter(pos_);
 
-
+		circelShape->SetCenter(pos_);
 	}
 
 #ifdef _DEBUG
@@ -123,7 +127,7 @@ void Player::Update()
 
 	ImGui::Text("HP:%d",hp_);
 
-	ImGui::Text("MaxHP:%d",maxHp_);
+	ImGui::Text("MaxHP:%d",MAX_HP_);
 
 	ImGui::Text("Pow:%1.2f",changePow_);
 
@@ -146,12 +150,12 @@ void Player::Attack()
 {
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && leftArm_ != nullptr && !rightArm_->IsAttack() )
 	{
-		leftArm_->AttackInit(changePow_);
+		leftArm_->AttackInit(changePow_,changeCrit_,changeCdmg_);
 	}
 
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && rightArm_ != nullptr && !leftArm_->IsAttack() )
 	{
-		rightArm_->AttackInit(changePow_);
+		rightArm_->AttackInit(changePow_,changeCrit_,changeCdmg_);
 	}
 
 	if ( leftArm_ != nullptr )
@@ -168,7 +172,7 @@ void Player::Damage(int32_t Damage)
 {
 	if ( DamageInterval_ >= DAMAGE_INTERVAL_MAX_ )
 	{
-		hp_ -= Damage * changeDef_;
+		hp_ -= Damage - (changeDef_*DEF_);
 
 		DamageInterval_ = 0;
 	}
@@ -259,11 +263,11 @@ bool Player::AddDef(int32_t def)
 
 bool Player::AddMaxHp(int32_t maxHp)
 {
-	uint32_t nowMaxHp = maxHp_;
+	uint32_t nowMaxHp = MAX_HP_ * changeMaxHp_;
 
-	maxHp_ += maxHp;
+	changeMaxHp_ += maxHp;
 
-	hp_ += maxHp_ - nowMaxHp;
+	hp_ += ( MAX_HP_ * changeMaxHp_ ) - nowMaxHp;
 
 	return true;
 }
@@ -313,15 +317,15 @@ bool Player::SubDef(int32_t def)
 
 bool Player::SubMaxHp(int32_t maxHp)
 {
-	if ( maxHp_ - maxHp <= 0 )
+	if ( changeMaxHp_- maxHp <= 0 )
 	{
 		return false;
 	}
-	maxHp_ -= maxHp;
+	changeMaxHp_ -= maxHp;
 
-	if ( hp_ >= maxHp_ )
+	if ( hp_ >= MAX_HP_* changeMaxHp_ )
 	{
-		hp_ = maxHp_;
+		hp_ = MAX_HP_* changeMaxHp_;
 	}
 
 	return true;
@@ -360,11 +364,11 @@ void Player::Draw()
 		rightArm_->Draw();
 	}
 
-	DrawFormatString(0,GameConfig::GetWindowHeight() - 20,0xffffff,"PlayerHP:%d/%d",hp_,maxHp_);
+	DrawFormatString(0,GameConfig::GetWindowHeight() - 20,0xffffff,"PlayerHP:%d/%d",hp_,MAX_HP_);
 
 	if (powerUpText&&isPowerUp==false )
 	{
-		DrawFormatString(pos_.x,pos_.y-drawSize_.y+40,0xffffff,"Push to KEY Z",hp_,maxHp_);
+		DrawFormatString(pos_.x,pos_.y-drawSize_.y+40,0xffffff,"Push to KEY Z",hp_,MAX_HP_);
 	}
 }
 
@@ -397,9 +401,9 @@ void Player::UseItem()
 			if ( itr->statusName == "HP" )
 			{
 				hp_ += itr->power;
-				if ( hp_ > maxHp_ )
+				if ( hp_ > MAX_HP_ )
 				{
-					hp_ = maxHp_;
+					hp_ = MAX_HP_;
 				}
 			}
 			if ( itr->statusName == "ATK" )

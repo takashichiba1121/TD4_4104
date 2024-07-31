@@ -39,6 +39,10 @@ protected:
 
 	float pow_;
 
+	float  playerCrit_;
+
+	float  playerCdmg_;
+
 public:
 
 	///<summary>
@@ -47,7 +51,7 @@ public:
 	///<param name="velocity">速度</param>
 	///<param name="position">初期位置</param>
 	///<param name="life">消えるまでの時間</param>
-	void Initialize(Vector2 velocity,Vector2 position,uint32_t life,float PlayerPow);
+	void Initialize(Vector2 velocity,Vector2 position,uint32_t life,float PlayerPow,float changeCrit_,float changeCdmg_);
 
 	///<summary>
 	///毎フレーム処理

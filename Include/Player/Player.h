@@ -18,7 +18,9 @@ class Player:public BaseObject
 {
 private:
 
-#pragma region 変更ステータス
+#pragma region ステータス変更値
+	float changeMaxHp_=1;
+
 	float changeSpd_=1;
 
 	float changePow_=1;
@@ -32,19 +34,28 @@ private:
 	int32_t nowCost=0;
 #pragma endregion
 
+#pragma region ステータス実数値
+
+	const uint32_t MAX_HP_ = 150;
+
+	const uint32_t DEF_ = 80;
+
+
+#pragma endregion
+
 	bool direction_ = false;
 
 	Vector2 colisionSift_ = { 5,5 };
 
 	RectShape* shape_;
 
+	std::unique_ptr<CircleShape> circelShape;
+
 	std::unique_ptr<PlayerAttack> leftArm_;
 
 	std::unique_ptr<PlayerAttack> rightArm_;
 
 	std::unique_ptr<PlayerLeg> leg_;
-
-	int32_t maxHp_ = 100;
 
 	UserData name_;
 
