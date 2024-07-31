@@ -29,7 +29,8 @@ void DealDaemon::Initialize()
 		unique_ptr<Parts> temp = make_unique<Parts>();
 
 		temp->cost = static_cast<int32_t>(obj["cost"]);
-		temp->partsName = static_cast<string>(obj["partsName"]);
+		temp->uiPartsName = static_cast< string >( obj[ "partsName" ] );
+		temp->partsName = static_cast<string>(obj["codeName"]);
 		temp->partsInfo = static_cast<string>(obj["partsInfo"]);
 
 		products_[static_cast<string>(obj["Type"])].push_back(std::move(temp));
@@ -151,7 +152,7 @@ void DealDaemon::Draw()
 		}
 		DrawBox((boxLeftTop_.x + i * boxDist_), boxLeftTop_.y, (boxLeftTop_.x + i * boxDist_) + boxSize_.x, boxLeftTop_.y + boxSize_.y, color, true);
 		DrawFormatString((boxLeftTop_.x + i * boxDist_) + 50, boxLeftTop_.y + 50,
-			0xffffff, "%s\nCost:%d\n%s",selectProducts_[i]->partsName,selectProducts_[i]->cost,selectProducts_[i]->partsInfo);
+			0xffffff, "%s\nCost:%d\n%s",selectProducts_[i]->uiPartsName,selectProducts_[i]->cost,selectProducts_[i]->partsInfo);
 	}
 
 }

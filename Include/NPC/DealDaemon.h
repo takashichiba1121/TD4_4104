@@ -13,6 +13,7 @@ class Player;
 struct Parts
 {
 	std::string partsName;
+	std::string uiPartsName;
 	std::string partsInfo;
 	int32_t cost;
 };
