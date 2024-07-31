@@ -6,6 +6,8 @@
 #include <unordered_map>
 #include <memory>
 #include "Vector2.h"
+#include "BaseObject.h"
+
 
 class Player;
 
@@ -29,7 +31,7 @@ enum Status
 };
 
 
-class PowerUpCave
+class PowerUpCave:public BaseObject
 {
 private:
 	Player* playerPtr_;
@@ -40,13 +42,20 @@ private:
 	std::string nowProductType;	Vector2 boxLeftTop_ = {200,200};
 	Vector2 boxSize_ = { 200,300 };
 	int32_t boxDist_ = 400;
-
+	int32_t caveColor;
+	bool dealed_ = false;
+	bool selectmode_ = false;
+	RectShape* shape_;
 public:
-	void Initialize();
+	void Initialize() override;
+	void Update() override;
+	void OnCollision() override;
+	void Draw() override;
+	void ReSet();
+	void NoDeal();
 	bool StatusChenge();
 	void SetSlect(uint8_t selectNum);
 	void SetPriducts();
 	void SetPlayer(Player* player);
-	void Draw();
 };
 

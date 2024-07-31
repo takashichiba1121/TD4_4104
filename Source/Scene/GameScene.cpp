@@ -18,19 +18,18 @@ void GameScene::Initialize()
 
 	mapChip_ = std::make_unique<MapChip>();
 	mapChip_->Initialize();
-	mapChip_->MapLoad("Resources/Export/Map/TestMap.json");
-
-	CollisionManager::GetInstance()->SetMapChip(mapChip_->GetMapChip());
-
-	enemys_ = std::make_unique<EnemyManager>();
-	enemys_->Initialize();
-	enemys_->SetPlayerPtr(player_.get());
 
 	powerUp_ = std::make_unique<PowerUpCave>();
 	powerUp_->Initialize();
 	powerUp_->SetPlayer(player_.get());
-	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
 
+	nodeManager_ = NodeManager::GetInstance();
+	nodeManager_->SetMapChip(mapChip_.get());
+	nodeManager_->SetPlayer(player_.get());
+	nodeManager_->SetPowerUp(powerUp_.get());
+	nodeManager_->Initialize();
+	nodeManager_->StartNodeSet(0);
+	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
 }
 
 void GameScene::Update()
@@ -39,72 +38,61 @@ void GameScene::Update()
 
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_R) )
 	{
-		SceneManager::GetInstance()->ChangeScene("TITLE");
+		nodeManager_->Reset();
 	}
 
-	if ( isPowerUp )
-	{
-		if ( Input::Instance()->TriggerKey(KEY_INPUT_LEFT) || Input::Instance()->TriggerKey(KEY_INPUT_A) )
-		{
-			if ( powerUpNum == 0 )
-			{
-				powerUpNum = 2;
-			}
-			else
-			{
-				powerUpNum--;
-			}
-		}
-		if ( Input::Instance()->TriggerKey(KEY_INPUT_RIGHT) || Input::Instance()->TriggerKey(KEY_INPUT_D) )
-		{
-			powerUpNum++;
-			if ( powerUpNum >= 3 )
-			{
-				powerUpNum = 0;
-			}
-		}
+	nodeManager_->Update();
 
+	if ( player_->IsPowerUp() )
+	{
+		powerUp_->Update();
+
+		uint32_t powerUpNum=player_->PowerUp();
+
+		powerUp_->SetSlect(powerUpNum);
 		if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) )
 		{
 			powerUp_->StatusChenge();
 
-			isPowerUp = false;
+			player_->EndPowerUp();
 		}
-		powerUp_->SetSlect(powerUpNum);
 	}
 	else
 	{
+		nodeManager_->Update();
+
 		player_->Update();
-		enemys_->Update();
 
+		CollisionManager::GetInstance()->SetScreenPos(mapChip_->GetScreenPos());
 		CollisionManager::GetInstance()->Update();
-	}
 
 	//TODO
-	if ( enemys_->GameEnd() )
-	{
-		SceneManager::GetInstance()->ChangeScene("CLEAR");
-	}
+	//if ( enemys_->GameEnd())
+	//{
+	//	SceneManager::GetInstance()->ChangeScene("CLEAR");
+	//}
 
-	//TODO
-	if ( player_->GetHp() <= 0 )
-	{
-		SceneManager::GetInstance()->ChangeScene("GAMEOVER");
+		//TODO
+		if ( player_->GetHp() <= 0 )
+		{
+			SceneManager::GetInstance()->ChangeScene("GAMEOVER");
+		}
 	}
 }
 
 void GameScene::Draw()
 {
 	DrawGraph(0,0,backGround_,true);
-
 	mapChip_->Draw({ 0,0 });
-
+	nodeManager_->Draw();
 	player_->Draw();
-	enemys_->Draw();
-	if ( isPowerUp )
-	{
-		powerUp_->Draw();
-	}
+
+	//if (!chenged) powerUp_->Draw();
+
+	nodeManager_->NodeMapDraw();
+
+	nodeManager_->Draw();
+	
 	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
 	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");
 	DrawFormatString(0,40,0xffffff,"ATTACK:Z X");

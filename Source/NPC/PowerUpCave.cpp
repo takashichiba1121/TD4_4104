@@ -4,12 +4,27 @@
 #include <json.hpp>
 #include <fstream>
 #include "DxlibInclude.h"
+#include "CollisionManager.h"
 
 using namespace nlohmann;
 using namespace std;
 
 void PowerUpCave::Initialize()
 {
+
+	selectmode_ = false;
+	dealed_ = true;
+	CollisionDisable();
+	hitboxSize_ = { 128,128 };
+	pos_ = { 650,640 };
+
+	shape_ = new RectShape();
+	shape_->SetRadius(hitboxSize_ / 2);
+	CollisionManager::GetInstance()->AddObject(this);
+	shape_->SetCenter(pos_);
+
+	SetShape(shape_);
+
 
 	std::ifstream file;
 
@@ -24,7 +39,7 @@ void PowerUpCave::Initialize()
 
 	file >> jsonObject;
 
-
+	products_.clear();
 	for ( json& obj : jsonObject)
 	{
 		unique_ptr<PowerUp> temp = make_unique<PowerUp>();
@@ -37,7 +52,7 @@ void PowerUpCave::Initialize()
 		temp->statusNames.first = static_cast< string >( obj[ "PowerName" ] );
 		temp->statusNames.second = static_cast< string >( obj[ "CostName" ] );
 		products_[ static_cast< string >( obj[ "Type" ] ) ].push_back(std::move(temp));
-}
+	}
 
 	for ( auto itr = products_.begin(); itr != products_.end(); ++itr )
 	{
@@ -47,10 +62,29 @@ void PowerUpCave::Initialize()
 	}
 
 	SetPriducts();
+
+	tag.tag = "PowerUpCave";
+	userData_ = &tag;
+}
+
+
+void PowerUpCave::Update()
+{
+	
+	selectmode_ = playerPtr_->IsPowerUp();
+
+}
+
+void PowerUpCave::OnCollision()
+{
 }
 
 bool PowerUpCave::StatusChenge()
 {
+	if ( dealed_ )
+	{
+		return true;
+	}
 	PowerUp* product = selectProducts_[ selectNum_ ];
 	bool isBuy = false;
 	switch ( magic_enum::enum_cast< Status >( product->statusNames.second ).value() )
@@ -102,6 +136,7 @@ bool PowerUpCave::StatusChenge()
 			break;
 		}
 	}
+	dealed_ = isBuy;
 	return isBuy;
 }
 
@@ -132,7 +167,8 @@ void PowerUpCave::SetPlayer(Player* player)
 
 void PowerUpCave::Draw()
 {
-	string type = productKey_[ GetRand(productKey_.size() - 1) ];
+	if ( selectmode_ && !dealed_)
+	{
 	for ( int i = 0; i < selectProducts_.size(); i++ )
 	{
 		int64_t color = 0x000000;
@@ -140,9 +176,32 @@ void PowerUpCave::Draw()
 		{
 			color = 0xf00f00;
 		}
-		DrawBox((boxLeftTop_.x + i * boxDist_),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,color,true);
+			DrawBox(( boxLeftTop_.x + i * boxDist_ ),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,color,true);
 		DrawFormatString(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,
-			0xffffff,"%s\nPowerUp\nStatus:%s \nUP:%d\nCost\nStatus:%s \nDown:%d",nowProductType.c_str(),selectProducts_[i]->statusNames.first.c_str(),
-			selectProducts_[i]->power,selectProducts_[i]->statusNames.second.c_str(),selectProducts_[i]->cost);
+				0xffffff,"%s\nPowerUp\nStatus:%s \nUP:%d\nCost\nStatus:%s \nDown:%d",nowProductType.c_str(),selectProducts_[ i ]->statusNames.first.c_str(),
+				selectProducts_[ i ]->power,selectProducts_[ i ]->statusNames.second.c_str(),selectProducts_[ i ]->cost);
+		}
 	}
+
+	if ( !dealed_ )
+	{
+		DrawBox(pos_.x - hitboxSize_.x/2,pos_.y - hitboxSize_.y/2,pos_.x + hitboxSize_.x/2,pos_.y + hitboxSize_.y/2,0xffffff,true);
+	}
+}
+
+void PowerUpCave::ReSet()
+{
+	selectmode_ = false;
+	dealed_ = false;
+	hitboxSize_ = { 128,128 };
+	pos_ = { 650,640 };
+	SetPriducts();
+	CollisionEnable();
+}
+
+void PowerUpCave::NoDeal()
+{
+	dealed_ = true;
+	selectmode_ = false;
+	CollisionDisable();
 }

@@ -1,16 +1,39 @@
 {
-    "name": "Config",
-    "Title": "4104_Eternal Damnation",
-    "WindowSize": [
-        1280,
-        704
-    ],
-    "BackGroundColor": [
-        "0x10",
-        "0x00",
-        "0x00"
-    ],
-    "VSync":true,
-    "FPS":60,
-    "FullScreen":false
-}W
+   "Config":{
+
+        "name": "Config",  
+        "Title": "Config",
+        "VSync":true,
+        "FPS":60,
+        "FullScreen":false,
+
+        "WindowSize": [
+            1280,
+            704
+        ],
+
+        "BackGroundColor": [
+            "0x10",
+            "0x00",
+            "0x00"
+        ]
+    },
+    "Node":{
+        "name": "Node",
+        "XDistance":60,
+        "YDistance":50,
+        "PlacementRandomness": 20,
+        "Floors":15,
+        "Width":7,
+        "Paths":5,
+        "StartPoints":3,
+        "NodeProbabilities":[
+            20, 
+            30, 
+            10, 
+            15, 
+            25
+        ]
+
+    }
+}

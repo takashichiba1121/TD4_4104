@@ -81,9 +81,19 @@ void MapChip::MapLoad(const std::string& path)
 
 }
 
+void MapChip::MapWrite(int32_t x,int32_t y,uint8_t index)
+{
+	map_[ y ][ x ] = index;
+}
+
 const std::vector<std::vector<uint8_t>>& MapChip::GetMapChip() const
 {
 	return map_;
+}
+
+std::vector<std::vector<uint8_t>>* MapChip::GetMapChipPtr()
+{
+	return &map_;
 }
 
 uint8_t MapChip::GetPosElement(int32_t x, int32_t y)const
@@ -91,13 +101,31 @@ uint8_t MapChip::GetPosElement(int32_t x, int32_t y)const
 	return map_[y / BLOCK_SIZE][x / BLOCK_SIZE];
 }
 
+Vector2 MapChip::GetPos(int32_t x,int32_t y) const
+{
+	return Vector2(x / BLOCK_SIZE, y / BLOCK_SIZE);
+}
+
 uint8_t MapChip::GetNumOfArrayElement(int32_t x, int32_t y) const
 {
-	return map_[y][x];
+	int32_t posY = min(y,map_.size() - 1);
+	posY = max(y,0);
+
+	int32_t posX = min(x,map_[ posY ].size() - 1);
+	posX = max(x,0);
+
+	return map_[posY][posX];
+}
+
+const Vector2& MapChip::GetScreenPos() const
+{
+	return screenPos_;
 }
 
 void MapChip::Draw(const Vector2& screenPos)
 {
+	screenPos_ = screenPos + Vector2(32,32);
+
 	for ( size_t i = 0; i < map_.size(); i++ )
 	{
 		for ( size_t j = 0; j < map_[ i ].size(); j++ )
@@ -107,7 +135,7 @@ void MapChip::Draw(const Vector2& screenPos)
 			case NONE:
 				break;
 			case ROAD:
-				DrawRotaGraph3(( j * BLOCK_SIZE ) + screenPos.x,( i * BLOCK_SIZE ) + screenPos.y,0,0,0.5,0.5,0.0,roadChipHandle_,true);
+				DrawRotaGraph(( j * BLOCK_SIZE ) + screenPos.x,( i * BLOCK_SIZE ) + screenPos.y,1.0,0.0,roadChipHandle_,true);
 				break;
 			case DOOR:
 				break;
@@ -116,7 +144,7 @@ void MapChip::Draw(const Vector2& screenPos)
 			case LOCK_ROOM:
 				break;
 			case WALL:
-				DrawRotaGraph3(( j * BLOCK_SIZE ) + screenPos.x,( i * BLOCK_SIZE ) + screenPos.y,0,0,0.5,0.5,0.0,wallChipHandle_,true);
+				DrawRotaGraph(( j * BLOCK_SIZE ) + screenPos.x,( i * BLOCK_SIZE ) + screenPos.y,1.0,0.0,wallChipHandle_,true);
 				break;
 			default:
 				break;
