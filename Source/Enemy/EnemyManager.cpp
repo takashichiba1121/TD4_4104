@@ -17,7 +17,7 @@ void EnemyManager::Pop()
 	{
 		if ( enemylist_.size() >= MAX_ENEMY_NUM || popEnemyCount_ >= MAX_POP_ENEMY_NUM) return;
 		popTime_ = POP_INTERVAL;
-		if (false)
+		if (true)
 		{
 			unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
 			temp->Initialize();
@@ -27,7 +27,7 @@ void EnemyManager::Pop()
 			enemylist_.push_back(move(temp));
 			popEnemyCount_++;
 		}
-		else if ( true )
+		else if ( false )
 		{
 			unique_ptr<ShootEnemy> temp = make_unique<ShootEnemy>();
 			temp->Initialize();

@@ -13,14 +13,16 @@ void FlyEnemy::Initialize()
 	islive_ = true;
 	shape_ = new RectShape();
 	shape_->SetRadius(drawSize_ / 2);
-
+	pos_.x = GetRand(850) + 50.f;
+	pos_.y = 100.f;
 	for ( int i = 0; i < moveCheckPoint_.size(); i++ )
 	{
-		int8_t r = GetRand(100) + 10;
-		float theta = 2 * PI * ( GetRand(360) / 360 );
+		int8_t r = GetRand(200) + 300;
+		float theta = 2 * PI * ( GetRand(120) / 120 + (i * 0.15f));
 
-		moveCheckPoint_[ i ].x = r * cos(theta);
-		moveCheckPoint_[ i ].y = r * sin(theta);
+
+		moveCheckPoint_[ i ].x = r * cosf(theta) + pos_.x;
+		moveCheckPoint_[ i ].y = r * sinf(theta) + pos_.y;
 	}
 	pos_ = moveCheckPoint_[ 0 ];
 	targetCheckPoint_ = 0;
@@ -104,24 +106,19 @@ void FlyEnemy::Move()
 {
 	if ( !islive_ ) return;
 	velocity_.Normalize();
-	if ( GetOnDir() & 0b1 << OnDir::RIGHT | OnDir::LEFT )
+	if (!moveTimer_.IsCountEnd() )
 	{
-		velocity_.x *= -1;
+		moveTimer_.CountUp();
 	}
 
-	if ( GetOnDir() & 0b1 << OnDir::BOTTOM && !isAttack_)
-	{
-		velocity_.y = 0;
-	}
-
-	velocity_ = Vector2(moveCheckPoint_[targetCheckPoint_ ],pos_);
+	velocity_ = Vector2(pos_,moveCheckPoint_[targetCheckPoint_ ]);
 	velocity_.Normalize();
-	speed_ = InQuad(0,2,moveTimer_.GetCount(),moveTimer_.GetEndCount());
+	speed_ = InQuad(0,2,moveTimer_.GetEndCount(),moveTimer_.GetCount());
 
 	pos_ += velocity_ * speed_;
 
 
-	if ( Vector2(pos_,moveCheckPoint_[ targetCheckPoint_ ]).GetLenge() <= 10 )
+	if ( Vector2(pos_,moveCheckPoint_[ targetCheckPoint_ ]).GetLenge() <= 40 )
 	{
 		int num = targetCheckPoint_;
 		while ( targetCheckPoint_ == num )
@@ -130,7 +127,7 @@ void FlyEnemy::Move()
 		}
 		moveTimer_.ReSetCount();
 	}
-
+	
 	shape_->SetCenter(pos_);
 
 }
@@ -144,10 +141,9 @@ void FlyEnemy::Attack()
 	else if ( !attackCounter_.IsCountEnd() )
 	{
 		attackCounter_.CountUp();
-		speed_ = InQuad(0,5,attackCounter_.GetCount(),attackCounter_.GetEndCount());
-		Vector2 targetVelo(targetPos_,pos_);
-		targetVelo.Normalize();
-		pos_ += targetVelo * speed_;
+
+		speed_ = InQuad(0,5,attackCounter_.GetEndCount(),attackCounter_.GetCount());
+
 		attackIntervalCounter_.SetEndCount(attackInterval_);
 	}
 	else if(Vector2(pos_,targetPos_).GetLenge() <= 10 )
@@ -155,7 +151,12 @@ void FlyEnemy::Attack()
 		actionMode = MOVE;
 	}
 
-
+	if ( beforeAttackCounter_.IsCountEnd() )
+	{
+		Vector2 targetVelo(targetPos_,pos_);
+		targetVelo.Normalize();
+		pos_ += targetVelo * speed_;
+	}
 }
 
 void FlyEnemy::Draw()
@@ -163,6 +164,7 @@ void FlyEnemy::Draw()
 	if ( !islive_ ) return;
 	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2,
 		pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,155),true);
+	DrawFormatString(100,100,0xffffff,"%f",Vector2(pos_,moveCheckPoint_[ targetCheckPoint_ ]).GetLenge());
 }
 
 void FlyEnemy::OnCollision()
