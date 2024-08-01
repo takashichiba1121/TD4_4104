@@ -22,7 +22,7 @@ public:
 
 	virtual void Falling()=0;
 
-	virtual void Draw() = 0;
+	virtual void Draw(Vector2 pos,Vector2 size) = 0;
 
 	virtual void Load() = 0;
 };

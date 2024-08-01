@@ -16,11 +16,19 @@ private:
 
 	Vector2 DrawPos_;
 
-	Combo combo1 = { 30,{30,-10},{60,15},70,1,1 };
+	float AttackInterval_ = 0;
 
-	Combo combo2 = { 40,{45,-10},{90,15},80,3,2 };
+	const float LAST_ATTACK_TIME_ = 10;
 
-	Combo combo3 = { 50,{60,-10},{120,15},90,5,3 };
+	const Vector2 ATTACK_POS_ = {30,0 };
+
+	const Vector2 COLISION_SIZE_ = { 64,64 };
+
+	const uint32_t INTERVAL_ = 10;
+
+	const float POW_ = 60;
+
+	const float MOVE_ = 3;
 
 	float playerPow_;
 

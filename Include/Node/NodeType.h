@@ -12,6 +12,7 @@ public:
 		START,//スタート
 		NONE,//設定なし
 		NO_CHILDREN,//子なし
+		BOSS,
 
 		TYPE_NUM
 	};

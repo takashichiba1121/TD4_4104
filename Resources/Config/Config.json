@@ -2,7 +2,7 @@
    "Config":{
 
         "name": "Config",  
-        "Title": "4104_Eternal Damnation",
+        "Title": "Config",
         "VSync":true,
         "FPS":60,
         "FullScreen":false,
