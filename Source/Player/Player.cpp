@@ -68,16 +68,16 @@ void Player::Initialize()
 
 	ItemGet(item);
 
-	circelShape = std::make_unique<CircleShape>();
+	circelShape_ = std::make_unique<CircleShape>();
 
-	circelShape->SetRadius(hitboxSize_.y);
+	circelShape_->SetRadius(hitboxSize_.y);
 }
 
 void Player::Update()
 {
-	powerUpText = false;
+	powerUpText_ = false;
 
-	if ( isPowerUp )
+	if ( isPowerUp_ )
 	{
 		PowerUp();
 	}
@@ -116,7 +116,7 @@ void Player::Update()
 
 		shape_->SetCenter(pos_);
 
-		circelShape->SetCenter(pos_);
+		circelShape_->SetCenter(pos_);
 	}
 
 #ifdef _DEBUG
@@ -139,7 +139,7 @@ void Player::Update()
 
 	ImGui::Text("Cdmg:%1.2f",changeCdmg_);
 
-	ImGui::Text("cost:%d",nowCost);
+	ImGui::Text("cost:%d",nowCost_);
 
 	ImGui::End();
 
@@ -170,7 +170,9 @@ void Player::Attack()
 }
 void Player::Damage(int32_t Damage)
 {
-	if ( DamageInterval_ >= DAMAGE_INTERVAL_MAX_ )
+	if ( DamageInterval_ >= DAMAGE_INTERVAL_MAX_/*||
+		(leftArm_->IsAttack()&& leftAtaackTag_==PlayerAttackTags::Mars)&&
+		( rightArm_->IsAttack() && rightAtaackTag_ == PlayerAttackTags::Mars )*/ )
 	{
 		hp_ -= Damage - (changeDef_*DEF_);
 
@@ -179,7 +181,7 @@ void Player::Damage(int32_t Damage)
 }
 bool Player::ChangeLeftArm(std::string attackName,uint32_t cost)
 {
-	if ( nowCost + cost - leftArm_->cost > 100 )
+	if ( nowCost_ + cost - leftArm_->cost > 100 )
 	{
 		return false;
 	}
@@ -201,7 +203,7 @@ bool Player::ChangeLeftArm(std::string attackName,uint32_t cost)
 
 bool Player::ChangeRightArm(std::string attackName,uint32_t cost)
 {
-	if ( nowCost + cost - rightArm_->cost > 100 )
+	if ( nowCost_ + cost - rightArm_->cost > 100 )
 	{
 		return false;
 	}
@@ -224,7 +226,7 @@ bool Player::ChangeRightArm(std::string attackName,uint32_t cost)
 
 bool Player::ChangeLeg(std::string legName,uint32_t cost)
 {
-	if ( nowCost + cost - leg_->cost > 100 )
+	if ( nowCost_ + cost - leg_->cost > 100 )
 	{
 		return false;
 	}
@@ -366,7 +368,7 @@ void Player::Draw()
 
 	DrawFormatString(0,GameConfig::GetWindowHeight() - 20,0xffffff,"PlayerHP:%d/%d",hp_,MAX_HP_);
 
-	if (powerUpText&&isPowerUp==false )
+	if (powerUpText_&&isPowerUp_==false )
 	{
 		DrawFormatString(pos_.x,pos_.y-drawSize_.y+40,0xffffff,"Push to KEY Z",hp_,MAX_HP_);
 	}
@@ -438,29 +440,29 @@ uint32_t Player::PowerUp()
 {
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_LEFT) || Input::Instance()->TriggerKey(KEY_INPUT_A) )
 	{
-		if ( powerUpNum == 0 )
+		if ( powerUpNum_ == 0 )
 		{
-			powerUpNum = 2;
+			powerUpNum_ = 2;
 		}
 		else
 		{
-			powerUpNum--;
+			powerUpNum_--;
 		}
 	}
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_RIGHT) || Input::Instance()->TriggerKey(KEY_INPUT_D) )
 	{
-		powerUpNum++;
-		if ( powerUpNum >= 3 )
+		powerUpNum_++;
+		if ( powerUpNum_ >= 3 )
 		{
-			powerUpNum = 0;
+			powerUpNum_ = 0;
 		}
 	}
-	return powerUpNum;
+	return powerUpNum_;
 }
 
 void Player::EndPowerUp()
 {
-	isPowerUp = false;
+	isPowerUp_ = false;
 }
 
 void Player::Reset()
@@ -474,12 +476,12 @@ void Player::OnCollision()
 {
 	if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "PowerUpCave"&&isDealed_==false )
 	{
-		powerUpText = true;
+		powerUpText_ = true;
 		if (Input::Instance()->TriggerKey(KEY_INPUT_Z) )
 		{
 			dynamic_cast< PowerUpCave* >( GetCollisionInfo().object )->SetPriducts();
 
-			isPowerUp = true;
+			isPowerUp_ = true;
 
 			isDealed_ = true;
 		}

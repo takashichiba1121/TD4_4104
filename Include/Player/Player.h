@@ -14,21 +14,33 @@ struct UserData
 	std::string tag;
 };
 
-enum class PlayerParts
+enum class PlayerAttackTags
 {
-	AttackFist,
-	AttackCerberus,
-	AttackFenrir,
-	AttackGun,
-	AttackMars,
-	AttackSpider,
-	AttackVine,
-	LegNormal,
-	LegFenrir,
-	MouthNormal,
-	Mouthsoul,
-	EyeNormal,
-	EyeClairvoyance,
+	Fist,
+	Cerberus,
+	Fenrir,
+	Gun,
+	Mars,
+	Spider,
+	Vine,
+};
+enum class PlayerLegTags
+{
+	Normal,
+	Fenrir,
+};
+
+enum class PlayerMouthTags
+{
+	Normal,
+	Soul,
+};
+
+enum class PlayerEyeTags
+{
+	Normal,
+	Clairvoyance,
+	Curse,
 };
 
 class Player:public BaseObject
@@ -48,7 +60,7 @@ private:
 
 	float changeCdmg_ = 1.5;
 
-	int32_t nowCost=0;
+	int32_t nowCost_=0;
 #pragma endregion
 
 #pragma region ステータス実数値
@@ -66,7 +78,7 @@ private:
 
 	RectShape* shape_;
 
-	std::unique_ptr<CircleShape> circelShape;
+	std::unique_ptr<CircleShape> circelShape_;
 
 	std::unique_ptr<PlayerAttack> leftArm_;
 
@@ -86,13 +98,25 @@ private:
 
 	std::unique_ptr<PowerUpCave>powerUp_;
 
-	bool isPowerUp = false;
+	bool isPowerUp_ = false;
 
-	uint32_t powerUpNum = 0;
+	uint32_t powerUpNum_ = 0;
 
 	bool isDealed_ = false;
 
-	bool powerUpText=false;
+	bool powerUpText_=false;
+
+	PlayerAttackTags leftAtaackTag_=PlayerAttackTags::Fist;
+
+	PlayerAttackTags rightAtaackTag_ = PlayerAttackTags::Fist;
+
+	PlayerLegTags legTag_ = PlayerLegTags::Normal;
+
+	PlayerMouthTags mouthTag_ = PlayerMouthTags::Normal;
+
+	PlayerEyeTags eyeTag_ = PlayerEyeTags::Normal;
+
+
 public:
 	void Initialize() override;
 
@@ -135,7 +159,7 @@ public:
 	bool SubCdmg(int32_t Cdmg);
 
 	int32_t GetCost() {
-		return nowCost;
+		return nowCost_;
 	}
 
 	void Draw() override;
@@ -151,13 +175,38 @@ public:
 	void Reset();
 
 	bool IsPowerUp() {
-		return isPowerUp;
+		return isPowerUp_;
 	}
 
 	void OnCollision() override;
 
 	CircleShape* GetCircleShape()
 	{
-		return circelShape.get() ;
+		return circelShape_.get() ;
+	}
+
+	PlayerAttackTags GetLeftAtaackTag()
+	{
+		return leftAtaackTag_;
+	}
+
+	PlayerAttackTags GetRightAtaackTag()
+	{
+		return rightAtaackTag_;
+	}
+
+	PlayerLegTags GetLegTag()
+	{
+		return legTag_;
+	}
+
+	PlayerMouthTags GetMouthTag()
+	{
+		return mouthTag_;
+	}
+
+	PlayerEyeTags GetEyeTag()
+	{
+		return eyeTag_;
 	}
 };
