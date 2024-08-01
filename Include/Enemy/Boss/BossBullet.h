@@ -27,12 +27,14 @@ public:
 	void Update();
 	void Draw();
 
+	bool IsAttack()const;
+
 	void SetBossPos(const Vector2& pos);
+	void SetDir(int32_t dir);
+
 	void SetTime(int32_t time);
 	void SetSize(const Vector2& size);
-	void SetDir(int32_t dir);
 	void SetPower(int32_t power);
-	bool IsAttack()const;
 	void SetSpeed(float speed);
 
 	void OnCollision()override;

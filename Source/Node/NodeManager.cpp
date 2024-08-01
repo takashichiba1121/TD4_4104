@@ -136,7 +136,7 @@ void NodeManager::Initialize()
 	int32_t bossNodeX = 0;
 	int32_t nodeCount = 0;
 
-	for ( size_t i = 0; i < MAP_WIDTH; i++ )
+	for ( int32_t i = 0; i < MAP_WIDTH; i++ )
 	{
 		if ( !nodes_[ FLOORS - 1 ][ i ].previews.empty() )
 		{

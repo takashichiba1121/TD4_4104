@@ -20,14 +20,23 @@ private:
 
 public:
 
+	BossLongRangeAttack();
+
 	void Attack();
 	void Initialize();
 	void Update();
 	void Draw();
 
 	void SetBossPos(const Vector2& pos);
-	void SetTime(int32_t time);
 	void SetDir(int32_t dir);
+
+	void SetChargeTime(int32_t time);
+	void SetFreezeTime(int32_t time);
+
+	void SetBulletTime(int32_t time);
+	void SetBulletSize(const Vector2& size);
+	void SetBulletPower(int32_t power);
+	void SetBulletSpeed(float speed);
 
 	bool IsAttack() const;
 
