@@ -114,11 +114,7 @@
     <ClCompile Include="Source\Enemy\Boss\BossChargeAttack.cpp" />
     <ClCompile Include="Source\Enemy\Boss\BossPunchAttack.cpp" />
     <ClCompile Include="Source\Enemy\Boss\BossEnemy.cpp" />
-    <ClCompile Include="Source\NPC\PowerUpCave.cpp" />
-    <ClCompile Include="Source\NPC\DealDaemon.cpp" />
     <ClCompile Include="Source\NPC\NPCManager.cpp" />
-    <ClCompile Include="Source\NPC\NPC.cpp" />
-    <ClCompile Include="Source\Player\PlayerAttackSpider.cpp" />
     <ClCompile Include="Source\Node\BaseNode.cpp" />
     <ClCompile Include="Source\Node\BattleNode.cpp" />
     <ClCompile Include="Source\Node\HealingNode.cpp" />
@@ -128,9 +124,7 @@
     <ClCompile Include="Source\Node\TransactionNode.cpp" />
     <ClCompile Include="Source\NPC\PowerUpCave.cpp" />
     <ClCompile Include="Source\NPC\DealDaemon.cpp" />
-    <ClCompile Include="Source\NPC\NPCManager.cpp" />
     <ClCompile Include="Source\NPC\NPC.cpp" />
-    <ClCompile Include="Source\Player\PlayerAttackSpider.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackVine.cpp" />
     <ClCompile Include="Source\Player\PlayerLegFenrir.cpp" />
     <ClCompile Include="Source\Player\PlayerMouth.cpp" />
@@ -245,7 +239,6 @@
     <ClInclude Include="Include\NPC\NPCManager.h" />
     <ClInclude Include="Include\NPC\PowerUpCave.h" />
     <ClInclude Include="Include\Deal\ItemShop.h" />
-    <ClInclude Include="PowerUpCave.h" />
     <ClInclude Include="Include\Node\StartNode.h" />
     <ClInclude Include="ThirdParty\imgui\imconfig.h" />
     <ClInclude Include="ThirdParty\imgui\imgui.h" />

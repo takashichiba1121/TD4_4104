@@ -149,11 +149,11 @@ void BossEnemy::DebugDraw()
 		punch_->Draw();
 		break;
 	case CHARGE:
+		charge_->Draw();
 		break;
 	default:
 		break;
 	}
-	charge_->Draw();
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 

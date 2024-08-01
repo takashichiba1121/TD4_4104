@@ -1,9 +1,22 @@
 #include "EnemyManager.h"
 #include "DxlibInclude.h"
 #include "GameConfig.h"
+#include<BossEnemy.h>
+
 using namespace std;
 std::list<std::unique_ptr<BaseEnemy>> EnemyManager::enemylist_;
 Player* EnemyManager::playerPtr_ = nullptr;
+
+void EnemyManager::BossPop()
+{
+	unique_ptr<BossEnemy> temp = make_unique<BossEnemy>();
+	temp->SetPos({ 150,GameConfig::GetWindowHeight() - 192 / 2.0f - 64 });
+	temp->SetPlayerPtr(playerPtr_);
+	temp->Initialize();
+	enemylist_.push_back(move(temp));
+}
+
+
 void EnemyManager::Initialize()
 {
 	enemylist_.clear();
@@ -68,6 +81,12 @@ void EnemyManager::SetPlayerPtr(Player* playerPtr)
 void EnemyManager::Update()
 {
 	Pop();
+
+	if ( enemylist_.empty() )
+	{
+		BossPop();
+	}
+
 	for ( auto& itr : enemylist_ )
 	{
 		itr->Update();
