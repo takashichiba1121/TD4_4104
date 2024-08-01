@@ -8,7 +8,7 @@
 void BossChargeAttack::Attack()
 {
 	isAttack_ = true;
-	velocity_.x = dir_;
+	velocity_.x = -dir_;
 	velocity_.y = 0;
 	shape_->SetCenter(pos_);
 	CollisionEnable();
@@ -41,6 +41,14 @@ void BossChargeAttack::Update()
 		time_++;
 
 		if ( TIME < time_ )
+		{
+			CollisionDisable();
+			MapChipObjectDisable();
+
+			isAttack_ = false;
+			time_ = 0;
+		}
+		else if( GetOnDir() & OnDir::LEFT || GetOnDir() & OnDir::RIGHT )
 		{
 			CollisionDisable();
 			MapChipObjectDisable();
