@@ -7,6 +7,12 @@
 
 class MapChip;
 class Player;
+enum EnemyType
+{
+	FLY,
+	SHOOT,
+	ADJACENT
+};
 class EnemyManager
 {
 private:
@@ -24,6 +30,7 @@ private:
 	void Pop();//自動ランダム生成
 public:
 	void SetEnemyPOP(std::string enemyType,Vector2 pos,Vector2 Velocity);
+	void SetEnemyPOP(EnemyType enemyType,Vector2 pos);
 	void SetPosPop(Vector2 pos);
 	//指定生成
 	void SetPlayerPtr(Player* playerPtr);
