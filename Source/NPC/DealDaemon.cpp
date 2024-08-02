@@ -105,7 +105,7 @@ bool DealDaemon::Deal()
 	{
 		if ( GetRand(1000) <= statusDownIvent_ )
 		{
-
+			//ivent用ダメージ関数を挿入
 		}
 		else
 		{

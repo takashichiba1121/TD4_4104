@@ -28,7 +28,6 @@ enum PartsName
 	LEG,
 	EYE,
 	MOUTH,
-	BODY
 };
 
 
