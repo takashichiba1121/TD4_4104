@@ -13,6 +13,7 @@
 #include"PlayerBulletManager.h"
 #include"PlayerLegNormal.h"
 #include"PlayerLegFenrir.h"
+#include"PlayerLegCerberus.h"
 #include"json.hpp"
 #include <fstream>
 
@@ -36,7 +37,7 @@ void Player::Initialize()
 
 	rightArm_->Initialize(&pos_,&velocity_,&direction_);
 
-	hp_ = MAX_HP_;
+	hp_ = MAX_HP_ * changeMaxHp_;
 
 	name_.tag = "Player";
 	userData_ = &name_;
@@ -168,15 +169,33 @@ void Player::Attack()
 		rightArm_->Attack();
 	}
 }
-void Player::Damage(int32_t Damage)
+void Player::Damage(int32_t damage)
 {
 	if ( DamageInterval_ >= DAMAGE_INTERVAL_MAX_/*||
 		(leftArm_->IsAttack()&& leftAtaackTag_==PlayerAttackTags::Mars)&&
 		( rightArm_->IsAttack() && rightAtaackTag_ == PlayerAttackTags::Mars )*/ )
 	{
-		hp_ -= Damage - (changeDef_*DEF_);
+		if ( damage - ( changeDef_ * leg_->GetDef() )>=5 )
+		{
 
+			hp_ -= damage - ( changeDef_ * leg_->GetDef() );
+		}
+		else
+		{
+			hp_ -= 5;
+		}
 		DamageInterval_ = 0;
+	}
+}
+void Player::IventDamage(int32_t damage)
+{
+	if ( hp_ - damage >= 0 )
+	{
+		hp_ -= damage;
+	}
+	else
+	{
+		hp_ = 1;
 	}
 }
 bool Player::ChangeLeftArm(std::string attackName,uint32_t cost)
@@ -189,13 +208,44 @@ bool Player::ChangeLeftArm(std::string attackName,uint32_t cost)
 	if ( attackName == "Fist" )
 	{
 		leftArm_ = std::make_unique<PlayerAttackFist>();
+		leftAtaackTag_ = PlayerAttackTags::Fist;
 	}
-	if ( attackName == "Weapon" )
+	if ( attackName == "Gun" )
 	{
 		leftArm_ = std::make_unique<PlayerAttackGun>();
+		leftAtaackTag_ = PlayerAttackTags::Gun;
+	}
+	if ( attackName == "Cerberus" )
+	{
+		leftArm_ = std::make_unique<PlayerAttackCerberus>();
+		leftAtaackTag_ = PlayerAttackTags::Cerberus;
+	}
+	if ( attackName == "Fenrir" )
+	{
+		leftArm_ = std::make_unique<PlayerAttackFenrir>();
+		leftAtaackTag_ = PlayerAttackTags::Fenrir;
+	}
+	if ( attackName == "Mars" )
+	{
+		leftArm_ = std::make_unique<PlayerAttackMars>();
+		leftAtaackTag_ = PlayerAttackTags::Mars;
+	}
+	if ( attackName == "Spider" )
+	{
+		leftArm_ = std::make_unique<PlayerAttackSpider>();
+		leftAtaackTag_ = PlayerAttackTags::Spider;
+	}
+	if ( attackName == "Vine" )
+	{
+		leftArm_ = std::make_unique<PlayerAttackVine>();
+		leftAtaackTag_ = PlayerAttackTags::Vine;
 	}
 
+	nowCost_ -= leftArm_->cost;
+
 	leftArm_->cost = cost;
+
+	nowCost_ += cost;
 
 	leftArm_->Initialize(&pos_,&velocity_,&direction_);
 	return true;
@@ -211,13 +261,44 @@ bool Player::ChangeRightArm(std::string attackName,uint32_t cost)
 	if ( attackName == "Fist" )
 	{
 		rightArm_ = std::make_unique<PlayerAttackFist>();
+		rightAtaackTag_ = PlayerAttackTags::Fist;
 	}
-	if ( attackName == "Weapon" )
+	if ( attackName == "Gun" )
 	{
 		rightArm_ = std::make_unique<PlayerAttackGun>();
+		rightAtaackTag_ = PlayerAttackTags::Gun;
+	}
+	if ( attackName == "Cerberus" )
+	{
+		rightArm_ = std::make_unique<PlayerAttackCerberus>();
+		rightAtaackTag_ = PlayerAttackTags::Cerberus;
+	}
+	if ( attackName == "Fenrir" )
+	{
+		rightArm_ = std::make_unique<PlayerAttackFenrir>();
+		rightAtaackTag_ = PlayerAttackTags::Fenrir;
+	}
+	if ( attackName == "Mars" )
+	{
+		rightArm_ = std::make_unique<PlayerAttackMars>();
+		rightAtaackTag_ = PlayerAttackTags::Mars;
+	}
+	if ( attackName == "Spider" )
+	{
+		rightArm_ = std::make_unique<PlayerAttackSpider>();
+		rightAtaackTag_ = PlayerAttackTags::Spider;
+	}
+	if ( attackName == "Vine" )
+	{
+		rightArm_ = std::make_unique<PlayerAttackVine>();
+		rightAtaackTag_ = PlayerAttackTags::Vine;
 	}
 
+	nowCost_ -= rightArm_->cost;
+
 	rightArm_->cost = cost;
+
+	nowCost_ += cost;
 
 	rightArm_->Initialize(&pos_,&velocity_,&direction_);
 
@@ -234,11 +315,80 @@ bool Player::ChangeLeg(std::string legName,uint32_t cost)
 	if ( legName == "Normal" )
 	{
 		leg_ = std::make_unique<PlayerLegNormal>();
+		legTag_ = PlayerLegTags::Normal;
 	}
+	if ( legName == "Cerberus" )
+	{
+		leg_ = std::make_unique<PlayerLegCerberus>();
+		legTag_ = PlayerLegTags::Cerberus;
+	}
+	if ( legName == "Fenrir" )
+	{
+		leg_ = std::make_unique<PlayerLegFenrir>();
+		legTag_ = PlayerLegTags::Fenrir;
+	}
+
+	nowCost_ -= leg_->cost;
 
 	leg_->cost = cost;
 
+	nowCost_ += cost;
+
 	leg_->Initialize(&velocity_,&direction_,&changeSpd_);
+
+	return true;
+}
+
+bool Player::ChangeEye(std::string eyeName,uint32_t cost)
+{
+	if ( nowCost_ + cost - nowEyeCost_ > 100 )
+	{
+		return false;
+	}
+
+	if ( eyeName == "Normal" )
+	{
+		eyeTag_ = PlayerEyeTags::Normal;
+	}
+	if ( eyeName == "Clairvoyance" )
+	{
+		eyeTag_ = PlayerEyeTags::Clairvoyance;
+	}
+	if ( eyeName == "Curse" )
+	{
+		eyeTag_ = PlayerEyeTags::Curse;
+	}
+
+	nowCost_ -= nowEyeCost_;
+
+	nowEyeCost_ = cost;
+
+	nowCost_ += cost;
+
+	return true;
+}
+
+bool Player::ChangeMouth(std::string mouthName,uint32_t cost)
+{
+	if ( nowCost_ + cost - nowMouthCost_ > 100 )
+	{
+		return false;
+	}
+
+	if ( mouthName == "Normal" )
+	{
+		mouthTag_ = PlayerMouthTags::Normal;
+	}
+	if ( mouthName == "Clairvoyance" )
+	{
+		mouthTag_ = PlayerMouthTags::Soul;
+	}
+
+	nowCost_ -= nowMouthCost_;
+
+	nowMouthCost_ = cost;
+
+	nowCost_ += cost;
 
 	return true;
 }
@@ -319,15 +469,15 @@ bool Player::SubDef(int32_t def)
 
 bool Player::SubMaxHp(int32_t maxHp)
 {
-	if ( changeMaxHp_- maxHp <= 0 )
+	if ( changeMaxHp_ - maxHp <= 0 )
 	{
 		return false;
 	}
 	changeMaxHp_ -= maxHp;
 
-	if ( hp_ >= MAX_HP_* changeMaxHp_ )
+	if ( hp_ >= MAX_HP_ * changeMaxHp_ )
 	{
-		hp_ = MAX_HP_* changeMaxHp_;
+		hp_ = MAX_HP_ * changeMaxHp_;
 	}
 
 	return true;
@@ -368,9 +518,9 @@ void Player::Draw()
 
 	DrawFormatString(0,GameConfig::GetWindowHeight() - 20,0xffffff,"PlayerHP:%d/%d",hp_,MAX_HP_);
 
-	if (powerUpText_&&isPowerUp_==false )
+	if ( powerUpText_ && isPowerUp_ == false )
 	{
-		DrawFormatString(pos_.x,pos_.y-drawSize_.y+40,0xffffff,"Push to KEY Z",hp_,MAX_HP_);
+		DrawFormatString(pos_.x,pos_.y - drawSize_.y + 40,0xffffff,"Push to KEY Z",hp_,MAX_HP_);
 	}
 }
 
@@ -403,9 +553,9 @@ void Player::UseItem()
 			if ( itr->statusName == "HP" )
 			{
 				hp_ += itr->power;
-				if ( hp_ > MAX_HP_ )
+				if ( hp_ > MAX_HP_ * changeMaxHp_ )
 				{
-					hp_ = MAX_HP_;
+					hp_ = MAX_HP_ * changeMaxHp_;
 				}
 			}
 			if ( itr->statusName == "ATK" )
@@ -474,16 +624,29 @@ void Player::Reset()
 
 void Player::OnCollision()
 {
-	if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "PowerUpCave"&&isDealed_==false )
+	if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "PowerUpCave" && isDealed_ == false )
 	{
 		powerUpText_ = true;
-		if (Input::Instance()->TriggerKey(KEY_INPUT_Z) )
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) )
 		{
 			dynamic_cast< PowerUpCave* >( GetCollisionInfo().object )->SetPriducts();
 
 			isPowerUp_ = true;
 
 			isDealed_ = true;
+		}
+	}
+}
+
+void Player::SoulMouth()
+{
+	if (mouthTag_==PlayerMouthTags::Soul )
+	{
+		hp_ += 10;
+
+		if ( hp_ > MAX_HP_ * changeMaxHp_ )
+		{
+			hp_ = MAX_HP_* changeMaxHp_;
 		}
 	}
 }

@@ -37,6 +37,8 @@ private:
 
 	uint32_t PlayerDushTextureCount_ = 0;
 
+	const uint32_t DEF_=70;
+
 #pragma region ステータス
 
 //移動
@@ -89,5 +91,8 @@ public:
 
 	void Load() override;
 
+	uint32_t GetDef() override {
+		return DEF_;
+	}
 };
 

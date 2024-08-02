@@ -28,6 +28,7 @@ enum class PlayerLegTags
 {
 	Normal,
 	Fenrir,
+	Cerberus,
 };
 
 enum class PlayerMouthTags
@@ -63,11 +64,11 @@ private:
 	int32_t nowCost_=0;
 #pragma endregion
 
-#pragma region ステータス実数値
+#pragma region ステータス初期値
 
 	const uint32_t MAX_HP_ = 150;
 
-	const uint32_t DEF_ = 80;
+	uint32_t DEF_ = 0;
 
 
 #pragma endregion
@@ -116,6 +117,10 @@ private:
 
 	PlayerEyeTags eyeTag_ = PlayerEyeTags::Normal;
 
+	uint32_t nowEyeCost_=0;
+
+	uint32_t nowMouthCost_ = 0;
+
 
 public:
 	void Initialize() override;
@@ -124,13 +129,19 @@ public:
 
 	void Attack();
 
-	void Damage(int32_t Damage) override;
+	void Damage(int32_t damage) override;
+
+	void IventDamage(int32_t damage);
 
 	bool ChangeLeftArm(std::string attackName,uint32_t cost);
 
 	bool ChangeRightArm(std::string attackName,uint32_t cost);
 
 	bool ChangeLeg(std::string legName,uint32_t cost);
+
+	bool ChangeEye(std::string eyeName,uint32_t cost);
+
+	bool ChangeMouth(std::string mouthName,uint32_t cost);
 
 	bool AddSpd(int32_t spd);
 
@@ -209,4 +220,6 @@ public:
 	{
 		return eyeTag_;
 	}
+
+	void SoulMouth();
 };

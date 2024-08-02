@@ -3,7 +3,6 @@
 #include<memory>
 class PlayerLeg
 {
-
 public:
 
 	uint32_t cost = 0;
@@ -25,5 +24,7 @@ public:
 	virtual void Draw(const Vector2& pos,const Vector2& size) = 0;
 
 	virtual void Load() = 0;
+
+	virtual uint32_t GetDef()=0;
 };
 
