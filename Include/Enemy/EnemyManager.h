@@ -23,7 +23,7 @@ private:
 	BaseEnemy* cursedEnemy_;
 	void Pop();//自動ランダム生成
 public:
-	static void SetEnemyPOP(std::string enemyType,Vector2 pos,Vector2 Velocity);
+	void SetEnemyPOP(std::string enemyType,Vector2 pos,Vector2 Velocity);
 	void SetPosPop(Vector2 pos);
 	//指定生成
 	void SetPlayerPtr(Player* playerPtr);

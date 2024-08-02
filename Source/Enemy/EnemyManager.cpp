@@ -72,7 +72,7 @@ void EnemyManager::SetEnemyPOP(std::string enemyType,Vector2 pos,Vector2 Velocit
 }
 
 
-void EnemyManager::PosSetEnemyPOP(Vector2 pos)
+void EnemyManager::SetPosPop(Vector2 pos)
 {
 	popTime_--;
 	if ( popTime_ <= 0 )
