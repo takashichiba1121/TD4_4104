@@ -32,6 +32,7 @@ void GameScene::Initialize()
 	nodeManager_->SetMapChip(mapChip_.get());
 	nodeManager_->SetPlayer(player_.get());
 	nodeManager_->SetPowerUp(powerUp_.get());
+	nodeManager_->SetDealer(dealer_.get());
 	nodeManager_->Initialize();
 	nodeManager_->StartNodeSet(0);
 	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");

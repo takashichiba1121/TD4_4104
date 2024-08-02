@@ -64,6 +64,7 @@ void DealDaemon::Initialize()
 void DealDaemon::Update()
 {
 	selectmode_ = playerPtr_->IsPowerUp();
+	shape_->SetCenter(pos_);
 }
 
 bool DealDaemon::PartsChenge()
