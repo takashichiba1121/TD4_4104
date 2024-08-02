@@ -25,7 +25,9 @@ public:
 	void Attack();
 	void Initialize();
 	void Update();
+	void BulletUpdate();
 	void Draw();
+	void DebugDraw();
 
 	void SetBossPos(const Vector2& pos);
 	void SetDir(int32_t dir);
@@ -39,5 +41,6 @@ public:
 	void SetBulletSpeed(float speed);
 
 	bool IsAttack() const;
+	bool IsShot()const;
 
 };

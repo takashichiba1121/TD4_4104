@@ -66,6 +66,10 @@ void BossChargeAttack::Update()
 
 void BossChargeAttack::Draw()
 {
+}
+
+void BossChargeAttack::DebugDraw()
+{
 	DrawBox(shape_->GetCenter().x - shape_->GetRadius().x,shape_->GetCenter().y - shape_->GetRadius().y,
 	shape_->GetCenter().x + shape_->GetRadius().x,shape_->GetCenter().y + shape_->GetRadius().y,
 	GetColor(255,0,255),true);

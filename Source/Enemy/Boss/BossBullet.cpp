@@ -2,6 +2,7 @@
 #include<Player.h>
 #include<CollisionConfig.h>
 #include<CollisionManager.h>
+#include<DxlibInclude.h>
 
 void BossBullet::Attack()
 {
@@ -48,6 +49,12 @@ void BossBullet::Update()
 		{
 			time_--;
 
+			if ( pos_.x >= 270 )
+			{
+				int b = 0; b++;
+			}
+
+
 			SetMapChipSpeed({ velocity_ * speed_ });
 			shape_->SetCenter(pos_);
 		}
@@ -59,8 +66,23 @@ void BossBullet::Draw()
 {
 	if ( isAttack_ )
 	{
-
+		DrawBox(shape_->GetCenter().x - shape_->GetRadius().x,shape_->GetCenter().y - shape_->GetRadius().y,
+				shape_->GetCenter().x + shape_->GetRadius().x,shape_->GetCenter().y + shape_->GetRadius().y,
+				GetColor(255,255,255),true);
 	}
+
+}
+
+void BossBullet::DebugDraw()
+{
+	if ( isAttack_ )
+	{
+		DrawBox(shape_->GetCenter().x - shape_->GetRadius().x,shape_->GetCenter().y - shape_->GetRadius().y,
+			shape_->GetCenter().x + shape_->GetRadius().x,shape_->GetCenter().y + shape_->GetRadius().y,
+			GetColor(255,255,255),true);
+	}
+
+
 }
 
 void BossBullet::SetBossPos(const Vector2& pos)

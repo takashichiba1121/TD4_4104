@@ -26,6 +26,7 @@ public:
 	void Initialize();
 	void Update();
 	void Draw();
+	void DebugDraw();
 
 	bool IsAttack()const;
 

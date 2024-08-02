@@ -19,42 +19,70 @@ void BossLongRangeAttack::Update()
 {
 	if ( chargeTime_ == 0 )
 	{
+		if ( bullet_->IsAttack())
+		{
+			freezeTime_ = FREEZE_TIME;
+			chargeTime_ = CHARGE_TIME;
+			isAttack_ = isShot_ = false;
+		}
+
 		if ( !isShot_ &&!bullet_->IsAttack())
 		{
 			isShot_ = true;
 			bullet_->SetDir(dir_);
 			bullet_->SetBossPos(bossPos_);
 			bullet_->Attack();
-		}
-		else if( bullet_->IsAttack() )
-		{
-			freezeTime_ = FREEZE_TIME;
-			chargeTime_ = CHARGE_TIME;
-			isAttack_ = isShot_ = false;
-			return;
-		}
-
-
-		if ( freezeTime_ == 0 )
-		{
-			freezeTime_ = FREEZE_TIME;
-			chargeTime_ = CHARGE_TIME;
-			isAttack_ = isShot_ = false;
-			return;
-		}
-		else
-		{
-			freezeTime_--;
+			chargeTime_ = -1;
 		}
 	}
 	else
 	{
 		chargeTime_--;
 	}
+
+	if ( freezeTime_ == 0 )
+	{
+		freezeTime_ = -1;
+		freezeTime_ = FREEZE_TIME;
+		chargeTime_ = CHARGE_TIME;
+		isAttack_ = false;
+		return;
+	}
+	else if ( isShot_ && bullet_->IsAttack() )
+	{
+		freezeTime_--;
+	}
+
+	if ( freezeTime_ == -1 && chargeTime_ == -1 )
+	{
+		freezeTime_ = FREEZE_TIME;
+		chargeTime_ = CHARGE_TIME;
+		isAttack_ = false;
+	}
+
+	if ( !bullet_->IsAttack() )
+	{
+		isShot_ = false;
+	}
+
+}
+
+void BossLongRangeAttack::BulletUpdate()
+{
+	if ( isShot_ )
+	{
+		bullet_->Update();
+	}
 }
 
 void BossLongRangeAttack::Draw()
 {
+	bullet_->Draw();
+}
+
+void BossLongRangeAttack::DebugDraw()
+{
+	bullet_->DebugDraw();
 }
 
 void BossLongRangeAttack::SetBossPos(const Vector2& pos)
@@ -100,4 +128,9 @@ void BossLongRangeAttack::SetBulletSpeed(float speed)
 bool BossLongRangeAttack::IsAttack() const
 {
 	return isAttack_;
+}
+
+bool BossLongRangeAttack::IsShot() const
+{
+	return isShot_;
 }

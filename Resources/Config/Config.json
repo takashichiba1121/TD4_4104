@@ -67,11 +67,11 @@
             "FreezeTime":10,
             "Bullet":
             {
-                "Time": 10,
-                "Speed":10,
+                "Time": 80,
+                "Speed":12,
                 "Size":[
-                    210, 
-                    192
+                    48, 
+                    48
                 ],
                 "Power":1
             }

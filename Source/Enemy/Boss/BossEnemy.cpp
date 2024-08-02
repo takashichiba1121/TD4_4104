@@ -127,6 +127,23 @@ void BossEnemy::Draw()
 		drawSize_.x,drawSize_.y,
 		textureId_,true,playerDir_ == 1);
 
+	switch ( phase_ )
+	{
+	case APPROACH:
+		break;
+	case PUNCH:
+		punch_->Draw();
+		break;
+	case CHARGE:
+		charge_->Draw();
+		break;
+	case LONG_RANGE:
+		longRange_->Draw();
+		break;
+	default:
+		break;
+	}
+
 #ifdef _DEBUG
 
 	DebugDraw();
@@ -160,10 +177,13 @@ void BossEnemy::DebugDraw()
 			GetColor(255,255,255),true);
 		break;
 	case PUNCH:
-		punch_->Draw();
+		punch_->DebugDraw();
 		break;
 	case CHARGE:
-		charge_->Draw();
+		charge_->DebugDraw();
+		break;
+	case LONG_RANGE:
+		longRange_->DebugDraw();
 		break;
 	default:
 		break;
@@ -245,6 +265,8 @@ void BossEnemy::AttackMove()
 			break;
 		}
 	}
+
+	longRange_->BulletUpdate();
 }
 
 void BossEnemy::Attack()

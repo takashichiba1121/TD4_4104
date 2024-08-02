@@ -24,6 +24,7 @@ public:
 	void Initialize();
 	void Update();
 	void Draw();
+	void DebugDraw();
 
 	void SetBossPos(const Vector2& pos);
 	void SetBossSize(const Vector2& size);
