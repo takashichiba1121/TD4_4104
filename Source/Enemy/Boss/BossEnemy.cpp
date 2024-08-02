@@ -11,7 +11,6 @@ void BossEnemy::Initialize()
 	textureId_ = LoadGraph("Resources/Enemy/boss.png");
 	bodyImg_ = LoadGraph("Resources/Enemy/bossBody.png");
 
-
 	int32_t graphSizeX;
 	int32_t graphSizeY;
 	GetGraphSize(textureId_,&graphSizeX,&graphSizeY);
@@ -19,7 +18,6 @@ void BossEnemy::Initialize()
 	animeNum_ = graphSizeX / 192;
 
 	drawSize_ = { 192,192 };
-
 
 	punch_ = std::make_unique<BossPunchAttack>();
 	charge_ = std::make_unique<BossChargeAttack>();
@@ -347,7 +345,7 @@ Phase BossEnemy::GetPhase()
 	}
 	else
 	{
-		ret = PUNCH;
+		ret = CHARGE;
 	}
 
 	return ret;

@@ -9,6 +9,7 @@ private:
 	float SPEED;
 	int32_t TIME;
 
+
 	Vector2 size_;
 	int32_t time_;
 	bool isAttack_;
@@ -19,6 +20,8 @@ private:
 	int32_t attackPower_;
 	Vector2 velocity_;
 	float speed_;
+
+	int32_t chargeImg;
 
 public:
 	void Attack();
