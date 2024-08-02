@@ -104,11 +104,15 @@ void GameConfig::Load(const std::string& filePath)
 
 		{
 			nlohmann::json& chargeObject = object[ "Charge" ];
+
 			boss.charge.sizeX = chargeObject[ "Size" ][ 0 ];
 			boss.charge.sizeY = chargeObject[ "Size" ][ 1 ];
 			boss.charge.time = chargeObject[ "Time" ];
 			boss.charge.power = chargeObject[ "Power" ];
 			boss.charge.speed = chargeObject[ "Speed" ];
+			boss.charge.animeFrame = chargeObject[ "AnimeFrame" ];
+			boss.charge.anime2Frame = chargeObject[ "Anime2Frame" ];
+
 		}
 
 		{

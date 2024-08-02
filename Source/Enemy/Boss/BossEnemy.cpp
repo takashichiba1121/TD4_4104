@@ -35,27 +35,34 @@ void BossEnemy::Initialize()
 			probabilities[ 1 ] = bossConfig->probabilitie2;
 		}
 		{
-			punch_->SetTime(bossConfig->attack.time);
-			punch_->SetSize({ float(bossConfig->attack.sizeX),float(bossConfig->attack.sizeY) });
-			punch_->SetPower(bossConfig->attack.power);
-			punch_->SetOffset({ float(bossConfig->attack.offsetX),float(bossConfig->attack.offsetY) });
+			GameConfig::Boss::Attack& punch = bossConfig->attack;
+
+			punch_->SetTime(punch.time);
+			punch_->SetSize({ float(punch.sizeX),float(punch.sizeY) });
+			punch_->SetPower(punch.power);
+			punch_->SetOffset({ float(punch.offsetX),float(punch.offsetY) });
 		}
 
 		{
-			charge_->SetTime(bossConfig->charge.time);
-			charge_->SetSize({ float(bossConfig->charge.sizeX),float(bossConfig->charge.sizeY) });
-			charge_->SetPower(bossConfig->charge.power);
-			charge_->SetSpeed(bossConfig->charge.speed);
+			GameConfig::Boss::Charge& charge = bossConfig->charge;
+			charge_->SetTime(charge.time);
+			charge_->SetSize({ float(charge.sizeX),float(charge.sizeY) });
+			charge_->SetPower(charge.power);
+			charge_->SetSpeed(charge.speed);
+			charge_->SetAnimeFrame(charge.animeFrame);
+			charge_->SetAnime2Frame(charge.anime2Frame);
 		}
 
 		{
-			longRange_->SetChargeTime(bossConfig->longRange.chargeTime);
-			longRange_->SetFreezeTime(bossConfig->longRange.freezeTime);
+			GameConfig::Boss::LongRange& longRange = bossConfig->longRange;
 
-			longRange_->SetBulletTime(bossConfig->longRange.bulletTime);
-			longRange_->SetBulletSpeed(bossConfig->longRange.bulletSpeed);
-			longRange_->SetBulletSize({float(bossConfig->longRange.bulletSizeX),float(bossConfig->longRange.bulletSizeY) });
-			longRange_->SetBulletPower(bossConfig->longRange.bulletPower);
+			longRange_->SetChargeTime(longRange.chargeTime);
+			longRange_->SetFreezeTime(longRange.freezeTime);
+
+			longRange_->SetBulletTime(longRange.bulletTime);
+			longRange_->SetBulletSpeed(longRange.bulletSpeed);
+			longRange_->SetBulletSize({float(longRange.bulletSizeX),float(longRange.bulletSizeY) });
+			longRange_->SetBulletPower(longRange.bulletPower);
 
 		}
 	}
@@ -129,7 +136,6 @@ void BossEnemy::Move()
 
 void BossEnemy::Draw()
 {
-
 	switch ( phase_ )
 	{
 	case APPROACH:
@@ -154,7 +160,7 @@ void BossEnemy::Draw()
 
 #ifdef _DEBUG
 
-	DebugDraw();
+	//DebugDraw();
 
 #endif // _DEBUG
 }
@@ -212,11 +218,21 @@ void BossEnemy::ApproachMove()
 	{
 		phase_ = nextPhase_;
 		nextPhase_ = GetPhase();
-		punch_->SetBossPos(pos_);
-		punch_->Preparation();
-		punch_->SetDir(playerDir_);
 
 		velocity_.x = 0;
+
+		if ( phase_ == PUNCH )
+		{
+			punch_->SetBossPos(pos_);
+			punch_->Preparation();
+			punch_->SetDir(playerDir_);
+		}
+		else if ( phase_ == CHARGE )
+		{
+			charge_->SetBossPos(pos_);
+			charge_->Preparation();
+			charge_->SetDir(playerDir_);
+		}
 
 		if ( nextPhase_ == PUNCH )
 		{
@@ -231,6 +247,11 @@ void BossEnemy::ApproachMove()
 
 void BossEnemy::AttackMove()
 {
+	if ( phase_ == CHARGE )
+	{
+		charge_->Update();
+	}
+
 	if ( attackInterval_ == 0 )
 	{
 		playerDir_ = PlayerDir();
@@ -256,8 +277,8 @@ void BossEnemy::AttackMove()
 				approachHitBox_.SetCenter({ pos_.x + ( shape_->GetRadius().x + approachHitBox_.GetRadius().x ) * -velocity_.x,pos_.y });
 			}
 			break;
+
 		case CHARGE:
-			charge_->Update();
 
 			pos_ = charge_->GetPos();
 

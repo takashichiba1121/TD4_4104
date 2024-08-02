@@ -50,6 +50,8 @@ public:
 			int32_t sizeX;
 			int32_t sizeY;
 			int32_t power;
+			int32_t animeFrame;
+			int32_t anime2Frame;
 		};
 
 		struct LongRange

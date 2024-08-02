@@ -72,7 +72,9 @@
                 184, 
                 184
             ],
-            "Power":1
+            "Power":1,
+            "AnimeFrame": 11,
+            "Anime2Frame": 2
         },
         "LongRange":{
             "ChargeTime":80,
