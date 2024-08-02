@@ -351,11 +351,11 @@ void PlayerLegFenrir::Load()
 
 	assert(lName.compare("Player") == 0);
 
-	topSpeed_ = 12.0f;
-	acceleration_ = 60.0f;
-	airAcceleration_ = 24.0f;
-	deccelaration_ = 88.0;
-	airDeccelaration_ = 124.0f;
+	topSpeed_ = jsonObject[ "TopSpeed" ];
+	acceleration_ = jsonObject[ "Acceleration" ];
+	airAcceleration_ = jsonObject[ "AirAcceleration" ];
+	deccelaration_ = jsonObject[ "Deccelaration" ];
+	airDeccelaration_ = jsonObject[ "AirDeccelaration" ];
 	gravityAcceleration_ = jsonObject[ "GravityAcceleration" ];
 	jumpAcceleration_ = jsonObject[ "JumpAcceleration" ];
 	jumpInitialVelocity_ = jsonObject[ "JumpInitialVelocity" ];
