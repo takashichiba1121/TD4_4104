@@ -351,11 +351,11 @@ void PlayerLegCerberus::Load()
 
 	assert(lName.compare("Player") == 0);
 
-	topSpeed_ = 12.0f;
-	acceleration_ = 60.0f;
-	airAcceleration_ = 24.0f;
-	deccelaration_ = 88.0;
-	airDeccelaration_ = 124.0f;
+	topSpeed_ = jsonObject[ "TopSpeed" ]*1.5f;
+	acceleration_ = jsonObject[ "Acceleration" ] * 1.5f;
+	airAcceleration_ = jsonObject[ "AirAcceleration" ] * 1.5f;
+	deccelaration_ = jsonObject[ "Deccelaration" ] * 1.5f;
+	airDeccelaration_ = jsonObject[ "AirDeccelaration" ] * 1.5f;
 	gravityAcceleration_ = jsonObject[ "GravityAcceleration" ];
 	jumpAcceleration_ = jsonObject[ "JumpAcceleration" ];
 	jumpInitialVelocity_ = jsonObject[ "JumpInitialVelocity" ];

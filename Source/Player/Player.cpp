@@ -72,6 +72,8 @@ void Player::Initialize()
 	circelShape_ = std::make_unique<CircleShape>();
 
 	circelShape_->SetRadius(hitboxSize_.y);
+
+	ChangeLeg("Cerberus",0);
 }
 
 void Player::Update()
@@ -447,7 +449,7 @@ bool Player::AddMaxHp(int32_t maxHp)
 {
 	uint32_t nowMaxHp = MAX_HP_ * changeMaxHp_;
 
-	changeMaxHp_ += maxHp;
+	changeMaxHp_ += maxHp/100.0f;
 
 	hp_ += (MAX_HP_ * changeMaxHp_) - nowMaxHp;
 
@@ -455,7 +457,7 @@ bool Player::AddMaxHp(int32_t maxHp)
 }
 bool Player::AddCrit(float Crit)
 {
-	changeCrit_ += Crit;
+	changeCrit_ += float(Crit) / 100.0f;;
 
 	return true;
 }

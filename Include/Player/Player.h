@@ -240,4 +240,10 @@ public:
 	bool CheckHavePart(PartsName partType,std::string partName);
 
 	void SoulMouth();
+
+	uint32_t GetMaxHp()
+	{
+		return MAX_HP_ * changeMaxHp_;
+	}
+
 };
