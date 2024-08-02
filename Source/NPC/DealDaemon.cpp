@@ -18,6 +18,10 @@ void DealDaemon::Initialize()
 	hitboxSize_ = { 128,128 };
 	pos_ = { 650,640 };
 
+	tag.tag = "Parts";
+
+
+
 	shape_ = new RectShape();
 	shape_->SetRadius(hitboxSize_ / 2);
 	CollisionManager::GetInstance()->AddObject(this);
@@ -50,6 +54,8 @@ void DealDaemon::Initialize()
 		temp->productType = static_cast< string >( obj[ "Type" ] );
 		products_.push_back(std::move(temp));
 	}
+
+	
 
 	SetPriducts();
 
