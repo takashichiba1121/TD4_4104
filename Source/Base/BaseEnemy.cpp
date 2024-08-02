@@ -15,19 +15,19 @@ void BaseEnemy::EffectUpdate()
 			case BURN:
 				if ( effectTimer[ i ].GetCount() % effectDamageInterval[i] == 0)
 				{
-					playerPtr_->Damage(effectDamage[ ef ]);
+					Damage(effectDamage[ ef ],BURN,true);
 				}
 				break;
 			case ICED:
 				if ( effectTimer[ i ].GetCount() % effectDamageInterval[ i ] == 0 )
 				{
-					playerPtr_->Damage(effectDamage[ ef ]);
+					Damage(effectDamage[ ef ],ICED,true);
 				}
 				break;
 			case BIND:
 				if ( effectTimer[ i ].GetCount() % effectDamageInterval[ i ] == 0 )
 				{
-					playerPtr_->Damage(effectDamage[ ef ]);
+					Damage(effectDamage[ ef ],BIND,true);
 				}
 				break;
 			default:
@@ -45,36 +45,37 @@ void BaseEnemy::EffectUpdate()
 	}
 }
 
-void BaseEnemy::Damage(int32_t damage,Effects effect)
+void BaseEnemy::Damage(int32_t damage,Effects effect,bool effectD)
 {
 	if (!immortal_)
 	{
-		SetEffect(effect);
-		switch ( effect )
+		if ( !effectD )
 		{
-		case BIND:
-			effectDamage[ effect ] = damage * 0.15f;
-			break;
-		case ICED:
-			effectDamage[ effect ] = damage * 0.50f;
-			break;
-		case BURN:
-			effectDamage[ effect ] = damage * 0.25f;
-			break;
-		default:
-			break;
+			SetEffect(effect);
+			switch ( effect )
+			{
+			case BIND:
+				effectDamage[ effect ] = damage * 0.15f;
+				break;
+			case ICED:
+				effectDamage[ effect ] = damage * 0.50f;
+				break;
+			default:
+				break;
+			}
+			if ( IsEffect(ICED) )
+			{
+				damage = static_cast< int32_t >( static_cast< float >( damage ) * 0.25f );
+			}
+			immortal_ = true;
+			immortalTime_ = 10;
+			if ( IsEffect(CURSE) )
+			{
+				curseStack++;
+			}
 		}
-		if ( IsEffect(ICED) )
-		{
-			damage = static_cast<int32_t>(static_cast<float>(damage) * 0.25f);
-		}
-		immortal_ = true;
+
 		hp_ -= damage;
-		immortalTime_ = 10;
-		if ( IsEffect(CURSE) )
-		{
-			curseStack++;
-		}
 	}
 }
 

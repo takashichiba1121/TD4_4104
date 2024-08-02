@@ -3,9 +3,10 @@ void BaseObject::Damage(int32_t damage)
 {
 	hp_ -= damage;
 }
-void BaseObject::Damage(int32_t damage,Effects effect)
+void BaseObject::Damage(int32_t damage, Effects effect, bool effectDamage)
 {
 }
+
 bool BaseObject::IsLive()
 {
 	if ( hp_ <= 0 )

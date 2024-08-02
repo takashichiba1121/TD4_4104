@@ -34,7 +34,7 @@ public:
 	virtual void Draw() = 0;
 	//攻撃耐性等の特殊な処理を必要とする場合を考慮し仮想化
 	virtual void Damage(int32_t damage);
-	virtual void Damage(int32_t damage,Effects effect);
+	virtual void Damage(int32_t damage,Effects effect,bool effectD);
 	bool IsLive();
 	Vector2 GetHitBoxSize();
 	Vector2 GetDrawSize();
