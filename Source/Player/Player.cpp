@@ -647,6 +647,11 @@ void Player::EndPowerUp()
 	isPowerUp_ = false;
 }
 
+void Player::EndChangeParts()
+{
+	isChangeParts_ = false;
+}
+
 void Player::Reset()
 {
 	pos_.x = GameConfig::GetGameConfig()->windowWidth / 2;

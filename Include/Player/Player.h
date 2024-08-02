@@ -121,15 +121,17 @@ private:
 
 	uint32_t selectItems_ = 1;
 
-	std::unique_ptr<PowerUpCave>powerUp_;
-
 	bool isPowerUp_ = false;
+
+	bool isChangeParts_ = false;
 
 	uint32_t powerUpNum_ = 0;
 
 	bool isDealed_ = false;
 
 	bool powerUpText_=false;
+
+	bool changePartsText_ = false;
 
 	NowPartsTag nowPartTag_;
 
@@ -199,10 +201,16 @@ public:
 
 	void EndPowerUp();
 
+	void EndChangeParts();
+
 	void Reset();
 
 	bool IsPowerUp() {
 		return isPowerUp_;
+	}
+
+	bool IsChangeParts() {
+		return isChangeParts_;
 	}
 
 	void OnCollision() override;

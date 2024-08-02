@@ -24,8 +24,8 @@ void GameScene::Initialize()
 	powerUp_->SetPlayer(player_.get());
 
 	dealer_ = std::make_unique<DealDaemon>();
-	dealer_->Initialize();
 	dealer_->SetPlayer(player_.get());
+	dealer_->Initialize();
 
 
 	nodeManager_ = NodeManager::GetInstance();
@@ -60,6 +60,26 @@ void GameScene::Update()
 			powerUp_->StatusChenge();
 
 			player_->EndPowerUp();
+		}
+	}
+	else if ( player_->IsChangeParts() )
+	{
+		dealer_->Update();
+
+		uint32_t powerUpNum = player_->PowerUp();
+
+		dealer_->SetSlect(powerUpNum);
+
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_RETURN) )
+		{
+			dealer_->Deal();
+		}
+
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) )
+		{
+			dealer_->PartsChenge();
+
+			player_->EndChangeParts();
 		}
 	}
 	else
