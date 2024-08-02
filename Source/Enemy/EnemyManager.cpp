@@ -17,7 +17,7 @@ void EnemyManager::Pop()
 	{
 		if ( enemylist_.size() >= MAX_ENEMY_NUM || popEnemyCount_ >= MAX_POP_ENEMY_NUM) return;
 		popTime_ = POP_INTERVAL;
-		if (false)
+		if (true)
 		{
 			unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
 			temp->Initialize();
@@ -27,12 +27,23 @@ void EnemyManager::Pop()
 			enemylist_.push_back(move(temp));
 			popEnemyCount_++;
 		}
+		else if ( false )
+		{
+			unique_ptr<ShootEnemy> temp = make_unique<ShootEnemy>();
+			temp->Initialize();
+			temp->SetPos({ GetRand(850) + 50.f,100.f });
+			temp->SetMapChip(mapchip_);
+			temp->SetPlayerPtr(playerPtr_);
+			enemylist_.push_back(move(temp));
+			popEnemyCount_++;
+		}
 		else
 		{
 			unique_ptr<WalkEnemy> temp = make_unique<WalkEnemy>();
 			temp->Initialize();
 			temp->SetPos({ GetRand(850) + 50.f,100.f });
 			temp->SetMapChip(mapchip_);
+			temp->SetPlayerPtr(playerPtr_);
 			enemylist_.push_back(move(temp));
 			popEnemyCount_++;
 		}
@@ -82,7 +93,7 @@ void EnemyManager::Update()
 		
 	for ( auto& itr : enemylist_ )
 	{
-		if ( itr->IsImmortal() )
+		if ( itr->IsImmortal() && itr->IsCursedDamage())
 		{
 			if ( time < itr->GetImmortalTime() )
 			{

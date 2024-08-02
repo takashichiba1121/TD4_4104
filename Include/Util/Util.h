@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#define  PI 3.14159265358979323846
 
 double Lerp(double startPos,double endPos,double maxTime,double time);
 double Lerp(double startPos,double endPos,double time);
@@ -12,6 +13,8 @@ double OutOutRelayQuad(double startPos,double endPos,double relayPos,double maxT
 double EaseInBack(double startPos,double endPos,double maxTime,double time);
 double EaseInBack2(double startPos,double endPos,double maxTime,double time);
 double EaseOutBounce(double startPos,double endPos,double time,double maxTime);
+
+int32_t sign(float num);
 
 enum Effects
 {

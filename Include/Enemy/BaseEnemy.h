@@ -3,15 +3,30 @@
 #include "Util.h"
 #include <array>
 
+enum ActionMode
+{
+	STAY,
+	MOVE,
+	APPROACH,
+	ATTACK
+};
+
 class MapChip;
 class Player;
 class BaseEnemy:public BaseObject
 {
 protected:
+	Counter attackCounter_;
+	Counter beforeAttackCounter_;
+	Counter attackIntervalCounter_;
+	int32_t attackInterval_ = 60;
+	int32_t beforeAttackFrame_ = 5;
+	int32_t attackFrame_ = 25;
 	MapChip* mapchip_;
 	ObjectUserData name_;
 	uint32_t id_;
 	bool immortal_ = false;
+	bool isCursedDamage_ = false;
 	Player* playerPtr_;
 	int32_t attackPower_;
 	int32_t defense_;
@@ -22,6 +37,7 @@ protected:
 	const std::array<int32_t,END> effectDamageInterval = { 120,240,120,0,0 };
 	std::array<float,END> effectDamage = { 0.15f,0.5f,0.25f,0.f,0.f };
 	int32_t curseStack = 0;
+	int32_t actionMode = MOVE;
 public:
 	virtual void Move() {};
 	virtual void Attack() {};
@@ -34,6 +50,7 @@ public:
 	void SetEffect(Effects effect);
 	void ReleaseEffect(Effects effect);
 	bool IsEffect(Effects effect);
+	bool IsCursedDamage();
 	bool IsImmortal();
 	int32_t GetImmortalTime();
 	int32_t GetCurseStack();

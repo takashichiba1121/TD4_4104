@@ -1,6 +1,7 @@
 #pragma once
 #include "WalkEnemy.h"
 #include "FlyEnemy.h"
+#include "ShootEnemy.h"
 #include <list>
 #include <memory>
 

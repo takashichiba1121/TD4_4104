@@ -110,6 +110,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Enemy\EnemyBullet.cpp" />
+    <ClCompile Include="Source\Enemy\ShootEnemy.cpp" />
     <ClCompile Include="Source\Node\BossNode.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackCerberus.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackFenrir.cpp" />
@@ -179,6 +181,8 @@
     <ClCompile Include="Source\Util\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Enemy\EnemyBullet.h" />
+    <ClInclude Include="Include\Enemy\ShootEnemy.h" />
     <ClInclude Include="Include\Node\BossNode.h" />
     <ClInclude Include="Include\NPC\DealDaemon.h" />
     <ClInclude Include="Include\Node\BaseNode.h" />
