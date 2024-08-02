@@ -40,17 +40,29 @@
         "Name": "Boss",
         "Hp":10,
         "AttackInterval":1.5,
-        "ApproachHitBox":[
-                128,
+        "AttackApproachHitBox":[
+                40,
                 128
+        ],
+        "ChargeApproachHitBox":[
+                40,
+                128
+        ],
+        "Probabilities":[
+            75,
+            25
         ],
         "Attack":{
             "Time":60,
             "Size":[
-                96, 
-                192
+                70, 
+                64
             ],
-            "Power":1
+            "Power":1,
+            "Offset":[
+                0, 
+                0
+            ]
         }
         ,
         "Charge":{

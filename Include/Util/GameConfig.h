@@ -39,6 +39,8 @@ public:
 			int32_t sizeX;
 			int32_t sizeY;
 			int32_t power;
+			int32_t offsetX;
+			int32_t offsetY;
 		};
 
 		struct Charge
@@ -64,8 +66,12 @@ public:
 
 		int32_t hp;
 		float attackInterval;
-		int32_t approachHitBoxX;
-		int32_t approachHitBoxY;
+		int32_t attackApproachHitBoxX;
+		int32_t attackApproachHitBoxY;
+		int32_t chargeApproachHitBoxY;
+		int32_t chargeApproachHitBoxX;
+		int32_t probabilitie1;
+		int32_t probabilitie2;
 		Attack attack;
 		Charge charge;
 		LongRange longRange;

@@ -85,13 +85,19 @@ void GameConfig::Load(const std::string& filePath)
 
 		boss.hp = object[ "Hp" ];
 		boss.attackInterval = object[ "AttackInterval" ];
-		boss.approachHitBoxX = object[ "ApproachHitBox" ][ 0 ];
-		boss.approachHitBoxY = object[ "ApproachHitBox" ][ 1 ];
+		boss.chargeApproachHitBoxX = object[ "ChargeApproachHitBox" ][ 0 ];
+		boss.chargeApproachHitBoxY = object[ "ChargeApproachHitBox" ][ 1 ];
+		boss.attackApproachHitBoxX = object[ "AttackApproachHitBox" ][ 0 ];
+		boss.attackApproachHitBoxY = object[ "AttackApproachHitBox" ][ 1 ];
+		boss.probabilitie1 = object[ "Probabilities" ][ 0 ];
+		boss.probabilitie2 = object[ "Probabilities" ][ 1 ];
 
 		{
 			nlohmann::json& attackObject = object[ "Attack" ];
 			boss.attack.sizeX = attackObject[ "Size" ][ 0 ];
 			boss.attack.sizeY = attackObject[ "Size" ][ 1 ];
+			boss.attack.offsetX = attackObject[ "Offset" ][ 0 ];
+			boss.attack.offsetY = attackObject[ "Offset" ][ 1 ];
 			boss.attack.time = attackObject[ "Time" ];
 			boss.attack.power = attackObject[ "Power" ];
 		}
