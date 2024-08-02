@@ -4,12 +4,27 @@
 #include <Player.h>
 #include <json.hpp>
 #include <fstream>
+#include "CollisionManager.h"
 
 using namespace std;
 using namespace nlohmann;
 
 void DealDaemon::Initialize()
 {
+
+	selectmode_ = false;
+	dealed_ = true;
+	CollisionDisable();
+	hitboxSize_ = { 128,128 };
+	pos_ = { 650,640 };
+
+	shape_ = new RectShape();
+	shape_->SetRadius(hitboxSize_ / 2);
+	CollisionManager::GetInstance()->AddObject(this);
+	shape_->SetCenter(pos_);
+
+	SetShape(shape_);
+
 	std::ifstream file;
 
 	file.open("Resources/Deal/Parts.json");
@@ -72,17 +87,44 @@ bool DealDaemon::PartsChenge()
 	default:
 		break;
 	}
-	dealCount = 0;
+	dealCount_ = 0;
 	return true;
 }
 
 bool DealDaemon::Deal()
 {
-	if (GetRand(1000) <= dealSucces[dealCount])
+	if (GetRand(1000) <= dealSucces_[dealCount_])
 	{
-		dealCount++;
-		dealCount = min(dealCount, dealSucces.size() - 1);
+		dealCount_++;
+		dealCount_ = min(dealCount_, dealSucces_.size() - 1);
 		SetPriducts(true);
+	}
+	else
+	{
+		if ( GetRand(1000) <= statusDownIvent_ )
+		{
+
+		}
+		else
+		{
+			int32_t dice = GetRand(1000);
+			if ( dice <= downStatus_[ 0 ] )
+			{
+				playerPtr_->SubPow(20);
+			}
+			else if ( dice <= downStatus_[ 1 ] )
+			{
+				playerPtr_->SubDef(15);
+			}
+			else if ( dice <= downStatus_[ 2 ] )
+			{
+				playerPtr_->SubSpd(10);
+			}
+			else
+			{
+				playerPtr_->SubMaxHp(30);
+			}
+		}
 	}
 	return false;
 }
@@ -118,6 +160,7 @@ void DealDaemon::SetPlayer(Player* player)
 {
 	playerPtr_ = player;
 }
+
 
 void DealDaemon::Draw()
 {

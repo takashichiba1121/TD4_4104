@@ -42,11 +42,14 @@ private:
 	Vector2 boxLeftTop_ = { 200,200 };
 	Vector2 boxSize_ = { 200,300 };
 	int32_t boxDist_ = 400;
-	int8_t dealCount;
-	bool isLeft = false;
+	int8_t dealCount_;
+	bool isLeft_ = false;
 	bool dealed_ = false;
 	bool selectmode_ = false;
-	const std::array<int32_t,7> dealSucces = { 950,750,500,200,100,50,20 };
+	RectShape* shape_;
+	const std::array<int32_t,7> dealSucces_ = { 950,750,500,200,100,50,20 };
+	int32_t statusDownIvent_ = 250;
+	const std::array<int32_t,3> downStatus_ = {250,500,750};
 public:
 	void Initialize();
 	bool PartsChenge();
@@ -56,5 +59,6 @@ public:
 	void SetPlayer(Player* player);
 	void Draw();
 	void NoDeal();
+	void ReSet();
 };
 
