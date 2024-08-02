@@ -21,13 +21,13 @@ void PlayerAttackGun::AttackInit(float pow,float changeCrit,float changeCdmg)
 
 		if ( *direction_ )
 		{
-			newBullet->Initialize({ 10,0 },*playerPos_,60,pow*POW_,changeCrit,changeCdmg);
+			newBullet->Initialize({ 10,0 },*playerPos_,60,pow*POW_,changeCrit,changeCdmg,PlayerBullet::Type::Normal);
 
 			velocity_->x -= 5;
 		}
 		else
 		{
-			newBullet->Initialize({ -10,0 },*playerPos_,60,pow*POW_,changeCrit,changeCdmg);
+			newBullet->Initialize({ -10,0 },*playerPos_,60,pow*POW_,changeCrit,changeCdmg,PlayerBullet::Type::Normal);
 
 			velocity_->x += 5;
 		}
