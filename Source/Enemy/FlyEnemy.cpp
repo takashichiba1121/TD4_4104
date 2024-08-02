@@ -19,7 +19,7 @@ void FlyEnemy::Initialize()
 	pos_.y = GameConfig::GetWindowHeight() / 2+ 50;
 	for ( int i = 0; i < moveCheckPoint_.size(); i++ )
 	{
-		int8_t r = GetRand(200) + 300;
+		int8_t r = GetRand(200) + 500;
 		float theta = 2 * PI * ( GetRand(120) / 120 + (i * 0.15f));
 
 
@@ -34,7 +34,7 @@ void FlyEnemy::Initialize()
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
 	CollisionManager::GetInstance()->AddObject(this);
-	attackPower_ = 1;
+	attackPower_ = 110;
 
 	moveTimer_.SetEndCount(20);
 	beforeAttackFrame_ = 40;
@@ -55,7 +55,7 @@ void FlyEnemy::Update()
 
 	searchArea_->SetCenter({ pos_.x,pos_.y });
 
-	if ( Collision::Circle2Circle(*playerPtr_->GetCircleShape() ,*searchArea_.get()))
+	if ( Collision::Circle2Circle(*playerPtr_->GetCircleShape() ,*searchArea_.get()) && attackIntervalCounter_.IsCountEnd())
 	{
 		if ( actionMode != ATTACK )
 		{
