@@ -20,7 +20,7 @@ void FlyEnemy::Initialize()
 	for ( int i = 0; i < moveCheckPoint_.size(); i++ )
 	{
 		int8_t r = GetRand(200) + 500;
-		float theta = 2 * PI * ( GetRand(120) / 120 + (i * 0.15f));
+		float theta = 2 * PI * ( GetRand(60) / 360 + (i * 0.15f));
 
 
 		moveCheckPoint_[ i ].x = r * cosf(theta) + pos_.x;
