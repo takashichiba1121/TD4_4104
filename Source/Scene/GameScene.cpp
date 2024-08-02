@@ -113,7 +113,9 @@ void GameScene::Draw()
 	nodeManager_->Draw();
 	player_->Draw();
 
-	//if (!chenged) powerUp_->Draw();
+	if (!chenged) powerUp_->Draw();
+
+	dealer_->Draw();
 
 	nodeManager_->NodeMapDraw();
 

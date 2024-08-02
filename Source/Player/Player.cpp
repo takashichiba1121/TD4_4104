@@ -661,14 +661,22 @@ void Player::Reset()
 
 void Player::OnCollision()
 {
-	if (static_cast<ObjectUserData*>(GetCollisionInfo().userData)->tag == "PowerUpCave" && isDealed_ == false)
+	if (static_cast<ObjectUserData*>(GetCollisionInfo().userData)->tag == "PowerUp" && isDealed_ == false)
 	{
 		powerUpText_ = true;
 		if (Input::Instance()->TriggerKey(KEY_INPUT_Z))
 		{
-			dynamic_cast<PowerUpCave*>(GetCollisionInfo().object)->SetPriducts();
-
 			isPowerUp_ = true;
+
+			isDealed_ = true;
+		}
+	}
+	if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "Parts" && isDealed_ == false )
+	{
+		powerUpText_ = true;
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) )
+		{
+			isChangeParts_ = true;
 
 			isDealed_ = true;
 		}
