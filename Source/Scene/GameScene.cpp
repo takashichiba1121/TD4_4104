@@ -24,8 +24,8 @@ void GameScene::Initialize()
 	powerUp_->SetPlayer(player_.get());
 
 	dealer_ = std::make_unique<DealDaemon>();
-	dealer_->Initialize();
 	dealer_->SetPlayer(player_.get());
+	dealer_->Initialize();
 
 
 	nodeManager_ = NodeManager::GetInstance();

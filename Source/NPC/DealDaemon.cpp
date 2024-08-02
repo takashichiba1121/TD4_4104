@@ -20,7 +20,7 @@ void DealDaemon::Initialize()
 
 	tag.tag = "Parts";
 
-
+	userData_ = &tag;
 
 	shape_ = new RectShape();
 	shape_->SetRadius(hitboxSize_ / 2);
@@ -76,27 +76,27 @@ bool DealDaemon::PartsChenge()
 	case ARM:
 		if ( product ->isLeft )
 		{
-			playerPtr_->ChangeLeftArm(product->partsName,product->cost);
+			isBuy = playerPtr_->ChangeLeftArm(product->partsName,product->cost);
 		}
 		else
 		{
-			playerPtr_->ChangeRightArm(product->partsName,product->cost);
+			isBuy = playerPtr_->ChangeRightArm(product->partsName,product->cost);
 		}
 		break;
 	case LEG:
-		playerPtr_->ChangeLeg(product->partsName,product->cost);
+		isBuy = playerPtr_->ChangeLeg(product->partsName,product->cost);
 		break;
 	case EYE:
-		playerPtr_->ChangeEye(product->partsName, product->cost);
+		isBuy = playerPtr_->ChangeEye(product->partsName, product->cost);
 		break;
 	case MOUTH:
-		playerPtr_->ChangeMouth(product->partsName, product->cost);
+		isBuy = playerPtr_->ChangeMouth(product->partsName, product->cost);
 		break;
 	default:
 		break;
 	}
 	dealCount_ = 0;
-	return true;
+	return isBuy;
 }
 
 bool DealDaemon::Deal()
