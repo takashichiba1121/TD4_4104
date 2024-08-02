@@ -37,10 +37,11 @@ void WalkEnemy::Initialize()
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
 	CollisionManager::GetInstance()->AddObject(this);
-	attackPower_ = 100;
+	attackPower_ = 90;
 	attackInterval_ = 60;
 	beforeAttackFrame_ = 5;
 	attackFrame_ = 25;
+	maxHp_ = 150;
 	hp_ = 150;
 
 	tag.tag = "Enemy";
@@ -280,9 +281,14 @@ void WalkEnemy::Draw()
 		searchArea_->GetCenter().x + searchArea_->GetRadius().x,pos_.y + searchArea_->GetRadius().y,GetColor(155,0,0),false);
 	}
 
-
-	DrawFormatString(100,100,0xffffff,"%d",nextElement_);
-	DrawCircle(nextPos_.x,nextPos_.y,10,0xffffff);
+	if ( playerPtr_->GetEyeTag() == PlayerEyeTags::Clairvoyance )
+	{
+		DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2 - hpBerOffSet_,
+		pos_.x + drawSize_.x / 2,pos_.y - drawSize_.x / 2 - hpBerOffSetUnder_,GetColor(155,0,155),false);
+		int32_t r = pos_.x + drawSize_.x / 2;
+		DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2 - hpBerOffSet_,
+		 r * ( hp_ / maxHp_ ),pos_.y - drawSize_.x / 2 - hpBerOffSetUnder_,GetColor(155,0,155),false);
+	}
 
 }
 

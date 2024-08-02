@@ -10,6 +10,7 @@
 using namespace std;
 void FlyEnemy::Initialize()
 {
+	maxHp_ = 1;
 	hp_ = 1;
 
 	islive_ = true;
@@ -34,7 +35,7 @@ void FlyEnemy::Initialize()
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
 	CollisionManager::GetInstance()->AddObject(this);
-	attackPower_ = 110;
+	attackPower_ = 100;
 
 	moveTimer_.SetEndCount(20);
 	beforeAttackFrame_ = 40;
@@ -162,10 +163,18 @@ void FlyEnemy::Attack()
 
 void FlyEnemy::Draw()
 {
-	if ( !islive_ ) return;
+	if ( !islive_ || !playerPtr_) return;
 	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2,
 		pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,155),true);
 	DrawFormatString(100,100,0xffffff,"%f",Vector2(pos_,targetPos_).GetLenge());
+	if ( playerPtr_->GetEyeTag() == PlayerEyeTags::Clairvoyance )
+	{
+		DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2 - hpBerOffSet_,
+		pos_.x + drawSize_.x / 2,pos_.y - drawSize_.x / 2 - hpBerOffSetUnder_,GetColor(155,0,155),false);
+		int32_t r = pos_.x + drawSize_.x / 2;
+		DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2 - hpBerOffSet_,
+		 r * (hp_/maxHp_),pos_.y - drawSize_.x / 2 - hpBerOffSetUnder_,GetColor(155,0,155),false);
+	}
 }
 
 void FlyEnemy::OnCollision()
