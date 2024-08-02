@@ -48,10 +48,10 @@ void FlyEnemy::Initialize()
 
 void FlyEnemy::Update()
 {
-	if ( !islive_ ) return;
+	if ( !islive_ || !playerPtr_ ) return;
 	immortalTime_--;
 	attackIntervalCounter_.CountUp();
-
+	isCursedDamage_ = false;
 
 	searchArea_->SetCenter({ pos_.x,pos_.y });
 
@@ -175,6 +175,7 @@ void FlyEnemy::OnCollision()
 		if ( static_cast<UserData*>(GetCollisionInfo().userData)->tag == "Player" )
 		{
 			dynamic_cast< Player* >( GetCollisionInfo().object )->Damage(attackPower_);
+			actionMode = MOVE;
 		}
 	}
 }

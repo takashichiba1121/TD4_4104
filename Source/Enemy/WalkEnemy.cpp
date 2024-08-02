@@ -50,10 +50,10 @@ void WalkEnemy::Initialize()
 
 void WalkEnemy::Update()
 {
-	if ( !islive_ ) return;
+	if ( !islive_ ||!playerPtr_ ) return;
 	immortalTime_--;
 	attackIntervalCounter_.CountUp();
-
+	isCursedDamage_ = false;
 
 	searchArea_->SetCenter({ ( sign(-velocity_.x) * searchArea_->GetRadius().x ) + pos_.x,pos_.y });
 

@@ -95,7 +95,7 @@ void EnemyManager::Update()
 	{
 		if ( itr->IsImmortal() && itr->IsCursedDamage())
 		{
-			if ( time < itr->GetImmortalTime() )
+			if ( time < itr->GetImmortalTime() && itr->IsCursedDamage() )
 			{
 				if ( cursedEnemy_ )
 				{

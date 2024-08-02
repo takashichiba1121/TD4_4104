@@ -71,6 +71,13 @@ void BaseEnemy::Damage(int32_t damage,Effects effect)
 		immortal_ = true;
 		hp_ -= damage;
 		immortalTime_ = 10;
+		if ( playerPtr_ )
+		{
+			if ( playerPtr_->GetEyeTag() == PlayerEyeTags::Curse )
+			{
+				isCursedDamage_ = true;
+			}
+		}
 		if ( IsEffect(CURSE) )
 		{
 			curseStack++;
