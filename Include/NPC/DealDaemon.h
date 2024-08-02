@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <memory>
 #include "Vector2.h"
+#include "BaseObject.h"
 
 class Player;
 
@@ -31,7 +32,7 @@ enum PartsName
 };
 
 
-class DealDaemon
+class DealDaemon : public BaseObject
 {
 private:
 	Player* playerPtr_;
@@ -43,6 +44,8 @@ private:
 	int32_t boxDist_ = 400;
 	int8_t dealCount;
 	bool isLeft = false;
+	bool dealed_ = false;
+	bool selectmode_ = false;
 	const std::array<int32_t,7> dealSucces = { 950,750,500,200,100,50,20 };
 public:
 	void Initialize();
@@ -52,5 +55,6 @@ public:
 	void SetPriducts(bool deal = false);
 	void SetPlayer(Player* player);
 	void Draw();
+	void NoDeal();
 };
 

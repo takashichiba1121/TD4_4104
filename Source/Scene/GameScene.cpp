@@ -23,6 +23,11 @@ void GameScene::Initialize()
 	powerUp_->Initialize();
 	powerUp_->SetPlayer(player_.get());
 
+	dealer_ = std::make_unique<DealDaemon>();
+	dealer_->Initialize();
+	dealer_->SetPlayer(player_.get());
+
+
 	nodeManager_ = NodeManager::GetInstance();
 	nodeManager_->SetMapChip(mapChip_.get());
 	nodeManager_->SetPlayer(player_.get());

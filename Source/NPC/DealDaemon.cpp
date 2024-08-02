@@ -121,17 +121,40 @@ void DealDaemon::SetPlayer(Player* player)
 
 void DealDaemon::Draw()
 {
-
-	for (int i = 0; i < selectProducts_.size(); i++)
+	if ( selectmode_ && !dealed_ )
 	{
-		int64_t color = 0x000000;
-		if (i == selectNum_)
+
+		for ( int i = 0; i < selectProducts_.size(); i++ )
 		{
-			color = 0xf00f00;
+			int64_t color = 0x000000;
+			if ( i == selectNum_ )
+			{
+				color = 0xf00f00;
+			}
+			DrawBox(( boxLeftTop_.x + i * boxDist_ ),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,color,true);
+			DrawFormatString(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,
+				0xffffff,"%s\nCost:%d\n%s",selectProducts_[ i ]->uiPartsName,selectProducts_[ i ]->cost,selectProducts_[ i ]->partsInfo);
 		}
-		DrawBox((boxLeftTop_.x + i * boxDist_), boxLeftTop_.y, (boxLeftTop_.x + i * boxDist_) + boxSize_.x, boxLeftTop_.y + boxSize_.y, color, true);
-		DrawFormatString((boxLeftTop_.x + i * boxDist_) + 50, boxLeftTop_.y + 50,
-			0xffffff, "%s\nCost:%d\n%s",selectProducts_[i]->uiPartsName,selectProducts_[i]->cost,selectProducts_[i]->partsInfo);
 	}
 
+	if ( !dealed_ )
+	{
+		DrawBox(pos_.x - hitboxSize_.x / 2,pos_.y - hitboxSize_.y / 2,pos_.x + hitboxSize_.x / 2,pos_.y + hitboxSize_.y / 2,0xffffff,true);
+	}
+
+}
+void DealDaemon::NoDeal()
+{
+	dealed_ = true;
+	selectmode_ = false;
+	CollisionDisable();
+}
+void DealDaemon::ReSet()
+{
+	selectmode_ = false;
+	dealed_ = false;
+	hitboxSize_ = { 128,128 };
+	pos_ = { 650,640 };
+	SetPriducts();
+	CollisionEnable();
 }
