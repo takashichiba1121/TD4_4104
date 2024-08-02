@@ -62,6 +62,26 @@ void GameScene::Update()
 			player_->EndPowerUp();
 		}
 	}
+	else if ( player_->IsChangeParts() )
+	{
+		dealer_->Update();
+
+		uint32_t powerUpNum = player_->PowerUp();
+
+		dealer_->SetSlect(powerUpNum);
+
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_RETURN) )
+		{
+			dealer_->Deal();
+		}
+
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) )
+		{
+			dealer_->PartsChenge();
+
+			player_->EndChangeParts();
+		}
+	}
 	else
 	{
 		nodeManager_->Update();
