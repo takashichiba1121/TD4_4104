@@ -287,7 +287,7 @@ void WalkEnemy::Draw()
 		pos_.x + drawSize_.x / 2,pos_.y - drawSize_.x / 2 - hpBerOffSetUnder_,GetColor(155,0,155),false);
 		int32_t r = pos_.x + drawSize_.x / 2;
 		DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2 - hpBerOffSet_,
-		 r * ( hp_ / maxHp_ ),pos_.y - drawSize_.x / 2 - hpBerOffSetUnder_,GetColor(155,0,155),false);
+		 r * ( hp_ / maxHp_ ),pos_.y - drawSize_.x / 2 - hpBerOffSetUnder_,GetColor(155,0,155),true);
 	}
 
 }
