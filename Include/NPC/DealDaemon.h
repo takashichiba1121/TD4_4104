@@ -51,13 +51,14 @@ private:
 	int32_t statusDownIvent_ = 250;
 	const std::array<int32_t,3> downStatus_ = {250,500,750};
 public:
-	void Initialize();
+	void Initialize() override;
+	void Update() override;
 	bool PartsChenge();
 	bool Deal();
 	void SetSlect(uint8_t selectNum);
 	void SetPriducts(bool deal = false);
 	void SetPlayer(Player* player);
-	void Draw();
+	void Draw() override;
 	void NoDeal();
 	void ReSet();
 };

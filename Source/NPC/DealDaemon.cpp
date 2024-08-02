@@ -55,6 +55,11 @@ void DealDaemon::Initialize()
 
 }
 
+void DealDaemon::Update()
+{
+	selectmode_ = playerPtr_->IsPowerUp();
+}
+
 bool DealDaemon::PartsChenge()
 {
 
@@ -76,13 +81,10 @@ bool DealDaemon::PartsChenge()
 		playerPtr_->ChangeLeg(product->partsName,product->cost);
 		break;
 	case EYE:
-		
+		playerPtr_->ChangeEye(product->partsName, product->cost);
 		break;
 	case MOUTH:
-
-		break;
-	case BODY:
-
+		playerPtr_->ChangeMouth(product->partsName, product->cost);
 		break;
 	default:
 		break;
@@ -152,6 +154,7 @@ void DealDaemon::SetPriducts(bool deal)
 				selectProducts_[ i ]->isLeft = false;
 			}
 		}
+
 	}
 
 }
