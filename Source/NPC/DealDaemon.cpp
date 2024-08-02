@@ -5,6 +5,7 @@
 #include <json.hpp>
 #include <fstream>
 #include "CollisionManager.h"
+#include <strconv.h>
 
 using namespace std;
 using namespace nlohmann;
@@ -47,14 +48,15 @@ void DealDaemon::Initialize()
 	{
 		unique_ptr<Parts> temp = make_unique<Parts>();
 
-		temp->cost = static_cast<int32_t>(obj["cost"]);
-		temp->uiPartsName = static_cast< string >( obj[ "partsName" ] );
-		temp->partsName = static_cast<string>(obj["codeName"]);
-		temp->partsInfo = static_cast<string>(obj["partsInfo"]);
 		temp->productType = static_cast< string >( obj[ "Type" ] );
+		temp->partsName = static_cast<string>(obj["codeName"]);
+		temp->cost = static_cast<int32_t>(obj["cost"]);
+
+		temp->uiPartsName = utf8_to_sjis(static_cast< string >( obj[ "partsName" ] ));
+		temp->partsInfo = utf8_to_sjis(static_cast<string>(obj["partsInfo"]));
 		products_.push_back(std::move(temp));
 	}
-
+	fontHandle_ = DxLib::CreateFontToHandle(NULL,32,3);
 	
 
 	SetPriducts();
@@ -63,7 +65,7 @@ void DealDaemon::Initialize()
 
 void DealDaemon::Update()
 {
-	selectmode_ = playerPtr_->IsPowerUp();
+	selectmode_ = playerPtr_->IsChangeParts();
 	shape_->SetCenter(pos_);
 }
 
@@ -190,8 +192,11 @@ void DealDaemon::Draw()
 				color = 0xf00f00;
 			}
 			DrawBox(( boxLeftTop_.x + i * boxDist_ ),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,color,true);
-			DrawFormatString(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,
-				0xffffff,"%s\nCost:%d\n%s",selectProducts_[ i ]->uiPartsName,selectProducts_[ i ]->cost,selectProducts_[ i ]->partsInfo);
+		/*	DrawFormatString(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,
+				0xffffff,"%s\nCost:%d\n%s",selectProducts_[ i ]->uiPartsName,selectProducts_[ i ]->cost,selectProducts_[ i ]->partsInfo);*/
+			
+			//DrawStringToHandle(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,selectProducts_[ i ]->partsInfo.c_str(),
+			//0xffffff,fontHandle_);
 		}
 	}
 

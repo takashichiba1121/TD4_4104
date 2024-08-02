@@ -34,6 +34,7 @@ enum PartsName
 class DealDaemon : public BaseObject
 {
 private:
+	int32_t fontHandle_ = 0;
 	Player* playerPtr_;
 	std::array<Parts*,3> selectProducts_;
 	uint8_t selectNum_ = 0;
