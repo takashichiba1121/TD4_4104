@@ -46,13 +46,15 @@ private:
 	int32_t shopImg;
 	int32_t healingImg;
 	int32_t startImg;
+	int32_t backGroundImg;
+
 	int32_t playerNodePos;
 
 	float leftBottomX;
 	float leftBottomY;
 
 
-	// 確率分布を作成する
+	// 遒ｺ邇・・蟶・ｒ菴懈・縺吶ｋ
 	std::discrete_distribution<int> distribution;
 	std::array<std::unique_ptr<BaseNode>,NodeType::TYPE_NUM - 3>rooms_;
 	std::list<Node*> drawNode_;

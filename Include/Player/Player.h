@@ -8,6 +8,7 @@
 #include"PlayerLeg.h"
 #include"ItemShop.h"
 #include"PowerUpCave.h"
+#include"DealDaemon.h"
 
 struct UserData
 {
@@ -42,6 +43,29 @@ enum class PlayerEyeTags
 	Normal,
 	Clairvoyance,
 	Curse,
+};
+
+struct NowPartsTag
+{
+	PlayerAttackTags leftAtaackTag = PlayerAttackTags::Fist;
+
+	PlayerAttackTags rightAtaackTag = PlayerAttackTags::Fist;
+
+	PlayerLegTags legTag = PlayerLegTags::Normal;
+
+	PlayerMouthTags mouthTag = PlayerMouthTags::Normal;
+
+	PlayerEyeTags eyeTag = PlayerEyeTags::Normal;
+
+	std::string leftAtaackName = "Fist";
+
+	std::string rightAtaackName = "Fist";
+
+	std::string legName = "Normal";
+
+	std::string mouthName = "Normal";
+
+	std::string eyeName = "Normal";
 };
 
 class Player:public BaseObject
@@ -107,15 +131,7 @@ private:
 
 	bool powerUpText_=false;
 
-	PlayerAttackTags leftAtaackTag_=PlayerAttackTags::Fist;
-
-	PlayerAttackTags rightAtaackTag_ = PlayerAttackTags::Fist;
-
-	PlayerLegTags legTag_ = PlayerLegTags::Normal;
-
-	PlayerMouthTags mouthTag_ = PlayerMouthTags::Normal;
-
-	PlayerEyeTags eyeTag_ = PlayerEyeTags::Normal;
+	NowPartsTag nowPartTag_;
 
 	uint32_t nowEyeCost_=0;
 
@@ -198,28 +214,30 @@ public:
 
 	PlayerAttackTags GetLeftAtaackTag()
 	{
-		return leftAtaackTag_;
+		return nowPartTag_.leftAtaackTag;
 	}
 
 	PlayerAttackTags GetRightAtaackTag()
 	{
-		return rightAtaackTag_;
+		return nowPartTag_.rightAtaackTag;
 	}
 
 	PlayerLegTags GetLegTag()
 	{
-		return legTag_;
+		return nowPartTag_.legTag;
 	}
 
 	PlayerMouthTags GetMouthTag()
 	{
-		return mouthTag_;
+		return nowPartTag_.mouthTag;
 	}
 
 	PlayerEyeTags GetEyeTag()
 	{
-		return eyeTag_;
+		return nowPartTag_.eyeTag;
 	}
+
+	bool CheckHavePart(PartsName partType,std::string partName);
 
 	void SoulMouth();
 };
