@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="imgui">
-      <UniqueIdentifier>{53d57c63-1882-4829-a846-08a247e3ea4b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\player">
       <UniqueIdentifier>{29b8397c-e123-46e6-9b9e-eb6f058b6e76}</UniqueIdentifier>
     </Filter>
@@ -64,55 +61,52 @@
     <Filter Include="ヘッダー ファイル\Node">
       <UniqueIdentifier>{744e79e3-b9aa-4477-948b-7d04ac14bb49}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Enemy\Boss">
+      <UniqueIdentifier>{654cd8b9-2c04-4514-a2fe-03abb9d0b24c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Enemy\Boss">
+      <UniqueIdentifier>{249b828f-7588-4028-9fa6-f148add9aac7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Core">
+      <UniqueIdentifier>{82a13dae-3bde-4340-b94c-a2e1712c1563}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Util">
+      <UniqueIdentifier>{d26863b2-ef40-463d-b053-4c5fb3e7bb61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty">
+      <UniqueIdentifier>{c3483ba6-efea-48c7-b607-30113b278182}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\imgui">
+      <UniqueIdentifier>{53d57c63-1882-4829-a846-08a247e3ea4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Core">
+      <UniqueIdentifier>{32bfc80a-f500-430e-b991-458e9fdb2774}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Util">
+      <UniqueIdentifier>{96cd2cad-def0-4d6b-97fe-303d4efadebb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="ThirdParty\imgui\imgui_tables.cpp">
-      <Filter>imgui</Filter>
+      <Filter>ThirdParty\imgui</Filter>
     </ClCompile>
     <ClCompile Include="ThirdParty\imgui\imgui_widgets.cpp">
-      <Filter>imgui</Filter>
+      <Filter>ThirdParty\imgui</Filter>
     </ClCompile>
     <ClCompile Include="ThirdParty\imgui\imgui.cpp">
-      <Filter>imgui</Filter>
+      <Filter>ThirdParty\imgui</Filter>
     </ClCompile>
     <ClCompile Include="ThirdParty\imgui\imgui_demo.cpp">
-      <Filter>imgui</Filter>
+      <Filter>ThirdParty\imgui</Filter>
     </ClCompile>
     <ClCompile Include="ThirdParty\imgui\imgui_draw.cpp">
-      <Filter>imgui</Filter>
+      <Filter>ThirdParty\imgui</Filter>
     </ClCompile>
     <ClCompile Include="ThirdParty\imgui\imgui_impl_dx11.cpp">
-      <Filter>imgui</Filter>
+      <Filter>ThirdParty\imgui</Filter>
     </ClCompile>
     <ClCompile Include="ThirdParty\imgui\imgui_impl_win32.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="GameCore\DxlibManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Util\GameConfig.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="GameCore\ImGuiManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="GameCore\FrameWork.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GameMain.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="GameCore\AbstractSceneFactory.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="GameCore\FPS.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="GameCore\Input.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ThirdParty\imgui</Filter>
     </ClCompile>
     <ClCompile Include="Source\Player\Player.cpp">
       <Filter>ソース ファイル\player</Filter>
@@ -153,16 +147,10 @@
     <ClCompile Include="Source\Collision\Collision.cpp">
       <Filter>ソース ファイル\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Util\MapChip.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Enemy\FlyEnemy.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Source\Base\BaseObject.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Util\Util.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Enemy\EnemyManager.cpp">
@@ -188,9 +176,6 @@
     </ClCompile>
     <ClCompile Include="Source\Node\BaseNode.cpp">
       <Filter>ソース ファイル\Node</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Node\StartNode.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\NPC\PowerUpCave.cpp">
       <Filter>ソース ファイル</Filter>
@@ -231,14 +216,8 @@
     <ClCompile Include="Source\Player\PlayerAttackGun.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Player\PlayerAttackSpider.cpp">
-      <Filter>ソース ファイル\player</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Player\PlayerLegNormal.cpp">
       <Filter>ソース ファイル\player</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Node\BossNode.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Player\PlayerMouth.cpp">
       <Filter>ソース ファイル\player</Filter>
@@ -258,61 +237,106 @@
     <ClCompile Include="Source\Player\PlayerLegFenrir.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Enemy\Boss\BossEnemy.cpp">
+    <ClCompile Include="Source\Player\PlayerAttackSpider.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Enemy\Boss\BossPunchAttack.cpp">
+    <ClCompile Include="Source\Scene\GameOverScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\GameScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCore\AbstractSceneFactory.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\SceneFactrory.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\TitleScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Node\StartNode.cpp">
+      <Filter>ソース ファイル\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\ClearScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player\PlayerAttackSpider.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCore\BaseScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Base\BaseEnemy.cpp">
+      <Filter>ソース ファイル\Enemy\Boss</Filter>
     </ClCompile>
     <ClCompile Include="Source\Enemy\Boss\BossChargeAttack.cpp">
+      <Filter>ソース ファイル\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Boss\BossEnemy.cpp">
+      <Filter>ソース ファイル\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Node\BossNode.cpp">
+      <Filter>ソース ファイル\Node</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCore\DxlibManager.cpp">
+      <Filter>ソース ファイル\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameMain.cpp">
+      <Filter>ソース ファイル\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCore\FPS.cpp">
+      <Filter>ソース ファイル\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\main.cpp">
+      <Filter>ソース ファイル\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCore\Input.cpp">
+      <Filter>ソース ファイル\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Util\Util.cpp">
+      <Filter>ソース ファイル\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Util\MapChip.cpp">
+      <Filter>ソース ファイル\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCore\SceneManager.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Boss\BossPunchAttack.cpp">
+      <Filter>ソース ファイル\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCore\FrameWork.cpp">
+      <Filter>ソース ファイル\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCore\ImGuiManager.cpp">
+      <Filter>ソース ファイル\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Util\GameConfig.cpp">
+      <Filter>ソース ファイル\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Boss\BossLongRangeAttack.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Boss\BossBullet.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ThirdParty\imgui\imconfig.h">
-      <Filter>imgui</Filter>
+      <Filter>ThirdParty\imgui</Filter>
     </ClInclude>
     <ClInclude Include="ThirdParty\imgui\imgui.h">
-      <Filter>imgui</Filter>
+      <Filter>ThirdParty\imgui</Filter>
     </ClInclude>
     <ClInclude Include="ThirdParty\imgui\imgui_impl_dx11.h">
-      <Filter>imgui</Filter>
+      <Filter>ThirdParty\imgui</Filter>
     </ClInclude>
     <ClInclude Include="ThirdParty\imgui\imgui_impl_win32.h">
-      <Filter>imgui</Filter>
+      <Filter>ThirdParty\imgui</Filter>
     </ClInclude>
     <ClInclude Include="ThirdParty\imgui\imgui_internal.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="GameCore\DxlibManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Util\GameConfig.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Util\Core.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="GameCore\ImGuiManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="GameCore\FrameWork.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\GameMain.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="GameCore\FPS.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Util\DxlibInclude.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="ThirdParty\json.hpp">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="GameCore\Input.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ThirdParty\imgui</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerAttack.h">
       <Filter>ヘッダー ファイル\player</Filter>
@@ -325,9 +349,6 @@
     </ClInclude>
     <ClInclude Include="Include\Util\Math\Vector3.h">
       <Filter>ヘッダー ファイル\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Enemy\BaseEnemy.h">
-      <Filter>ヘッダー ファイル\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Include\Enemy\WalkEnemy.h">
       <Filter>ヘッダー ファイル\Enemy</Filter>
@@ -359,19 +380,10 @@
     <ClInclude Include="Include\Collision\CollisionManager.h">
       <Filter>ヘッダー ファイル\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Util\MapChip.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Util\ChipIndex.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Enemy\FlyEnemy.h">
       <Filter>ヘッダー ファイル\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Include\Base\BaseObject.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Util\Util.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Include\Enemy\EnemyManager.h">
@@ -401,21 +413,6 @@
     <ClInclude Include="Include\Node\TransactionNode.h">
       <Filter>ヘッダー ファイル\Node</Filter>
     </ClInclude>
-    <ClInclude Include="GameCore\AbstractSceneFactory.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="GameCore\BaseScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Scene\GameScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Scene\SceneFactrory.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="GameCore\SceneManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Player\Player.h">
       <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
@@ -425,16 +422,7 @@
     <ClInclude Include="Include\Player\PlayerAttackGun.h">
       <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Node\BossNode.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Include\NPC\DealDaemon.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Scene\ClearScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Scene\GameOverScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Include\NPC\NPC.h">
@@ -446,13 +434,7 @@
     <ClInclude Include="Include\NPC\PowerUpCave.h">
       <Filter>ヘッダー ファイル\PowerUp</Filter>
     </ClInclude>
-    <ClInclude Include="ThirdParty\magic_enum.hpp">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Deal\ItemShop.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Node\StartNode.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerMouth.h">
@@ -489,12 +471,87 @@
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Include\Enemy\Boss\BossEnemy.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Enemy\Boss</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Enemy\Boss\BossPunchAttack.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Include\Enemy\BaseEnemy.h">
+      <Filter>ヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCore\BaseScene.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Include\Enemy\Boss\BossChargeAttack.h">
+      <Filter>ヘッダー ファイル\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Node\BossNode.h">
+      <Filter>ヘッダー ファイル\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCore\AbstractSceneFactory.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Enemy\Boss\BossPunchAttack.h">
+      <Filter>ヘッダー ファイル\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\GameScene.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\ClearScene.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Node\StartNode.h">
+      <Filter>ヘッダー ファイル\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\json.hpp">
+      <Filter>ThirdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Util\DxlibInclude.h">
+      <Filter>ヘッダー ファイル\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCore\DxlibManager.h">
+      <Filter>ヘッダー ファイル\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCore\FPS.h">
+      <Filter>ヘッダー ファイル\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCore\FrameWork.h">
+      <Filter>ヘッダー ファイル\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\GameMain.h">
+      <Filter>ヘッダー ファイル\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCore\ImGuiManager.h">
+      <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Util\Core.h">
+      <Filter>ヘッダー ファイル\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Util\ChipIndex.h">
+      <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\GameOverScene.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCore\Input.h">
+      <Filter>ヘッダー ファイル\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\SceneFactrory.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Util\Util.h">
+      <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCore\SceneManager.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Util\MapChip.h">
+      <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Util\GameConfig.h">
+      <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Enemy\Boss\BossLongRangeAttack.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Enemy\Boss\BossBullet.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

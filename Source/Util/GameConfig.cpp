@@ -67,7 +67,7 @@ void GameConfig::Load(const std::string& filePath)
 		node.startPoints = object[ "StartPoints" ];
 		for ( size_t i = 0; i < node.nodeProbabilities.size(); i++ )
 		{
-			node.nodeProbabilities[i] = object[ "NodeProbabilities" ][i];
+			node.nodeProbabilities[ i ] = object[ "NodeProbabilities" ][ i ];
 		}
 	}
 
@@ -85,13 +85,13 @@ void GameConfig::Load(const std::string& filePath)
 
 		boss.hp = object[ "Hp" ];
 		boss.attackInterval = object[ "AttackInterval" ];
-		boss.approachHitBoxX = object[ "ApproachHitBox" ][0];
-		boss.approachHitBoxY = object[ "ApproachHitBox" ][1];
+		boss.approachHitBoxX = object[ "ApproachHitBox" ][ 0 ];
+		boss.approachHitBoxY = object[ "ApproachHitBox" ][ 1 ];
 
 		{
 			nlohmann::json& attackObject = object[ "Attack" ];
-			boss.attack.sizeX = attackObject[ "Size" ][0];
-			boss.attack.sizeY = attackObject[ "Size" ][1];
+			boss.attack.sizeX = attackObject[ "Size" ][ 0 ];
+			boss.attack.sizeY = attackObject[ "Size" ][ 1 ];
 			boss.attack.time = attackObject[ "Time" ];
 			boss.attack.power = attackObject[ "Power" ];
 		}
@@ -103,6 +103,22 @@ void GameConfig::Load(const std::string& filePath)
 			boss.charge.time = chargeObject[ "Time" ];
 			boss.charge.power = chargeObject[ "Power" ];
 			boss.charge.speed = chargeObject[ "Speed" ];
+		}
+
+		{
+			nlohmann::json& longRangeObject = object[ "LongRange" ];
+			boss.longRange.chargeTime = longRangeObject[ "ChargeTime" ];
+			boss.longRange.freezeTime = longRangeObject[ "FreezeTime" ];
+
+			{
+				nlohmann::json& bulletObject = longRangeObject[ "Bullet" ];
+				boss.longRange.bulletTime = bulletObject[ "Time" ];
+				boss.longRange.bulletSpeed = bulletObject[ "Speed" ];
+				boss.longRange.bulletSizeX = bulletObject[ "Size" ][ 0 ];
+				boss.longRange.bulletSizeY = bulletObject[ "Size" ][ 1 ];
+				boss.longRange.bulletPower = bulletObject[ "Power" ];
+
+			}
 		}
 	}
 }

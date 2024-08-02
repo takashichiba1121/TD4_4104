@@ -107,6 +107,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Enemy\Boss\BossBullet.cpp" />
+    <ClCompile Include="Source\Enemy\Boss\BossLongRangeAttack.cpp" />
     <ClCompile Include="Source\Node\BossNode.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackCerberus.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackFenrir.cpp" />
@@ -114,10 +116,7 @@
     <ClCompile Include="Source\Enemy\Boss\BossChargeAttack.cpp" />
     <ClCompile Include="Source\Enemy\Boss\BossPunchAttack.cpp" />
     <ClCompile Include="Source\Enemy\Boss\BossEnemy.cpp" />
-    <ClCompile Include="Source\NPC\PowerUpCave.cpp" />
-    <ClCompile Include="Source\NPC\DealDaemon.cpp" />
-    <ClCompile Include="Source\NPC\NPC.cpp" />
-    <ClCompile Include="Source\Player\PlayerAttackSpider.cpp" />
+    <ClCompile Include="Source\NPC\NPCManager.cpp" />
     <ClCompile Include="Source\Node\BaseNode.cpp" />
     <ClCompile Include="Source\Node\BattleNode.cpp" />
     <ClCompile Include="Source\Node\HealingNode.cpp" />
@@ -125,8 +124,9 @@
     <ClCompile Include="Source\Node\ReinforcementNode.cpp" />
     <ClCompile Include="Source\Node\ShopNode.cpp" />
     <ClCompile Include="Source\Node\TransactionNode.cpp" />
-    <ClCompile Include="Source\NPC\NPCManager.cpp" />
-    <ClCompile Include="Source\Player\PlayerAttackSpider.cpp" />
+    <ClCompile Include="Source\NPC\PowerUpCave.cpp" />
+    <ClCompile Include="Source\NPC\DealDaemon.cpp" />
+    <ClCompile Include="Source\NPC\NPC.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackVine.cpp" />
     <ClCompile Include="Source\Player\PlayerLegFenrir.cpp" />
     <ClCompile Include="Source\Player\PlayerMouth.cpp" />
@@ -180,6 +180,8 @@
     <ClCompile Include="Source\Util\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Enemy\Boss\BossBullet.h" />
+    <ClInclude Include="Include\Enemy\Boss\BossLongRangeAttack.h" />
     <ClInclude Include="Include\Node\BossNode.h" />
     <ClInclude Include="Include\Enemy\Boss\BossChargeAttack.h" />
     <ClInclude Include="Include\Enemy\Boss\BossPunchAttack.h" />

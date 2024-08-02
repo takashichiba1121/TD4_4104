@@ -3,11 +3,14 @@
 #include "RectShape.h"
 #include<BossPunchAttack.h>
 #include<BossChargeAttack.h>
+#include<BossLongRangeAttack.h>
+
 enum Phase
 {
 	APPROACH,
 	PUNCH,
-	CHARGE
+	CHARGE,
+	LONG_RANGE
 };
 
 
@@ -31,6 +34,7 @@ private:
 
 	std::unique_ptr<BossPunchAttack>punch_;
 	std::unique_ptr<BossChargeAttack>charge_;
+	std::unique_ptr<BossLongRangeAttack>longRange_;
 
 	int32_t anime_;
 	int32_t animeTimer_;

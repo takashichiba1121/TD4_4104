@@ -198,6 +198,11 @@ bool CollisionManager::DownCollision(IObject* object)
 	int32_t downLeftY = static_cast< int32_t >( ( ( objectY + object->r_.y - 1 ) + object->speed_.y ) / BLOCK_SIZE );
 	int32_t downRightY = static_cast< int32_t >( ( ( objectY + object->r_.y - 1 ) + object->speed_.y ) / BLOCK_SIZE );
 
+	if ( downLeftY >= mapChip_->size() || downRightY >= mapChip_->size() )
+	{
+		return false;
+	}
+
 	if ( mapChip_->data()[ downLeftY ][ downLeftX ] == ChipIndex::NONE || mapChip_->data()[ downLeftY ][ downLeftX ] == ChipIndex::NEXT &&
 		 mapChip_->data()[ downRightY ][ downRightX ] == ChipIndex::NONE || mapChip_->data()[ downRightY ][ downRightX ] == ChipIndex::NEXT )
 	{

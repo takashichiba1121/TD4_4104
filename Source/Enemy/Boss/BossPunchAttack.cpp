@@ -44,9 +44,13 @@ void BossPunchAttack::Update()
 
 void BossPunchAttack::Draw()
 {
+}
+
+void BossPunchAttack::DebugDraw()
+{
 	DrawBox(shape_->GetCenter().x - shape_->GetRadius().x,shape_->GetCenter().y - shape_->GetRadius().y,
-		shape_->GetCenter().x + shape_->GetRadius().x,shape_->GetCenter().y + shape_->GetRadius().y,
-		GetColor(255,255,255),true);
+	shape_->GetCenter().x + shape_->GetRadius().x,shape_->GetCenter().y + shape_->GetRadius().y,
+	GetColor(255,255,255),true);
 }
 
 void BossPunchAttack::SetBossPos(const Vector2& pos)

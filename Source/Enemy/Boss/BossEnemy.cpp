@@ -22,6 +22,7 @@ void BossEnemy::Initialize()
 
 	punch_ = std::make_unique<BossPunchAttack>();
 	charge_ = std::make_unique<BossChargeAttack>();
+	longRange_ = std::make_unique<BossLongRangeAttack>();
 
 	{
 		GameConfig::Boss* bossConfig = GameConfig::GetBossConfig();
@@ -43,6 +44,17 @@ void BossEnemy::Initialize()
 			charge_->SetPower(bossConfig->charge.power);
 			charge_->SetSpeed(bossConfig->charge.speed);
 		}
+
+		{
+			longRange_->SetChargeTime(bossConfig->longRange.chargeTime);
+			longRange_->SetFreezeTime(bossConfig->longRange.freezeTime);
+
+			longRange_->SetBulletTime(bossConfig->longRange.bulletTime);
+			longRange_->SetBulletSpeed(bossConfig->longRange.bulletSpeed);
+			longRange_->SetBulletSize({float(bossConfig->longRange.bulletSizeX),float(bossConfig->longRange.bulletSizeY) });
+			longRange_->SetBulletPower(bossConfig->longRange.bulletPower);
+
+		}
 	}
 
 
@@ -50,6 +62,8 @@ void BossEnemy::Initialize()
 	punch_->Initialize();
 
 	charge_->Initialize();
+
+	longRange_->Initialize();
 
 	MapChipObjectEnable();
 	SetMapChipCenter(&pos_);
@@ -113,6 +127,23 @@ void BossEnemy::Draw()
 		drawSize_.x,drawSize_.y,
 		textureId_,true,playerDir_ == 1);
 
+	switch ( phase_ )
+	{
+	case APPROACH:
+		break;
+	case PUNCH:
+		punch_->Draw();
+		break;
+	case CHARGE:
+		charge_->Draw();
+		break;
+	case LONG_RANGE:
+		longRange_->Draw();
+		break;
+	default:
+		break;
+	}
+
 #ifdef _DEBUG
 
 	DebugDraw();
@@ -146,14 +177,17 @@ void BossEnemy::DebugDraw()
 			GetColor(255,255,255),true);
 		break;
 	case PUNCH:
-		punch_->Draw();
+		punch_->DebugDraw();
 		break;
 	case CHARGE:
+		charge_->DebugDraw();
+		break;
+	case LONG_RANGE:
+		longRange_->DebugDraw();
 		break;
 	default:
 		break;
 	}
-	charge_->Draw();
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
@@ -168,7 +202,7 @@ void BossEnemy::ApproachMove()
 
 	if ( Collision::Rect2Rect(playerRect_,approachHitBox_) )
 	{
-		phase_ = Phase::CHARGE;
+		phase_ = Phase::LONG_RANGE;
 		velocity_.x = 0;
 	}
 }
@@ -179,15 +213,6 @@ void BossEnemy::AttackMove()
 	{
 		playerDir_ = PlayerDir();
 		attackInterval_ = -1;
-		switch ( phase_ )
-		{
-		case PUNCH:
-			punch_->SetDir(playerDir_);
-			break;
-		case CHARGE:
-			charge_->SetDir(playerDir_);
-			break;
-		}
 
 		Attack();
 	}
@@ -225,8 +250,23 @@ void BossEnemy::AttackMove()
 
 			}
 			break;
+
+		case LONG_RANGE:
+
+			longRange_->Update();
+
+			if ( !longRange_->IsAttack() )
+			{
+				phase_ = APPROACH;
+				attackInterval_ = ATTACK_INTERVAL;
+				approachHitBox_.SetCenter({ pos_.x + ( shape_->GetRadius().x + approachHitBox_.GetRadius().x ) * -velocity_.x,pos_.y });
+			}
+
+			break;
 		}
 	}
+
+	longRange_->BulletUpdate();
 }
 
 void BossEnemy::Attack()
@@ -234,13 +274,20 @@ void BossEnemy::Attack()
 	switch ( phase_ )
 	{
 	case PUNCH:
+		punch_->SetDir(playerDir_);
 		punch_->Attack();
 		break;
 	case CHARGE:
+		charge_->SetDir(playerDir_);
 		charge_->Attack();
 		CollisionDisable();
 		MapChipObjectDisable();
 		charge_->SetBossPos(pos_);
+		break;
+	case LONG_RANGE:
+		longRange_->SetDir(playerDir_);
+		longRange_->SetBossPos(pos_);
+		longRange_->Attack();
 		break;
 	}
 }

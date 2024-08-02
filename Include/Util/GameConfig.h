@@ -50,12 +50,25 @@ public:
 			int32_t power;
 		};
 
+		struct LongRange
+		{
+			int32_t chargeTime;
+			int32_t freezeTime;
+
+			int32_t bulletTime;
+			int32_t bulletSpeed;
+			int32_t bulletSizeX;
+			int32_t bulletSizeY;
+			int32_t bulletPower;
+		};
+
 		int32_t hp;
 		float attackInterval;
 		int32_t approachHitBoxX;
 		int32_t approachHitBoxY;
 		Attack attack;
 		Charge charge;
+		LongRange longRange;
 	};
 
 private:

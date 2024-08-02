@@ -5,7 +5,18 @@
 
 using namespace std;
 std::list<std::unique_ptr<BaseEnemy>> EnemyManager::enemylist_;
-BaseObject* EnemyManager::playerPtr_ = nullptr;
+Player* EnemyManager::playerPtr_ = nullptr;
+
+void EnemyManager::BossPop()
+{
+	unique_ptr<BossEnemy> temp = make_unique<BossEnemy>();
+	temp->SetPos({ 150,GameConfig::GetWindowHeight() - 192 / 2.0f - 64 });
+	temp->SetPlayerPtr(playerPtr_);
+	temp->Initialize();
+	enemylist_.push_back(move(temp));
+}
+
+
 void EnemyManager::Initialize()
 {
 	enemylist_.clear();
@@ -17,14 +28,15 @@ void EnemyManager::Pop()
 	popTime_--;
 	if ( popTime_ <= 0 )
 	{
-		if ( enemylist_.size() >= MAX_ENEMY_NUM || popEnemyCount_ >= MAX_POP_ENEMY_NUM ) return;
+		if ( enemylist_.size() >= MAX_ENEMY_NUM || popEnemyCount_ >= MAX_POP_ENEMY_NUM) return;
 		popTime_ = POP_INTERVAL;
-		if ( GetRand(2) - 1 )
+		if (false)
 		{
 			unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
 			temp->Initialize();
 			temp->SetPlayerPtr(playerPtr_);
 			temp->SetPos({ GetRand(850) + 50.f,100.f });
+			temp->SetMapChip(mapchip_);
 			enemylist_.push_back(move(temp));
 			popEnemyCount_++;
 		}
@@ -33,19 +45,11 @@ void EnemyManager::Pop()
 			unique_ptr<WalkEnemy> temp = make_unique<WalkEnemy>();
 			temp->Initialize();
 			temp->SetPos({ GetRand(850) + 50.f,100.f });
+			temp->SetMapChip(mapchip_);
 			enemylist_.push_back(move(temp));
 			popEnemyCount_++;
 		}
 	}
-}
-
-void EnemyManager::BossPop()
-{
-	unique_ptr<BossEnemy> temp = make_unique<BossEnemy>();
-	temp->SetPos({ 150,GameConfig::GetWindowHeight() - 192/2.0f-64 });
-	temp->SetPlayerPtr(playerPtr_);
-	temp->Initialize();
-	enemylist_.push_back(move(temp));
 }
 
 void EnemyManager::SetEnemyPOP(std::string enemyType,Vector2 pos,Vector2 Velocity)
@@ -69,17 +73,18 @@ void EnemyManager::SetEnemyPOP(std::string enemyType,Vector2 pos,Vector2 Velocit
 	}
 }
 
-void EnemyManager::SetPlayerPtr(BaseObject* playerPtr)
+void EnemyManager::SetPlayerPtr(Player* playerPtr)
 {
 	playerPtr_ = playerPtr;
 }
 
 void EnemyManager::Update()
 {
+	Pop();
+
 	if ( enemylist_.empty() )
 	{
 		BossPop();
-
 	}
 
 	for ( auto& itr : enemylist_ )
@@ -87,10 +92,31 @@ void EnemyManager::Update()
 		itr->Update();
 	}
 
-	deadEnemyCount_ += enemylist_.remove_if([ ] (unique_ptr<BaseEnemy>& enemy)
+	deadEnemyCount_ += enemylist_.remove_if([](unique_ptr<BaseEnemy>& enemy )
 	{
 		return enemy->IsLive() == false;
 	});
+
+	int32_t time = -10;
+		
+	for ( auto& itr : enemylist_ )
+	{
+		if ( itr->IsImmortal() )
+		{
+			if ( time < itr->GetImmortalTime() )
+			{
+				if ( cursedEnemy_ )
+				{
+					cursedEnemy_->ReleaseEffect(CURSE);
+				}
+				cursedEnemy_ = itr.get();
+				cursedEnemy_->SetEffect(CURSE);
+				time = itr->GetImmortalTime();
+			}
+		}
+
+	}
+
 }
 
 void EnemyManager::Draw()
@@ -100,6 +126,11 @@ void EnemyManager::Draw()
 		itr->Draw();
 	}
 	DrawFormatString(GameConfig::GetWindowWidth() - 200,10,0xffffff,"KillEnemy %d / %d",deadEnemyCount_,MAX_POP_ENEMY_NUM);
+}
+
+void EnemyManager::SetMapChip(MapChip* mapchip)
+{
+	mapchip_ = mapchip;
 }
 
 size_t EnemyManager::GetEnemyCount()
