@@ -132,7 +132,7 @@
     <ClCompile Include="Source\Player\PlayerBulletManager.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
-    <ClCompile Include="Include\Player\PlayerBullet.cpp">
+    <ClCompile Include="Source\Player\PlayerBullet.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
     <ClCompile Include="Source\Collision\IShape.cpp">
@@ -257,6 +257,15 @@
     </ClCompile>
     <ClCompile Include="Source\Player\PlayerLegFenrir.cpp">
       <Filter>ソース ファイル\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Boss\BossEnemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Boss\BossPunchAttack.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Boss\BossChargeAttack.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -435,12 +444,12 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Include\NPC\PowerUpCave.h">
+      <Filter>ヘッダー ファイル\PowerUp</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdParty\magic_enum.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Include\Deal\ItemShop.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="PowerUpCave.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Include\Node\StartNode.h">
@@ -469,6 +478,24 @@
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerLegFenrir.h">
       <Filter>ヘッダー ファイル\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Player\PlayerAttackGun.h">
+      <Filter>ヘッダー ファイル\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Player\PlayerAttackSpider.h">
+      <Filter>ヘッダー ファイル\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\GameScene.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Enemy\Boss\BossEnemy.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Enemy\Boss\BossPunchAttack.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Enemy\Boss\BossChargeAttack.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

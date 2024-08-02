@@ -45,6 +45,7 @@ void GameConfig::Load(const std::string& filePath)
 		object[ "BackGroundColor" ][ 1 ];
 		config.backGroundColorB = strtol(color.c_str(),nullptr,0);
 	}
+
 	{
 		nlohmann::json& object = jsonObject[ "Node" ];
 		assert(object.is_object());
@@ -69,6 +70,41 @@ void GameConfig::Load(const std::string& filePath)
 			node.nodeProbabilities[i] = object[ "NodeProbabilities" ][i];
 		}
 	}
+
+	{
+		nlohmann::json& object = jsonObject[ "Boss" ];
+		assert(object.is_object());
+		assert(object.contains("Name"));
+		assert(object[ "Name" ].is_string());
+
+		std::string lName = object[ "Name" ].get<std::string>();
+
+		assert(lName.compare("Boss") == 0);
+
+		Boss& boss = GetInstance()->boss_;
+
+		boss.hp = object[ "Hp" ];
+		boss.attackInterval = object[ "AttackInterval" ];
+		boss.approachHitBoxX = object[ "ApproachHitBox" ][0];
+		boss.approachHitBoxY = object[ "ApproachHitBox" ][1];
+
+		{
+			nlohmann::json& attackObject = object[ "Attack" ];
+			boss.attack.sizeX = attackObject[ "Size" ][0];
+			boss.attack.sizeY = attackObject[ "Size" ][1];
+			boss.attack.time = attackObject[ "Time" ];
+			boss.attack.power = attackObject[ "Power" ];
+		}
+
+		{
+			nlohmann::json& chargeObject = object[ "Charge" ];
+			boss.charge.sizeX = chargeObject[ "Size" ][ 0 ];
+			boss.charge.sizeY = chargeObject[ "Size" ][ 1 ];
+			boss.charge.time = chargeObject[ "Time" ];
+			boss.charge.power = chargeObject[ "Power" ];
+			boss.charge.speed = chargeObject[ "Speed" ];
+		}
+	}
 }
 
 int32_t GameConfig::GetWindowWidth()
@@ -89,6 +125,11 @@ GameConfig::Config* GameConfig::GetGameConfig()
 GameConfig::Node* GameConfig::GetNodeConfig()
 {
 	return &GetInstance()->node_;
+}
+
+GameConfig::Boss* GameConfig::GetBossConfig()
+{
+	return &GetInstance()->boss_;
 }
 
 GameConfig* GameConfig::GetInstance()
