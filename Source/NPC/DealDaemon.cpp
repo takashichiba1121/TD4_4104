@@ -142,7 +142,12 @@ void DealDaemon::SetPriducts(bool deal)
 
 	for (int i = 0; i < selectProducts_.size(); i++)
 	{
-		selectProducts_[i] = products_[GetRand(products_.size() - 1)].get();
+		Parts* temp = products_[ GetRand(products_.size() - 1) ].get();
+		while ( playerPtr_->CheckHavePart(magic_enum::enum_cast< PartsName >( temp->productType).value(),temp->partsName) )
+		{
+			temp = products_[ GetRand(products_.size() - 1) ].get();
+		}
+		selectProducts_[ i ] = temp;
 		if ( selectProducts_[ i ]->productType == "ARM" )
 		{
 			if ( GetRand(10) <= 5 )
