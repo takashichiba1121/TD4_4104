@@ -140,6 +140,7 @@ void FlyEnemy::Attack()
 	attackIntervalCounter_.SetEndCount(attackInterval_);
 	if ( !beforeAttackCounter_.IsCountEnd() )
 	{
+		attackFinish_ = false;
 		beforeAttackCounter_.CountUp();
 		speed_ = 0;
 	}
@@ -151,13 +152,25 @@ void FlyEnemy::Attack()
 
 		attackIntervalCounter_.SetEndCount(attackInterval_);
 	}
-	speed_ = InQuad(0,5,attackCounter_.GetEndCount(),attackCounter_.GetCount());
-	Vector2 targetVelo(pos_,targetPos_);
-	targetVelo.Normalize();
-	pos_ += targetVelo * speed_;
+	if ( !attackFinish_ )
+	{
+		speed_ = InQuad(0,5,attackCounter_.GetEndCount(),attackCounter_.GetCount());
+		Vector2 targetVelo(pos_,targetPos_);
+		targetVelo.Normalize();
+		pos_ += targetVelo * speed_;
+	}
+	else
+	{
+		stanTimer_.CountUp();
+		if ( stanTimer_.IsCountEnd() )
+		{
+			actionMode = MOVE;
+		}
+	}
 	if ( Vector2(pos_,targetPos_).GetLenge() <= 10 )
 	{
-		actionMode = MOVE;
+		attackFinish_ = true;
+		stanTimer_.SetEndCount(30);
 	}
 }
 
