@@ -110,6 +110,8 @@
     <ClCompile Include="Include\Util\DxlibInclude.cpp" />
     <ClCompile Include="Source\Enemy\Boss\BossBullet.cpp" />
     <ClCompile Include="Source\Enemy\Boss\BossLongRangeAttack.cpp" />
+    <ClCompile Include="Source\Enemy\EnemyBullet.cpp" />
+    <ClCompile Include="Source\Enemy\ShootEnemy.cpp" />
     <ClCompile Include="Source\Node\BossNode.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackCerberus.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackFenrir.cpp" />
@@ -128,6 +130,7 @@
     <ClCompile Include="Source\NPC\PowerUpCave.cpp" />
     <ClCompile Include="Source\NPC\DealDaemon.cpp" />
     <ClCompile Include="Source\NPC\NPC.cpp" />
+    <ClCompile Include="Source\Player\PlayerAttackSpider.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackVine.cpp" />
     <ClCompile Include="Source\Player\PlayerLegCerberus.cpp" />
     <ClCompile Include="Source\Player\PlayerLegFenrir.cpp" />
@@ -184,6 +187,8 @@
   <ItemGroup>
     <ClInclude Include="Include\Enemy\Boss\BossBullet.h" />
     <ClInclude Include="Include\Enemy\Boss\BossLongRangeAttack.h" />
+    <ClInclude Include="Include\Enemy\EnemyBullet.h" />
+    <ClInclude Include="Include\Enemy\ShootEnemy.h" />
     <ClInclude Include="Include\Node\BossNode.h" />
     <ClInclude Include="Include\Enemy\Boss\BossChargeAttack.h" />
     <ClInclude Include="Include\Enemy\Boss\BossPunchAttack.h" />

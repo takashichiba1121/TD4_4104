@@ -112,7 +112,6 @@ void GameScene::Draw()
 	mapChip_->Draw({ 0,0 });
 	nodeManager_->Draw();
 	player_->Draw();
-	enemys_->Draw();
 	nodeManager_->Draw();
 	if(!chenged) powerUp_->Draw();
 	

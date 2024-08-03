@@ -68,6 +68,8 @@ private:
 
 	bool isDirBottom_;
 
+	bool oldIsDirBottom_;
+
 	uint32_t bulletInterval_;
 
 	const uint32_t MAX_BULLET_INTERVAL_=5;
