@@ -191,11 +191,13 @@ void EnemyManager::Update()
 		}
 	}
 
-	deadEnemyCount_ += enemylist_.remove_if([](unique_ptr<BaseEnemy>& enemy )
+	int32_t cost = 0;
+	cost += enemylist_.remove_if([ ](unique_ptr<BaseEnemy>& enemy)
 	{
 		return enemy->IsLive() == false;
 	});
-
+	cost *= 2;
+	playerPtr_->AddMaxCost(cost);
 	int32_t time = -10;
 		
 	for ( auto& itr : enemylist_ )
@@ -272,8 +274,16 @@ int32_t EnemyManager::GetSoundHandle(std::string name)
 void EnemyManager::TexLoad()
 {
 	texs_[ "fly" ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
-	texs_[ "shoot" ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
-	texs_[ "adjacent" ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
+
+	texs_[ "shootMove" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));
+
+	texs_[ "shootAttack" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));
+
+	texs_[ "adjacentMove" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));
+
+	texs_[ "adjacentAttack" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));
+
+	texs_[ "adjacentDash" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));
 
 
 }

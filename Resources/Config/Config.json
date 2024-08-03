@@ -28,11 +28,11 @@
         "Paths":5,
         "StartPoints":3,
         "NodeProbabilities":[
-            20, 
-            30, 
-            10, 
-            15, 
-            25
+            29, 
+            14, 
+            0, 
+            35, 
+            22
         ]
 
     },
