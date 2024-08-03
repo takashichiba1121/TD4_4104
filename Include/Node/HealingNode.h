@@ -1,9 +1,11 @@
 #pragma once
 #include<BaseNode.h>
+#include "HealObject.h"
 
 class HealingNode:public BaseNode
 {
 private:
+	HealObject healObj_;
 public:
 
 	// BaseNode を介して継承されました

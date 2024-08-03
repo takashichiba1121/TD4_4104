@@ -5,17 +5,18 @@
 void HealingNode::Initialize()
 {
 	mapChip_->MapLoad("Resources/Export/Map/TestMap.json");
-
+	healObj_.Initialize();
 }
 
 void HealingNode::Update()
 {
 	PlayerNodeMove();
-
+	healObj_.Update();
 }
 
 void HealingNode::Draw()
 {
+	healObj_.Draw();
 }
 
 void HealingNode::Reset()

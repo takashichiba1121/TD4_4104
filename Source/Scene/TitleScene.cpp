@@ -11,6 +11,7 @@ void TitleScene::Initialize()
 	titleTex_ = LoadGraph("Resources\\Title\\titleLogo.png");
 	mistTex_ = LoadGraph("Resources\\Title\\mist.png");
 	backTex_ = LoadGraph("Resources\\Title\\title.png");
+	startSound_ = LoadSoundMem("Resources\\Sound\\SFX_title_gameStart.mp3");
 	mistPos_ = { GameConfig::GetWindowWidth() / 2.f,GameConfig::GetWindowHeight() / 2.f };
 	mistPosOffSet_ = { 0,0 };
 	moveTime_.SetEndCount(moveCount_);
@@ -24,6 +25,7 @@ void TitleScene::Update()
 	if ( input_->TriggerKey(KEY_INPUT_RETURN) )
 	{
 		SceneManager::GetInstance()->ChangeScene("GAME");
+		PlaySoundMem(startSound_,DX_PLAYTYPE_BACK);
 	}
 
 	if ( isLeft_ )
