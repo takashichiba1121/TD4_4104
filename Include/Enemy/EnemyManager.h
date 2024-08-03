@@ -28,7 +28,7 @@ private:
 	size_t deadEnemyCount_;
 	BaseEnemy* cursedEnemy_;
 
-	std::array<int32_t,3> texs_;
+	static std::array<int32_t,3> texs_;
 
 	void Pop();//自動ランダム生成
 public:
@@ -44,5 +44,6 @@ public:
 	size_t GetEnemyCount();
 	bool GameEnd();
 	void EnemysClear();
+	static void TexLoad();
 };
 

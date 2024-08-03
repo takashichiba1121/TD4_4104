@@ -3,6 +3,7 @@
 #include "GameConfig.h"
 using namespace std;
 std::list<std::unique_ptr<BaseEnemy>> EnemyManager::enemylist_;
+std::array<int32_t,3> EnemyManager::texs_;
 Player* EnemyManager::playerPtr_ = nullptr;
 void EnemyManager::Initialize()
 {
@@ -223,4 +224,9 @@ bool EnemyManager::GameEnd()
 void EnemyManager::EnemysClear()
 {
 	enemylist_.clear();
+}
+
+void EnemyManager::TexLoad()
+{
+
 }
