@@ -6,8 +6,6 @@ void BattleNode::Initialize()
 {
 
 	mapChip_->SetEnemyManager(enemys_);
-
-	mapChip_->MapLoad("Resources/Export/Map/TestMap.json");
 }
 
 void BattleNode::Update()
