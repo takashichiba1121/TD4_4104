@@ -57,6 +57,7 @@ void NodeManager::Initialize()
 	shopImg = LoadGraph(std::string("Resources/Node/shop.png"));
 	healingImg = LoadGraph(std::string("Resources/Node/healing.png"));
 	startImg = LoadGraph(std::string("Resources/Node/start.png"));
+	backGroundImg = LoadGraph(std::string("Resources/BackGround/mapBackGround.png"));
 
 	distribution = std::discrete_distribution<int32_t>(nodeProbabilities,nodeProbabilities + NodeType::TYPE_NUM);
 
@@ -75,6 +76,7 @@ void NodeManager::Initialize()
 		room->SetPlayer(player_);
 		room->SetNodeManagerr(this);
 		room->SetPowerUp(powerUp_);
+		room->SetDealer(dealer_);
 		room->Initialize();
 	}
 
@@ -369,6 +371,11 @@ void NodeManager::SetPlayer(Player* player)
 void NodeManager::SetPowerUp(PowerUpCave* powerUp)
 {
 	powerUp_ = powerUp;
+}
+
+void NodeManager::SetDealer(DealDaemon* dealer)
+{
+	dealer_ = dealer;
 }
 
 void NodeManager::GenerateInitialGrid()

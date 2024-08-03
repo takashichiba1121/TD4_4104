@@ -3,8 +3,9 @@
 class DxlibManager
 {
 private:
-
+	
 public:
+
 
 	bool Initialize(const GameConfig::Config* config);
 

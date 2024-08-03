@@ -11,16 +11,18 @@ void TransactionNode::Initialize()
 void TransactionNode::Update()
 {
 	PlayerNodeMove();
+	dealer_->Update();
 }
 
 void TransactionNode::Draw()
 {
+	dealer_->Draw();
 }
 
 void TransactionNode::Reset()
 {
 	player_->Reset();
-
+	dealer_->ReSet();
 	int32_t i = 0;
 	int32_t count = 0;
 	for ( auto& chip : mapChip_->GetMapChip()[ mapChip_->GetMapChip().size() - 2 ] )
@@ -62,7 +64,7 @@ void TransactionNode::Finalize()
 
 	nextdoors_.clear();
 	nextDoorsNum_ = 0;
-	powerUp_->NoDeal();
+	dealer_->NoDeal();
 }
 
 Vector2 TransactionNode::GetPlayerStartPos()

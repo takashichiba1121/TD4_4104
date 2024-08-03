@@ -63,7 +63,7 @@ void PowerUpCave::Initialize()
 
 	SetPriducts();
 
-	tag.tag = "PowerUpCave";
+	tag.tag = "PowerUp";
 	userData_ = &tag;
 }
 
@@ -72,7 +72,7 @@ void PowerUpCave::Update()
 {
 	
 	selectmode_ = playerPtr_->IsPowerUp();
-
+	shape_->SetCenter(pos_);
 }
 
 void PowerUpCave::OnCollision()

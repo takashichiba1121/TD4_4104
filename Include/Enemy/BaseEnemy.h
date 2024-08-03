@@ -42,14 +42,14 @@ protected:
 	std::array<Counter,END> effectTimer;
 	const std::array<int32_t,END> effectTime = {360,240,600,360,0};
 	const std::array<int32_t,END> effectDamageInterval = { 120,240,120,0,0 };
-	std::array<float,END> effectDamage = { 0.15f,0.5f,0.25f,0.f,0.f };
+	std::array<float,END> effectDamage = { 0.15f,0.5f,25.f,0.f,0.f };
 	int32_t curseStack = 0;
 	int32_t actionMode = MOVE;
 public:
 	virtual void Move() {};
 	virtual void Attack() {};
 	virtual void EffectUpdate();
-	virtual void Damage(int32_t damage,Effects effects = END) override;
+	virtual void Damage(int32_t damage,Effects effects = END,bool effectD=false) override;
 	void SetPos(Vector2 pos);
 	void SetVelocity(Vector2 velocity);
 	void SetPlayerPtr(Player* ptr);
