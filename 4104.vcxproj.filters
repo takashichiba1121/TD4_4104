@@ -500,8 +500,14 @@
     <ClInclude Include="Include\Player\PlayerAttackSpider.h">
       <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Enemy\EnemyBullet.h">
-      <Filter>ヘッダー ファイル\Enemy</Filter>
+    <ClInclude Include="Include\Player\PlayerAttackGun.h">
+      <Filter>ヘッダー ファイル\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Player\PlayerAttackSpider.h">
+      <Filter>ヘッダー ファイル\player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Scene\GameScene.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Include\Enemy\Boss\BossEnemy.h">
       <Filter>ヘッダー ファイル\Enemy\Boss</Filter>

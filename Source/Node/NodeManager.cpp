@@ -75,6 +75,7 @@ void NodeManager::Initialize()
 		room->SetPlayer(player_);
 		room->SetNodeManagerr(this);
 		room->SetPowerUp(powerUp_);
+		room->SetDealer(dealer_);
 		room->Initialize();
 	}
 
@@ -369,6 +370,11 @@ void NodeManager::SetPlayer(Player* player)
 void NodeManager::SetPowerUp(PowerUpCave* powerUp)
 {
 	powerUp_ = powerUp;
+}
+
+void NodeManager::SetDealer(DealDaemon* dealer)
+{
+	dealer_ = dealer;
 }
 
 void NodeManager::GenerateInitialGrid()

@@ -15,19 +15,19 @@ void BaseEnemy::EffectUpdate()
 			case BURN:
 				if ( static_cast<int32_t>(effectTimer[ i ].GetCount())% effectDamageInterval[i] == 0)
 				{
-					playerPtr_->Damage(effectDamage[ ef ]);
+					Damage(effectDamage[ ef ],BURN,true);
 				}
 				break;
 			case ICED:
 				if ( static_cast<int32_t>(effectTimer[ i ].GetCount())% effectDamageInterval[ i ] == 0 )
 				{
-					playerPtr_->Damage(effectDamage[ ef ]);
+					Damage(effectDamage[ ef ],ICED,true);
 				}
 				break;
 			case BIND:
 				if (static_cast<int32_t>( effectTimer[ i ].GetCount()) % effectDamageInterval[ i ] == 0 )
 				{
-					playerPtr_->Damage(effectDamage[ ef ]);
+					Damage(effectDamage[ ef ],BIND,true);
 				}
 				break;
 			default:
@@ -45,7 +45,7 @@ void BaseEnemy::EffectUpdate()
 	}
 }
 
-void BaseEnemy::Damage(int32_t damage,Effects effect)
+void BaseEnemy::Damage(int32_t damage,Effects effect,bool effectD)
 {
 	if (!immortal_)
 	{

@@ -53,7 +53,7 @@ private:
 
 	float airDeccelaration_ = 0;
 
-	float evasionRollSpeed_ = 32;
+	float evasionRollSpeed_ = 24;
 
 	//戦闘
 
@@ -67,9 +67,11 @@ private:
 
 	bool isDirBottom_;
 
+	bool oldIsDirBottom_;
+
 	uint32_t bulletInterval_;
 
-	const uint32_t MAX_BULLET_INTERVAL_=10;
+	const uint32_t MAX_BULLET_INTERVAL_=5;
 
 #pragma endregion
 

@@ -24,10 +24,16 @@ void GameScene::Initialize()
 	powerUp_->Initialize();
 	powerUp_->SetPlayer(player_.get());
 
+	dealer_ = std::make_unique<DealDaemon>();
+	dealer_->SetPlayer(player_.get());
+	dealer_->Initialize();
+
+
 	nodeManager_ = NodeManager::GetInstance();
 	nodeManager_->SetMapChip(mapChip_.get());
 	nodeManager_->SetPlayer(player_.get());
 	nodeManager_->SetPowerUp(powerUp_.get());
+	nodeManager_->SetDealer(dealer_.get());
 	nodeManager_->Initialize();
 	nodeManager_->StartNodeSet(0);
 	backGround_ = LoadGraph(std::string("Resources/BackGround/BackGround.png"));
@@ -58,6 +64,26 @@ void GameScene::Update()
 			player_->EndPowerUp();
 		}
 	}
+	else if ( player_->IsChangeParts() )
+	{
+		dealer_->Update();
+
+		uint32_t powerUpNum = player_->PowerUp();
+
+		dealer_->SetSlect(powerUpNum);
+
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_RETURN) )
+		{
+			dealer_->Deal();
+		}
+
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) )
+		{
+			dealer_->PartsChenge();
+
+			player_->EndChangeParts();
+		}
+	}
 	else
 	{
 		nodeManager_->Update();
@@ -84,7 +110,7 @@ void GameScene::Update()
 void GameScene::Draw()
 {
 	DrawGraph(0,0,backGround_,true);
-	mapChip_->Draw({ 0,0 });
+	mapChip_->Draw(Scroll());
 	nodeManager_->Draw();
 	player_->Draw();
 
@@ -105,4 +131,11 @@ void GameScene::Finalize()
 {
 	PlayerBulletManager::Instance()->Clear();
 	EnemyManager::Finalize();
+}
+
+Vector2 GameScene::Scroll()
+{
+	Vector2 playerpos=player_->GetPos();
+
+	return { 0,0 };
 }

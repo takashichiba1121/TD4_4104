@@ -18,6 +18,10 @@ void PowerUpCave::Initialize()
 	hitboxSize_ = { 128,128 };
 	pos_ = { 650,640 };
 
+	tag.tag = "PowerUp";
+
+	userData_ = &tag;
+
 	shape_ = new RectShape();
 	shape_->SetRadius(hitboxSize_ / 2);
 	CollisionManager::GetInstance()->AddObject(this);
