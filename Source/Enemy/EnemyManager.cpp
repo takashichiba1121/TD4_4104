@@ -234,3 +234,12 @@ void EnemyManager::TexLoad()
 	texs_[1] = LoadGraph("Resources\\Enemy\\enemyFly.png");
 	texs_[2] = LoadGraph("Resources\\Enemy\\enemyFly.png");
 }
+
+void EnemyManager::Finalize()
+{
+	enemylist_.clear();
+	for ( size_t i = 0; i < texs_.size(); i++ )
+	{
+		DeleteGraph(texs_[ i ]);
+	}
+}

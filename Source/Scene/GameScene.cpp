@@ -29,6 +29,8 @@ void GameScene::Initialize()
 	nodeManager_->SetPowerUp(powerUp_.get());
 	nodeManager_->Initialize();
 	nodeManager_->StartNodeSet(0);
+
+	EnemyManager::TexLoad();
 	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
 }
 
@@ -105,4 +107,5 @@ void GameScene::SpriteDraw()
 void GameScene::Finalize()
 {
 	PlayerBulletManager::Instance()->Clear();
+	EnemyManager::Finalize();
 }

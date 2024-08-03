@@ -45,5 +45,6 @@ public:
 	bool GameEnd();
 	void EnemysClear();
 	static void TexLoad();
+	static void Finalize();
 };
 
