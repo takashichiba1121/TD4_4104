@@ -37,9 +37,10 @@ private:
 	void BossPop();
 public:
 	void SetEnemyPop(EnemyType enemyType,Vector2 pos,Vector2 Velocity);
-	void SetEnemyPop(EnemyType enemyType,Vector2 pos);
-	void SetPosPop(Vector2 pos);
 	//指定生成
+	void SetEnemyPop(EnemyType enemyType,Vector2 pos);
+	//Pos指定型ランダム
+	void SetPosPop(Vector2 pos);
 	void SetPlayerPtr(Player* playerPtr);
 	void Initialize();
 	void Update();
