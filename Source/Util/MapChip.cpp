@@ -64,24 +64,24 @@ void MapChip::MapLoad(const std::string& path)
 			switch ( chip )
 			{
 			case START:
-				player_->SetPos({ 32.0f + 64.0f * j,32.0f + 64.0f * i });
+				player_->SetPos({ float(( j * BLOCK_SIZE ) ),float(( i * BLOCK_SIZE ) ) });
 				map_[ i ][ j ] = ChipIndex::NONE;
 				break;
 			case FLY_RANGE_ENEMY:
 				map_[ i ][ j ] = ChipIndex::NONE;
-				enemyManager_->SetEnemyPop(EnemyType::FLY,{ 32.0f + 64.0f * j,32.0f + 64.0f * i });
+				enemyManager_->SetEnemyPop(EnemyType::FLY,{ float( ( j * BLOCK_SIZE )  ),float( ( i * BLOCK_SIZE )  ) });
 				break;
 			case LONG_RANGE_ENEMY:
 				map_[ i ][ j ] = ChipIndex::NONE;
-				enemyManager_->SetEnemyPop(EnemyType::SHOOT,{ 32.0f + 64.0f * j,32.0f + 64.0f * i });
+				enemyManager_->SetEnemyPop(EnemyType::SHOOT,{ float(( j * BLOCK_SIZE ) ),float(( ( i - 1 ) * BLOCK_SIZE ) - 68) });
 				break;
 			case SHORT_RANGE_ENEMY:
 				map_[ i ][ j ] = ChipIndex::NONE;
-				enemyManager_->SetEnemyPop(EnemyType::ADJACENT,{ 32.0f + 64.0f * j,32.0f + 64.0f * i });
+				enemyManager_->SetEnemyPop(EnemyType::ADJACENT,{ float(( j * BLOCK_SIZE )),float(( i * BLOCK_SIZE ) - 68) });
 				break;
 			case RANDOM_ENEMY:
 				map_[ i ][ j ] = ChipIndex::NONE;
-				enemyManager_->SetPosPop({ 32.0f + 64.0f * j,32.0f + 64.0f * i });
+				enemyManager_->SetPosPop({ float(( j * BLOCK_SIZE ) ),float(( ( i - 1 ) * BLOCK_SIZE ) ) });
 				break;
 
 			case NONE:
@@ -134,10 +134,10 @@ Vector2 MapChip::GetPos(int32_t x,int32_t y) const
 uint8_t MapChip::GetNumOfArrayElement(int32_t x,int32_t y) const
 {
 	int32_t posY = min(uint32_t(y),map_.size() - 1);
-	posY = max(y,0);
+	posY = max(posY,0);
 
 	int32_t posX = min(uint32_t(x),map_[ posY ].size() - 1);
-	posX = max(x,0);
+	posX = max(posX,0);
 
 	return map_[ posY ][ posX ];
 }
@@ -149,12 +149,12 @@ const Vector2& MapChip::GetScreenPos() const
 
 const Vector2& MapChip::GetLeftTopPos() const
 {
-	return leftTopPos_;
+	return  { float(BLOCK_SIZE/2) ,float(BLOCK_SIZE/2) };
 }
 
 const Vector2& MapChip::GetRightTopBottom() const
 {
-	return rightTopBottom_;
+	return { float((map_[ 0 ].size() - 1) * BLOCK_SIZE) ,float((map_.size() - 1) * BLOCK_SIZE) };
 }
 
 void MapChip::SetPlayer(Player* player)
@@ -181,7 +181,7 @@ void MapChip::Draw(const Vector2& screenPos)
 				leftTopPos_ = { ( j * BLOCK_SIZE ) + screenPos.x - 32,( i * BLOCK_SIZE ) + screenPos.y - 32 };
 			}
 
-			if ( i == map_.size() - 1 && j == map_[ map_.size() - 1 ].size()-1 )
+			if ( i == map_.size() - 1 && j == map_[ map_.size() - 1 ].size() - 1 )
 			{
 				rightTopBottom_ = { ( j * BLOCK_SIZE ) + screenPos.x + 32,( i * BLOCK_SIZE ) + screenPos.y + 32 };
 			}

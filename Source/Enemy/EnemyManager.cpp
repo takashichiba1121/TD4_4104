@@ -174,7 +174,6 @@ void EnemyManager::SetPlayerPtr(Player* playerPtr)
 
 void EnemyManager::Update()
 {
-	Pop();
 
 	screenEnemy_ = 0;
 	for ( auto& itr : enemylist_ )
