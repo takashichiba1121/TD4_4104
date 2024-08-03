@@ -110,6 +110,8 @@
     <ClCompile Include="Include\Util\DxlibInclude.cpp" />
     <ClCompile Include="Source\Enemy\Boss\BossBullet.cpp" />
     <ClCompile Include="Source\Enemy\Boss\BossLongRangeAttack.cpp" />
+    <ClCompile Include="Source\Enemy\EnemyBullet.cpp" />
+    <ClCompile Include="Source\Enemy\ShootEnemy.cpp" />
     <ClCompile Include="Source\Node\BossNode.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackCerberus.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackFenrir.cpp" />
@@ -117,7 +119,6 @@
     <ClCompile Include="Source\Enemy\Boss\BossChargeAttack.cpp" />
     <ClCompile Include="Source\Enemy\Boss\BossPunchAttack.cpp" />
     <ClCompile Include="Source\Enemy\Boss\BossEnemy.cpp" />
-    <ClCompile Include="Source\NPC\NPCManager.cpp" />
     <ClCompile Include="Source\Node\BaseNode.cpp" />
     <ClCompile Include="Source\Node\BattleNode.cpp" />
     <ClCompile Include="Source\Node\HealingNode.cpp" />
@@ -125,12 +126,13 @@
     <ClCompile Include="Source\Node\ReinforcementNode.cpp" />
     <ClCompile Include="Source\Node\ShopNode.cpp" />
     <ClCompile Include="Source\Node\TransactionNode.cpp" />
+    <ClCompile Include="Source\NPC\NPCManager.cpp" />
     <ClCompile Include="Source\NPC\PowerUpCave.cpp" />
     <ClCompile Include="Source\NPC\DealDaemon.cpp" />
     <ClCompile Include="Source\NPC\NPC.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackVine.cpp" />
+    <ClCompile Include="Source\Player\PlayerLegCerberus.cpp" />
     <ClCompile Include="Source\Player\PlayerLegFenrir.cpp" />
-    <ClCompile Include="Source\Player\PlayerMouth.cpp" />
     <ClCompile Include="Source\Scene\ClearScene.cpp" />
     <ClCompile Include="Source\Scene\GameOverScene.cpp" />
     <ClCompile Include="Source\Base\BaseEnemy.cpp" />
@@ -184,6 +186,8 @@
   <ItemGroup>
     <ClInclude Include="Include\Enemy\Boss\BossBullet.h" />
     <ClInclude Include="Include\Enemy\Boss\BossLongRangeAttack.h" />
+    <ClInclude Include="Include\Enemy\EnemyBullet.h" />
+    <ClInclude Include="Include\Enemy\ShootEnemy.h" />
     <ClInclude Include="Include\Node\BossNode.h" />
     <ClInclude Include="Include\Enemy\Boss\BossChargeAttack.h" />
     <ClInclude Include="Include\Enemy\Boss\BossPunchAttack.h" />
@@ -202,12 +206,12 @@
     <ClInclude Include="Include\Player\PlayerAttackMars.h" />
     <ClInclude Include="Include\Player\PlayerAttackVine.h" />
     <ClInclude Include="Include\Player\PlayerLeg.h" />
+    <ClInclude Include="Include\Player\PlayerLegCerberus.h" />
     <ClInclude Include="Include\Player\PlayerLegFenrir.h" />
     <ClInclude Include="Include\Player\PlayerLegNormal.h" />
     <ClInclude Include="Include\Scene\ClearScene.h" />
     <ClInclude Include="Include\Scene\GameOverScene.h" />
     <ClInclude Include="Include\Player\PlayerAttackSpider.h" />
-    <ClInclude Include="Include\Player\PlayerMouth.h" />
     <ClInclude Include="Include\Util\ChipIndex.h" />
     <ClInclude Include="Include\Enemy\EnemyManager.h" />
     <ClInclude Include="Include\Base\BaseObject.h" />

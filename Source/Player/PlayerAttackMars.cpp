@@ -21,11 +21,15 @@ void PlayerAttackMars::Initialize(Vector2* playerPos,Vector2* velocity,bool* dir
 
 	CollisionDisable();
 }
-void PlayerAttackMars::AttackInit(float pow)
+void PlayerAttackMars::AttackInit(float pow,float changeCrit,float changeCdmg)
 {
 	if (INTERVAL_<=AttackInterval_ )
 	{
 		playerPow_ = pow;
+
+		playerCrit_ = changeCrit;
+
+		playerCdmg_ = changeCdmg;
 
 		isAttack_ = true;
 
@@ -86,19 +90,4 @@ void PlayerAttackMars::Draw()
 
 void PlayerAttackMars::OnCollision()
 {
-	if ( GetCollisionInfo().userData && isGiveDamage_ == false )
-	{
-
-		if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "FlyEnemy" )
-		{
-			dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_);
-			isGiveDamage_ = true;
-		}
-		if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "WalkEnemy" )
-		{
-			dynamic_cast< WalkEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_);
-
-			isGiveDamage_ = true;
-		}
-	}
 }

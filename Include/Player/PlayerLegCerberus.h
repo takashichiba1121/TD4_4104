@@ -1,6 +1,6 @@
 #pragma once
 #include"PlayerLeg.h"
-class PlayerLegFenrir :
+class PlayerLegCerberus :
     public PlayerLeg
 {
 private:
@@ -37,8 +37,7 @@ private:
 
 	uint32_t PlayerDushTextureCount_ = 0;
 
-	const uint32_t DEF_ = 80;
-
+	const uint32_t DEF_=70;
 
 #pragma region ステータス
 
@@ -95,6 +94,5 @@ public:
 	uint32_t GetDef() override {
 		return DEF_;
 	}
-
 };
 

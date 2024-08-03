@@ -4,7 +4,7 @@
 void BaseEnemy::EffectUpdate()
 {
 
-	for ( int i = 0; i < effectTimer.size(); i++ )
+	for ( size_t i = 0; i < effectTimer.size(); i++ )
 	{
 		Effects ef = static_cast< Effects >( i );
 		effectTimer[ i ].CountUp();
@@ -34,7 +34,7 @@ void BaseEnemy::EffectUpdate()
 				break;
 			}
 		}
-		else if ( effectTimer[ i ].IsCountEnd() && !ef == CURSE)
+		else if ( effectTimer[ i ].IsCountEnd() && ef != CURSE)
 		{
 			ReleaseEffect(ef);
 		}
@@ -71,6 +71,13 @@ void BaseEnemy::Damage(int32_t damage,Effects effect)
 		immortal_ = true;
 		hp_ -= damage;
 		immortalTime_ = 10;
+		if ( playerPtr_ )
+		{
+			if ( playerPtr_->GetEyeTag() == PlayerEyeTags::Curse )
+			{
+				isCursedDamage_ = true;
+			}
+		}
 		if ( IsEffect(CURSE) )
 		{
 			curseStack++;
@@ -122,6 +129,11 @@ bool BaseEnemy::IsEffect(Effects effect)
 	return false;
 }
 
+bool BaseEnemy::IsCursedDamage()
+{
+	return isCursedDamage_;
+}
+
 bool BaseEnemy::IsImmortal()
 {
 	return immortal_;
@@ -135,4 +147,19 @@ int32_t BaseEnemy::GetImmortalTime()
 int32_t BaseEnemy::GetCurseStack()
 {
 	return curseStack;
+}
+
+void BaseEnemy::AnimeUpdate()
+{
+	animeTimer_++;
+
+	if ( animeTimer_ == 60 )
+	{
+		animeTimer_ = 0;
+		anime_++;
+		if ( anime_ == animeNum_ )
+		{
+			anime_ = 0;
+		}
+	}
 }

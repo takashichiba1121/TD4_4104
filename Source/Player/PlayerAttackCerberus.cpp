@@ -21,11 +21,17 @@ void PlayerAttackCerberus::Initialize(Vector2* playerPos,Vector2* velocity,bool*
 
 	CollisionDisable();
 }
-void PlayerAttackCerberus::AttackInit(float pow)
+void PlayerAttackCerberus::AttackInit(float pow,float changeCrit,float changeCdmg)
 {
 	if (INTERVAL_<=AttackInterval_ )
 	{
 		playerPow_ = pow;
+
+		playerCrit_= changeCrit;
+
+		playerCdmg_ = changeCdmg;
+
+		float  playerCdmg_;
 
 		isAttack_ = true;
 
@@ -89,15 +95,16 @@ void PlayerAttackCerberus::OnCollision()
 	if ( GetCollisionInfo().userData && isGiveDamage_ == false )
 	{
 
-		if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "FlyEnemy" )
+		if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "Enemy" )
 		{
-			dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_,Effects::BURN);
-			isGiveDamage_ = true;
-		}
-		if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "WalkEnemy" )
-		{
-			dynamic_cast< WalkEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_,Effects::BURN);
-
+			if ( GetRand(1000)<=playerCrit_*1000 )
+			{
+				dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage((playerPow_ * POW_)+ ( playerPow_ * POW_*playerCdmg_),Effects::BURN);
+			}
+			else
+			{
+				dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_,Effects::BURN);
+			}
 			isGiveDamage_ = true;
 		}
 	}
