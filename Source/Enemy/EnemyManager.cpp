@@ -82,11 +82,6 @@ void EnemyManager::Update()
 {
 	Pop();
 
-	if ( enemylist_.empty() )
-	{
-		BossPop();
-	}
-
 	for ( auto& itr : enemylist_ )
 	{
 		itr->Update();
