@@ -87,10 +87,14 @@ private:
 	{
 		{ChipIndex::NONE,ChipIndex::NONE},
 		{ChipIndex::ROAD,ChipIndex::ROAD},
-		{ChipIndex::DOOR,ChipIndex::DOOR},
-		{ChipIndex::ROOM,ChipIndex::ROOM},
-		{ChipIndex::LOCK_ROOM,ChipIndex::LOCK_ROOM},
-		{ChipIndex::WALL,ChipIndex::WALL} };
+		{ChipIndex::WALL,ChipIndex::WALL},
+		{ChipIndex::START,ChipIndex::START},
+		{ChipIndex::NEXT,ChipIndex::NEXT},
+		{ChipIndex::SHORT_RANGE_ENEMY,ChipIndex::SHORT_RANGE_ENEMY},
+		{ChipIndex::LONG_RANGE_ENEMY,ChipIndex::LONG_RANGE_ENEMY},
+		{ChipIndex::FLY_RANGE_ENEMY,ChipIndex::FLY_RANGE_ENEMY},
+		{ChipIndex::RANDOM_ENEMY,ChipIndex::RANDOM_ENEMY},
+	};
 	std::list<FileTableElement>mapFileName_;
 	std::list<FileTableElement>roomFileName_;
 	EditMode selectMode_;
@@ -132,11 +136,17 @@ private:
 	int32_t mouseInput_;
 
 	Graph noneGraphHandle_;
+
 	Graph roadGraphHandle_;
-	Graph doorGraphHandle_;
-	Graph roomGraphHandle_;
-	Graph lockroomGraphHandle_;
 	Graph wallGraphHandle_;
+
+	Graph startGraphHandle_;
+	Graph nextGraphHandle_;
+
+	Graph shortRangeEnemyGraphHandle_;
+	Graph longRangeEnemyGraphHandle_;
+	Graph flyRangeEnemyGraphHandle_;
+	Graph randomEnemyGraphHandle_;
 
 	ChipIndex selectChip_;
 

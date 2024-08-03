@@ -4,6 +4,7 @@
 #include"json.hpp"
 #include <fstream>
 #include"GameConfig.h"
+#include"PlayerBulletManager.h"
 
 void PlayerLegFenrir::Initialize(Vector2* playerVelocity,bool* direction,float* changeAcl)
 {
@@ -24,11 +25,13 @@ void PlayerLegFenrir::Initialize(Vector2* playerVelocity,bool* direction,float* 
 	LoadDivGraph("Resources/Player/PlayerDush.png",5,5,1,128,128,( int* ) PlayerDushTexture_);
 }
 
-void PlayerLegFenrir::Move(bool DirBOTTOM,bool isAttack)
+void PlayerLegFenrir::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const float pow)
 {
+	oldIsDirBottom_ = isDirBottom_;
+
 	isDirBottom_ = DirBOTTOM;
 
-	if ( ( Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A) ) && !isEvasionRoll_ && !isAttack )
+	if ( ( Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A) ) && !isEvasionRoll_ && !isAttack && !isJump_ )
 	{
 		*direction_ = false;
 		if ( playerVelocity_->x > topSpeed_ * *changeAcl_ )
@@ -71,7 +74,7 @@ void PlayerLegFenrir::Move(bool DirBOTTOM,bool isAttack)
 			PlayerStandTextureCount_ = 0;
 		}
 	}
-	if ( ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) ) && !isEvasionRoll_ && !isAttack )
+	if ( ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) ) && !isEvasionRoll_ && !isAttack && !isJump_ )
 	{
 		*direction_ = true;
 		if ( playerVelocity_->x < topSpeed_ * *changeAcl_ )
@@ -123,7 +126,7 @@ void PlayerLegFenrir::Move(bool DirBOTTOM,bool isAttack)
 
 	EvasionRoll();
 
-	if ( !DirBOTTOM )
+	if ( !isDirBottom_ )
 	{
 		onGround_ = true;
 	}
@@ -139,6 +142,19 @@ void PlayerLegFenrir::Move(bool DirBOTTOM,bool isAttack)
 			Falling();
 		}
 	}
+
+	if ( isBullet )
+	{
+		bulletInterval_++;
+		if ( bulletInterval_ == MAX_BULLET_INTERVAL_ )
+		{
+			std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
+			newBullet->Initialize({ 0,0 },pos,60,pow,1,1,PlayerBullet::Type::ICED);
+			PlayerBulletManager::Instance()->AddBullet(std::move(newBullet));
+
+			bulletInterval_ = 0;
+		}
+	}
 }
 
 void PlayerLegFenrir::JumpStart()
@@ -151,13 +167,15 @@ void PlayerLegFenrir::JumpStart()
 
 	PlayerJumpTextureCount_ = 0;
 
+	isBullet = true;
+
 	if ( *direction_ )
 	{
-		playerVelocity_->x += evasionRollSpeed_ / 2;
+		playerVelocity_->x += evasionRollSpeed_;
 	}
 	else
 	{
-		playerVelocity_->x += -evasionRollSpeed_ / 2;
+		playerVelocity_->x += -evasionRollSpeed_;
 	}
 }
 
@@ -165,10 +183,13 @@ void PlayerLegFenrir::Jump()
 {
 	playerVelocity_->y += jumpAcceleration_;
 
-	PlayerJumpTextureCount_++;
-	if ( PlayerJumpTextureCount_ == 40 )
+	if ( !isDirBottom_ && !oldIsDirBottom_ )
 	{
-		PlayerJumpTextureCount_ = 0;
+		PlayerDownTextureCount_++;
+		if ( PlayerDownTextureCount_ == 40 )
+		{
+			PlayerDownTextureCount_ = 0;
+		}
 	}
 
 	if ( Input::Instance()->ReleaseKey(KEY_INPUT_SPACE) || playerVelocity_->y >= 0 )
@@ -240,10 +261,12 @@ void PlayerLegFenrir::Falling()
 
 		PlayerDownTextureCount_ = 0;
 
+		isBullet = false;
+
 	}
 }
 
-void PlayerLegFenrir::Draw(Vector2 pos,Vector2 size)
+void PlayerLegFenrir::Draw(const Vector2& pos,const Vector2& size)
 {
 	float leftPos = pos.x - size.x / 2;
 	float rightPos = pos.x + size.x / 2;
@@ -261,29 +284,26 @@ void PlayerLegFenrir::Draw(Vector2 pos,Vector2 size)
 			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerDushTexture_[ PlayerDushTextureCount_ ],TRUE);
 		}
 	}
-	else if ( onGround_ )
+	else if ( isJump_ )
 	{
-		if ( isJump_ )
+		if ( *direction_ )
 		{
-			if ( *direction_ )
-			{
-				DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerJumpTexture_[ PlayerJumpTextureCount_ / 10 ],TRUE);
-			}
-			else
-			{
-				DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerJumpTexture_[ PlayerJumpTextureCount_ / 10 ],TRUE);
-			}
+			DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerJumpTexture_[ PlayerJumpTextureCount_ / 10 ],TRUE);
 		}
 		else
 		{
-			if ( *direction_ )
-			{
-				DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerDownTexture_[ PlayerDownTextureCount_ / 10 ],TRUE);
-			}
-			else
-			{
-				DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerDownTexture_[ PlayerDownTextureCount_ / 10 ],TRUE);
-			}
+			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerJumpTexture_[ PlayerJumpTextureCount_ / 10 ],TRUE);
+		}
+	}
+	else if ( !isDirBottom_ && !oldIsDirBottom_ )
+	{
+		if ( *direction_ )
+		{
+			DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerDownTexture_[ PlayerDownTextureCount_ / 10 ],TRUE);
+		}
+		else
+		{
+			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerDownTexture_[ PlayerDownTextureCount_ / 10 ],TRUE);
 		}
 	}
 	else if ( isWalk )
@@ -333,11 +353,11 @@ void PlayerLegFenrir::Load()
 
 	assert(lName.compare("Player") == 0);
 
-	topSpeed_ = 12.0f;
-	acceleration_ = 60.0f;
-	airAcceleration_ = 24.0f;
-	deccelaration_ = 88.0;
-	airDeccelaration_ = 124.0f;
+	topSpeed_ = jsonObject[ "TopSpeed" ];
+	acceleration_ = jsonObject[ "Acceleration" ];
+	airAcceleration_ = jsonObject[ "AirAcceleration" ];
+	deccelaration_ = jsonObject[ "Deccelaration" ];
+	airDeccelaration_ = jsonObject[ "AirDeccelaration" ];
 	gravityAcceleration_ = jsonObject[ "GravityAcceleration" ];
 	jumpAcceleration_ = jsonObject[ "JumpAcceleration" ];
 	jumpInitialVelocity_ = jsonObject[ "JumpInitialVelocity" ];

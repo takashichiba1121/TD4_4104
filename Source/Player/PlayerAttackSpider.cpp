@@ -21,11 +21,15 @@ void PlayerAttackSpider::Initialize(Vector2* playerPos,Vector2* velocity,bool* d
 
 	CollisionDisable();
 }
-void PlayerAttackSpider::AttackInit(float pow)
+void PlayerAttackSpider::AttackInit(float pow,float changeCrit,float changeCdmg)
 {
 	if ( INTERVAL_ <= AttackInterval_ )
 	{
 		playerPow_ = pow;
+
+		playerCrit_ = changeCrit;
+
+		playerCdmg_ = changeCdmg;
 
 		isAttack_ = true;
 
@@ -89,15 +93,16 @@ void PlayerAttackSpider::OnCollision()
 {
 	if ( GetCollisionInfo().userData && isGiveDamage_ == false )
 	{
-		if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "FlyEnemy" )
+		if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "Enemy" )
 		{
-			dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_,Effects::DELAY);
-			isGiveDamage_ = true;
-		}
-		if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "WalkEnemy" )
-		{
-			dynamic_cast< WalkEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_,Effects::DELAY);
-
+			if ( GetRand(1000) <= playerCrit_ * 1000 )
+			{
+				dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(( playerPow_ * POW_ ) + ( playerPow_ * POW_ * playerCdmg_ ),Effects::DELAY);
+			}
+			else
+			{
+				dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_,Effects::DELAY);
+			}
 			isGiveDamage_ = true;
 		}
 	}

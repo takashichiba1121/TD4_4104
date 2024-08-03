@@ -18,23 +18,27 @@ void GameScene::Initialize()
 
 	mapChip_ = std::make_unique<MapChip>();
 	mapChip_->Initialize();
-
-	enemys_ = std::make_unique<EnemyManager>();
-	enemys_->Initialize();
-	enemys_->SetMapChip(mapChip_.get());
-	enemys_->SetPlayerPtr(player_.get());
+	mapChip_->SetPlayer(player_.get());
 
 	powerUp_ = std::make_unique<PowerUpCave>();
 	powerUp_->Initialize();
 	powerUp_->SetPlayer(player_.get());
 
+	dealer_ = std::make_unique<DealDaemon>();
+	dealer_->SetPlayer(player_.get());
+	dealer_->Initialize();
+
+
 	nodeManager_ = NodeManager::GetInstance();
 	nodeManager_->SetMapChip(mapChip_.get());
 	nodeManager_->SetPlayer(player_.get());
 	nodeManager_->SetPowerUp(powerUp_.get());
+	nodeManager_->SetDealer(dealer_.get());
 	nodeManager_->Initialize();
 	nodeManager_->StartNodeSet(0);
-	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
+	backGround_ = LoadGraph(std::string("Resources/BackGround/BackGround.png"));
+
+	EnemyManager::TexLoad();
 }
 
 void GameScene::Update()
@@ -60,21 +64,40 @@ void GameScene::Update()
 			player_->EndPowerUp();
 		}
 	}
+	else if ( player_->IsChangeParts() )
+	{
+		dealer_->Update();
+
+		uint32_t powerUpNum = player_->PowerUp();
+
+		dealer_->SetSlect(powerUpNum);
+
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_RETURN) )
+		{
+			dealer_->Deal();
+		}
+
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) )
+		{
+			dealer_->PartsChenge();
+
+			player_->EndChangeParts();
+		}
+	}
 	else
 	{
 		nodeManager_->Update();
 
 		player_->Update();
-		enemys_->Update();
 
 		CollisionManager::GetInstance()->SetScreenPos(mapChip_->GetScreenPos());
 		CollisionManager::GetInstance()->Update();
 
-		//TODO
-		if ( enemys_->GameEnd() )
-		{
-			SceneManager::GetInstance()->ChangeScene("CLEAR");
-		}
+	//TODO
+	//if ( enemys_->GameEnd())
+	//{
+	//	SceneManager::GetInstance()->ChangeScene("CLEAR");
+	//}
 
 		//TODO
 		if ( player_->GetHp() <= 0 )
@@ -87,12 +110,13 @@ void GameScene::Update()
 void GameScene::Draw()
 {
 	DrawGraph(0,0,backGround_,true);
-	mapChip_->Draw({ 0,0 });
+	mapChip_->Draw(Scroll());
 	nodeManager_->Draw();
 	player_->Draw();
-	enemys_->Draw();
+
+	//if (!chenged) powerUp_->Draw();
+
 	nodeManager_->Draw();
-	if(!chenged) powerUp_->Draw();
 	
 	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
 	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");
@@ -106,4 +130,12 @@ void GameScene::SpriteDraw()
 void GameScene::Finalize()
 {
 	PlayerBulletManager::Instance()->Clear();
+	EnemyManager::Finalize();
+}
+
+Vector2 GameScene::Scroll()
+{
+	Vector2 playerpos=player_->GetPos();
+
+	return { 0,0 };
 }

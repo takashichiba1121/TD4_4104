@@ -35,6 +35,8 @@ private:
 
 	uint32_t PlayerDushTextureCount_ = 0;
 
+	const uint32_t DEF_ = 70;
+
 #pragma region ステータス
 
 //移動
@@ -63,13 +65,15 @@ private:
 
 	bool isDirBottom_;
 
+	bool oldIsDirBottom_;
+
 #pragma endregion
 
 public:
 
 	void Initialize(Vector2* playerPos,bool* direction,float* changeAcl) override;
 
-	void Move(bool DirBOTTOM,bool isAttack) override;
+	void Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const float pow) override;
 
 	void JumpStart() override;
 
@@ -79,9 +83,13 @@ public:
 
 	void Falling() override;
 
-	void Draw(Vector2 pos,Vector2 size) override;
+	void Draw(const Vector2& pos,const Vector2& size) override;
 
 	void Load() override;
+
+	uint32_t GetDef() override {
+		return DEF_;
+	}
 
 };
 

@@ -23,7 +23,7 @@ protected:
 	bool islive_;
 	Vector2 pos_;
 	Vector2 hitboxSize_;
-	Vector2 drawSize_;
+	Vector2 drawSize_ = { 64,128 };
 	float speed_;
 	float originalSpeed_;
 	Vector2 velocity_;
@@ -34,11 +34,12 @@ public:
 	virtual void Draw() = 0;
 	//攻撃耐性等の特殊な処理を必要とする場合を考慮し仮想化
 	virtual void Damage(int32_t damage);
-	virtual void Damage(int32_t damage,Effects effect);
+	virtual void Damage(int32_t damage,Effects effect,bool effectD);
 	bool IsLive();
 	Vector2 GetHitBoxSize();
 	Vector2 GetDrawSize();
 	int32_t GetHp();
 	Vector2 GetPos();
+	void SetPos(const Vector2& pos);
 };
 

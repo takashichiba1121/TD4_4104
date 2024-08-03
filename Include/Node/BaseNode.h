@@ -25,6 +25,7 @@ protected:
 	Player* player_;
 	NodeManager* nodeManager_;
 	PowerUpCave* powerUp_;
+	DealDaemon* dealer_;
 
 	struct NextDoor
 	{
@@ -47,6 +48,7 @@ public:
 	void SetMapChip(MapChip* mapChip);
 	void SetPlayer(Player* player);
 	void SetPowerUp(PowerUpCave* powerUp);
+	void SetDealer(DealDaemon* dealer);
 	void SetNodeManagerr(NodeManager* nodeManager);
 
 	void PlayerNodeMove();

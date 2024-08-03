@@ -23,6 +23,7 @@ void ReinforcementNode::Reset()
 {
 	player_->Reset();
 	powerUp_->ReSet();
+	
 	int32_t i = 0;
 	int32_t count = 0;
 	for ( auto& chip : mapChip_->GetMapChip()[ mapChip_->GetMapChip().size() - 2 ] )

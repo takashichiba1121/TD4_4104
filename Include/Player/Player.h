@@ -8,17 +8,73 @@
 #include"PlayerLeg.h"
 #include"ItemShop.h"
 #include"PowerUpCave.h"
+#include"DealDaemon.h"
 
 struct UserData
 {
 	std::string tag;
 };
 
+enum class PlayerAttackTags
+{
+	Fist,
+	Cerberus,
+	Fenrir,
+	Gun,
+	Mars,
+	Spider,
+	Vine,
+};
+enum class PlayerLegTags
+{
+	Normal,
+	Fenrir,
+	Cerberus,
+};
+
+enum class PlayerMouthTags
+{
+	Normal,
+	Soul,
+};
+
+enum class PlayerEyeTags
+{
+	Normal,
+	Clairvoyance,
+	Curse,
+};
+
+struct NowPartsTag
+{
+	PlayerAttackTags leftAtaackTag = PlayerAttackTags::Fist;
+
+	PlayerAttackTags rightAtaackTag = PlayerAttackTags::Fist;
+
+	PlayerLegTags legTag = PlayerLegTags::Normal;
+
+	PlayerMouthTags mouthTag = PlayerMouthTags::Normal;
+
+	PlayerEyeTags eyeTag = PlayerEyeTags::Normal;
+
+	std::string leftAtaackName = "Fist";
+
+	std::string rightAtaackName = "Fist";
+
+	std::string legName = "Normal";
+
+	std::string mouthName = "Normal";
+
+	std::string eyeName = "Normal";
+};
+
 class Player:public BaseObject
 {
 private:
 
-#pragma region 変更ステータス
+#pragma region ステータス変更値
+	float changeMaxHp_=1;
+
 	float changeSpd_=1;
 
 	float changePow_=1;
@@ -29,7 +85,16 @@ private:
 
 	float changeCdmg_ = 1.5f;
 
-	int32_t nowCost=0;
+	int32_t nowCost_=0;
+#pragma endregion
+
+#pragma region ステータス初期値
+
+	const uint32_t MAX_HP_ = 150;
+
+	uint32_t DEF_ = 0;
+
+
 #pragma endregion
 
 	bool direction_ = false;
@@ -38,13 +103,13 @@ private:
 
 	RectShape* shape_;
 
+	std::unique_ptr<CircleShape> circelShape_;
+
 	std::unique_ptr<PlayerAttack> leftArm_;
 
 	std::unique_ptr<PlayerAttack> rightArm_;
 
 	std::unique_ptr<PlayerLeg> leg_;
-
-	int32_t maxHp_ = 100;
 
 	UserData name_;
 
@@ -56,15 +121,25 @@ private:
 
 	uint32_t selectItems_ = 1;
 
-	std::unique_ptr<PowerUpCave>powerUp_;
+	bool isPowerUp_ = false;
 
-	bool isPowerUp = false;
+	bool isChangeParts_ = false;
 
-	uint32_t powerUpNum = 0;
+	uint32_t powerUpNum_ = 0;
 
 	bool isDealed_ = false;
 
-	bool powerUpText=false;
+	bool powerUpText_=false;
+
+	bool changePartsText_ = false;
+
+	NowPartsTag nowPartTag_;
+
+	uint32_t nowEyeCost_=0;
+
+	uint32_t nowMouthCost_ = 0;
+
+		
 public:
 	void Initialize() override;
 
@@ -72,13 +147,19 @@ public:
 
 	void Attack();
 
-	void Damage(int32_t Damage) override;
+	void Damage(int32_t damage) override;
+
+	void IventDamage(int32_t damage);
 
 	bool ChangeLeftArm(std::string attackName,uint32_t cost);
 
 	bool ChangeRightArm(std::string attackName,uint32_t cost);
 
 	bool ChangeLeg(std::string legName,uint32_t cost);
+
+	bool ChangeEye(std::string eyeName,uint32_t cost);
+
+	bool ChangeMouth(std::string mouthName,uint32_t cost);
 
 	bool AddSpd(int32_t spd);
 
@@ -107,7 +188,7 @@ public:
 	bool SubCdmg(int32_t Cdmg);
 
 	int32_t GetCost() {
-		return nowCost;
+		return nowCost_;
 	}
 
 	void Draw() override;
@@ -120,11 +201,57 @@ public:
 
 	void EndPowerUp();
 
+	void EndChangeParts();
+
 	void Reset();
 
 	bool IsPowerUp() {
-		return isPowerUp;
+		return isPowerUp_;
+	}
+
+	bool IsChangeParts() {
+		return isChangeParts_;
 	}
 
 	void OnCollision() override;
+
+	CircleShape* GetCircleShape()
+	{
+		return circelShape_.get() ;
+	}
+
+	PlayerAttackTags GetLeftAtaackTag()
+	{
+		return nowPartTag_.leftAtaackTag;
+	}
+
+	PlayerAttackTags GetRightAtaackTag()
+	{
+		return nowPartTag_.rightAtaackTag;
+	}
+
+	PlayerLegTags GetLegTag()
+	{
+		return nowPartTag_.legTag;
+	}
+
+	PlayerMouthTags GetMouthTag()
+	{
+		return nowPartTag_.mouthTag;
+	}
+
+	PlayerEyeTags GetEyeTag()
+	{
+		return nowPartTag_.eyeTag;
+	}
+
+	bool CheckHavePart(PartsName partType,std::string partName);
+
+	void SoulMouth();
+
+	uint32_t GetMaxHp()
+	{
+		return MAX_HP_ * changeMaxHp_;
+	}
+
 };

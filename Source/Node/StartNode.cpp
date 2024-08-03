@@ -4,7 +4,7 @@
 
 void StartNode::Initialize()
 {
-	mapChip_->MapLoad("Resources/Export/Map/TestMap.json");
+	mapChip_->MapLoad("Resources/Export/Map/Etest.json");
 
 }
 
@@ -19,7 +19,7 @@ void StartNode::Draw()
 
 void StartNode::Reset()
 {
-	mapChip_->MapLoad("Resources/Export/Map/TestMap.json");
+	mapChip_->MapLoad("Resources/Export/Map/Etest.json");
 
 	player_->Reset();
 
