@@ -147,7 +147,9 @@ void WalkEnemy::Move()
 	}
 	 nextPos_ = { pos_.x + ( ( velocity_.x * speed_ ) ) + ( ( hitboxSize_.x / 2 + 32)* -sign(velocity_.x) ),pos_.y + ( hitboxSize_.y / 2 )};
 	 nextElement_ = mapchip_->GetPosElement(static_cast<int32_t>(nextPos_.x),static_cast< int32_t >( nextPos_.y)+64);
-	if ((nextElement_ == NEXT ||(nextElement_ == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM )) &&  !tern_ )
+
+	 if ( ( nextElement_ == NEXT || ( nextElement_ == NONE && ( prevElement_ != NONE || prevElement_ != NEXT ) ) )
+	 && !tern_ )
 	{
 		velocity_ *= -1;
 		tern_ = true;
@@ -169,24 +171,7 @@ void WalkEnemy::Move()
 			ternInvervalTimer_ = 0;
 		}
 	}
-	 nextElement_ = mapchip_->GetPosElement(pos_.x +(( velocity_.x * speed_ )) + ( hitboxSize_.x / 2 ),
-		pos_.y + ( hitboxSize_.y / 2 ) + 1);
 
-	if (( nextElement_ == NEXT || ( nextElement_ == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM )) && !tern_ )
-	{
-		velocity_ *= -1;
-		tern_ = true;
-	}
-
-	if ( tern_ )
-	{
-		ternInvervalTimer_++;
-		if ( ternInverval_ < ternInvervalTimer_)
-		{
-			tern_ = false;
-			ternInvervalTimer_ = 0;
-		}
-	}
 
 	SetMapChipSpeed({ velocity_ * speed_,gravity_ });
 	shape_->SetCenter(pos_);
@@ -215,12 +200,13 @@ void WalkEnemy::Approach()
 	if ( GetOnDir() & 0b1 << OnDir::BOTTOM )
 	{
 		gravity_ = { 0,0 };
-		prevElement_ = mapchip_->GetPosElement(pos_.x,pos_.y + ( hitboxSize_.y / 2 ) + 1);
+		
 	}
+	prevElement_ = mapchip_->GetPosElement(pos_.x,pos_.y + ( hitboxSize_.y / 2 ) + 18);
 	nextElement_ = mapchip_->GetPosElement(pos_.x + ( ( velocity_.x * speed_ ) ) + ( hitboxSize_.x / 2 * sign(velocity_.x) ),
 	   pos_.y + ( hitboxSize_.y / 2 ) + 5);
 
-	if ( ( nextElement_ == NEXT || ( nextElement_ == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM ) ) && !tern_ )
+	if ( ( nextElement_ == NEXT || ( nextElement_ == NONE &&(prevElement_ != NONE || prevElement_ != NEXT) ) ) && !tern_ )
 	{
 		actionMode = MOVE;
 		return;
