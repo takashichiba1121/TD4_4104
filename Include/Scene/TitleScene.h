@@ -14,6 +14,7 @@ private:
 	int32_t titleTex_;
 	int32_t mistTex_;
 	int32_t backTex_;
+	int32_t startSound_;
 	Counter alpha_;
 	Counter alphaChengeTimer_;
 	float maxAlpha_ = 200;

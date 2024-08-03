@@ -191,11 +191,13 @@ void EnemyManager::Update()
 		}
 	}
 
-	deadEnemyCount_ += enemylist_.remove_if([](unique_ptr<BaseEnemy>& enemy )
+	int32_t cost = 0;
+	cost += enemylist_.remove_if([ ](unique_ptr<BaseEnemy>& enemy)
 	{
 		return enemy->IsLive() == false;
 	});
-
+	cost *= 2;
+	playerPtr_->AddMaxCost(cost);
 	int32_t time = -10;
 		
 	for ( auto& itr : enemylist_ )

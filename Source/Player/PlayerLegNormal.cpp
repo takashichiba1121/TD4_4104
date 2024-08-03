@@ -15,13 +15,13 @@ void PlayerLegNormal::Initialize(Vector2* playerVelocity,bool* direction,float* 
 
 	Load();
 
-	LoadDivGraph("Resources/Player/PlayerStand_sheet.png",10,10,1,128,128,( int* ) PlayerStandTexture_);
+	PlayerStandTexture_ = LoadGraph(std::string("Resources\\Player\\PlayerStand_sheet.png"));
 
-	LoadDivGraph("Resources/Player/PlayerJumpUp.png",4,4,1,128,128,( int* ) PlayerJumpTexture_);
+	PlayerJumpTexture_ = LoadGraph(std::string("Resources\\Player\\PlayerJumpUp.png"));
 
-	LoadDivGraph("Resources/Player/PlayerJumpDown.png",4,4,1,128,128,( int* ) PlayerDownTexture_);
+	PlayerDownTexture_ = LoadGraph(std::string("Resources\\Player\\PlayerJumpDown.png"));
 
-	LoadDivGraph("Resources/Player/PlayerDush.png",5,5,1,128,128,( int* ) PlayerDushTexture_);
+	PlayerDushTexture_ = LoadGraph(std::string("Resources\\Player\\PlayerDush.png"));
 }
 
 void PlayerLegNormal::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const float pow)
@@ -73,7 +73,7 @@ void PlayerLegNormal::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const
 			PlayerStandTextureCount_ = 0;
 		}
 	}
-	if ( ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) ) && !isEvasionRoll_ && !isAttack )
+	else if ( ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) ) && !isEvasionRoll_ && !isAttack )
 	{
 		*direction_ = true;
 		if ( playerVelocity_->x < topSpeed_ * *changeAcl_ )
@@ -240,66 +240,76 @@ void PlayerLegNormal::Falling()
 
 void PlayerLegNormal::Draw(const Vector2& pos,const Vector2& size,Vector2 scroll)
 {
-	float leftPos = scroll.x+pos.x - size.x / 2;
-	float rightPos = scroll.x+pos.x + size.x / 2;
-	float upPos = scroll.y+pos.y - size.y / 2;
-	float downPos = scroll.y+pos.y + size.y / 2;
+	float leftPos = scroll.x + pos.x - size.x / 2;
+	float rightPos = scroll.x + pos.x + size.x / 2;
+	float upPos = scroll.y + pos.y - size.y / 2;
+	float downPos = scroll.y + pos.y + size.y / 2;
 
 	if ( isEvasionRoll_ )
 	{
 		if ( *direction_ )
 		{
-			DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerDushTexture_[ PlayerDushTextureCount_ ],TRUE);
+			DrawRectGraph(leftPos,upPos,PlayerDushTextureCount_ * size.x,0,
+				size.x,size.y,PlayerDushTexture_,true,false);
 		}
 		else
 		{
-			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerDushTexture_[ PlayerDushTextureCount_ ],TRUE);
+			DrawRectGraph(leftPos,upPos,PlayerDushTextureCount_ * size.x,0,
+				size.x,size.y,PlayerDushTexture_,true,true);
 		}
 	}
 	else if ( isJump_ )
 	{
 		if ( *direction_ )
 		{
-			DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerJumpTexture_[ PlayerJumpTextureCount_ / 10 ],TRUE);
+			DrawRectGraph(leftPos,upPos,( PlayerJumpTextureCount_ / 10 ) * size.x,0,
+				size.x,size.y,PlayerJumpTexture_,true,false);
 		}
 		else
 		{
-			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerJumpTexture_[ PlayerJumpTextureCount_ / 10 ],TRUE);
+			DrawRectGraph(leftPos,upPos,( PlayerJumpTextureCount_ / 10 ) * size.x,0,
+				size.x,size.y,PlayerJumpTexture_,true,true);
 		}
 	}
-	else if( !isDirBottom_ && !oldIsDirBottom_ )
+	else if ( !isDirBottom_ && !oldIsDirBottom_ )
 	{
 		if ( *direction_ )
 		{
-			DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerDownTexture_[ PlayerDownTextureCount_ / 10 ],TRUE);
+			DrawRectGraph(leftPos,upPos,( PlayerDownTextureCount_ / 10 ) * size.x,0,
+				size.x,size.y,PlayerDownTexture_,true,false);
 		}
 		else
 		{
-			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerDownTexture_[ PlayerDownTextureCount_ / 10 ],TRUE);
+			DrawRectGraph(leftPos,upPos,( PlayerDownTextureCount_ / 10 ) * size.x,0,
+				size.x,size.y,PlayerDownTexture_,true,true);
 		}
 	}
 	else if ( isWalk )
 	{
 		if ( *direction_ )
 		{
-			DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_ / 2 ],TRUE);
+			DrawRectGraph(leftPos,upPos,( PlayerStandTextureCount_ / 2 ) * size.x,0,
+				size.x,size.y,PlayerStandTexture_,true,false);
 		}
 		else
 		{
-			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_ / 2 ],TRUE);
+			DrawRectGraph(leftPos,upPos,( PlayerStandTextureCount_ / 2 ) * size.x,0,
+				size.x,size.y,PlayerStandTexture_,true,true);
 		}
-		}
+	}
 	else
 	{
 		if ( *direction_ )
 		{
-			DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_ / 2 ],TRUE);
+			DrawRectGraph(leftPos,upPos,( PlayerStandTextureCount_ / 2 ) * size.x,0,
+				size.x,size.y,PlayerStandTexture_,true,false);
 		}
 		else
 		{
-			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_ / 2 ],TRUE);
+			DrawRectGraph(leftPos,upPos,( PlayerStandTextureCount_ / 2 ) * size.x,0,
+				size.x,size.y,PlayerStandTexture_,true,true);
 		}
-		}
+	}
 }
 
 void PlayerLegNormal::Load()

@@ -37,6 +37,8 @@ void MapChip::Initialize()
 
 void MapChip::MapLoad(const std::string& path)
 {
+	Reset();
+
 	std::fstream file;
 	file.open(path);
 	if ( file.fail() )
@@ -131,12 +133,12 @@ Vector2 MapChip::GetPos(int32_t x,int32_t y) const
 	return Vector2(x / BLOCK_SIZE,y / BLOCK_SIZE);
 }
 
-uint8_t MapChip::GetNumOfArrayElement(int32_t x,int32_t y) const
+uint8_t MapChip::GetNumOfArrayElement(uint32_t x,uint32_t y) const
 {
-	int32_t posY = min(uint32_t(y),map_.size() - 1);
+	int32_t posY = min(y,map_.size() - 1);
 	posY = max(posY,0);
 
-	int32_t posX = min(uint32_t(x),map_[ posY ].size() - 1);
+	int32_t posX = min(x,map_[ posY ].size() - 1);
 	posX = max(posX,0);
 
 	return map_[ posY ][ posX ];
@@ -169,7 +171,7 @@ void MapChip::SetEnemyManager(EnemyManager* enemyManager)
 
 void MapChip::Draw(const Vector2& screenPos)
 {
-	screenPos_ = screenPos + Vector2(32,32);
+	screenPos_ = screenPos;
 
 	for ( size_t i = 0; i < map_.size(); i++ )
 	{
@@ -203,6 +205,16 @@ void MapChip::Draw(const Vector2& screenPos)
 			}
 		}
 	}
+}
+
+void MapChip::Reset()
+{
+	for (size_t i = 0; i < map_.size(); i++)
+	{
+		map_[i].clear();
+	}
+
+	map_.clear();
 }
 
 void MapChip::RoomInstallation(const std::string& directoryPath,const Vector2& leftTop)

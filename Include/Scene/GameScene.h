@@ -24,7 +24,7 @@ private:
 	std::unique_ptr<PowerUpCave>powerUp_;
 	std::unique_ptr<DealDaemon>dealer_;
 	std::unique_ptr<EnemyManager>enemys_;
-
+	int32_t bgm_;
 
 	uint32_t backGround_;
 	uint8_t num;
