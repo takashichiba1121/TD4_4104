@@ -2,19 +2,19 @@
 #include "IObject.h"
 #include "RectShape.h"
 #include<BaseObject.h>
+#include<Util.h>
 
-class BossChargeAttack :public IObject
+class BossBullet :public IObject
 {
 private:
+
 	float SPEED;
 	int32_t TIME;
-
-	bool isAttack_;
-	bool isPreparation_;
+	int32_t CHARGE_TIME;
 
 	Vector2 size_;
 	int32_t time_;
-
+	bool isAttack_;
 	Vector2 pos_;
 	RectShape* shape_;
 	int32_t dir_;
@@ -22,47 +22,32 @@ private:
 	int32_t attackPower_;
 	Vector2 velocity_;
 	float speed_;
-	float posY_;
+	bool isPreparation_;
 
-	int32_t chargeImg_;
-	int32_t effectImg_;
-	Vector2 drawSize_;
-
-	int32_t anime_;
-	int32_t animeTimer_;
-	int32_t animeNum_ = 0;
-	int32_t animeFrame_;
-
-	int32_t anime2Timer_;
-	int32_t anime2Num_ = 0;
-	int32_t anime2Frame_;
-	int32_t anime2_;
+	float angle_;
+	int32_t rightHandImg_;
+	float rotateSpeed_;
+	float exRate;
+	int32_t chargeTime_;
 
 public:
-	void Attack();
+	bool Attack();
 	void Initialize();
 	void Update();
 	void Draw();
 	void DebugDraw();
 	void Preparation();
 
-	void SetBossPos(const Vector2& pos);
-	void SetTime(int32_t time);
-	void SetSize(const Vector2& size);
-	void SetDir(int32_t dir);
-	void SetPower(int32_t power);
-	void SetSpeed(float speed);
-	void SetAnimeFrame(int32_t frame);
-	void SetAnime2Frame(int32_t frame);
-
 	bool IsAttack()const;
 
-	const Vector2& GetPos()const;
+	void SetBossPos(const Vector2& pos);
+	void SetDir(int32_t dir);
+
+	void SetTime(int32_t time);
+	void SetSize(const Vector2& size);
+	void SetPower(int32_t power);
+	void SetSpeed(float speed);
 
 	void OnCollision()override;
-
-private:
-
-	void AnimeUpdate();
 
 };

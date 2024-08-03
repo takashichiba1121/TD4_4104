@@ -5,10 +5,12 @@
 #include "Player.h"
 #include<Collision.h>
 #include<GameConfig.h>
+#include<Input.h>
 
 void BossEnemy::Initialize()
 {
-	textureId_ = LoadGraph("Resources/Enemy/boss.png");
+	textureId_ = LoadGraph(std::string("Resources/Enemy/boss.png"));
+	bodyImg_ = LoadGraph(std::string("Resources/Enemy/bossBody.png"));
 
 	int32_t graphSizeX;
 	int32_t graphSizeY;
@@ -20,26 +22,49 @@ void BossEnemy::Initialize()
 
 	punch_ = std::make_unique<BossPunchAttack>();
 	charge_ = std::make_unique<BossChargeAttack>();
+	longRange_ = std::make_unique<BossLongRangeAttack>();
 
 	{
 		GameConfig::Boss* bossConfig = GameConfig::GetBossConfig();
 
 		{
-			hp_ = bossConfig->hp;
+			hp_ = HP = bossConfig->hp;
 			attackInterval_ = ATTACK_INTERVAL = 60 * bossConfig->attackInterval;
-			approachHitBox_.SetRadius({ float(bossConfig->approachHitBoxX),float(bossConfig->approachHitBoxY) });
+			attackApproachHitBox_.SetRadius({ float(bossConfig->attackApproachHitBoxX),float(bossConfig->attackApproachHitBoxY) });
+			chargeApproachHitBox_.SetRadius({ float(bossConfig->chargeApproachHitBoxX),float(bossConfig->chargeApproachHitBoxY) });
+			probabilities[ 0 ] = bossConfig->probabilitie1;
+			probabilities[ 1 ] = bossConfig->probabilitie2;
 		}
 		{
-			punch_->SetTime(bossConfig->attack.time);
-			punch_->SetSize({ float(bossConfig->attack.sizeX),float(bossConfig->attack.sizeY) });
-			punch_->SetPower(bossConfig->attack.power);
+			GameConfig::Boss::Attack& punch = bossConfig->attack;
+
+			punch_->SetTime(punch.time);
+			punch_->SetSize({ float(punch.sizeX),float(punch.sizeY) });
+			punch_->SetPower(punch.power);
+			punch_->SetOffset({ float(punch.offsetX),float(punch.offsetY) });
 		}
 
 		{
-			charge_->SetTime(bossConfig->charge.time);
-			charge_->SetSize({ float(bossConfig->charge.sizeX),float(bossConfig->charge.sizeY) });
-			charge_->SetPower(bossConfig->charge.power);
-			charge_->SetSpeed(bossConfig->charge.speed);
+			GameConfig::Boss::Charge& charge = bossConfig->charge;
+			charge_->SetTime(charge.time);
+			charge_->SetSize({ float(charge.sizeX),float(charge.sizeY) });
+			charge_->SetPower(charge.power);
+			charge_->SetSpeed(charge.speed);
+			charge_->SetAnimeFrame(charge.animeFrame);
+			charge_->SetAnime2Frame(charge.anime2Frame);
+		}
+
+		{
+			GameConfig::Boss::LongRange& longRange = bossConfig->longRange;
+
+			longRange_->SetChargeTime(longRange.chargeTime);
+			longRange_->SetFreezeTime(longRange.freezeTime);
+
+			longRange_->SetBulletTime(longRange.bulletTime);
+			longRange_->SetBulletSpeed(longRange.bulletSpeed);
+			longRange_->SetBulletSize({ float(longRange.bulletSizeX),float(longRange.bulletSizeY) });
+			longRange_->SetBulletPower(longRange.bulletPower);
+
 		}
 	}
 
@@ -48,6 +73,8 @@ void BossEnemy::Initialize()
 	punch_->Initialize();
 
 	charge_->Initialize();
+
+	longRange_->Initialize();
 
 	MapChipObjectEnable();
 	SetMapChipCenter(&pos_);
@@ -67,9 +94,13 @@ void BossEnemy::Initialize()
 	CollisionManager::GetInstance()->AddObject(this);
 	attackPower_ = 1;
 
+	playerRect_.SetRadius({ 1,1 });
 
-	approachHitBox_.SetCenter(pos_);
-	playerRect_.SetRadius(playerPtr_->GetDrawSize());
+	distribution = std::discrete_distribution<int>(probabilities,probabilities + 2);
+
+	phase_ = APPROACH;
+
+	approachHitBox_.SetRadius(attackApproachHitBox_.GetRadius());
 }
 
 void BossEnemy::Update()
@@ -77,6 +108,11 @@ void BossEnemy::Update()
 	AnimeUpdate();
 
 	Move();
+
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_UP) )
+	{
+		hp_--;
+	}
 }
 
 void BossEnemy::Move()
@@ -93,23 +129,50 @@ void BossEnemy::Move()
 
 	if ( phase_ == APPROACH )
 	{
-		ApproachMove();
-
 		SetMapChipSpeed({ velocity_ * speed_,gravity_ });
 		shape_->SetCenter(pos_);
+
+		ApproachMove();
 	}
 	else
 	{
 		AttackMove();
 	}
+
+	longRange_->BulletUpdate();
 }
 
 void BossEnemy::Draw()
 {
-	DrawRectGraphF(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.y / 2,
-		 0 + drawSize_.x * anime_,0,
+	switch ( phase_ )
+	{
+	case APPROACH:
+		DrawRectGraphF(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.y / 2,
+		0 + drawSize_.x * anime_,0,
 		drawSize_.x,drawSize_.y,
 		textureId_,true,playerDir_ == 1);
+		break;
+	case PUNCH:
+		DrawRotaGraph(pos_.x,pos_.y,1.0,0.0,bodyImg_,true,playerDir_ == 1);
+		punch_->Draw();
+		break;
+	case CHARGE:
+		charge_->Draw();
+		break;
+	case LONG_RANGE:
+
+		if ( !longRange_->IsAttack() )
+		{
+			DrawRotaGraph(pos_.x,pos_.y,1.0,0.0,bodyImg_,true,playerDir_ == 1);
+
+		}
+
+		break;
+	default:
+		break;
+	}
+
+	longRange_->Draw();
 
 #ifdef _DEBUG
 
@@ -144,14 +207,17 @@ void BossEnemy::DebugDraw()
 			GetColor(255,255,255),true);
 		break;
 	case PUNCH:
-		punch_->Draw();
+		punch_->DebugDraw();
 		break;
 	case CHARGE:
+		charge_->DebugDraw();
+		break;
+	case LONG_RANGE:
+		longRange_->DebugDraw();
 		break;
 	default:
 		break;
 	}
-	charge_->Draw();
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
@@ -164,28 +230,73 @@ void BossEnemy::ApproachMove()
 	playerRect_.SetCenter(playerPtr_->GetPos());
 	approachHitBox_.SetCenter({ pos_.x + ( shape_->GetRadius().x + approachHitBox_.GetRadius().x ) * -velocity_.x,pos_.y });
 
-	if ( Collision::Rect2Rect(playerRect_,approachHitBox_) )
+	float hpRet = hp_ / float(HP);
+	int32_t hp = hpRet * 100;
+
+	if ( hp == 50 && longRangeAttackCount_ ==  0  || hp == 25 && longRangeAttackCount_ == 1 || hp == 10 && longRangeAttackCount_ == 2 )
 	{
-		phase_ = Phase::CHARGE;
 		velocity_.x = 0;
+		longRangeAttackCount_++;
+
+		nextPhase_ = GetPhase();
+		phase_ = LONG_RANGE;
+		attackInterval_ = 0;
+		SetMapChipSpeed({ playerDir_ * 1000.0f,0 });
+
+		if ( nextPhase_ == PUNCH )
+		{
+			approachHitBox_.SetRadius(attackApproachHitBox_.GetRadius());
+		}
+		else if ( nextPhase_ == CHARGE )
+		{
+			approachHitBox_.SetRadius(chargeApproachHitBox_.GetRadius());
+		}
+	}
+	else
+	{
+		if ( Collision::Rect2Rect(playerRect_,approachHitBox_) )
+		{
+			phase_ = nextPhase_;
+			nextPhase_ = GetPhase();
+
+			velocity_.x = 0;
+
+			if ( phase_ == PUNCH )
+			{
+				punch_->SetBossPos(pos_);
+				punch_->Preparation();
+				punch_->SetDir(playerDir_);
+			}
+			else if ( phase_ == CHARGE )
+			{
+				charge_->SetBossPos(pos_);
+				charge_->Preparation();
+				charge_->SetDir(playerDir_);
+			}
+
+			if ( nextPhase_ == PUNCH )
+			{
+				approachHitBox_.SetRadius(attackApproachHitBox_.GetRadius());
+			}
+			else if ( nextPhase_ == CHARGE )
+			{
+				approachHitBox_.SetRadius(chargeApproachHitBox_.GetRadius());
+			}
+		}
 	}
 }
 
 void BossEnemy::AttackMove()
 {
+	if ( phase_ == CHARGE )
+	{
+		charge_->Update();
+	}
+
 	if ( attackInterval_ == 0 )
 	{
 		playerDir_ = PlayerDir();
 		attackInterval_ = -1;
-		switch ( phase_ )
-		{
-		case PUNCH:
-			punch_->SetDir(playerDir_);
-			break;
-		case CHARGE:
-			charge_->SetDir(playerDir_);
-			break;
-		}
 
 		Attack();
 	}
@@ -199,7 +310,6 @@ void BossEnemy::AttackMove()
 		{
 		case PUNCH:
 			punch_->Update();
-			punch_->SetBossPos(pos_);
 
 			if ( !punch_->IsAttack() )
 			{
@@ -208,8 +318,8 @@ void BossEnemy::AttackMove()
 				approachHitBox_.SetCenter({ pos_.x + ( shape_->GetRadius().x + approachHitBox_.GetRadius().x ) * -velocity_.x,pos_.y });
 			}
 			break;
+
 		case CHARGE:
-			charge_->Update();
 
 			pos_ = charge_->GetPos();
 
@@ -223,6 +333,19 @@ void BossEnemy::AttackMove()
 
 			}
 			break;
+
+		case LONG_RANGE:
+
+			longRange_->Update();
+
+			if ( !longRange_->IsAttack() )
+			{
+				phase_ = APPROACH;
+				attackInterval_ = ATTACK_INTERVAL;
+				approachHitBox_.SetCenter({ pos_.x + ( shape_->GetRadius().x + approachHitBox_.GetRadius().x ) * -velocity_.x,pos_.y });
+			}
+
+			break;
 		}
 	}
 }
@@ -233,12 +356,19 @@ void BossEnemy::Attack()
 	{
 	case PUNCH:
 		punch_->Attack();
+		punch_->SetBossPos(pos_);
 		break;
 	case CHARGE:
+		charge_->SetDir(playerDir_);
 		charge_->Attack();
 		CollisionDisable();
 		MapChipObjectDisable();
 		charge_->SetBossPos(pos_);
+		break;
+	case LONG_RANGE:
+		longRange_->SetDir(playerDir_);
+		longRange_->SetBossPos(pos_);
+		longRange_->Attack();
 		break;
 	}
 }
@@ -255,6 +385,27 @@ float BossEnemy::PlayerDir()
 	{
 		return 1.0f;
 	}
+}
+
+Phase BossEnemy::GetPhase()
+{
+	Phase ret;
+
+	float hpRet = hp_ / float(HP);
+	int32_t hp = hpRet * 100;
+
+	if ( hp < 75 )
+	{
+		static std::mt19937 gen(std::time(nullptr));
+		ret = static_cast< Phase >( distribution(gen) + 1 );
+	}
+	else
+	{
+		ret = PUNCH;
+
+	}
+
+	return ret;
 }
 
 void BossEnemy::AnimeUpdate()

@@ -39,6 +39,8 @@ public:
 			int32_t sizeX;
 			int32_t sizeY;
 			int32_t power;
+			int32_t offsetX;
+			int32_t offsetY;
 		};
 
 		struct Charge
@@ -48,14 +50,34 @@ public:
 			int32_t sizeX;
 			int32_t sizeY;
 			int32_t power;
+			int32_t animeFrame;
+			int32_t anime2Frame;
+		};
+
+		struct LongRange
+		{
+			int32_t chargeTime;
+			int32_t freezeTime;
+
+			int32_t bulletTime;
+			int32_t bulletSpeed;
+			int32_t bulletSizeX;
+			int32_t bulletSizeY;
+			int32_t bulletPower;
+			int32_t bulletRotateSpeed;
 		};
 
 		int32_t hp;
 		float attackInterval;
-		int32_t approachHitBoxX;
-		int32_t approachHitBoxY;
+		int32_t attackApproachHitBoxX;
+		int32_t attackApproachHitBoxY;
+		int32_t chargeApproachHitBoxY;
+		int32_t chargeApproachHitBoxX;
+		int32_t probabilitie1;
+		int32_t probabilitie2;
 		Attack attack;
 		Charge charge;
+		LongRange longRange;
 	};
 
 private:
