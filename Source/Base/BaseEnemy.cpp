@@ -148,3 +148,18 @@ int32_t BaseEnemy::GetCurseStack()
 {
 	return curseStack;
 }
+
+void BaseEnemy::AnimeUpdate()
+{
+	animeTimer_++;
+
+	if ( animeTimer_ == 60 )
+	{
+		animeTimer_ = 0;
+		anime_++;
+		if ( anime_ == animeNum_ )
+		{
+			anime_ = 0;
+		}
+	}
+}

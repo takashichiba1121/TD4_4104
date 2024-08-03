@@ -35,6 +35,9 @@ protected:
 	int32_t defense_;
 	int32_t immortalTime_;
 	int8_t statusEffects_;
+	int32_t animeTimer_;
+	int32_t anime_;
+	int32_t animeNum_;
 	std::array<Counter,END> effectTimer;
 	const std::array<int32_t,END> effectTime = {360,240,600,360,0};
 	const std::array<int32_t,END> effectDamageInterval = { 120,240,120,0,0 };
@@ -57,5 +60,6 @@ public:
 	bool IsImmortal();
 	int32_t GetImmortalTime();
 	int32_t GetCurseStack();
+	void AnimeUpdate();
 };
 
