@@ -121,7 +121,8 @@ void EnemyManager::SetPosPop(Vector2 pos)
 	{
 		if ( enemylist_.size() >= MAX_ENEMY_NUM || popEnemyCount_ >= MAX_POP_ENEMY_NUM ) return;
 		popTime_ = POP_INTERVAL;
-		if ( true )
+		int32_t rand = GetRand(1000);
+		if ( rand <= 200 )
 		{
 			unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
 			temp->Initialize();
@@ -131,7 +132,7 @@ void EnemyManager::SetPosPop(Vector2 pos)
 			enemylist_.push_back(move(temp));
 			popEnemyCount_++;
 		}
-		else if ( false )
+		else if ( rand <= 550 )
 		{
 			unique_ptr<ShootEnemy> temp = make_unique<ShootEnemy>();
 			temp->Initialize();
