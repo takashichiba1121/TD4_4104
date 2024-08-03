@@ -5,6 +5,8 @@
 #include <fstream>
 #include "DxlibInclude.h"
 #include "CollisionManager.h"
+#include <strconv.h>
+#include "FontManager.h"
 
 using namespace nlohmann;
 using namespace std;
@@ -62,7 +64,7 @@ void PowerUpCave::Initialize()
 	}
 
 	SetPriducts();
-
+	font_ = FontManager::GetFontHandle("normal");
 	tag.tag = "PowerUp";
 	userData_ = &tag;
 }
@@ -177,9 +179,26 @@ void PowerUpCave::Draw()
 			color = 0xf00f00;
 		}
 			DrawBox(( boxLeftTop_.x + i * boxDist_ ),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,color,true);
-		DrawFormatString(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,
-				0xffffff,"%s\nPowerUp\nStatus:%s \nUP:%d\nCost\nStatus:%s \nDown:%d",nowProductType.c_str(),selectProducts_[ i ]->statusNames.first.c_str(),
-				selectProducts_[ i ]->power,selectProducts_[ i ]->statusNames.second.c_str(),selectProducts_[ i ]->cost);
+			string temp;
+			if ( nowProductType == "Attack" )
+			{
+				temp = "狩猟の道";
+			}
+			else if ( nowProductType == "survival" )
+			{
+				temp = "生存の道";
+			}
+			else
+			{
+				temp = "精密の道";
+			}
+			temp = temp + "\n\n強化\nステータス:" + selectProducts_[ i ]->statusNames.first +
+				"\n増加量:"+ to_string(selectProducts_[ i ]->power) + "\n\n\n代償\nステータス: "+
+				selectProducts_[ i ]->statusNames.second + "\n減少量:"+ to_string(selectProducts_[ i ]->cost);
+
+			temp = utf8_to_sjis(temp);
+			DrawStringToHandle(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,temp.c_str(),
+				0xffffff,font_);
 		}
 	}
 

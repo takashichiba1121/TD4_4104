@@ -8,11 +8,15 @@
 #include"Input.h"
 #include"PlayerBulletManager.h"
 #include"GameConfig.h"
-
+#include "FontManager.h"
 #include<SceneManager.h>
 
 void GameScene::Initialize()
 {
+	FontManager::CreateFontHandle(NULL,16,3,"normal");
+
+	EnemyManager::TexLoad();
+
 	player_ = std::make_unique<Player>();
 	player_->Initialize();
 
@@ -38,7 +42,7 @@ void GameScene::Initialize()
 	nodeManager_->StartNodeSet(0);
 	backGround_ = LoadGraph(std::string("Resources/BackGround/BackGround.png"));
 
-	EnemyManager::TexLoad();
+
 }
 
 void GameScene::Update()
@@ -131,6 +135,7 @@ void GameScene::Finalize()
 {
 	PlayerBulletManager::Instance()->Clear();
 	EnemyManager::Finalize();
+	FontManager::Finalize();
 }
 
 Vector2 GameScene::Scroll()
