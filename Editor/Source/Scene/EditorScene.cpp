@@ -849,33 +849,7 @@ void EditorScene::Export()
 			{
 				if ( !editorMap_[ i ][ j ].out )
 				{
-					if ( editorMap_[ i ][ j ].chip == ChipIndex::ROOM && !editorMap_[ i ][ j ].room
-						|| editorMap_[ i ][ j ].chip == ChipIndex::LOCK_ROOM && !editorMap_[ i ][ j ].room )
-					{
-						RoomSetting roomSetting;
-
-						if ( editorMap_[ i ][ j ].chip == ChipIndex::ROOM )
-						{
-							roomSetting.lock = false;
-						}
-						else
-						{
-							roomSetting.lock = true;
-						}
-
-						RoomSearch(roomSetting,j,i,data);
-
-						roomSettings_.push_back(roomSetting);
-					}
-
-					if ( editorMap_[ i ][ j ].chip == ChipIndex::WALL || editorMap_[ i ][ j ].chip == ChipIndex::ROAD )
-					{
-						data[ "Map" ].push_back(editorMap_[ i ][ j ].chip);
-					}
-					else
-					{
-						data[ "Map" ].push_back(0);
-					}
+					data[ "Map" ].push_back(editorMap_[ i ][ j ].chip);
 
 					editorMap_[ i ][ j ].out = true;
 				}

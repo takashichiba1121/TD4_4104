@@ -64,24 +64,24 @@ void MapChip::MapLoad(const std::string& path)
 			switch ( chip )
 			{
 			case START:
-				player_->SetPos({ 32 + 64 * j,32 + 64 * i });
+				player_->SetPos({ 32.0f + 64.0f * j,32.0f + 64.0f * i });
 				map_[ i ][ j ] = ChipIndex::NONE;
 				break;
 			case FLY_RANGE_ENEMY:
 				map_[ i ][ j ] = ChipIndex::NONE;
-				enemyManager_->SetEnemyPop(EnemyType::FLY,{ 32 + 64 * j,32 + 64 * i });
+				enemyManager_->SetEnemyPop(EnemyType::FLY,{ 32.0f + 64.0f * j,32.0f + 64.0f * i });
 				break;
 			case LONG_RANGE_ENEMY:
 				map_[ i ][ j ] = ChipIndex::NONE;
-				enemyManager_->SetEnemyPop(EnemyType::SHOOT,{ 32 + 64 * j,32 + 64 * i });
+				enemyManager_->SetEnemyPop(EnemyType::SHOOT,{ 32.0f + 64.0f * j,32.0f + 64.0f * i });
 				break;
 			case SHORT_RANGE_ENEMY:
 				map_[ i ][ j ] = ChipIndex::NONE;
-				enemyManager_->SetEnemyPop(EnemyType::ADJACENT,{ 32 + 64 * j,32 + 64 * i });
+				enemyManager_->SetEnemyPop(EnemyType::ADJACENT,{ 32.0f + 64.0f * j,32.0f + 64.0f * i });
 				break;
 			case RANDOM_ENEMY:
 				map_[ i ][ j ] = ChipIndex::NONE;
-				enemyManager_->SetPosPop({ 32 + 64 * j,32 + 64 * i });
+				enemyManager_->SetPosPop({ 32.0f + 64.0f * j,32.0f + 64.0f * i });
 				break;
 
 			case NONE:
@@ -133,10 +133,10 @@ Vector2 MapChip::GetPos(int32_t x,int32_t y) const
 
 uint8_t MapChip::GetNumOfArrayElement(int32_t x, int32_t y) const
 {
-	int32_t posY = min(y,map_.size() - 1);
+	int32_t posY = min(uint32_t( y ),map_.size() - 1);
 	posY = max(y,0);
 
-	int32_t posX = min(x,map_[ posY ].size() - 1);
+	int32_t posX = min(uint32_t(x),map_[ posY ].size() - 1);
 	posX = max(x,0);
 
 	return map_[posY][posX];
