@@ -29,7 +29,7 @@ void PlayerLegCerberus::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,con
 {
 	isDirBottom_ = DirBOTTOM;
 
-	if ( ( Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A) ) && !isEvasionRoll_ && !isAttack )
+	if ( ( Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A) ) && !isEvasionRoll_ && !isAttack && !isJump_ )
 	{
 		*direction_ = false;
 		if ( playerVelocity_->x > topSpeed_ * *changeAcl_ )
@@ -72,7 +72,7 @@ void PlayerLegCerberus::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,con
 			PlayerStandTextureCount_ = 0;
 		}
 	}
-	if ( ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) ) && !isEvasionRoll_ && !isAttack )
+	if ( ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) ) && !isEvasionRoll_ && !isAttack&& !isJump_ )
 	{
 		*direction_ = true;
 		if ( playerVelocity_->x < topSpeed_ * *changeAcl_ )
@@ -169,11 +169,11 @@ void PlayerLegCerberus::JumpStart()
 
 	if ( *direction_ )
 	{
-		playerVelocity_->x += evasionRollSpeed_;
+		playerVelocity_->x += evasionRollSpeed_ * 1.5f;
 	}
 	else
 	{
-		playerVelocity_->x += -evasionRollSpeed_;
+		playerVelocity_->x += -evasionRollSpeed_ * 1.5f;
 	}
 }
 
@@ -192,6 +192,8 @@ void PlayerLegCerberus::Jump()
 		isJump_ = false;
 
 		playerVelocity_->y /= 3;
+
+		isBullet = false;
 	}
 
 }
@@ -255,8 +257,6 @@ void PlayerLegCerberus::Falling()
 		playerVelocity_->y = 0;
 
 		PlayerDownTextureCount_ = 0;
-
-		isBullet = false;
 
 	}
 }
@@ -351,7 +351,7 @@ void PlayerLegCerberus::Load()
 
 	assert(lName.compare("Player") == 0);
 
-	topSpeed_ = jsonObject[ "TopSpeed" ]*1.5f;
+	topSpeed_ = jsonObject[ "TopSpeed" ] * 1.5f;
 	acceleration_ = jsonObject[ "Acceleration" ] * 1.5f;
 	airAcceleration_ = jsonObject[ "AirAcceleration" ] * 1.5f;
 	deccelaration_ = jsonObject[ "Deccelaration" ] * 1.5f;

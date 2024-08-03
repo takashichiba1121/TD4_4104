@@ -117,9 +117,9 @@ void GameScene::Draw()
 
 	dealer_->Draw();
 
-	nodeManager_->NodeMapDraw();
+	//nodeManager_->NodeMapDraw();
 
-	nodeManager_->Draw();
+	//nodeManager_->Draw();
 	
 	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
 	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");
