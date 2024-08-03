@@ -86,6 +86,8 @@ private:
 	float changeCdmg_ = 1.5f;
 
 	int32_t nowCost_=0;
+
+	uint32_t changeMaxCost_ = 0;
 #pragma endregion
 
 #pragma region ステータス初期値
@@ -94,7 +96,7 @@ private:
 
 	uint32_t DEF_ = 0;
 
-
+	const uint32_t MAX_COST_ = 75;
 #pragma endregion
 
 	bool direction_ = false;
@@ -138,10 +140,6 @@ private:
 	uint32_t nowEyeCost_=0;
 
 	uint32_t nowMouthCost_ = 0;
-
-	Vector2 scroll_ = {0,0};
-
-
 public:
 	void Initialize() override;
 
@@ -176,6 +174,8 @@ public:
 	bool AddCdmg(int32_t Cdmg);
 
 	bool AddCost(int32_t cost);
+
+	void AddMaxCost(int32_t AddMaxCost);
 
 	bool SubSpd(int32_t spd);
 
@@ -256,8 +256,5 @@ public:
 		return MAX_HP_ * changeMaxHp_;
 	}
 
-	void SetScroll(Vector2 scroll)
-	{
 
-	}
 };
