@@ -40,5 +40,6 @@ public:
 	Vector2 GetDrawSize();
 	int32_t GetHp();
 	Vector2 GetPos();
+	void SetPos(const Vector2& pos);
 };
 

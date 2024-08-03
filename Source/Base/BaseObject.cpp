@@ -36,3 +36,8 @@ Vector2 BaseObject::GetPos()
 {
 	return pos_;
 }
+
+void BaseObject::SetPos(const Vector2& pos)
+{
+	pos_ = pos;
+}
