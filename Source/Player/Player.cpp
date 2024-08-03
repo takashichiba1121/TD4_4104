@@ -202,7 +202,7 @@ void Player::IventDamage(int32_t damage)
 }
 bool Player::ChangeLeftArm(std::string attackName, uint32_t cost)
 {
-	if (nowCost_ + cost - leftArm_->cost > 100)
+	if (nowCost_ + cost - leftArm_->cost > MAX_COST_ * changeMaxCost_ )
 	{
 		return false;
 	}
@@ -266,7 +266,7 @@ bool Player::ChangeLeftArm(std::string attackName, uint32_t cost)
 
 bool Player::ChangeRightArm(std::string attackName, uint32_t cost)
 {
-	if (nowCost_ + cost - rightArm_->cost > 100)
+	if (nowCost_ + cost - rightArm_->cost > MAX_COST_ * changeMaxCost_ )
 	{
 		return false;
 	}
@@ -331,7 +331,7 @@ bool Player::ChangeRightArm(std::string attackName, uint32_t cost)
 
 bool Player::ChangeLeg(std::string legName, uint32_t cost)
 {
-	if (nowCost_ + cost - leg_->cost > 100)
+	if (nowCost_ + cost - leg_->cost > MAX_COST_*changeMaxCost_)
 	{
 		return false;
 	}
@@ -368,7 +368,7 @@ bool Player::ChangeLeg(std::string legName, uint32_t cost)
 
 bool Player::ChangeEye(std::string eyeName, uint32_t cost)
 {
-	if (nowCost_ + cost - nowEyeCost_ > 100)
+	if (nowCost_ + cost - nowEyeCost_ > MAX_COST_ * changeMaxCost_ )
 	{
 		return false;
 	}
@@ -400,7 +400,7 @@ bool Player::ChangeEye(std::string eyeName, uint32_t cost)
 
 bool Player::ChangeMouth(std::string mouthName, uint32_t cost)
 {
-	if (nowCost_ + cost - nowMouthCost_ > 100)
+	if (nowCost_ + cost - nowMouthCost_ > MAX_COST_ * changeMaxCost_ )
 	{
 		return false;
 	}
@@ -467,6 +467,12 @@ bool Player::AddCdmg(int32_t Cdmg)
 
 	return true;
 }
+
+void Player::AddMaxCost(int32_t AddMaxCost)
+{
+	changeMaxCost_ += AddMaxCost;
+}
+
 bool Player::SubSpd(int32_t spd)
 {
 	if (changeSpd_ - float(spd) / 100.0f <= 0)
