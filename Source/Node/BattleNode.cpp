@@ -30,12 +30,12 @@ void BattleNode::Reset()
 
 	int32_t i = 0;
 	int32_t count = 0;
-	for ( auto& chip : mapChip_->GetMapChip()[ mapChip_->GetMapChip().size() - 2 ] )
+	for ( auto& chip : mapChip_->GetMapChip()[ mapChip_->GetMapChip().size() - 1 ] )
 	{
 		if ( chip == ChipIndex::NEXT )
 		{
 			NextDoor nextDoor;
-			nextDoor.pos = { float(i), float(mapChip_->GetMapChip().size() - 2) };
+			nextDoor.pos = { float(i), float(mapChip_->GetMapChip().size() - 1) };
 			nextDoor.id = count;
 			nextdoors_.push_back(nextDoor);
 			count++;
