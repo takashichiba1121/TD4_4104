@@ -19,6 +19,8 @@ private:
 
 	bool isEvasionRoll_;
 
+	bool isBullet=false;
+
 	uint32_t PlayerStandTexture_[ 10 ];
 
 	uint32_t PlayerStandTextureCount_ = 0;
@@ -35,6 +37,9 @@ private:
 
 	uint32_t PlayerDushTextureCount_ = 0;
 
+	const uint32_t DEF_ = 80;
+
+
 #pragma region ステータス
 
 //移動
@@ -49,7 +54,7 @@ private:
 
 	float airDeccelaration_ = 0;
 
-	float evasionRollSpeed_ = 32;
+	float evasionRollSpeed_ = 16;
 
 	//戦闘
 
@@ -63,13 +68,19 @@ private:
 
 	bool isDirBottom_;
 
+	bool oldIsDirBottom_;
+
+	uint32_t bulletInterval_;
+
+	const uint32_t MAX_BULLET_INTERVAL_=5;
+
 #pragma endregion
 
 public:
 
 	void Initialize(Vector2* playerPos,bool* direction,float* changeAcl) override;
 
-	void Move(bool DirBOTTOM,bool isAttack) override;
+	void Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const float pow) override;
 
 	void JumpStart() override;
 
@@ -79,9 +90,13 @@ public:
 
 	void Falling() override;
 
-	void Draw(Vector2 pos,Vector2 size) override;
+	void Draw(const Vector2& pos,const Vector2& size) override;
 
 	void Load() override;
+
+	uint32_t GetDef() override {
+		return DEF_;
+	}
 
 };
 

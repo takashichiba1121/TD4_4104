@@ -1,11 +1,18 @@
 #pragma once
 #include "WalkEnemy.h"
 #include "FlyEnemy.h"
+#include "ShootEnemy.h"
 #include <list>
 #include <memory>
 
 class MapChip;
 class Player;
+enum EnemyType
+{
+	FLY,
+	SHOOT,
+	ADJACENT
+};
 class EnemyManager
 {
 private:
@@ -20,11 +27,18 @@ private:
 	size_t popEnemyCount_;
 	size_t deadEnemyCount_;
 	BaseEnemy* cursedEnemy_;
-	void Pop();//自動ランダム生成
+
+	static std::array<int32_t,3> texs_;
+
+	void Pop();
+	//自動ランダム生成
 
 	void BossPop();
 public:
-	static void SetEnemyPOP(std::string enemyType,Vector2 pos,Vector2 Velocity);//指定生成
+	void SetEnemyPop(EnemyType enemyType,Vector2 pos,Vector2 Velocity);
+	void SetEnemyPop(EnemyType enemyType,Vector2 pos);
+	void SetPosPop(Vector2 pos);
+	//指定生成
 	void SetPlayerPtr(Player* playerPtr);
 	void Initialize();
 	void Update();
@@ -33,5 +47,7 @@ public:
 	size_t GetEnemyCount();
 	bool GameEnd();
 	void EnemysClear();
+	static void TexLoad();
+	static void Finalize();
 };
 

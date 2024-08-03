@@ -1,0 +1,79 @@
+[
+	{
+		"Type": "ARM",
+		"partsName": "銃腕",
+		"codeName": "Gun",
+		"cost": 25,
+		"partsInfo": "プレイヤーが向いてる方向に\n弾を撃つ"
+	},
+	{
+		"Type": "ARM",
+		"partsName": "クモの腕",
+		"codeName": "Spider",
+		"cost": 25,
+		"partsInfo": "短距離攻撃、\n攻撃は短いが\nダメージはそこそこ。\n当たった敵の移動速度ダウン"
+	},
+	{
+		"Type": "ARM",
+		"partsName": "蔓の腕",
+		"codeName": "Vine",
+		"cost": 50,
+		"partsInfo": "中距離攻撃\n攻撃を受けると\n敵をバインドさせ、\n動けなくなる"
+	},
+	{
+		"Type": "ARM",
+		"partsName": "ケルベロスの肢",
+		"codeName": "Cerberus",
+		"cost": 75,
+		"partsInfo": "当たった敵に\nやけど状態を与える。"
+	},
+	{
+		"Type": "ARM",
+		"partsName": "フェンリルの肢",
+		"codeName": "Fenrir",
+		"cost": 75,
+		"partsInfo": "プレイヤーが向いてる方向に\n氷ビームを放つ腕。\n当たると敵を凍らせる"
+	},
+	{
+		"Type": "ARM",
+		"partsName": "マルスの楯腕",
+		"codeName": "Mars",
+		"cost": 25,
+		"partsInfo": "敵の攻撃をブロックする腕"
+	},
+	{
+		"Type": "LEG",
+		"partsName": "ケルベロスの爪",
+		"codeName": "Cerberus",
+		"cost": 75,
+		"partsInfo": "速度が向上し、\nジャンプが飛び跳ねるに変わる。\n飛び跳ねた時に火の跡を残し、\n当たった敵をやけどにする。"
+	},
+	{
+		"Type": "LEG",
+		"partsName": "フェンリルの爪",
+		"codeName": "Fenrir",
+		"cost": 75,
+		"partsInfo": "ジャンプが飛び跳ねるになり、\n飛び跳ねた時に跡を残し、\n攻撃が当たった敵を\nフリーズ状態にする"
+	},
+	{
+		"Type": "EYE",
+		"partsName": "千里眼",
+		"codeName": "Clairvoyance",
+		"cost": 25,
+		"partsInfo": "敵のHPや攻撃力を見抜ける"
+	},
+	{
+		"Type": "EYE",
+		"partsName": "呪いの眼",
+		"codeName": "Curse",
+		"cost": 25,
+		"partsInfo": "攻撃した敵を\n呪いの印でマーキングし、\n敵が受けるダメージを\n増加させる。\n攻撃すればするほど\nスタックが溜まる。\nマークされた敵以外を\n攻撃するとスタックが\nリセットされる"
+	},
+	{
+		"Type": "MOUTH",
+		"partsName": "魂喰いの口器",
+		"codeName": "Soul",
+		"cost": 75,
+		"partsInfo": "敵を食べれるようになる。\n敵を食べるとHP回復"
+	}
+]

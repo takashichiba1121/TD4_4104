@@ -11,7 +11,7 @@ void PlayerAttackGun::Initialize(Vector2* playerPos,Vector2* velocity,bool* dire
 	velocity_ = velocity;
 }
 
-void PlayerAttackGun::AttackInit(float pow)
+void PlayerAttackGun::AttackInit(float pow,float changeCrit,float changeCdmg)
 {
 	if ( isAttack_ == false )
 	{
@@ -21,13 +21,13 @@ void PlayerAttackGun::AttackInit(float pow)
 
 		if ( *direction_ )
 		{
-			newBullet->Initialize({ 10,0 },*playerPos_,60,pow*POW_);
+			newBullet->Initialize({ 10,0 },*playerPos_,60,pow*POW_,changeCrit,changeCdmg,PlayerBullet::Type::Normal);
 
 			velocity_->x -= 5;
 		}
 		else
 		{
-			newBullet->Initialize({ -10,0 },*playerPos_,60,pow*POW_);
+			newBullet->Initialize({ -10,0 },*playerPos_,60,pow*POW_,changeCrit,changeCdmg,PlayerBullet::Type::Normal);
 
 			velocity_->x += 5;
 		}

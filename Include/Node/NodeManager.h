@@ -37,8 +37,9 @@ private:
 	const int32_t STARTNODE_DREW_MAX_Y = 650;
 	const int32_t NODE_DREW_MIN_Y = 100;
 
-	int oldRand = 0;
-	int oldRandomJ = 0;
+	int32_t oldRand = 0;
+	int32_t oldRandomJ = 0;
+	float scrollSpeed_ = 7.0f;
 
 	int32_t reinforcementImg;
 	int32_t transactionImg;
@@ -46,13 +47,15 @@ private:
 	int32_t shopImg;
 	int32_t healingImg;
 	int32_t startImg;
+	int32_t backGroundImg;
+
 	int32_t playerNodePos;
 
 	float leftBottomX;
 	float leftBottomY;
 
 
-	// 確率分布を作成する
+	// 遒ｺ邇・・蟶・ｒ菴懈・縺吶ｋ
 	std::discrete_distribution<int> distribution;
 	std::array<std::unique_ptr<BaseNode>,NodeType::TYPE_NUM - 3>rooms_;
 	std::list<Node*> drawNode_;
@@ -71,6 +74,7 @@ private:
 	MapChip* mapChip_;
 	Player* player_;
 	PowerUpCave* powerUp_;
+	DealDaemon* dealer_;
 
 	bool isNodeDraw;
 
@@ -93,13 +97,14 @@ public:
 	void SetMapChip(MapChip* mapChip);
 	void SetPlayer(Player* player);
 	void SetPowerUp(PowerUpCave* powerUp);
+	void SetDealer (DealDaemon* dealer );
 
 private:
 
 	void GenerateInitialGrid();
-	std::vector<int> GetRandomStartingPoints();
-	int SetupConnection(int i,int j);
-	bool WouldCrossExistingPath(int i,int j,Node* room);
+	std::vector<int32_t> GetRandomStartingPoints();
+	int32_t SetupConnection(int32_t i,int32_t j);
+	bool WouldCrossExistingPath(int32_t i,int32_t j,Node* room);
 	void SetupRoomTypes();
 	void SetRoomRandomly(Node* roomToSet);
 	bool RoomHasParentOfType(Node* room,NodeType type);

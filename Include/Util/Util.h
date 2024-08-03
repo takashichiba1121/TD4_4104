@@ -1,5 +1,10 @@
 #pragma once
 #include <stdint.h>
+#include <string>
+#include <locale>
+#include <codecvt>
+#include <Windows.h>
+#define  PI 3.14159265358979323846
 
 double Lerp(double startPos,double endPos,double maxTime,double time);
 double Lerp(double startPos,double endPos,double time);
@@ -12,6 +17,10 @@ double OutOutRelayQuad(double startPos,double endPos,double relayPos,double maxT
 double EaseInBack(double startPos,double endPos,double maxTime,double time);
 double EaseInBack2(double startPos,double endPos,double maxTime,double time);
 double EaseOutBounce(double startPos,double endPos,double time,double maxTime);
+
+int32_t sign(float num);
+
+std::wstring StringToWString(std::string oString);
 
 enum Effects
 {
@@ -26,17 +35,20 @@ enum Effects
 class Counter
 {
 private:
-	int32_t nowCount_;
-	int32_t endCount_;
+	float nowCount_;
+	float endCount_;
 public:
-	void CountUp(uint32_t up = 1);
-	void CountDown(uint32_t down = 1);
+	void CountUp(float up = 1);
+	void CountDown(float down = 1);
 	bool IsCountEnd();
 	bool IsCountZero();
 	bool IsCountUnderZero();
-	void SetEndCount(int32_t endCount);
+	void SetEndCount(float endCount);
+	void SetNowCount(float count);
 	void ReSetCount();
-	int32_t GetCount();
-	int32_t GetEndCount();
+	float GetCount();
+	float GetEndCount();
 
 };
+
+constexpr float DEG_TO_RAD = 3.141592f / 180.0f;

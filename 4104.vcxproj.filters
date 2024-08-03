@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="ソース ファイル">
@@ -15,9 +15,6 @@
     </Filter>
     <Filter Include="ソース ファイル\player">
       <UniqueIdentifier>{29b8397c-e123-46e6-9b9e-eb6f058b6e76}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\player">
-      <UniqueIdentifier>{1afd2eae-3abb-474e-b2a0-f18516c6f13b}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\Enemy">
       <UniqueIdentifier>{11d37f02-5fff-4b2f-9f9b-b275c2a9ea39}</UniqueIdentifier>
@@ -84,6 +81,9 @@
     </Filter>
     <Filter Include="ヘッダー ファイル\Util">
       <UniqueIdentifier>{96cd2cad-def0-4d6b-97fe-303d4efadebb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Player">
+      <UniqueIdentifier>{1afd2eae-3abb-474e-b2a0-f18516c6f13b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +180,15 @@
     <ClCompile Include="Source\NPC\PowerUpCave.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Scene\ClearScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\GameOverScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\ShootEnemy.cpp">
+      <Filter>ソース ファイル\Enemy</Filter>
+    </ClCompile>
     <ClCompile Include="Source\NPC\DealDaemon.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -192,9 +201,6 @@
     <ClCompile Include="Source\Scene\ClearScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scene\GameOverScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Base\BaseEnemy.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -202,9 +208,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="GameCore\BaseScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene\GameScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene\SceneFactrory.cpp">
@@ -222,6 +225,18 @@
     <ClCompile Include="Source\Player\PlayerMouth.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Player\PlayerAttackSpider.cpp">
+      <Filter>ソース ファイル\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\EnemyBullet.cpp">
+      <Filter>ソース ファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player\PlayerLegNormal.cpp">
+      <Filter>ソース ファイル\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Node\BossNode.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Player\PlayerAttackVine.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
@@ -237,8 +252,11 @@
     <ClCompile Include="Source\Player\PlayerLegFenrir.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Player\PlayerAttackSpider.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Include\Scene\GameScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player\PlayerLegCerberus.cpp">
+      <Filter>ソース ファイル\player</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene\GameOverScene.cpp">
       <Filter>ソース ファイル\Scene</Filter>
@@ -262,6 +280,15 @@
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\Player\PlayerAttackSpider.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Scene\GameScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player\PlayerLegCerberus.cpp">
+      <Filter>ソース ファイル\player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy\Boss\BossEnemy.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="GameCore\BaseScene.cpp">
@@ -321,6 +348,12 @@
     <ClCompile Include="Source\Enemy\Boss\BossBullet.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Base\TextureManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Include\Util\DxlibInclude.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ThirdParty\imgui\imconfig.h">
@@ -339,10 +372,10 @@
       <Filter>ThirdParty\imgui</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerAttack.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerAttackFist.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Util\Math\Vector2.h">
       <Filter>ヘッダー ファイル\Math</Filter>
@@ -354,10 +387,10 @@
       <Filter>ヘッダー ファイル\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerBulletManager.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerBullet.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Collision\IObject.h">
       <Filter>ヘッダー ファイル\Collision</Filter>
@@ -414,13 +447,16 @@
       <Filter>ヘッダー ファイル\Node</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\Player.h">
-      <Filter>ヘッダー ファイル\player</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Player\PlayerAttackSpider.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerAttackGun.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Node\BossNode.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Enemy\ShootEnemy.h">
+      <Filter>ヘッダー ファイル\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Include\NPC\DealDaemon.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -440,25 +476,34 @@
     <ClInclude Include="Include\Player\PlayerMouth.h">
       <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Node\StartNode.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
     <ClInclude Include="Include\Player\PlayerAttackVine.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerAttackMars.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerAttackFenrir.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerAttackCerberus.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerLeg.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerLegNormal.h">
-      <Filter>ヘッダー ファイル\player</Filter>
+      <Filter>ヘッダー ファイル\Player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerLegFenrir.h">
+      <Filter>ヘッダー ファイル\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Player\PlayerLegCerberus.h">
+      <Filter>ヘッダー ファイル\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Player\PlayerAttackSpider.h">
       <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerAttackGun.h">
@@ -552,6 +597,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Include\Enemy\Boss\BossBullet.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Base\TextureManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

@@ -40,27 +40,41 @@
         "Name": "Boss",
         "Hp":10,
         "AttackInterval":1.5,
-        "ApproachHitBox":[
-                128,
+        "AttackApproachHitBox":[
+                40,
                 128
+        ],
+        "ChargeApproachHitBox":[
+                40,
+                128
+        ],
+        "Probabilities":[
+            75,
+            25
         ],
         "Attack":{
             "Time":60,
             "Size":[
-                96, 
-                192
+                70, 
+                64
             ],
-            "Power":1
+            "Power":1,
+            "Offset":[
+                0, 
+                0
+            ]
         }
         ,
         "Charge":{
             "Time":80,
             "Speed":10,
             "Size":[
-                210, 
-                192
+                184, 
+                184
             ],
-            "Power":1
+            "Power":1,
+            "AnimeFrame": 11,
+            "Anime2Frame": 2
         },
         "LongRange":{
             "ChargeTime":80,
@@ -73,7 +87,8 @@
                     48, 
                     48
                 ],
-                "Power":1
+                "Power":1,
+                "RotateSpeed":25
             }
             
         }

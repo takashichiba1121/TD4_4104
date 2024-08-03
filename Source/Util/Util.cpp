@@ -1,5 +1,8 @@
 #include "Util.h"
 
+
+using namespace std;
+
 double Lerp(double startPos,double endPos,double maxTime,double time)
 {
 	time /= maxTime;
@@ -104,15 +107,60 @@ double EaseOutBounce(double startPos,double endPos,double time,double maxTime)
 	}
 }
 
+int32_t sign(float num)
+{
+	if ( num > 0 )
+	{
+		return 1;
+	}
+	else if ( num < 0 )
+	{
+		return -1;
+	}
+	return 0;
+}
+
+
+
+std::wstring StringToWString(std::string oString)
+{
+	// SJIS → wstring
+	int iBufferSize = MultiByteToWideChar(CP_ACP,0,oString.c_str()
+		,-1,( wchar_t* ) NULL,0);
+
+	// バッファの取得
+	wchar_t* cpUCS2 = new wchar_t[ iBufferSize ];
+
+	// SJIS → wstring
+	MultiByteToWideChar(CP_ACP,0,oString.c_str(),-1,cpUCS2
+		,iBufferSize);
+
+	// stringの生成
+	std::wstring oRet(cpUCS2,cpUCS2 + iBufferSize - 1);
+
+	// バッファの破棄
+	delete[ ] cpUCS2;
+
+	// 変換結果を返す
+	return( oRet );
+}
+
+
+
 void Counter::ReSetCount()
 {
 	nowCount_ = 0;
 }
 
-void Counter::SetEndCount(int32_t endCount)
+void Counter::SetEndCount(float endCount)
 {
 	nowCount_ = 0;
 	endCount_ = endCount;
+}
+
+void Counter::SetNowCount(float count)
+{
+	nowCount_ = count;
 }
 
 bool Counter::IsCountUnderZero()
@@ -142,22 +190,25 @@ bool Counter::IsCountEnd()
 	return false;
 }
 
-void Counter::CountDown(uint32_t down)
+void Counter::CountDown(float down)
 {
 	nowCount_ -= down;
 }
 
-void Counter::CountUp(uint32_t up)
+void Counter::CountUp(float up)
 {
-	nowCount_ += up;
+	if ( !IsCountEnd() )
+	{
+		nowCount_ += up;
+	}
 }
 
-int32_t Counter::GetCount()
+float Counter::GetCount()
 {
 	return nowCount_;
 }
 
-int32_t Counter::GetEndCount()
+float Counter::GetEndCount()
 {
 	return endCount_;
 }
