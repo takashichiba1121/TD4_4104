@@ -37,6 +37,8 @@ void MapChip::Initialize()
 
 void MapChip::MapLoad(const std::string& path)
 {
+	Reset();
+
 	std::fstream file;
 	file.open(path);
 	if ( file.fail() )
@@ -203,6 +205,16 @@ void MapChip::Draw(const Vector2& screenPos)
 			}
 		}
 	}
+}
+
+void MapChip::Reset()
+{
+	for (size_t i = 0; i < map_.size(); i++)
+	{
+		map_[i].clear();
+	}
+
+	map_.clear();
 }
 
 void MapChip::RoomInstallation(const std::string& directoryPath,const Vector2& leftTop)

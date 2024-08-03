@@ -91,3 +91,36 @@ void BaseNode::PlayerNodeMove()
 		nodeManager_->ChangeNode(nextDoor->id);
 	}
 }
+
+void BaseNode::GetNextDoors()
+{
+	int32_t i = 0;
+	int32_t count = 0;
+	for ( auto& chip : mapChip_->GetMapChip()[ mapChip_->GetMapChip().size() - 1 ] )
+	{
+		if ( chip == ChipIndex::NEXT )
+		{
+			NextDoor nextDoor;
+			nextDoor.pos = { float(i), float(mapChip_->GetMapChip().size() - 1) };
+			nextDoor.id = count;
+			nextdoors_.push_back(nextDoor);
+			count++;
+		}
+
+		i++;
+	}
+
+	if ( nextdoors_.size() > nextDoorsNum_ )
+	{
+		std::vector<NextDoor> tmpNextdoors = nextdoors_;
+
+		while ( tmpNextdoors.size() > nextDoorsNum_ && tmpNextdoors.size() != 1 )
+		{
+			NextDoor door = tmpNextdoors.back();
+			mapChip_->MapWrite(door.pos.x,door.pos.y,ChipIndex::ROAD);
+			tmpNextdoors.pop_back();
+
+		}
+
+	}
+}

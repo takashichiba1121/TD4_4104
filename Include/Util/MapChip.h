@@ -46,5 +46,7 @@ public:
 
 	void Draw(const Vector2& screenPos);
 
+	void Reset();
+
 	void RoomInstallation(const std::string& directoryPath,const Vector2& leftTop);
 };
