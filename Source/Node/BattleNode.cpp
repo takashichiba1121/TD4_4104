@@ -23,6 +23,8 @@ void BattleNode::Draw()
 
 void BattleNode::Reset()
 {
+	mapChip_->MapLoad("Resources/Export/Map/Map_01.json");
+
 	player_->Reset();
 
 	int32_t i = 0;

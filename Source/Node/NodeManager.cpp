@@ -109,7 +109,7 @@ void NodeManager::Initialize()
 		{
 			startNodes_.push_back(&nodes_[ 0 ][ point ]);
 			drawNode_.push_back(&nodes_[ 0 ][ point ]);
-			nodes_[ 0 ][ point ].type.value = NodeType::START;
+			nodes_[ 0 ][ point ].type.value = NodeType::BATTLE;
 		}
 	}
 
