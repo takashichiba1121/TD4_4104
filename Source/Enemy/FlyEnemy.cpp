@@ -18,7 +18,7 @@ void FlyEnemy::Initialize()
 	shape_->SetRadius(drawSize_ / 2);
 	pos_.x = GameConfig::GetWindowWidth() / 2;
 	pos_.y = GameConfig::GetWindowHeight() / 2+ 50;
-	for ( int i = 0; i < moveCheckPoint_.size(); i++ )
+	for ( size_t i = 0; i < moveCheckPoint_.size(); i++ )
 	{
 		int8_t r = GetRand(200) + 500;
 		float theta = 2 * PI * ( GetRand(60) / 360 + (i * 0.15f));
