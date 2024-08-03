@@ -4,7 +4,7 @@
 uint32_t SoundManager::LoadSound(const std::string& path_)
 {
 	//一回読み込んだことがあるファイルはそのまま返す
-	auto textureItr = find_if(soundDates_.begin(),soundDates_.end(), [&](std::pair<const std::string,SoundManager::Tex>& texture)
+	auto textureItr = find_if(soundDates_.begin(),soundDates_.end(), [&](std::pair<const std::string,SoundManager::Sound>& texture)
 		{
 			return texture.second.path == path_;
 		});
