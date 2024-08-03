@@ -59,6 +59,7 @@ public:
 	bool IsEffect(Effects effect);
 	bool IsCursedDamage();
 	bool IsImmortal();
+	bool OnScreen(Vector2 scrool);
 	int32_t GetImmortalTime();
 	int32_t GetCurseStack();
 	void AnimeUpdate();

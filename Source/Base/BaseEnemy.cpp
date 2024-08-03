@@ -1,5 +1,6 @@
 #include "BaseEnemy.h"
 #include <Player.h>
+#include "GameConfig.h"
 
 void BaseEnemy::EffectUpdate()
 {
@@ -137,6 +138,18 @@ bool BaseEnemy::IsCursedDamage()
 bool BaseEnemy::IsImmortal()
 {
 	return immortal_;
+}
+
+bool BaseEnemy::OnScreen(Vector2 scrool)
+{
+	if (pos_.x - scrool.x >= 0 && pos_.x - scrool.x <= GameConfig::GetWindowWidth())
+	{
+		if (pos_.y - scrool.y >= 0 && pos_.y - scrool.y <= GameConfig::GetWindowHeight())
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 int32_t BaseEnemy::GetImmortalTime()

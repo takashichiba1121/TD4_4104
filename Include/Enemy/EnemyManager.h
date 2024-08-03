@@ -27,6 +27,7 @@ private:
 	size_t popEnemyCount_;
 	size_t deadEnemyCount_;
 	BaseEnemy* cursedEnemy_;
+	size_t screenEnemy_ = 0;
 
 	static std::array<int32_t,3> texs_;
 

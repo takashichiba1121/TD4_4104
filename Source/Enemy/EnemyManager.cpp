@@ -176,9 +176,14 @@ void EnemyManager::Update()
 {
 	Pop();
 
+	screenEnemy_ = 0;
 	for ( auto& itr : enemylist_ )
 	{
-		itr->Update();
+		if ( itr->OnScreen({ 0,0 }) )
+		{
+			itr->Update();
+			screenEnemy_++;
+		}
 	}
 
 	deadEnemyCount_ += enemylist_.remove_if([](unique_ptr<BaseEnemy>& enemy )
@@ -212,7 +217,10 @@ void EnemyManager::Draw()
 {
 	for ( auto& itr : enemylist_ )
 	{
-		itr->Draw({0,0});
+		if ( itr->OnScreen({ 0,0 }) )
+		{
+			itr->Draw({ 0,0 });
+		}
 	}
 	DrawFormatString(GameConfig::GetWindowWidth() - 200,10,0xffffff,"KillEnemy %d / %d",deadEnemyCount_,MAX_POP_ENEMY_NUM);
 }
@@ -238,7 +246,7 @@ bool EnemyManager::GameEnd()
 
 bool EnemyManager::IsEnemyEmpty()
 {
-	return enemylist_.empty();
+	return screenEnemy_ <= 0;
 }
 
 void EnemyManager::EnemysClear()
