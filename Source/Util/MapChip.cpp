@@ -147,12 +147,12 @@ const Vector2& MapChip::GetScreenPos() const
 	return screenPos_;
 }
 
-const Vector2& MapChip::GetLeftTopPos() const
+const Vector2 MapChip::GetLeftTopPos() const
 {
 	return  { float(BLOCK_SIZE/2) ,float(BLOCK_SIZE/2) };
 }
 
-const Vector2& MapChip::GetRightTopBottom() const
+const Vector2 MapChip::GetRightTopBottom() const
 {
 	return { float((map_[ 0 ].size() - 1) * BLOCK_SIZE) ,float((map_.size() - 1) * BLOCK_SIZE) };
 }
