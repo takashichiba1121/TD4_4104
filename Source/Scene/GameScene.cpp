@@ -43,8 +43,6 @@ void GameScene::Update()
 		nodeManager_->Reset();
 	}
 
-	nodeManager_->Update();
-
 	if ( player_->IsPowerUp() )
 	{
 		powerUp_->Update();

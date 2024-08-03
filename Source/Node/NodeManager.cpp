@@ -12,15 +12,16 @@
 #include<BossNode.h>
 
 #include<GameConfig.h>
+#include<Input.h>
 
-int GetRand(int min_,int max_)
+int32_t GetRand(int32_t min_,int32_t max_)
 {
 	// 乱数生成器
 	static std::random_device slRD;
 	static std::default_random_engine lsEngine(slRD());
 
 	// 分布生成器
-	std::uniform_int_distribution<int> lsDistribution(min_,max_);
+	std::uniform_int_distribution<int32_t> lsDistribution(min_,max_);
 
 	// 乱数を生成
 	return lsDistribution(lsEngine);
@@ -56,53 +57,9 @@ void NodeManager::Initialize()
 	shopImg = LoadGraph("Resources/Node/shop.png");
 	healingImg = LoadGraph("Resources/Node/healing.png");
 	startImg = LoadGraph("Resources/Node/start.png");
+	backGroundImg = LoadGraph("Resources/BackGround/mapBackGround.png");
 
-	distribution = std::discrete_distribution<int>(nodeProbabilities,nodeProbabilities + NodeType::TYPE_NUM);
-
-	GenerateInitialGrid();
-
-
-	std::vector<int> startingPoints = GetRandomStartingPoints();
-
-	for ( int k = 0; k < PATHS; k++ )
-	{
-		int j = startingPoints[ DxLib::GetRand(startingPoints.size() - 1) ];
-
-		int current_j = j;
-		for ( int i = 0; i < FLOORS - 1; ++i )
-		{
-			current_j = SetupConnection(i,current_j);
-		}
-	}
-
-	for ( int point : startingPoints )
-	{
-		if ( nodes_[ 0 ][ point ].type.value != NodeType::Type::NO_CHILDREN )
-		{
-			startNodes_.push_back(&nodes_[ 0 ][ point ]);
-			drawNode_.push_back(&nodes_[ 0 ][ point ]);
-			nodes_[ 0 ][ point ].type.value = NodeType::START;
-		}
-	}
-
-	for ( int i = 0; i < MAP_WIDTH; ++i )
-	{
-		if ( !nodes_[ FLOORS - 1 ][ i ].previews.empty() )
-		{
-			nodes_[ FLOORS - 1 ][ i ].nexts.push_back(&bossNode_);
-			nodes_[ FLOORS - 1 ][ i ].type.value = NodeType::Type::NONE;
-		}
-	}
-
-	SetupRoomTypes();
-
-	for ( auto& node : drawNode_ )
-	{
-		std::vector<Node*>& nodes = node->nexts;
-		std::sort(nodes.begin(),nodes.end());
-	}
-
-	std::sort(startNodes_.begin(),startNodes_.end());
+	distribution = std::discrete_distribution<int32_t>(nodeProbabilities,nodeProbabilities + NodeType::TYPE_NUM);
 
 	rooms_[ NodeType::REINFORCEMENT ] = std::make_unique<ReinforcementNode>();
 	rooms_[ NodeType::TRANSACTION ] = std::make_unique<TransactionNode>();
@@ -129,14 +86,64 @@ void NodeManager::Initialize()
 
 	bossNode_.type.value = NodeType::BOSS;
 
+	GenerateInitialGrid();
+
+	std::vector<int32_t> startingPoints = GetRandomStartingPoints();
+
+	for ( int32_t k = 0; k < PATHS; k++ )
+	{
+		int32_t j = startingPoints[ DxLib::GetRand(startingPoints.size() - 1) ];
+
+		int32_t current_j = j;
+		for ( int32_t i = 0; i < FLOORS - 1; ++i )
+		{
+			current_j = SetupConnection(i,current_j);
+		}
+	}
+
+	for ( int32_t point : startingPoints )
+	{
+		if ( nodes_[ 0 ][ point ].type.value != NodeType::Type::NO_CHILDREN )
+		{
+			startNodes_.push_back(&nodes_[ 0 ][ point ]);
+			drawNode_.push_back(&nodes_[ 0 ][ point ]);
+			nodes_[ 0 ][ point ].type.value = NodeType::START;
+		}
+	}
+
+	for ( int32_t i = 0; i < MAP_WIDTH; ++i )
+	{
+		if ( !nodes_[ FLOORS - 1 ][ i ].previews.empty() )
+		{
+			nodes_[ FLOORS - 1 ][ i ].nexts.push_back(&bossNode_);
+			nodes_[ FLOORS - 1 ][ i ].type.value = NodeType::Type::NONE;
+		}
+	}
+
+	SetupRoomTypes();
+
+	for ( int32_t i = 0; i < FLOORS; ++i )
+	{
+		for ( int32_t j = 0; j < MAP_WIDTH; ++j )
+		{
+			if ( !nodes_[ i ][ j ].nexts.empty() )
+			{
+				std::vector<Node*>& nodes = nodes_[ i ][ j ].nexts;
+				std::sort(nodes.begin(),nodes.end(),[ ] (Node* node,Node* node2) { return node->column < node2->column; });
+			}
+		}
+	}
+
+	std::sort(startNodes_.begin(),startNodes_.end());
+
 	playerNodePos = 0;
-	leftBottomX = 100;
+	leftBottomX = 450;
 	leftBottomY = 650;
 
 	int32_t bossNodeX = 0;
 	int32_t nodeCount = 0;
 
-	for ( size_t i = 0; i < MAP_WIDTH; i++ )
+	for ( int32_t i = 0; i < MAP_WIDTH; i++ )
 	{
 		if ( !nodes_[ FLOORS - 1 ][ i ].previews.empty() )
 		{
@@ -162,12 +169,12 @@ void NodeManager::Update()
 		int32_t scroll = GetMouseWheelRotVol();
 		if ( scroll == -1 && leftBottomY > STARTNODE_DREW_MAX_Y )
 		{
-			leftBottomY += 1.0f * scroll;
+			leftBottomY += scrollSpeed_ * scroll;
 		}
 
 		if ( scroll == 1 && nodes_[ playerNodePos - 1 ][ 0 ].position.y + leftBottomY < NODE_DREW_MIN_Y )
 		{
-			leftBottomY += 1.0f * scroll;
+			leftBottomY += scrollSpeed_ * scroll;
 		}
 	}
 
@@ -195,21 +202,36 @@ void NodeManager::Update()
 		nextNode_ = nullptr;
 	}
 
-	node_->Update();
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_M) )
+	{
+		if ( isNodeDraw )
+		{
+			isNodeDraw = false;
+		}
+		else
+		{
+			isNodeDraw = true;
+		}
+	}
 
-	isNodeDraw = false;
+	node_->Update();
 }
 
 void NodeManager::Draw()
 {
+	if ( isNodeDraw )
+	{
+		NodeMapDraw();
+	}
+
 	node_->Draw();
 }
 
 void NodeManager::Reset()
 {
-	for ( int i = 0; i < FLOORS; ++i )
+	for ( int32_t i = 0; i < FLOORS; ++i )
 	{
-		for ( int j = 0; j < MAP_WIDTH; ++j )
+		for ( int32_t j = 0; j < MAP_WIDTH; ++j )
 		{
 			nodes_[ i ][ j ].nexts.clear();
 			nodes_[ i ][ j ].previews.clear();
@@ -219,14 +241,14 @@ void NodeManager::Reset()
 
 	drawNode_.clear();
 
-	std::vector<int> startingPoints = GetRandomStartingPoints();
+	std::vector<int32_t> startingPoints = GetRandomStartingPoints();
 
-	for ( int k = 0; k < PATHS; k++ )
+	for ( int32_t k = 0; k < PATHS; k++ )
 	{
-		int j = startingPoints[ DxLib::GetRand(startingPoints.size() - 1) ];
+		int32_t j = startingPoints[ DxLib::GetRand(startingPoints.size() - 1) ];
 
-		int current_j = j;
-		for ( int i = 0; i < FLOORS - 1; ++i )
+		int32_t current_j = j;
+		for ( int32_t i = 0; i < FLOORS - 1; ++i )
 		{
 			current_j = SetupConnection(i,current_j);
 
@@ -235,7 +257,7 @@ void NodeManager::Reset()
 
 	startNodes_.clear();
 
-	for ( int point : startingPoints )
+	for ( int32_t point : startingPoints )
 	{
 		if ( nodes_[ 0 ][ point ].type.value != NodeType::Type::NO_CHILDREN )
 		{
@@ -245,10 +267,16 @@ void NodeManager::Reset()
 		}
 	}
 
-	for ( auto& node : drawNode_ )
+	for ( int32_t i = 0; i < FLOORS; ++i )
 	{
-		std::vector<Node*>& nodes = node->nexts;
-		std::sort(nodes.begin(),nodes.end());
+		for ( int32_t j = 0; j < MAP_WIDTH; ++j )
+		{
+			if ( !nodes_[ i ][ j ].nexts.empty() )
+			{
+				std::vector<Node*>& nodes = nodes_[ i ][ j ].nexts;
+				std::sort(nodes.begin(),nodes.end());
+			}
+		}
 	}
 
 	std::sort(startNodes_.begin(),startNodes_.end());
@@ -257,14 +285,16 @@ void NodeManager::Reset()
 
 void NodeManager::NodeMapDraw()
 {
-	isNodeDraw = true;
 
 	playerNodePos = selectNode_->row + 3;
 	playerNodePos = min(playerNodePos,FLOORS);
 
-	for ( int i = 0; i < playerNodePos; ++i )
+	DrawRotaGraph(GameConfig::GetWindowWidth()/2,GameConfig::GetWindowHeight()/2-2,1.0f,0.0,backGroundImg,true);
+
+	DrawCircle(leftBottomX + selectNode_->position.x,leftBottomY + selectNode_->position.y,20,GetColor(255,0,0));
+	for ( int32_t i = 0; i < playerNodePos; ++i )
 	{
-		for ( int j = 0; j < MAP_WIDTH; ++j )
+		for ( int32_t j = 0; j < MAP_WIDTH; ++j )
 		{
 			NodeDrew(leftBottomX,leftBottomY,nodes_[ i ][ j ],true);
 
@@ -311,7 +341,6 @@ void NodeManager::NodeDrew(int32_t leftBottomX,int32_t leftBottomY,const Node& n
 		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,0.5,0,startImg,true);
 		break;
 	default:
-		DrawCircle(leftBottomX + selectNode_->position.x,leftBottomY + selectNode_->position.y,5,GetColor(255,0,0));
 		break;
 	}
 }
@@ -345,11 +374,11 @@ void NodeManager::SetPowerUp(PowerUpCave* powerUp)
 
 void NodeManager::GenerateInitialGrid()
 {
-	for ( int i = 0; i < FLOORS; ++i )
+	for ( int32_t i = 0; i < FLOORS; ++i )
 	{
 		std::vector<Node> adjacentRooms;
 
-		for ( int j = 0; j < MAP_WIDTH; ++j )
+		for ( int32_t j = 0; j < MAP_WIDTH; ++j )
 		{
 			Node currentRoom;
 			Vector2 offset(DxLib::GetRand(PLACEMENT_RANDOMNESS),DxLib::GetRand(PLACEMENT_RANDOMNESS));
@@ -370,19 +399,19 @@ void NodeManager::GenerateInitialGrid()
 	}
 }
 
-std::vector<int> NodeManager::GetRandomStartingPoints()
+std::vector<int32_t> NodeManager::GetRandomStartingPoints()
 {
-	std::vector<int> yCoordinates;
-	int uniquePoints = 0;
+	std::vector<int32_t> yCoordinates;
+	int32_t uniquePoints = 0;
 
 	while ( uniquePoints < 2 )
 	{
 		uniquePoints = 0;
 		yCoordinates.clear();
 
-		for ( int i = 0; i < START_POINT; ++i )
+		for ( int32_t i = 0; i < START_POINT; ++i )
 		{
-			int startingPoint = DxLib::GetRand(MAP_WIDTH - 1);
+			int32_t startingPoint = DxLib::GetRand(MAP_WIDTH - 1);
 
 			if ( find(yCoordinates.begin(),yCoordinates.end(),startingPoint) == yCoordinates.end() )
 			{
@@ -396,13 +425,13 @@ std::vector<int> NodeManager::GetRandomStartingPoints()
 	return yCoordinates;
 }
 
-int NodeManager::SetupConnection(int i,int j)
+int32_t NodeManager::SetupConnection(int32_t i,int32_t j)
 {
 	Node* nextRoom = nullptr;
 	Node* currentRoom = &nodes_[ i ][ j ];
-	int rand_ = 0;
-	int selectJ;
-	int random_j = 0;
+	int32_t rand_ = 0;
+	int32_t selectJ;
+	int32_t random_j = 0;
 
 	{
 		oldRandomJ = random_j;
@@ -453,7 +482,7 @@ int NodeManager::SetupConnection(int i,int j)
 	return nextRoom->column;
 }
 
-bool NodeManager::WouldCrossExistingPath(int i,int j,Node* room)
+bool NodeManager::WouldCrossExistingPath(int32_t i,int32_t j,Node* room)
 {
 	Node* leftNeighbour = nullptr;
 	Node* rightNeighbour = nullptr;

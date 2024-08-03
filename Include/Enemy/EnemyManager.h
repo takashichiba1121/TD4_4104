@@ -31,6 +31,8 @@ private:
 	static std::array<int32_t,3> texs_;
 
 	void Pop();//自動ランダム生成
+
+	void BossPop();
 public:
 	void SetEnemyPOP(std::string enemyType,Vector2 pos,Vector2 Velocity);
 	void SetEnemyPOP(EnemyType enemyType,Vector2 pos);

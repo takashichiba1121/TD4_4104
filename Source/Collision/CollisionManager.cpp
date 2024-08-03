@@ -103,6 +103,25 @@ void CollisionManager::Update()
 						objectA->OnCollision();
 						objectB->OnCollision();
 					}
+					else if ( objectA->GetShapeType() == ShapeType::S_RECT && objectB->GetShapeType() == ShapeType::S_CIRCLE )
+					{
+						RectShape* rect = dynamic_cast< RectShape* >( objectA->GetShape() );
+						CircleShape* circle = dynamic_cast< CircleShape* >( objectB->GetShape() );
+
+						if ( Collision::Rect2Circe(*rect,*circle) )
+						{
+							objectA->collisionInfo_.object = objectB;
+							objectA->collisionInfo_.shape = objectB->GetShape();
+							objectA->collisionInfo_.userData = objectB->userData_;
+
+							objectB->collisionInfo_.object = objectA;
+							objectB->collisionInfo_.shape = objectA->GetShape();
+							objectB->collisionInfo_.userData = objectA->userData_;
+
+							objectA->OnCollision();
+							objectB->OnCollision();
+						}
+					}
 				}
 			}
 		}
@@ -110,6 +129,12 @@ void CollisionManager::Update()
 
 	for ( auto itr : mapChipObjects_ )
 	{
+
+		if (! itr->mapChipObject_ )
+		{
+			continue;
+		}
+
 		itr->dir_ = 0;
 
 		if ( itr->speed_.x < 0 )
@@ -170,8 +195,8 @@ bool CollisionManager::DownCollision(IObject* object)
 	int32_t downLeftX = static_cast< int32_t >( ( objectX - object->r_.x ) / BLOCK_SIZE );
 	int32_t downRightX = static_cast< int32_t >( ( objectX + object->r_.x + -1 ) / BLOCK_SIZE );
 
-	int32_t downLeftY = static_cast< int32_t >( ( ( objectY + screenPos_.y - 1 ) + object->speed_.y ) / BLOCK_SIZE );
-	int32_t downRightY = static_cast< int32_t >( ( ( objectY + screenPos_.y - 1 ) + object->speed_.y ) / BLOCK_SIZE );
+	int32_t downLeftY = static_cast< int32_t >( ( ( objectY + object->r_.y - 1 ) + object->speed_.y ) / BLOCK_SIZE );
+	int32_t downRightY = static_cast< int32_t >( ( ( objectY + object->r_.y - 1 ) + object->speed_.y ) / BLOCK_SIZE );
 
 	if ( mapChip_->data()[ downLeftY ][ downLeftX ] == ChipIndex::NONE || mapChip_->data()[ downLeftY ][ downLeftX ] == ChipIndex::NEXT &&
 		 mapChip_->data()[ downRightY ][ downRightX ] == ChipIndex::NONE || mapChip_->data()[ downRightY ][ downRightX ] == ChipIndex::NEXT )
@@ -266,7 +291,7 @@ bool CollisionManager::TopCollision(IObject* object)
 bool CollisionManager::LeftCollision(IObject* object)
 {
 	int32_t objectX = object->center_->x + screenPos_.x;
-	int32_t objectY = object->center_->y ;
+	int32_t objectY = object->center_->y + screenPos_.y;
 
 	int32_t topLeftX = static_cast< int32_t >( ( ( objectX - object->r_.x ) + object->speed_.x ) / BLOCK_SIZE );
 	int32_t downLeftX = static_cast< int32_t >( ( ( objectX - object->r_.x ) + object->speed_.x ) / BLOCK_SIZE );
@@ -316,7 +341,7 @@ bool CollisionManager::LeftCollision(IObject* object)
 bool CollisionManager::RightCollision(IObject* object)
 {
 	int32_t objectX = object->center_->x + screenPos_.x;
-	int32_t objectY = object->center_->y;
+	int32_t objectY = object->center_->y + screenPos_.y;
 
 	int32_t topRightX = static_cast< int32_t >( ( ( objectX + object->r_.x - 1 ) + object->speed_.x ) / BLOCK_SIZE );
 	int32_t downRightX = static_cast< int32_t >( ( ( objectX + object->r_.x - 1 ) + object->speed_.x ) / BLOCK_SIZE );
