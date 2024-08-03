@@ -137,25 +137,6 @@ void CollisionManager::Update()
 
 		uint8_t dir = 0;
 
-		if ( itr->speed_.x  == 0)
-		{
-
-		}
-		else if ( itr->speed_.x < 0 )
-		{
-			if ( LeftCollision(itr) )
-			{
-				dir |= 0b1 << 0b1 << OnDir::LEFT;
-			}
-		}
-		else
-		{
-			if ( RightCollision(itr) )
-			{
-				dir |= 0b1 << OnDir::RIGHT;
-			}
-		}
-
 		if ( itr->speed_.y == 0 )
 		{
 
@@ -172,6 +153,25 @@ void CollisionManager::Update()
 			if ( DownCollision(itr) )
 			{
 				dir |= 0b1 << OnDir::BOTTOM;
+			}
+		}
+
+		if ( itr->speed_.x  == 0)
+		{
+
+		}
+		else if ( itr->speed_.x < 0 )
+		{
+			if ( LeftCollision(itr) )
+			{
+				dir |= 0b1 << 0b1 << OnDir::LEFT;
+			}
+		}
+		else
+		{
+			if ( RightCollision(itr) )
+			{
+				dir |= 0b1 << OnDir::RIGHT;
 			}
 		}
 
@@ -203,8 +203,8 @@ bool CollisionManager::DownCollision(IObject* object)
 
 	bool on = false;
 
-	int32_t objectX = object->center_->x + screenPos_.x;
-	int32_t objectY = object->center_->y + screenPos_.y;
+	float objectX = object->center_->x + screenPos_.x;
+	float objectY = object->center_->y + screenPos_.y;
 
 	uint32_t downLeftX = static_cast< int32_t >( ( objectX - object->r_.x ) / BLOCK_SIZE );
 	uint32_t downRightX = static_cast< int32_t >( ( objectX + object->r_.x + -1 ) / BLOCK_SIZE );
@@ -263,6 +263,7 @@ bool CollisionManager::DownCollision(IObject* object)
 				}
 			}
 		}
+
 		return true;
 	}
 }
@@ -271,8 +272,8 @@ bool CollisionManager::TopCollision(IObject* object)
 {
 	bool on = false;
 
-	int32_t objectX = object->center_->x + screenPos_.x;
-	int32_t objectY = object->center_->y + screenPos_.y;
+	float objectX = object->center_->x + screenPos_.x;
+	float objectY = object->center_->y + screenPos_.y;
 
 	uint32_t topLeftX = static_cast< int32_t >( ( objectX - object->r_.x ) / BLOCK_SIZE );
 	uint32_t topRightX = static_cast< int32_t >( ( objectX + object->r_.x - 1 ) / BLOCK_SIZE );
@@ -339,8 +340,8 @@ bool CollisionManager::LeftCollision(IObject* object)
 {
 	bool on = false;
 
-	int32_t objectX = object->center_->x + screenPos_.x;
-	int32_t objectY = object->center_->y + screenPos_.y;
+	float objectX = object->center_->x + screenPos_.x;
+	float objectY = object->center_->y + screenPos_.y;
 
 	uint32_t topLeftX = static_cast< uint32_t >( ( ( objectX - object->r_.x ) + object->speed_.x ) / BLOCK_SIZE );
 	uint32_t downLeftX = static_cast< uint32_t >( ( ( objectX - object->r_.x ) + object->speed_.x ) / BLOCK_SIZE );
@@ -407,8 +408,8 @@ bool CollisionManager::RightCollision(IObject* object)
 {
 	bool on = false;
 
-	int32_t objectX = object->center_->x + screenPos_.x;
-	int32_t objectY = object->center_->y + screenPos_.y;
+	float objectX = object->center_->x + screenPos_.x;
+	float objectY = object->center_->y + screenPos_.y;
 
 	uint32_t topRightX = static_cast< int32_t >( ( ( objectX + object->r_.x - 1 ) + object->speed_.x ) / BLOCK_SIZE );
 	uint32_t downRightX = static_cast< int32_t >( ( ( objectX + object->r_.x - 1 ) + object->speed_.x ) / BLOCK_SIZE );
