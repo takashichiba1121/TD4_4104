@@ -252,6 +252,12 @@
     <ClCompile Include="Source\Player\PlayerLegFenrir.cpp">
       <Filter>ソース ファイル\player</Filter>
     </ClCompile>
+    <ClCompile Include="Include\Scene\GameScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player\PlayerLegCerberus.cpp">
+      <Filter>ソース ファイル\player</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Scene\GameOverScene.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>

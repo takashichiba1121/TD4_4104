@@ -5,6 +5,7 @@
 #include <json.hpp>
 #include <fstream>
 #include "CollisionManager.h"
+#include <strconv.h>
 
 using namespace std;
 using namespace nlohmann;
@@ -47,14 +48,16 @@ void DealDaemon::Initialize()
 	{
 		unique_ptr<Parts> temp = make_unique<Parts>();
 
-		temp->cost = static_cast<int32_t>(obj["cost"]);
-		temp->uiPartsName = static_cast< string >( obj[ "partsName" ] );
-		temp->partsName = static_cast<string>(obj["codeName"]);
-		temp->partsInfo = static_cast<string>(obj["partsInfo"]);
 		temp->productType = static_cast< string >( obj[ "Type" ] );
+		temp->partsName = static_cast<string>(obj["codeName"]);
+		temp->cost = static_cast<int32_t>(obj["cost"]);
+
+		temp->uiPartsName = utf8_to_sjis(static_cast< string >( obj[ "partsName" ] ));
+		temp->partsInfo = utf8_to_sjis(static_cast<string>(obj["partsInfo"]));
 		products_.push_back(std::move(temp));
 	}
-
+	nameFontHandle_ = DxLib::CreateFontToHandle(NULL,16,3);
+	infoFontHandle_ = DxLib::CreateFontToHandle(NULL,16,3);
 	
 
 	SetPriducts();
@@ -63,7 +66,7 @@ void DealDaemon::Initialize()
 
 void DealDaemon::Update()
 {
-	selectmode_ = playerPtr_->IsPowerUp();
+	selectmode_ = playerPtr_->IsChangeParts();
 	shape_->SetCenter(pos_);
 }
 
@@ -97,6 +100,7 @@ bool DealDaemon::PartsChenge()
 		break;
 	}
 	dealCount_ = 0;
+	dealed_ = isBuy;
 	return isBuy;
 }
 
@@ -150,7 +154,7 @@ void DealDaemon::SetPriducts(bool deal)
 	for (int i = 0; i < selectProducts_.size(); i++)
 	{
 		Parts* temp = products_[ GetRand(products_.size() - 1) ].get();
-		while ( playerPtr_->CheckHavePart(magic_enum::enum_cast< PartsName >( temp->productType).value(),temp->partsName) )
+		while ( playerPtr_->CheckHavePart(magic_enum::enum_cast< PartsName >( temp->productType).value(),temp->partsName))
 		{
 			temp = products_[ GetRand(products_.size() - 1) ].get();
 		}
@@ -190,8 +194,32 @@ void DealDaemon::Draw()
 				color = 0xf00f00;
 			}
 			DrawBox(( boxLeftTop_.x + i * boxDist_ ),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,color,true);
-			DrawFormatString(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,
-				0xffffff,"%s\nCost:%d\n%s",selectProducts_[ i ]->uiPartsName,selectProducts_[ i ]->cost,selectProducts_[ i ]->partsInfo);
+
+			string nameTemp = selectProducts_[ i ]->uiPartsName;
+
+			if ( selectProducts_[ i ]->productType == "ARM" )
+			{
+				if ( selectProducts_[ i ]->isLeft )
+				{
+					nameTemp += utf8_to_sjis("(左腕)");
+				}
+				else
+				{
+					nameTemp += utf8_to_sjis("(右腕)");
+				}
+			}
+
+			DrawStringToHandle(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,nameTemp.c_str(),
+			0xffffff,nameFontHandle_);
+
+			string temp = utf8_to_sjis("価格:");
+			temp += to_string(selectProducts_[ i ]->cost);
+
+			DrawStringToHandle(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 75,temp.c_str(),
+			0xffffff,infoFontHandle_);
+
+			DrawStringToHandle(( boxLeftTop_.x + i * boxDist_ ) + 25,boxLeftTop_.y + 125,selectProducts_[ i ]->partsInfo.c_str(),
+			0xffffff,infoFontHandle_);
 		}
 	}
 

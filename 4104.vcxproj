@@ -181,7 +181,9 @@
     <ClCompile Include="Source\Util\Math\Vector2.cpp" />
     <ClCompile Include="Source\Util\Math\Vector3.cpp" />
     <ClCompile Include="Source\Enemy\WalkEnemy.cpp" />
-    <ClCompile Include="Source\Util\Util.cpp" />
+    <ClCompile Include="Source\Util\Util.cpp">
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdcpp20</LanguageStandard>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Enemy\Boss\BossBullet.h" />
