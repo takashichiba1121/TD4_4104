@@ -121,30 +121,40 @@ std::vector<std::vector<uint8_t>>* MapChip::GetMapChipPtr()
 	return &map_;
 }
 
-uint8_t MapChip::GetPosElement(int32_t x, int32_t y)const
+uint8_t MapChip::GetPosElement(int32_t x,int32_t y)const
 {
-	return map_[y / BLOCK_SIZE][x / BLOCK_SIZE];
+	return map_[ y / BLOCK_SIZE ][ x / BLOCK_SIZE ];
 }
 
 Vector2 MapChip::GetPos(int32_t x,int32_t y) const
 {
-	return Vector2(x / BLOCK_SIZE, y / BLOCK_SIZE);
+	return Vector2(x / BLOCK_SIZE,y / BLOCK_SIZE);
 }
 
-uint8_t MapChip::GetNumOfArrayElement(int32_t x, int32_t y) const
+uint8_t MapChip::GetNumOfArrayElement(int32_t x,int32_t y) const
 {
-	int32_t posY = min(uint32_t( y ),map_.size() - 1);
+	int32_t posY = min(uint32_t(y),map_.size() - 1);
 	posY = max(y,0);
 
 	int32_t posX = min(uint32_t(x),map_[ posY ].size() - 1);
 	posX = max(x,0);
 
-	return map_[posY][posX];
+	return map_[ posY ][ posX ];
 }
 
 const Vector2& MapChip::GetScreenPos() const
 {
 	return screenPos_;
+}
+
+const Vector2& MapChip::GetLeftTopPos() const
+{
+	return leftTopPos_;
+}
+
+const Vector2& MapChip::GetRightTopBottom() const
+{
+	return rightTopBottom_;
 }
 
 void MapChip::SetPlayer(Player* player)
@@ -165,22 +175,29 @@ void MapChip::Draw(const Vector2& screenPos)
 	{
 		for ( size_t j = 0; j < map_[ i ].size(); j++ )
 		{
+
+			if ( i == 0 && j == 0 )
+			{
+				leftTopPos_ = { ( j * BLOCK_SIZE ) + screenPos.x - 32,( i * BLOCK_SIZE ) + screenPos.y - 32 };
+			}
+
+			if ( i == map_.size() - 1 && j == map_[ map_.size() - 1 ].size()-1 )
+			{
+				rightTopBottom_ = { ( j * BLOCK_SIZE ) + screenPos.x + 32,( i * BLOCK_SIZE ) + screenPos.y + 32 };
+			}
+
 			switch ( map_[ i ][ j ] )
 			{
-			case NONE:
-				break;
 			case ROAD:
 				DrawRotaGraph(( j * BLOCK_SIZE ) + screenPos.x,( i * BLOCK_SIZE ) + screenPos.y,1.0,0.0,roadChipHandle_,true);
-				break;
-			case DOOR:
-				break;
-			case ROOM:
-				break;
-			case LOCK_ROOM:
 				break;
 			case WALL:
 				DrawRotaGraph(( j * BLOCK_SIZE ) + screenPos.x,( i * BLOCK_SIZE ) + screenPos.y,1.0,0.0,wallChipHandle_,true);
 				break;
+			case NONE:
+			case DOOR:
+			case ROOM:
+			case LOCK_ROOM:
 			default:
 				break;
 			}
