@@ -222,6 +222,11 @@ bool EnemyManager::GameEnd()
 	return false;
 }
 
+bool EnemyManager::IsEnemyEmpty()
+{
+	return enemylist_.empty();
+}
+
 void EnemyManager::EnemysClear()
 {
 	enemylist_.clear();

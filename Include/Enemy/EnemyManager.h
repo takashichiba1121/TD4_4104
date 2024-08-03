@@ -46,6 +46,7 @@ public:
 	void SetMapChip(MapChip* mapchip);
 	size_t GetEnemyCount();
 	bool GameEnd();
+	bool IsEnemyEmpty();
 	void EnemysClear();
 	static int32_t GetTexHandle(EnemyType type);
 	static void TexLoad();
