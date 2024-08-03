@@ -17,23 +17,29 @@ void HealObject::Initialize()
 
 void HealObject::Update()
 {
-
-	shape_->SetCenter({ pos_.x , pos_.y });
+	if ( islive_ )
+	{
+		shape_->SetCenter({ pos_.x , pos_.y });
+	}
 }
 
 void HealObject::Draw()
 {
-	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.y / 2,pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,0x00f100,true);
+	if ( islive_ )
+	{
+		DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.y / 2,pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,0x00f100,true);
+	}
 }
 
 
-//void HealObject::OnCollision()
-//{
-//	if ( GetCollisionInfo().userData )
-//	{
-//		if ( static_cast< UserData* >( GetCollisionInfo().userData )->tag == "Player" )
-//		{
-//			dynamic_cast< Player* >( GetCollisionInfo().object )->;
-//		}
-//	}
-//}
+void HealObject::OnCollision()
+{
+	if ( GetCollisionInfo().userData )
+	{
+		if ( static_cast< UserData* >( GetCollisionInfo().userData )->tag == "Player" )
+		{
+			dynamic_cast< Player* >( GetCollisionInfo().object )->Heel(healPower);
+			islive_ = false;
+		}
+	}
+}

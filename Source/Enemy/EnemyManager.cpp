@@ -197,7 +197,7 @@ void EnemyManager::Update()
 		return enemy->IsLive() == false;
 	});
 	cost *= 2;
-	playerPtr_->AddCost(cost);
+	playerPtr_->AddMaxCost(cost);
 	int32_t time = -10;
 		
 	for ( auto& itr : enemylist_ )
