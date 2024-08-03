@@ -79,12 +79,12 @@ void PlayerAttackSpider::Attack()
 	}
 }
 
-void PlayerAttackSpider::Draw()
+void PlayerAttackSpider::Draw(Vector2 scroll)
 {
 	if ( isAttack_ )
 	{
-		DrawBox(DrawPos_.x - COLISION_SIZE_.x / 2,DrawPos_.y - COLISION_SIZE_.y / 2,
-			DrawPos_.x + COLISION_SIZE_.x / 2,DrawPos_.y + COLISION_SIZE_.y / 2,
+		DrawBox(scroll.x + DrawPos_.x - COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y - COLISION_SIZE_.y / 2,
+			scroll.x + DrawPos_.x + COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y + COLISION_SIZE_.y / 2,
 			GetColor(0,255,0),false);
 	}
 }

@@ -4,10 +4,15 @@
 #include "Player.h"
 #include "MapChip.h"
 #include "Collision.h"
+#include "EnemyManager.h"
 
 using namespace std;
 void WalkEnemy::Initialize()
 {
+
+	animeNum_ = 4;
+	animeSpeed_ = 5;
+	drawSize_ = { 64,64 };
 
 	MapChipObjectEnable();
 	SetMapChipCenter(&pos_);
@@ -43,7 +48,7 @@ void WalkEnemy::Initialize()
 	attackFrame_ = 25;
 	maxHp_ = 150;
 	hp_ = 150;
-
+	tex_ = EnemyManager::GetTexHandle("adjacent");
 	tag.tag = "Enemy";
 	userData_ = &tag;
 
@@ -113,6 +118,7 @@ void WalkEnemy::Update()
 	}
 	shape_->SetCenter({ pos_.x , pos_.y });
 
+	AnimeUpdate();
 
 	EffectUpdate();
 }
@@ -248,6 +254,11 @@ void WalkEnemy::Attack()
 	}
 	else if ( !attackCounter_.IsCountEnd() )
 	{
+		if ( !attackSoundPlayed_ )
+		{
+			PlaySoundMem(EnemyManager::GetSoundHandle("shootAttack"),DX_PLAYTYPE_BACK);
+			attackSoundPlayed_ = true;
+		}
 		attackCounter_.CountUp();
 		if ( Collision::Rect2Rect(*dynamic_cast< RectShape* >( playerPtr_->GetShape() ),*attackArea_.get()) )
 		{
@@ -258,28 +269,41 @@ void WalkEnemy::Attack()
 	else
 	{
 		actionMode = MOVE;
+		attackSoundPlayed_ = false;
 	}
 	SetMapChipSpeed({ 0.f,gravity_.y });
 
 }
 
-void WalkEnemy::Draw()
+void WalkEnemy::Draw(Vector2 scroll)
 {
 	if ( !islive_ ) return;
-	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.y / 2,
-		pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,0),true);
+	bool flag = false;
+	if ( velocity_.x < 0 )
+	{
+		flag = true;
+	}
+	DrawRectRotaGraph(pos_.x + scroll.x,pos_.y + scroll.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,tex_,true,flag);
 
-
+#ifdef _DEBUG
 	if ( actionMode == ATTACK )
 	{
-		DrawBox(attackArea_->GetCenter().x - attackArea_->GetRadius().x ,attackArea_->GetCenter().y - attackArea_->GetRadius().y,
-		attackArea_->GetCenter().x + attackArea_->GetRadius().x ,attackArea_->GetCenter().y + attackArea_->GetRadius().y,GetColor(155,0,0),false);
+		DrawBox(attackArea_->GetCenter().x - attackArea_->GetRadius().x + scroll.x,
+			attackArea_->GetCenter().y - attackArea_->GetRadius().y + scroll.y,
+		attackArea_->GetCenter().x + attackArea_->GetRadius().x + scroll.x,
+			attackArea_->GetCenter().y + attackArea_->GetRadius().y + scroll.y
+			,GetColor(155,0,0),false);
 	}
 	else
 	{
-		DrawBox(searchArea_->GetCenter().x - searchArea_->GetRadius().x,pos_.y - searchArea_->GetRadius().y,
-		searchArea_->GetCenter().x + searchArea_->GetRadius().x,pos_.y + searchArea_->GetRadius().y,GetColor(155,0,0),false);
+		DrawBox(searchArea_->GetCenter().x - searchArea_->GetRadius().x + scroll.x,
+			pos_.y - searchArea_->GetRadius().y + scroll.y,
+		searchArea_->GetCenter().x + searchArea_->GetRadius().x + scroll.x
+			,pos_.y + searchArea_->GetRadius().y + scroll.y,GetColor(155,0,0),false);
 	}
+#endif // DEBUG
+
+	
 
 	if ( playerPtr_->GetEyeTag() == PlayerEyeTags::Clairvoyance )
 	{

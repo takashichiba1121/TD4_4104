@@ -77,6 +77,7 @@ void NodeManager::Initialize()
 		room->SetNodeManagerr(this);
 		room->SetPowerUp(powerUp_);
 		room->SetDealer(dealer_);
+		room->SetEnemyManager(enemys_);
 		room->Initialize();
 	}
 
@@ -108,7 +109,7 @@ void NodeManager::Initialize()
 		{
 			startNodes_.push_back(&nodes_[ 0 ][ point ]);
 			drawNode_.push_back(&nodes_[ 0 ][ point ]);
-			nodes_[ 0 ][ point ].type.value = NodeType::START;
+			nodes_[ 0 ][ point ].type.value = NodeType::BATTLE;
 		}
 	}
 
@@ -376,6 +377,11 @@ void NodeManager::SetPowerUp(PowerUpCave* powerUp)
 void NodeManager::SetDealer(DealDaemon* dealer)
 {
 	dealer_ = dealer;
+}
+
+void NodeManager::SetEnemys(EnemyManager* enemys)
+{
+	enemys_ = enemys;
 }
 
 void NodeManager::GenerateInitialGrid()

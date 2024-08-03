@@ -23,6 +23,8 @@ private:
 	NodeManager* nodeManager_;
 	std::unique_ptr<PowerUpCave>powerUp_;
 	std::unique_ptr<DealDaemon>dealer_;
+	std::unique_ptr<EnemyManager>enemys_;
+
 
 	uint32_t backGround_;
 	uint8_t num;

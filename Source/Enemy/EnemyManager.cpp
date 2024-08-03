@@ -2,10 +2,12 @@
 #include "DxlibInclude.h"
 #include "GameConfig.h"
 #include<BossEnemy.h>
+#include "Player.h"
 
 using namespace std;
 std::list<std::unique_ptr<BaseEnemy>> EnemyManager::enemylist_;
-std::array<int32_t,3> EnemyManager::texs_;
+std::unordered_map<string,int32_t> EnemyManager::texs_;
+std::unordered_map<string,int32_t> EnemyManager::sounds_;
 Player* EnemyManager::playerPtr_ = nullptr;
 
 void EnemyManager::BossPop()
@@ -35,9 +37,9 @@ void EnemyManager::Pop()
 		if ( rand <= 200)
 		{
 			unique_ptr<ShootEnemy> temp = make_unique<ShootEnemy>();
+			temp->SetPos({ GetRand(850) + 50.f,100.f });
 			temp->Initialize();
 			temp->SetPlayerPtr(playerPtr_);
-			temp->SetPos({ GetRand(850) + 50.f,100.f });
 			temp->SetMapChip(mapchip_);
 			enemylist_.push_back(move(temp));
 			popEnemyCount_++;
@@ -59,6 +61,7 @@ void EnemyManager::Pop()
 			temp->SetPos({ GetRand(850) + 50.f,100.f });
 			temp->SetMapChip(mapchip_);
 			temp->SetPlayerPtr(playerPtr_);
+			temp->SetMovePos();
 			enemylist_.push_back(move(temp));
 			popEnemyCount_++;
 		}
@@ -70,10 +73,11 @@ void EnemyManager::SetEnemyPop(EnemyType enemyType,Vector2 pos,Vector2 velocity)
 	if ( enemyType == FLY )
 	{
 		unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
+		temp->SetPos(pos);
 		temp->Initialize();
 		temp->SetPlayerPtr(playerPtr_);
-		temp->SetPos(pos);
 		temp->SetVelocity(velocity);
+		temp->SetMovePos();
 		enemylist_.push_back(move(temp));
 	}
 	else if ( enemyType == SHOOT )
@@ -102,9 +106,10 @@ void EnemyManager::SetEnemyPop(EnemyType enemyType,Vector2 pos)
 	{
 		unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
 		temp->Initialize();
-		temp->SetPlayerPtr(playerPtr_);
 		temp->SetPos(pos);
+		temp->SetPlayerPtr(playerPtr_);
 		temp->SetMapChip(mapchip_);
+		temp->SetMovePos();
 		enemylist_.push_back(move(temp));
 		popEnemyCount_++;
 	}
@@ -138,10 +143,11 @@ void EnemyManager::SetPosPop(Vector2 pos)
 	if ( rand <= 200 )
 	{
 		unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
+		temp->SetPos(pos);
 		temp->Initialize();
 		temp->SetPlayerPtr(playerPtr_);
-		temp->SetPos(pos);
 		temp->SetMapChip(mapchip_);
+		temp->SetMovePos();
 		enemylist_.push_back(move(temp));
 		popEnemyCount_++;
 	}
@@ -174,11 +180,15 @@ void EnemyManager::SetPlayerPtr(Player* playerPtr)
 
 void EnemyManager::Update()
 {
-	Pop();
 
+	screenEnemy_ = 0;
 	for ( auto& itr : enemylist_ )
 	{
-		itr->Update();
+		if ( itr->OnScreen(scroll_) )
+		{
+			itr->Update();
+			screenEnemy_++;
+		}
 	}
 
 	deadEnemyCount_ += enemylist_.remove_if([](unique_ptr<BaseEnemy>& enemy )
@@ -212,7 +222,10 @@ void EnemyManager::Draw()
 {
 	for ( auto& itr : enemylist_ )
 	{
-		itr->Draw();
+		if ( itr->OnScreen(scroll_) )
+		{
+			itr->Draw(scroll_);
+		}
 	}
 	DrawFormatString(GameConfig::GetWindowWidth() - 200,10,0xffffff,"KillEnemy %d / %d",deadEnemyCount_,MAX_POP_ENEMY_NUM);
 }
@@ -236,23 +249,56 @@ bool EnemyManager::GameEnd()
 	return false;
 }
 
+bool EnemyManager::IsEnemyEmpty()
+{
+	return screenEnemy_ <= 0;
+}
+
 void EnemyManager::EnemysClear()
 {
 	enemylist_.clear();
 }
 
+int32_t EnemyManager::GetTexHandle(std::string type)
+{
+	return texs_[type];
+}
+
+int32_t EnemyManager::GetSoundHandle(std::string name)
+{
+	return sounds_[name];
+}
+
 void EnemyManager::TexLoad()
 {
-	texs_[0] = LoadGraph("Resources\\Enemy\\enemyFly.png");
-	texs_[1] = LoadGraph("Resources\\Enemy\\enemyFly.png");
-	texs_[2] = LoadGraph("Resources\\Enemy\\enemyFly.png");
+	texs_[ "fly" ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
+	texs_[ "shoot" ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
+	texs_[ "adjacent" ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
+
+
+}
+
+void EnemyManager::SoundLoad()
+{
+
+	sounds_[ "shootAttack" ] =
+		LoadSoundMem(string("Resources\\Sound\\Enemy\\SFX_enemy_archer_arrowRelease.mp3"));
+	sounds_[ "shootBeforeAttack" ] =
+		LoadSoundMem(string("Resources\\Sound\\Enemy\\SFX_enemy_archer_DrawingBow.mp3"));
+	sounds_[ "flyBeforeAttack" ] =
+		LoadSoundMem(string("Resources\\Sound\\Enemy\\SFX_enemy_fly_DetectPlayer.mp3"));
+	sounds_[ "freeze" ] =
+		LoadSoundMem(string("Resources\\Sound\\Enemy\\SFX_enemy_freeze.mp3"));
+	sounds_[ "meleeAttack" ] =
+		LoadSoundMem(string("Resources\\Sound\\Enemy\\SFX_enemy_melee_Attack.mp3"));
 }
 
 void EnemyManager::Finalize()
 {
 	enemylist_.clear();
-	for ( size_t i = 0; i < texs_.size(); i++ )
-	{
-		DeleteGraph(texs_[ i ]);
-	}
+}
+
+void EnemyManager::SetScroll(Vector2 scroll)
+{
+	scroll_ = scroll;
 }

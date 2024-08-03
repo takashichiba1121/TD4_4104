@@ -8,11 +8,15 @@
 #include"Input.h"
 #include"PlayerBulletManager.h"
 #include"GameConfig.h"
-
+#include "FontManager.h"
 #include<SceneManager.h>
 
 void GameScene::Initialize()
 {
+	FontManager::CreateFontHandle(NULL,16,3,"normal");
+
+	EnemyManager::TexLoad();
+
 	player_ = std::make_unique<Player>();
 	player_->Initialize();
 
@@ -29,16 +33,23 @@ void GameScene::Initialize()
 	dealer_->Initialize();
 
 
+	enemys_ = std::make_unique<EnemyManager>();
+	enemys_->Initialize();
+	enemys_->SetMapChip(mapChip_.get());
+	enemys_->SetPlayerPtr(player_.get());
+	enemys_->SoundLoad();
+
 	nodeManager_ = NodeManager::GetInstance();
 	nodeManager_->SetMapChip(mapChip_.get());
 	nodeManager_->SetPlayer(player_.get());
 	nodeManager_->SetPowerUp(powerUp_.get());
 	nodeManager_->SetDealer(dealer_.get());
+	nodeManager_->SetEnemys(enemys_.get());
 	nodeManager_->Initialize();
 	nodeManager_->StartNodeSet(0);
 	backGround_ = LoadGraph(std::string("Resources/BackGround/BackGround.png"));
 
-	EnemyManager::TexLoad();
+
 }
 
 void GameScene::Update()
@@ -54,7 +65,7 @@ void GameScene::Update()
 	{
 		powerUp_->Update();
 
-		uint32_t powerUpNum=player_->PowerUp();
+		uint32_t powerUpNum = player_->PowerUp();
 
 		powerUp_->SetSlect(powerUpNum);
 		if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) )
@@ -105,19 +116,29 @@ void GameScene::Update()
 			SceneManager::GetInstance()->ChangeScene("GAMEOVER");
 		}
 	}
+
+	Vector2 s = Scroll();
+
+	ImGui::Begin("Scroll");
+
+	ImGui::Text("%f,%f",s.x,s.y);
+
+	ImGui::End();
 }
 
 void GameScene::Draw()
 {
+	Vector2 s = Scroll();
+	enemys_->SetScroll(s);
 	DrawGraph(0,0,backGround_,true);
-	mapChip_->Draw(Scroll());
+	mapChip_->Draw(s);
 	nodeManager_->Draw();
-	player_->Draw();
+	player_->Draw(s);
 
 	//if (!chenged) powerUp_->Draw();
 
 	nodeManager_->Draw();
-	
+
 	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
 	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");
 	DrawFormatString(0,40,0xffffff,"ATTACK:Z X");
@@ -125,17 +146,51 @@ void GameScene::Draw()
 
 void GameScene::SpriteDraw()
 {
+
 }
 
 void GameScene::Finalize()
 {
 	PlayerBulletManager::Instance()->Clear();
 	EnemyManager::Finalize();
+	FontManager::Finalize();
 }
 
 Vector2 GameScene::Scroll()
 {
-	Vector2 playerpos=player_->GetPos();
+	Vector2 scroll = { 0,0 };
 
-	return { 0,0 };
+	Vector2 playerPos = player_->GetPos();
+
+	Vector2 mapChipLeftTopPos = {0,0};
+	Vector2 mapChipTopBottomPos = mapChip_->GetRightTopBottom();
+
+	int32_t WindowHeight = GameConfig::GetWindowHeight();
+	int32_t WindowWidth = GameConfig::GetWindowWidth();
+
+	scroll.x = WindowWidth / 2 - playerPos.x;
+
+	scroll.y = WindowHeight / 2 - playerPos.y;
+
+	if ( mapChipTopBottomPos.x > 0 && mapChipTopBottomPos.y > 0 )
+	{
+		if ( playerPos.x >= mapChipTopBottomPos.x - WindowWidth/2 )
+		{
+ 			scroll.x = -(mapChipTopBottomPos.x - WindowWidth);
+		}
+		if ( playerPos.y >= mapChipTopBottomPos.y - WindowHeight/2 )
+		{
+			scroll.y = -(mapChipTopBottomPos.y - WindowHeight);
+		}
+	}
+	if ( playerPos.x <= mapChipLeftTopPos.x + WindowWidth / 2 )
+	{
+		scroll.x = mapChipLeftTopPos.x;
+	}
+	if ( playerPos.y <= mapChipLeftTopPos.y + WindowHeight / 2 )
+	{
+		scroll.y = mapChipLeftTopPos.y;
+	}
+
+	return scroll;
 }

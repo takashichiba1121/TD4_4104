@@ -38,6 +38,8 @@ protected:
 	int32_t animeTimer_;
 	int32_t anime_;
 	int32_t animeNum_;
+	int32_t animeSpeed_;
+	int32_t tex_;
 	std::array<Counter,END> effectTimer;
 	const std::array<int32_t,END> effectTime = {360,240,600,360,0};
 	const std::array<int32_t,END> effectDamageInterval = { 120,240,120,0,0 };
@@ -58,6 +60,7 @@ public:
 	bool IsEffect(Effects effect);
 	bool IsCursedDamage();
 	bool IsImmortal();
+	bool OnScreen(Vector2 scrool);
 	int32_t GetImmortalTime();
 	int32_t GetCurseStack();
 	void AnimeUpdate();

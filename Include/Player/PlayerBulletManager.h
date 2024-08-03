@@ -22,7 +22,7 @@ public:
 
 	void Update();
 
-	void Draw();
+	void Draw(Vector2 scroll);
 
 	void AddBullet(std::unique_ptr<PlayerBullet> newBullet);
 
