@@ -51,11 +51,18 @@ void EditorScene::Initialize(int32_t screen)
 	}
 
 	noneGraphHandle_ = Load("Resource/NoneChip.png");
+
 	roadGraphHandle_ = Load("Resource/RoadChip.png");
-	doorGraphHandle_ = Load("Resource/DoorChip.png");
-	roomGraphHandle_ = Load("Resource/RoomChip.png");
-	lockroomGraphHandle_ = Load("Resource/LockroomChip.png");
 	wallGraphHandle_ = Load("Resource/WallChip.png");
+
+	startGraphHandle_ = Load("Resource/Start.png");
+	nextGraphHandle_ = Load("Resource/Next.png");
+
+	shortRangeEnemyGraphHandle_ = Load("Resource/ShortRangeEnemy.png");
+	longRangeEnemyGraphHandle_ = Load("Resource/LongRangeEnemy.png");
+	flyRangeEnemyGraphHandle_ = Load("Resource/FlyRangeEnemy.png");
+	randomEnemyGraphHandle_ = Load("Resource/RandomEnemy.png");
+
 
 	{
 		auto files = GetFilesName("Export/Room");
@@ -121,9 +128,14 @@ void EditorScene::Update()
 
 	if ( IsEditorMapWithin(editorMousePos_.x,editorMousePos_.y) )
 	{
-		if ( mouseInput_ )
+		if ( mouseInput_ & MOUSE_INPUT_LEFT)
 		{
 			editorMap_[ editorMousePos_.y ][ editorMousePos_.x ].chip = selectChip_;
+		}
+
+		if ( mouseInput_ & MOUSE_INPUT_RIGHT )
+		{
+			editorMap_[ editorMousePos_.y ][ editorMousePos_.x ].chip = NONE;
 		}
 	}
 
@@ -685,21 +697,37 @@ void EditorScene::ChipDraw(size_t x,size_t y,int8_t chip,int32_t sign)
 	case NONE:
 		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),noneGraphHandle_.handle,true);
 		break;
+
 	case ROAD:
 		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),roadGraphHandle_.handle,true);
-		break;
-	case DOOR:
-		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),doorGraphHandle_.handle,true);
-		break;
-	case ROOM:
-		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),roomGraphHandle_.handle,true);
-		break;
-	case LOCK_ROOM:
-		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),lockroomGraphHandle_.handle,true);
 		break;
 	case WALL:
 		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),wallGraphHandle_.handle,true);
 		break;
+
+	case START:
+		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),startGraphHandle_.handle,true);
+		break;
+	case NEXT:
+		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),nextGraphHandle_.handle,true);
+		break;
+
+	case SHORT_RANGE_ENEMY:
+		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),shortRangeEnemyGraphHandle_.handle,true);
+		break;
+	case LONG_RANGE_ENEMY:
+		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),longRangeEnemyGraphHandle_.handle,true);
+		break;
+	case FLY_RANGE_ENEMY:
+		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),flyRangeEnemyGraphHandle_.handle,true);
+		break;
+	case RANDOM_ENEMY:
+		DrawGraph(x + ( blockSizeHalf_ * sign ),y + ( blockSizeHalf_ * sign ),randomEnemyGraphHandle_.handle,true);
+		break;
+
+	case DOOR:
+	case ROOM:
+	case LOCK_ROOM:
 	default:
 		break;
 	}
@@ -712,21 +740,37 @@ void EditorScene::SelectDraw(ChipIndex chip)
 	case NONE:
 		ImGui::Image(noneGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
 		break;
+
 	case ROAD:
 		ImGui::Image(roadGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
-		break;
-	case DOOR:
-		ImGui::Image(doorGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
-		break;
-	case ROOM:
-		ImGui::Image(roomGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
-		break;
-	case LOCK_ROOM:
-		ImGui::Image(lockroomGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
 		break;
 	case WALL:
 		ImGui::Image(wallGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
 		break;
+
+	case START:
+		ImGui::Image(startGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
+		break;
+	case NEXT:
+		ImGui::Image(nextGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
+		break;
+
+	case SHORT_RANGE_ENEMY:
+		ImGui::Image(shortRangeEnemyGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
+		break;
+	case LONG_RANGE_ENEMY:
+		ImGui::Image(longRangeEnemyGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
+		break;
+	case FLY_RANGE_ENEMY:
+		ImGui::Image(flyRangeEnemyGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
+		break;
+	case RANDOM_ENEMY:
+		ImGui::Image(randomEnemyGraphHandle_.pSRV,{ blockSize_ * 5.8f,blockSize_ * 5.8f });
+		break;
+
+	case DOOR:
+	case ROOM:
+	case LOCK_ROOM:
 	default:
 		break;
 	}
@@ -805,33 +849,7 @@ void EditorScene::Export()
 			{
 				if ( !editorMap_[ i ][ j ].out )
 				{
-					if ( editorMap_[ i ][ j ].chip == ChipIndex::ROOM && !editorMap_[ i ][ j ].room
-						|| editorMap_[ i ][ j ].chip == ChipIndex::LOCK_ROOM && !editorMap_[ i ][ j ].room )
-					{
-						RoomSetting roomSetting;
-
-						if ( editorMap_[ i ][ j ].chip == ChipIndex::ROOM )
-						{
-							roomSetting.lock = false;
-						}
-						else
-						{
-							roomSetting.lock = true;
-						}
-
-						RoomSearch(roomSetting,j,i,data);
-
-						roomSettings_.push_back(roomSetting);
-					}
-
-					if ( editorMap_[ i ][ j ].chip == ChipIndex::WALL || editorMap_[ i ][ j ].chip == ChipIndex::ROAD )
-					{
-						data[ "Map" ].push_back(editorMap_[ i ][ j ].chip);
-					}
-					else
-					{
-						data[ "Map" ].push_back(0);
-					}
+					data[ "Map" ].push_back(editorMap_[ i ][ j ].chip);
 
 					editorMap_[ i ][ j ].out = true;
 				}
@@ -1081,7 +1099,13 @@ std::list<std::string> GetFilesName(const std::string& path)
 
 	for ( auto& p : dir_it )
 	{
-		ret.push_back(p.path().filename().stem().string());
+		std::string extension = p.path().extension().string();
+
+		if ( extension == ".json" )
+		{
+			ret.push_back(p.path().filename().stem().string());
+		}
+
 	}
 
 	return ret;

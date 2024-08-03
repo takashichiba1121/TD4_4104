@@ -21,7 +21,7 @@ public:
 
 	virtual void Falling()=0;
 
-	virtual void Draw(const Vector2& pos,const Vector2& size) = 0;
+	virtual void Draw(const Vector2& pos,const Vector2& size,Vector2 scroll) = 0;
 
 	virtual void Load() = 0;
 

@@ -17,7 +17,7 @@ private:
 
 	
 
-
+	bool attackSoundPlayed_ = false;
 	bool tern_ = false;
 	int8_t ternInverval_;
 	int8_t ternInvervalTimer_;
@@ -29,7 +29,7 @@ public:
 	void Update() override;
 	void Move() override;
 	void Attack() override;
-	void Draw() override;
+	void Draw(Vector2 scroll) override;
 	void OnCollision() override;
 	void Approach();
 };

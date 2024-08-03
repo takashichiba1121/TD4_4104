@@ -1,5 +1,6 @@
 #include "BaseEnemy.h"
 #include <Player.h>
+#include "GameConfig.h"
 
 void BaseEnemy::EffectUpdate()
 {
@@ -15,19 +16,19 @@ void BaseEnemy::EffectUpdate()
 			case BURN:
 				if ( static_cast<int32_t>(effectTimer[ i ].GetCount())% effectDamageInterval[i] == 0)
 				{
-					playerPtr_->Damage(effectDamage[ ef ]);
+					Damage(effectDamage[ ef ],BURN,true);
 				}
 				break;
 			case ICED:
 				if ( static_cast<int32_t>(effectTimer[ i ].GetCount())% effectDamageInterval[ i ] == 0 )
 				{
-					playerPtr_->Damage(effectDamage[ ef ]);
+					Damage(effectDamage[ ef ],ICED,true);
 				}
 				break;
 			case BIND:
 				if (static_cast<int32_t>( effectTimer[ i ].GetCount()) % effectDamageInterval[ i ] == 0 )
 				{
-					playerPtr_->Damage(effectDamage[ ef ]);
+					Damage(effectDamage[ ef ],BIND,true);
 				}
 				break;
 			default:
@@ -45,7 +46,7 @@ void BaseEnemy::EffectUpdate()
 	}
 }
 
-void BaseEnemy::Damage(int32_t damage,Effects effect)
+void BaseEnemy::Damage(int32_t damage,Effects effect,bool effectD)
 {
 	if (!immortal_)
 	{
@@ -139,6 +140,18 @@ bool BaseEnemy::IsImmortal()
 	return immortal_;
 }
 
+bool BaseEnemy::OnScreen(Vector2 scrool)
+{
+	if (pos_.x + scrool.x >= 0 && pos_.x + scrool.x <= GameConfig::GetWindowWidth())
+	{
+		if (pos_.y + scrool.y >= 0 && pos_.y + scrool.y <= GameConfig::GetWindowHeight())
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 int32_t BaseEnemy::GetImmortalTime()
 {
 	return immortalTime_;
@@ -149,15 +162,16 @@ int32_t BaseEnemy::GetCurseStack()
 	return curseStack;
 }
 
-void BaseEnemy::AnimeUpdate()
+void BaseEnemy::AnimeUpdate(bool loop)
 {
 	animeTimer_++;
 
-	if ( animeTimer_ == 60 )
+	if ( animeTimer_ == animeSpeed_ )
 	{
 		animeTimer_ = 0;
 		anime_++;
-		if ( anime_ == animeNum_ )
+		anime_ = min(animeNum_-1,anime_);
+		if ( anime_ == animeNum_ && loop)
 		{
 			anime_ = 0;
 		}

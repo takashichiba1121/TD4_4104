@@ -65,6 +65,8 @@ private:
 
 	bool isDirBottom_;
 
+	bool oldIsDirBottom_;
+
 #pragma endregion
 
 public:
@@ -81,7 +83,7 @@ public:
 
 	void Falling() override;
 
-	void Draw(const Vector2& pos,const Vector2& size) override;
+	void Draw(const Vector2& pos,const Vector2& size,Vector2 scroll) override;
 
 	void Load() override;
 

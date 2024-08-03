@@ -27,9 +27,11 @@ void PlayerLegFenrir::Initialize(Vector2* playerVelocity,bool* direction,float* 
 
 void PlayerLegFenrir::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const float pow)
 {
+	oldIsDirBottom_ = isDirBottom_;
+
 	isDirBottom_ = DirBOTTOM;
 
-	if ( ( Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A) ) && !isEvasionRoll_ && !isAttack )
+	if ( ( Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A) ) && !isEvasionRoll_ && !isAttack && !isJump_ )
 	{
 		*direction_ = false;
 		if ( playerVelocity_->x > topSpeed_ * *changeAcl_ )
@@ -72,7 +74,7 @@ void PlayerLegFenrir::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const
 			PlayerStandTextureCount_ = 0;
 		}
 	}
-	if ( ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) ) && !isEvasionRoll_ && !isAttack )
+	if ( ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) ) && !isEvasionRoll_ && !isAttack && !isJump_ )
 	{
 		*direction_ = true;
 		if ( playerVelocity_->x < topSpeed_ * *changeAcl_ )
@@ -124,7 +126,7 @@ void PlayerLegFenrir::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const
 
 	EvasionRoll();
 
-	if ( !DirBOTTOM )
+	if ( !isDirBottom_ )
 	{
 		onGround_ = true;
 	}
@@ -181,10 +183,13 @@ void PlayerLegFenrir::Jump()
 {
 	playerVelocity_->y += jumpAcceleration_;
 
-	PlayerJumpTextureCount_++;
-	if ( PlayerJumpTextureCount_ == 40 )
+	if ( !isDirBottom_ && !oldIsDirBottom_ )
 	{
-		PlayerJumpTextureCount_ = 0;
+		PlayerDownTextureCount_++;
+		if ( PlayerDownTextureCount_ == 40 )
+		{
+			PlayerDownTextureCount_ = 0;
+		}
 	}
 
 	if ( Input::Instance()->ReleaseKey(KEY_INPUT_SPACE) || playerVelocity_->y >= 0 )
@@ -261,12 +266,12 @@ void PlayerLegFenrir::Falling()
 	}
 }
 
-void PlayerLegFenrir::Draw(const Vector2& pos,const Vector2& size)
+void PlayerLegFenrir::Draw(const Vector2& pos,const Vector2& size,Vector2 scroll)
 {
-	float leftPos = pos.x - size.x / 2;
-	float rightPos = pos.x + size.x / 2;
-	float upPos = pos.y - size.y / 2;
-	float downPos = pos.y + size.y / 2;
+	float leftPos = scroll.x + pos.x - size.x / 2;
+	float rightPos = scroll.x + pos.x + size.x / 2;
+	float upPos = scroll.y + pos.y - size.y / 2;
+	float downPos = scroll.y + pos.y + size.y / 2;
 
 	if ( isEvasionRoll_ )
 	{
@@ -279,29 +284,26 @@ void PlayerLegFenrir::Draw(const Vector2& pos,const Vector2& size)
 			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerDushTexture_[ PlayerDushTextureCount_ ],TRUE);
 		}
 	}
-	else if ( onGround_ )
+	else if ( isJump_ )
 	{
-		if ( isJump_ )
+		if ( *direction_ )
 		{
-			if ( *direction_ )
-			{
-				DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerJumpTexture_[ PlayerJumpTextureCount_ / 10 ],TRUE);
-			}
-			else
-			{
-				DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerJumpTexture_[ PlayerJumpTextureCount_ / 10 ],TRUE);
-			}
+			DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerJumpTexture_[ PlayerJumpTextureCount_ / 10 ],TRUE);
 		}
 		else
 		{
-			if ( *direction_ )
-			{
-				DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerDownTexture_[ PlayerDownTextureCount_ / 10 ],TRUE);
-			}
-			else
-			{
-				DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerDownTexture_[ PlayerDownTextureCount_ / 10 ],TRUE);
-			}
+			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerJumpTexture_[ PlayerJumpTextureCount_ / 10 ],TRUE);
+		}
+	}
+	else if ( !isDirBottom_ && !oldIsDirBottom_ )
+	{
+		if ( *direction_ )
+		{
+			DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerDownTexture_[ PlayerDownTextureCount_ / 10 ],TRUE);
+		}
+		else
+		{
+			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerDownTexture_[ PlayerDownTextureCount_ / 10 ],TRUE);
 		}
 	}
 	else if ( isWalk )
@@ -351,11 +353,11 @@ void PlayerLegFenrir::Load()
 
 	assert(lName.compare("Player") == 0);
 
-	topSpeed_ = 12.0f;
-	acceleration_ = 60.0f;
-	airAcceleration_ = 24.0f;
-	deccelaration_ = 88.0;
-	airDeccelaration_ = 124.0f;
+	topSpeed_ = jsonObject[ "TopSpeed" ];
+	acceleration_ = jsonObject[ "Acceleration" ];
+	airAcceleration_ = jsonObject[ "AirAcceleration" ];
+	deccelaration_ = jsonObject[ "Deccelaration" ];
+	airDeccelaration_ = jsonObject[ "AirDeccelaration" ];
 	gravityAcceleration_ = jsonObject[ "GravityAcceleration" ];
 	jumpAcceleration_ = jsonObject[ "JumpAcceleration" ];
 	jumpInitialVelocity_ = jsonObject[ "JumpInitialVelocity" ];

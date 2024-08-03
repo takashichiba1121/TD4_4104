@@ -8,6 +8,7 @@
 #include"CollisionManager.h"
 #include"NodeManager.h"
 #include "PowerUpCave.h"
+#include "DealDaemon.h"
 
 #include"MapChip.h"
 
@@ -21,6 +22,9 @@ private:
 	std::unique_ptr<MapChip>mapChip_;
 	NodeManager* nodeManager_;
 	std::unique_ptr<PowerUpCave>powerUp_;
+	std::unique_ptr<DealDaemon>dealer_;
+	std::unique_ptr<EnemyManager>enemys_;
+
 
 	uint32_t backGround_;
 	uint8_t num;
@@ -32,5 +36,6 @@ public:
 	void Draw() override;
 	void SpriteDraw() override;
 	void Finalize() override;
+	Vector2 Scroll();
 };
 

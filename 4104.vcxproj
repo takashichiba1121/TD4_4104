@@ -107,7 +107,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Util\FontManager.cpp" />
     <ClCompile Include="Include\Util\DxlibInclude.cpp" />
+    <ClCompile Include="Source\Base\SoundManager.cpp" />
     <ClCompile Include="Source\Enemy\Boss\BossBullet.cpp" />
     <ClCompile Include="Source\Enemy\Boss\BossLongRangeAttack.cpp" />
     <ClCompile Include="Source\Enemy\EnemyBullet.cpp" />
@@ -126,10 +128,10 @@
     <ClCompile Include="Source\Node\ReinforcementNode.cpp" />
     <ClCompile Include="Source\Node\ShopNode.cpp" />
     <ClCompile Include="Source\Node\TransactionNode.cpp" />
-    <ClCompile Include="Source\NPC\NPCManager.cpp" />
     <ClCompile Include="Source\NPC\PowerUpCave.cpp" />
     <ClCompile Include="Source\NPC\DealDaemon.cpp" />
     <ClCompile Include="Source\NPC\NPC.cpp" />
+    <ClCompile Include="Source\Player\PlayerAttackSpider.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackVine.cpp" />
     <ClCompile Include="Source\Player\PlayerLegCerberus.cpp" />
     <ClCompile Include="Source\Player\PlayerLegFenrir.cpp" />
@@ -181,9 +183,13 @@
     <ClCompile Include="Source\Util\Math\Vector2.cpp" />
     <ClCompile Include="Source\Util\Math\Vector3.cpp" />
     <ClCompile Include="Source\Enemy\WalkEnemy.cpp" />
-    <ClCompile Include="Source\Util\Util.cpp" />
+    <ClCompile Include="Source\Util\Util.cpp">
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdcpp20</LanguageStandard>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Util\FontManager.h" />
+    <ClInclude Include="Include\Base\SoundManager.h" />
     <ClInclude Include="Include\Enemy\Boss\BossBullet.h" />
     <ClInclude Include="Include\Enemy\Boss\BossLongRangeAttack.h" />
     <ClInclude Include="Include\Enemy\EnemyBullet.h" />

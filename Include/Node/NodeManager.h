@@ -49,6 +49,9 @@ private:
 	int32_t startImg;
 	int32_t backGroundImg;
 
+	int32_t openSound_;
+	int32_t closeSound_;
+
 	int32_t playerNodePos;
 
 	float leftBottomX;
@@ -74,6 +77,8 @@ private:
 	MapChip* mapChip_;
 	Player* player_;
 	PowerUpCave* powerUp_;
+	DealDaemon* dealer_;
+	EnemyManager* enemys_;
 
 	bool isNodeDraw;
 
@@ -96,6 +101,10 @@ public:
 	void SetMapChip(MapChip* mapChip);
 	void SetPlayer(Player* player);
 	void SetPowerUp(PowerUpCave* powerUp);
+	void SetDealer (DealDaemon* dealer );
+	void SetEnemys (EnemyManager* enemys_);
+
+	bool IsMapDraw();
 
 private:
 

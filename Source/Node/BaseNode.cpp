@@ -28,9 +28,19 @@ void BaseNode::SetPowerUp(PowerUpCave* powerUp)
 	powerUp_ = powerUp;
 }
 
+void BaseNode::SetDealer(DealDaemon* dealer)
+{
+	dealer_ = dealer;
+}
+
 void BaseNode::SetNodeManagerr(NodeManager* nodeManager)
 {
 	nodeManager_ = nodeManager;
+}
+
+void BaseNode::SetEnemyManager(EnemyManager* enemyManager)
+{
+	enemys_ = enemyManager;
 }
 
 void BaseNode::PlayerNodeMove()

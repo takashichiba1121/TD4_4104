@@ -51,7 +51,7 @@ void PlayerAttackGun::Attack()
 
 }
 
-void PlayerAttackGun::Draw()
+void PlayerAttackGun::Draw(Vector2 scroll)
 {
 
 }

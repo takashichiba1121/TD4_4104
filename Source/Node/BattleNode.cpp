@@ -4,11 +4,10 @@
 
 void BattleNode::Initialize()
 {
+
+	mapChip_->SetEnemyManager(enemys_);
+
 	mapChip_->MapLoad("Resources/Export/Map/TestMap.json");
-	enemys_ = std::make_unique<EnemyManager>();
-	enemys_->Initialize();
-	enemys_->SetMapChip(mapChip_);
-	enemys_->SetPlayerPtr(player_);
 }
 
 void BattleNode::Update()
@@ -24,16 +23,18 @@ void BattleNode::Draw()
 
 void BattleNode::Reset()
 {
+	mapChip_->MapLoad("Resources/Export/Map/Map_01.json");
+
 	player_->Reset();
 
 	int32_t i = 0;
 	int32_t count = 0;
-	for ( auto& chip : mapChip_->GetMapChip()[ mapChip_->GetMapChip().size() - 2 ] )
+	for ( auto& chip : mapChip_->GetMapChip()[ mapChip_->GetMapChip().size() - 1 ] )
 	{
 		if ( chip == ChipIndex::NEXT )
 		{
 			NextDoor nextDoor;
-			nextDoor.pos = { float(i), float(mapChip_->GetMapChip().size() - 2) };
+			nextDoor.pos = { float(i), float(mapChip_->GetMapChip().size() - 1) };
 			nextDoor.id = count;
 			nextdoors_.push_back(nextDoor);
 			count++;
