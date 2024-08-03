@@ -45,7 +45,7 @@ void BaseNode::SetEnemyManager(EnemyManager* enemyManager)
 
 void BaseNode::PlayerNodeMove()
 {
-	Vector2 playerPos = mapChip_->GetPos(player_->GetPos().x,player_->GetPos().y);
+	Vector2 playerPos = mapChip_->GetPos(player_->GetPos().x+37,player_->GetPos().y+16);
 	NextDoor* nextDoor = nullptr;
 
 	if ( mapChip_->GetNumOfArrayElement(playerPos.x,playerPos.y + 1) == ChipIndex::NEXT ||

@@ -35,7 +35,7 @@ public:
 
 	uint8_t GetPosElement(int32_t x,int32_t y)const;
 	Vector2 GetPos(int32_t x,int32_t y)const;
-	uint8_t GetNumOfArrayElement(int32_t x,int32_t y)const;
+	uint8_t GetNumOfArrayElement(uint32_t x,uint32_t y)const;
 	const Vector2& GetScreenPos()const;
 
 	const Vector2 GetLeftTopPos()const;
