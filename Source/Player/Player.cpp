@@ -529,23 +529,23 @@ bool Player::SubCdmg(int32_t Cdmg)
 	return true;
 }
 
-void Player::Draw()
+void Player::Draw(Vector2 scroll)
 {
-	PlayerBulletManager::Instance()->Draw();
+	PlayerBulletManager::Instance()->Draw(scroll);
 
 	if (DamageInterval_ % 2 == 0)
 	{
-		leg_->Draw(pos_, drawSize_);
+		leg_->Draw(pos_, drawSize_,scroll);
 	}
 
 	if (leftArm_ != nullptr)
 	{
-		leftArm_->Draw();
+		leftArm_->Draw(scroll);
 	}
 
 	if (rightArm_ != nullptr)
 	{
-		rightArm_->Draw();
+		rightArm_->Draw(scroll);
 	}
 
 	DrawFormatString(0, GameConfig::GetWindowHeight() - 20, 0xffffff, "PlayerHP:%d/%d", hp_, MAX_HP_);

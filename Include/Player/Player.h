@@ -191,7 +191,7 @@ public:
 		return nowCost_;
 	}
 
-	void Draw() override;
+	void Draw(Vector2 scroll) override;
 
 	bool ItemGet(Item newItem);
 

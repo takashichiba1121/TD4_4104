@@ -112,7 +112,7 @@ void GameScene::Draw()
 	DrawGraph(0,0,backGround_,true);
 	mapChip_->Draw(Scroll());
 	nodeManager_->Draw();
-	player_->Draw();
+	player_->Draw(Scroll());
 
 	//if (!chenged) powerUp_->Draw();
 

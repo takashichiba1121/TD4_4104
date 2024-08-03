@@ -57,7 +57,7 @@ public:
 	///<summary>
 	///描画
 	///</summary>
-	void Draw();
+	void Draw(Vector2 scroll);
 
 	///<summary>
 	///衝突を検出したら呼び出されたるコールバック関数

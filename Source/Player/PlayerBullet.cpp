@@ -42,9 +42,9 @@ void PlayerBullet::Update()
 	shape_->SetCenter(position_);
 }
 
-void PlayerBullet::Draw()
+void PlayerBullet::Draw(Vector2 scroll)
 {
-	DrawBox(position_.x - SIZE_.x,position_.y - SIZE_.y,position_.x + SIZE_.x,position_.y + SIZE_.y,GetColor(255,0,0),true);
+	DrawBox(scroll.x+position_.x - SIZE_.x,scroll.y+position_.y - SIZE_.y,scroll.x+position_.x + SIZE_.x,scroll.y+position_.y + SIZE_.y,GetColor(255,0,0),true);
 }
 
 void PlayerBullet::OnCollision()
