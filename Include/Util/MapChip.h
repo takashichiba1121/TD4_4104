@@ -38,8 +38,8 @@ public:
 	uint8_t GetNumOfArrayElement(int32_t x,int32_t y)const;
 	const Vector2& GetScreenPos()const;
 
-	const Vector2& GetLeftTopPos()const;
-	const Vector2& GetRightTopBottom()const;
+	const Vector2 GetLeftTopPos()const;
+	const Vector2 GetRightTopBottom()const;
 
 	void SetPlayer(Player* player);
 	void SetEnemyManager(EnemyManager* enemyManager);
