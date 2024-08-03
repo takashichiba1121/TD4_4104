@@ -130,6 +130,7 @@
     <ClCompile Include="Source\NPC\PowerUpCave.cpp" />
     <ClCompile Include="Source\NPC\DealDaemon.cpp" />
     <ClCompile Include="Source\NPC\NPC.cpp" />
+    <ClCompile Include="Source\Player\PlayerAttackSpider.cpp" />
     <ClCompile Include="Source\Player\PlayerAttackVine.cpp" />
     <ClCompile Include="Source\Player\PlayerLegCerberus.cpp" />
     <ClCompile Include="Source\Player\PlayerLegFenrir.cpp" />
