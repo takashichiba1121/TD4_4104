@@ -139,7 +139,7 @@ private:
 
 	uint32_t nowMouthCost_ = 0;
 
-
+		
 public:
 	void Initialize() override;
 
