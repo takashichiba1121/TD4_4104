@@ -1,9 +1,23 @@
 #include "EnemyManager.h"
 #include "DxlibInclude.h"
 #include "GameConfig.h"
+#include<BossEnemy.h>
+
 using namespace std;
 std::list<std::unique_ptr<BaseEnemy>> EnemyManager::enemylist_;
+std::array<int32_t,3> EnemyManager::texs_;
 Player* EnemyManager::playerPtr_ = nullptr;
+
+void EnemyManager::BossPop()
+{
+	unique_ptr<BossEnemy> temp = make_unique<BossEnemy>();
+	temp->SetPos({ 150,GameConfig::GetWindowHeight() - 192 / 2.0f - 64 });
+	temp->SetPlayerPtr(playerPtr_);
+	temp->Initialize();
+	enemylist_.push_back(move(temp));
+}
+
+
 void EnemyManager::Initialize()
 {
 	enemylist_.clear();
@@ -17,9 +31,10 @@ void EnemyManager::Pop()
 	{
 		if ( enemylist_.size() >= MAX_ENEMY_NUM || popEnemyCount_ >= MAX_POP_ENEMY_NUM) return;
 		popTime_ = POP_INTERVAL;
-		if (true)
+		int32_t rand = GetRand(1000);
+		if ( rand <= 200)
 		{
-			unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
+			unique_ptr<ShootEnemy> temp = make_unique<ShootEnemy>();
 			temp->Initialize();
 			temp->SetPlayerPtr(playerPtr_);
 			temp->SetPos({ GetRand(850) + 50.f,100.f });
@@ -27,9 +42,9 @@ void EnemyManager::Pop()
 			enemylist_.push_back(move(temp));
 			popEnemyCount_++;
 		}
-		else if ( false )
+		else if ( rand <= 550 )
 		{
-			unique_ptr<ShootEnemy> temp = make_unique<ShootEnemy>();
+			unique_ptr<WalkEnemy> temp = make_unique<WalkEnemy>();
 			temp->Initialize();
 			temp->SetPos({ GetRand(850) + 50.f,100.f });
 			temp->SetMapChip(mapchip_);
@@ -39,7 +54,7 @@ void EnemyManager::Pop()
 		}
 		else
 		{
-			unique_ptr<WalkEnemy> temp = make_unique<WalkEnemy>();
+			unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
 			temp->Initialize();
 			temp->SetPos({ GetRand(850) + 50.f,100.f });
 			temp->SetMapChip(mapchip_);
@@ -50,24 +65,105 @@ void EnemyManager::Pop()
 	}
 }
 
-void EnemyManager::SetEnemyPOP(std::string enemyType,Vector2 pos,Vector2 Velocity)
+void EnemyManager::SetEnemyPop(EnemyType enemyType,Vector2 pos,Vector2 velocity)
 {
-	if ( enemyType == "Fly" )
+	if ( enemyType == FLY )
 	{
 		unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
 		temp->Initialize();
 		temp->SetPlayerPtr(playerPtr_);
 		temp->SetPos(pos);
-		temp->SetVelocity(Velocity);
+		temp->SetVelocity(velocity);
 		enemylist_.push_back(move(temp));
+	}
+	else if ( enemyType == SHOOT )
+	{
+		unique_ptr<ShootEnemy> temp = make_unique<ShootEnemy>();
+		temp->Initialize();
+		temp->SetPos(pos);
+		temp->SetMapChip(mapchip_);
+		temp->SetPlayerPtr(playerPtr_);
+		temp->SetVelocity(velocity);
+		enemylist_.push_back(move(temp));
+		popEnemyCount_++;
 	}
 	else
 	{
 		unique_ptr<WalkEnemy> temp = make_unique<WalkEnemy>();
 		temp->Initialize();
 		temp->SetPos(pos);
-		temp->SetVelocity(Velocity);
+		temp->SetVelocity(velocity);
 		enemylist_.push_back(move(temp));
+	}
+}
+void EnemyManager::SetEnemyPop(EnemyType enemyType,Vector2 pos)
+{
+	if ( enemyType == FLY )
+	{
+		unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
+		temp->Initialize();
+		temp->SetPlayerPtr(playerPtr_);
+		temp->SetPos(pos);
+		temp->SetMapChip(mapchip_);
+		enemylist_.push_back(move(temp));
+		popEnemyCount_++;
+	}
+	else if ( enemyType == SHOOT )
+	{
+		unique_ptr<ShootEnemy> temp = make_unique<ShootEnemy>();
+		temp->Initialize();
+		temp->SetPos(pos);
+		temp->SetMapChip(mapchip_);
+		temp->SetPlayerPtr(playerPtr_);
+		enemylist_.push_back(move(temp));
+		popEnemyCount_++;
+	}
+	else
+	{
+		unique_ptr<WalkEnemy> temp = make_unique<WalkEnemy>();
+		temp->Initialize();
+		temp->SetPos(pos);
+		temp->SetMapChip(mapchip_);
+		temp->SetPlayerPtr(playerPtr_);
+		enemylist_.push_back(move(temp));
+		popEnemyCount_++;
+	}
+}
+
+
+void EnemyManager::SetPosPop(Vector2 pos)
+{
+
+	int32_t rand = GetRand(1000);
+	if ( rand <= 200 )
+	{
+		unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
+		temp->Initialize();
+		temp->SetPlayerPtr(playerPtr_);
+		temp->SetPos(pos);
+		temp->SetMapChip(mapchip_);
+		enemylist_.push_back(move(temp));
+		popEnemyCount_++;
+	}
+	else if ( rand <= 550 )
+	{
+		unique_ptr<ShootEnemy> temp = make_unique<ShootEnemy>();
+		temp->Initialize();
+		temp->SetPos(pos);
+		temp->SetMapChip(mapchip_);
+		temp->SetPlayerPtr(playerPtr_);
+		enemylist_.push_back(move(temp));
+		popEnemyCount_++;
+	}
+	else
+	{
+		unique_ptr<WalkEnemy> temp = make_unique<WalkEnemy>();
+		temp->Initialize();
+		temp->SetPos(pos);
+		temp->SetMapChip(mapchip_);
+		temp->SetPlayerPtr(playerPtr_);
+		enemylist_.push_back(move(temp));
+		popEnemyCount_++;
 	}
 }
 
@@ -79,6 +175,7 @@ void EnemyManager::SetPlayerPtr(Player* playerPtr)
 void EnemyManager::Update()
 {
 	Pop();
+
 	for ( auto& itr : enemylist_ )
 	{
 		itr->Update();
@@ -95,7 +192,7 @@ void EnemyManager::Update()
 	{
 		if ( itr->IsImmortal() && itr->IsCursedDamage())
 		{
-			if ( time < itr->GetImmortalTime() )
+			if ( time < itr->GetImmortalTime() && itr->IsCursedDamage() )
 			{
 				if ( cursedEnemy_ )
 				{
@@ -142,4 +239,20 @@ bool EnemyManager::GameEnd()
 void EnemyManager::EnemysClear()
 {
 	enemylist_.clear();
+}
+
+void EnemyManager::TexLoad()
+{
+	texs_[0] = LoadGraph("Resources\\Enemy\\enemyFly.png");
+	texs_[1] = LoadGraph("Resources\\Enemy\\enemyFly.png");
+	texs_[2] = LoadGraph("Resources\\Enemy\\enemyFly.png");
+}
+
+void EnemyManager::Finalize()
+{
+	enemylist_.clear();
+	for ( size_t i = 0; i < texs_.size(); i++ )
+	{
+		DeleteGraph(texs_[ i ]);
+	}
 }

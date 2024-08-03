@@ -81,9 +81,9 @@ private:
 
 	float changeDef_=1;
 
-	float changeCrit_ = 0.1;
+	float changeCrit_ = 0.1f;
 
-	float changeCdmg_ = 1.5;
+	float changeCdmg_ = 1.5f;
 
 	int32_t nowCost_=0;
 #pragma endregion

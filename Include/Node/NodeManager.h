@@ -37,8 +37,9 @@ private:
 	const int32_t STARTNODE_DREW_MAX_Y = 650;
 	const int32_t NODE_DREW_MIN_Y = 100;
 
-	int oldRand = 0;
-	int oldRandomJ = 0;
+	int32_t oldRand = 0;
+	int32_t oldRandomJ = 0;
+	float scrollSpeed_ = 7.0f;
 
 	int32_t reinforcementImg;
 	int32_t transactionImg;
@@ -101,9 +102,9 @@ public:
 private:
 
 	void GenerateInitialGrid();
-	std::vector<int> GetRandomStartingPoints();
-	int SetupConnection(int i,int j);
-	bool WouldCrossExistingPath(int i,int j,Node* room);
+	std::vector<int32_t> GetRandomStartingPoints();
+	int32_t SetupConnection(int32_t i,int32_t j);
+	bool WouldCrossExistingPath(int32_t i,int32_t j,Node* room);
 	void SetupRoomTypes();
 	void SetRoomRandomly(Node* roomToSet);
 	bool RoomHasParentOfType(Node* room,NodeType type);

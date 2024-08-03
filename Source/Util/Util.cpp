@@ -152,10 +152,15 @@ void Counter::ReSetCount()
 	nowCount_ = 0;
 }
 
-void Counter::SetEndCount(int32_t endCount)
+void Counter::SetEndCount(float endCount)
 {
 	nowCount_ = 0;
 	endCount_ = endCount;
+}
+
+void Counter::SetNowCount(float count)
+{
+	nowCount_ = count;
 }
 
 bool Counter::IsCountUnderZero()
@@ -185,12 +190,12 @@ bool Counter::IsCountEnd()
 	return false;
 }
 
-void Counter::CountDown(uint32_t down)
+void Counter::CountDown(float down)
 {
 	nowCount_ -= down;
 }
 
-void Counter::CountUp(uint32_t up)
+void Counter::CountUp(float up)
 {
 	if ( !IsCountEnd() )
 	{
@@ -198,12 +203,12 @@ void Counter::CountUp(uint32_t up)
 	}
 }
 
-int32_t Counter::GetCount()
+float Counter::GetCount()
 {
 	return nowCount_;
 }
 
-int32_t Counter::GetEndCount()
+float Counter::GetEndCount()
 {
 	return endCount_;
 }

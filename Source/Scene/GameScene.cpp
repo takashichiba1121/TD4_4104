@@ -35,7 +35,9 @@ void GameScene::Initialize()
 	nodeManager_->SetDealer(dealer_.get());
 	nodeManager_->Initialize();
 	nodeManager_->StartNodeSet(0);
-	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
+	backGround_ = LoadGraph(std::string("Resources/BackGround/BackGround.png"));
+
+	EnemyManager::TexLoad();
 }
 
 void GameScene::Update()
@@ -46,8 +48,6 @@ void GameScene::Update()
 	{
 		nodeManager_->Reset();
 	}
-
-	nodeManager_->Update();
 
 	if ( player_->IsPowerUp() )
 	{
@@ -117,8 +117,6 @@ void GameScene::Draw()
 
 	dealer_->Draw();
 
-	nodeManager_->NodeMapDraw();
-
 	nodeManager_->Draw();
 	
 	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
@@ -133,4 +131,5 @@ void GameScene::SpriteDraw()
 void GameScene::Finalize()
 {
 	PlayerBulletManager::Instance()->Clear();
+	EnemyManager::Finalize();
 }

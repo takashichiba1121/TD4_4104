@@ -7,7 +7,7 @@ enum ActionMode
 {
 	STAY,
 	MOVE,
-	APPROACH,
+	ENEMYAPPROACH,
 	ATTACK
 };
 
@@ -16,12 +16,15 @@ class Player;
 class BaseEnemy:public BaseObject
 {
 protected:
+	int32_t maxHp_;
 	Counter attackCounter_;
 	Counter beforeAttackCounter_;
 	Counter attackIntervalCounter_;
 	int32_t attackInterval_ = 60;
 	int32_t beforeAttackFrame_ = 5;
 	int32_t attackFrame_ = 25;
+	int32_t hpBerOffSet_ = 20;
+	int32_t hpBerOffSetUnder_ = 10;
 	MapChip* mapchip_;
 	ObjectUserData name_;
 	uint32_t id_;
@@ -32,6 +35,9 @@ protected:
 	int32_t defense_;
 	int32_t immortalTime_;
 	int8_t statusEffects_;
+	int32_t animeTimer_;
+	int32_t anime_;
+	int32_t animeNum_;
 	std::array<Counter,END> effectTimer;
 	const std::array<int32_t,END> effectTime = {360,240,600,360,0};
 	const std::array<int32_t,END> effectDamageInterval = { 120,240,120,0,0 };
@@ -54,5 +60,6 @@ public:
 	bool IsImmortal();
 	int32_t GetImmortalTime();
 	int32_t GetCurseStack();
+	void AnimeUpdate();
 };
 
