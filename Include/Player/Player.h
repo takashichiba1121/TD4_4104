@@ -257,4 +257,5 @@ public:
 	}
 
 
+	void Heel(uint32_t heel);
 };

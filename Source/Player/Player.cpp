@@ -21,7 +21,7 @@
 
 void Player::Initialize()
 {
-	hitboxSize_ = { 64,128 };
+	hitboxSize_ = { 60,128 };
 
 	drawSize_ = { 128,128 };
 
@@ -754,5 +754,15 @@ void Player::SoulMouth()
 		{
 			hp_ = MAX_HP_ * changeMaxHp_;
 		}
+	}
+}
+
+void Player::Heel(uint32_t heel)
+{
+	hp_ += heel;
+
+	if (hp_>MAX_HP_*changeMaxHp_ )
+	{
+		hp_ = MAX_HP_ * changeMaxHp_;
 	}
 }

@@ -100,7 +100,10 @@ void GameScene::Update()
 	{
 		nodeManager_->Update();
 
-		player_->Update();
+		if ( !nodeManager_->IsMapDraw() )
+		{
+			player_->Update();
+		}
 
 		CollisionManager::GetInstance()->SetScreenPos(mapChip_->GetScreenPos());
 		CollisionManager::GetInstance()->Update();
@@ -164,7 +167,7 @@ Vector2 GameScene::Scroll()
 
 	Vector2 playerPos = player_->GetPos();
 
-	Vector2 mapChipLeftTopPos = {0,0};
+	Vector2 mapChipLeftTopPos = { 0,0 };
 	Vector2 mapChipTopBottomPos = mapChip_->GetRightTopBottom();
 
 	int32_t WindowHeight = GameConfig::GetWindowHeight();
@@ -176,13 +179,13 @@ Vector2 GameScene::Scroll()
 
 	if ( mapChipTopBottomPos.x > 0 && mapChipTopBottomPos.y > 0 )
 	{
-		if ( playerPos.x >= mapChipTopBottomPos.x - WindowWidth/2 )
+		if ( playerPos.x >= mapChipTopBottomPos.x - WindowWidth / 2 )
 		{
- 			scroll.x = -(mapChipTopBottomPos.x - WindowWidth);
+			scroll.x = -( mapChipTopBottomPos.x - WindowWidth );
 		}
-		if ( playerPos.y >= mapChipTopBottomPos.y - WindowHeight/2 )
+		if ( playerPos.y >= mapChipTopBottomPos.y - WindowHeight / 2 )
 		{
-			scroll.y = -(mapChipTopBottomPos.y - WindowHeight);
+			scroll.y = -( mapChipTopBottomPos.y - WindowHeight );
 		}
 	}
 	if ( playerPos.x <= mapChipLeftTopPos.x + WindowWidth / 2 )
