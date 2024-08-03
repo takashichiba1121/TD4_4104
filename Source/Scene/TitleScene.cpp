@@ -82,7 +82,6 @@ void TitleScene::Draw()
 	DrawRotaGraph(GameConfig::GetWindowWidth() / 2,200,1,0,titleTex_,TRUE);
 
 	DrawFormatString(470,450,GetColor(255,255,255),"Start To EnterKey");
-	DrawFormatString(170,100,GetColor(255,255,255),"%f",alpha_.GetCount());
 }
 
 void TitleScene::SpriteDraw()
