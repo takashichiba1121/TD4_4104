@@ -64,24 +64,24 @@ void MapChip::MapLoad(const std::string& path)
 			switch ( chip )
 			{
 			case START:
-				player_->SetPos({ 32.0f + 64.0f * j,32.0f + 64.0f * i });
+				player_->SetPos({ float(( j * BLOCK_SIZE ) ),float(( i * BLOCK_SIZE ) ) });
 				map_[ i ][ j ] = ChipIndex::NONE;
 				break;
 			case FLY_RANGE_ENEMY:
 				map_[ i ][ j ] = ChipIndex::NONE;
-				enemyManager_->SetEnemyPop(EnemyType::FLY,{ 32.0f + 64.0f * j,32.0f + 64.0f * i });
+				enemyManager_->SetEnemyPop(EnemyType::FLY,{ float( ( j * BLOCK_SIZE )  ),float( ( i * BLOCK_SIZE )  ) });
 				break;
 			case LONG_RANGE_ENEMY:
 				map_[ i ][ j ] = ChipIndex::NONE;
-				enemyManager_->SetEnemyPop(EnemyType::SHOOT,{ 32.0f + 64.0f * j,32.0f + 64.0f * i });
+				enemyManager_->SetEnemyPop(EnemyType::SHOOT,{ float(( j * BLOCK_SIZE ) ),float(( ( i - 1 ) * BLOCK_SIZE ) - 68) });
 				break;
 			case SHORT_RANGE_ENEMY:
 				map_[ i ][ j ] = ChipIndex::NONE;
-				enemyManager_->SetEnemyPop(EnemyType::ADJACENT,{ 32.0f + 64.0f * j,32.0f + 64.0f * i });
+				enemyManager_->SetEnemyPop(EnemyType::ADJACENT,{ float(( j * BLOCK_SIZE )),float(( i * BLOCK_SIZE ) - 68) });
 				break;
 			case RANDOM_ENEMY:
 				map_[ i ][ j ] = ChipIndex::NONE;
-				enemyManager_->SetPosPop({ 32.0f + 64.0f * j,32.0f + 64.0f * i });
+				enemyManager_->SetPosPop({ float(( j * BLOCK_SIZE ) ),float(( ( i - 1 ) * BLOCK_SIZE ) ) });
 				break;
 
 			case NONE:
