@@ -4,35 +4,35 @@
 		"partsName": "銃腕",
 		"codeName": "Gun",
 		"cost": 25,
-		"partsInfo": "プレイヤーが向いてる方向に弾を撃つ"
+		"partsInfo": "プレイヤーが向いてる方向に\n弾を撃つ"
 	},
 	{
 		"Type": "ARM",
 		"partsName": "クモの腕",
 		"codeName": "Spider",
 		"cost": 25,
-		"partsInfo": "短距離攻撃、攻撃は短いがダメージはそこそこ。当たった敵の移動速度ダウン(25%)"
+		"partsInfo": "短距離攻撃、\n攻撃は短いが\nダメージはそこそこ。\n当たった敵の移動速度ダウン"
 	},
 	{
 		"Type": "ARM",
 		"partsName": "蔓の腕",
 		"codeName": "Vine",
 		"cost": 50,
-		"partsInfo": "中距離攻撃攻撃を受けると敵をバインド(攻撃力の30%, 3回)させ、動けなくなる"
+		"partsInfo": "中距離攻撃\n攻撃を受けると\n敵をバインドさせ、\n動けなくなる"
 	},
 	{
 		"Type": "ARM",
 		"partsName": "ケルベロスのの肢",
 		"codeName": "Cerberus",
 		"cost": 75,
-		"partsInfo": "当たった敵にやけど状態を与える。"
+		"partsInfo": "当たった敵に\nやけど状態を与える。"
 	},
 	{
 		"Type": "ARM",
 		"partsName": "フェンリルの肢",
 		"codeName": "Fenrir",
 		"cost": 75,
-		"partsInfo": "プレイヤーが向いてる方向に氷ビームを放つ腕。当たると敵を凍らせる"
+		"partsInfo": "プレイヤーが向いてる方向に\n氷ビームを放つ腕。\n当たると敵を凍らせる"
 	},
 	{
 		"Type": "ARM",
@@ -46,28 +46,14 @@
 		"partsName": "ケルベロスの爪",
 		"codeName": "Cerberus",
 		"cost": 75,
-		"partsInfo": "速度が向上し、ジャンプが飛び跳ねるに変える。飛び跳ねるパースに火の跡を残し、当たった敵にやけど状態。"
+		"partsInfo": "速度が向上し、\nジャンプが飛び跳ねるに変わる。\n飛び跳ねた時に火の跡を残し、\n当たった敵をやけどにする。"
 	},
 	{
 		"Type": "LEG",
 		"partsName": "フェンリルの爪",
 		"codeName": "Fenrir",
 		"cost": 75,
-		"partsInfo": "ジャンプが飛び跳ねるになり、そのパースに当たった敵フリーズ状態をかける"
-	},
-	{
-		"Type": "LEG",
-		"partsName": "蔓の脚",
-		"codeName": "temp9",
-		"cost": 50,
-		"partsInfo": "ジャンプが遅くなるが敵の上に着地すると敵を縛る。敵にダメージを与え、バインド状態にする"
-	},
-	{
-		"Type": "LEG",
-		"partsName": "クモの脚",
-		"codeName": "temp10",
-		"cost": 25,
-		"partsInfo": "壁登りできるようになる。空中いると地面に突進できる。"
+		"partsInfo": "ジャンプが飛び跳ねるになり、\n飛び跳ねた時に跡を残し、\n攻撃が当たった敵を\nフリーズ状態にする"
 	},
 	{
 		"Type": "EYE",
@@ -78,51 +64,16 @@
 	},
 	{
 		"Type": "EYE",
-		"partsName": "透視の魔眼",
-		"codeName": "temp12",
-		"cost": 25,
-		"partsInfo": "敵の弱点を見破る目。敵の弱点をヒットすると必ず会心ダメージが入る。"
-	},
-	{
-		"Type": "EYE",
-		"partsName": "予知の魔眼",
-		"codeName": "temp13",
-		"cost": 50,
-		"partsInfo": "プレイヤーが攻撃を受ける直前に敵の攻撃を予知し、一時的にプレイヤーの周りをスローダウンさせる。使うとクールダウンに入る。"
-	},
-	{
-		"Type": "EYE",
 		"partsName": "呪いの眼",
 		"codeName": "Curse",
 		"cost": 25,
-		"partsInfo": "攻撃した敵を呪いの印でマーキングし、その敵が受けるダメージを増加させる。攻撃すればするほどスタックが溜まる。マークされた敵以外の敵を攻撃するとスタックがリセット"
+		"partsInfo": "攻撃した敵を\n呪いの印でマーキングし、\n敵が受けるダメージを\n増加させる。\n攻撃すればするほど\nスタックが溜まる。\nマークされた敵以外を攻撃すると\nスタックがリセットされる"
 	},
 	{
 		"Type": "MOUTH",
 		"partsName": "魂喰いの口器",
 		"codeName": "Soul",
 		"cost": 75,
-		"partsInfo": "敵を食べれるようになる。敵を食べるとHP回復"
-	},
-	{
-		"Type": "MOUTH",
-		"partsName": "貪欲の顎",
-		"codeName": "temp16",
-		"cost": 25,
-		"partsInfo": "アイテム使用時の効果が増加する"
-	},
-	{
-		"Type": "MOUTH",
-		"partsName": "幸運の牙",
-		"codeName": "temp17",
-		"cost": 25,
-		"partsInfo": "アイテムを消費することで、追加でランダムな効果が付与されたり、アイテムの効果が2倍になったりするチャンスがある。"
-	},
-	{
-		"Type": "MOUTH",
-		"partsName": "血飲みの口",
-		"codeName": "temp18",
-		"cost": 50,
-		"partsInfo": "回復アイテムを消費すると、一時的な攻撃力アップも得られる。"
+		"partsInfo": "敵を食べれるようになる。\n敵を食べるとHP回復"
 	}
 ]

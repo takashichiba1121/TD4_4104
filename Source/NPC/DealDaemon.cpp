@@ -56,7 +56,8 @@ void DealDaemon::Initialize()
 		temp->partsInfo = utf8_to_sjis(static_cast<string>(obj["partsInfo"]));
 		products_.push_back(std::move(temp));
 	}
-	fontHandle_ = DxLib::CreateFontToHandle(NULL,32,3);
+	nameFontHandle_ = DxLib::CreateFontToHandle(NULL,16,3);
+	infoFontHandle_ = DxLib::CreateFontToHandle(NULL,16,3);
 	
 
 	SetPriducts();
@@ -152,7 +153,7 @@ void DealDaemon::SetPriducts(bool deal)
 	for (int i = 0; i < selectProducts_.size(); i++)
 	{
 		Parts* temp = products_[ GetRand(products_.size() - 1) ].get();
-		while ( playerPtr_->CheckHavePart(magic_enum::enum_cast< PartsName >( temp->productType).value(),temp->partsName) )
+		while ( playerPtr_->CheckHavePart(magic_enum::enum_cast< PartsName >( temp->productType).value(),temp->partsName))
 		{
 			temp = products_[ GetRand(products_.size() - 1) ].get();
 		}
@@ -192,11 +193,18 @@ void DealDaemon::Draw()
 				color = 0xf00f00;
 			}
 			DrawBox(( boxLeftTop_.x + i * boxDist_ ),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,color,true);
-		/*	DrawFormatString(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,
-				0xffffff,"%s\nCost:%d\n%s",selectProducts_[ i ]->uiPartsName,selectProducts_[ i ]->cost,selectProducts_[ i ]->partsInfo);*/
-			
-			//DrawStringToHandle(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,selectProducts_[ i ]->partsInfo.c_str(),
-			//0xffffff,fontHandle_);
+
+
+			DrawStringToHandle(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,selectProducts_[ i ]->uiPartsName.c_str(),
+			0xffffff,nameFontHandle_);
+
+			string temp = utf8_to_sjis(string("価格:" + selectProducts_[ i ]->cost));
+
+			DrawStringToHandle(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 75,temp.c_str(),
+			0xffffff,infoFontHandle_);
+
+			DrawStringToHandle(( boxLeftTop_.x + i * boxDist_ ) + 25,boxLeftTop_.y + 100,selectProducts_[ i ]->partsInfo.c_str(),
+			0xffffff,infoFontHandle_);
 		}
 	}
 

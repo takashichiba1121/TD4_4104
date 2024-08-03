@@ -34,13 +34,14 @@ enum PartsName
 class DealDaemon : public BaseObject
 {
 private:
-	int32_t fontHandle_ = 0;
+	int32_t nameFontHandle_ = 0;
+	int32_t infoFontHandle_ = 0;
 	Player* playerPtr_;
 	std::array<Parts*,3> selectProducts_;
 	uint8_t selectNum_ = 0;
 	std::vector<std::unique_ptr<Parts>> products_;
-	Vector2 boxLeftTop_ = { 200,200 };
-	Vector2 boxSize_ = { 200,300 };
+	Vector2 boxLeftTop_ = { 100,200 };
+	Vector2 boxSize_ = { 250,300 };
 	int32_t boxDist_ = 400;
 	int8_t dealCount_;
 	bool isLeft_ = false;
