@@ -170,7 +170,7 @@ void FlyEnemy::Attack()
 			actionMode = MOVE;
 		}
 	}
-	if ( Vector2(pos_,targetPos_).GetLenge() <= 10 )
+	if ( Vector2(pos_,targetPos_).GetLenge() <= 25 )
 	{
 		attackFinish_ = true;
 		stanTimer_.SetEndCount(30);
