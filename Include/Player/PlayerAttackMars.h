@@ -28,6 +28,10 @@ private:
 
 	float playerPow_;
 
+	float  playerCrit_;
+
+	float  playerCdmg_;
+
 	RectShape* shape_;
 
 	Vector2* playerPos_;
@@ -43,7 +47,7 @@ public:
 public:
 	void Initialize(Vector2* playerPos,Vector2* velocity,bool* direction) override;
 
-	void AttackInit(float pow) override;
+	void AttackInit(float pow,float changeCrit_,float changeCdmg_) override;
 
 	void Attack() override;
 
