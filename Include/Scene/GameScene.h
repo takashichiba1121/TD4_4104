@@ -34,5 +34,6 @@ public:
 	void Draw() override;
 	void SpriteDraw() override;
 	void Finalize() override;
+	Vector2 Scroll();
 };
 

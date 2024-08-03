@@ -49,32 +49,26 @@ void BaseEnemy::Damage(int32_t damage,Effects effect,bool effectD)
 {
 	if (!immortal_)
 	{
-		if ( !effectD )
+		SetEffect(effect);
+		switch ( effect )
 		{
-			SetEffect(effect);
-			switch ( effect )
-			{
-			case BIND:
-				effectDamage[ effect ] = damage * 0.15f;
-				break;
-			case ICED:
-				effectDamage[ effect ] = damage * 0.50f;
-				break;
-			default:
-				break;
-			}
-			if ( IsEffect(ICED) )
-			{
-				damage = static_cast< int32_t >( static_cast< float >( damage ) * 0.25f );
-			}
-			immortal_ = true;
-			immortalTime_ = 10;
-			if ( IsEffect(CURSE) )
-			{
-				curseStack++;
-			}
+		case BIND:
+			effectDamage[ effect ] = damage * 0.15f;
+			break;
+		case ICED:
+			effectDamage[ effect ] = damage * 0.50f;
+			break;
+		case BURN:
+			effectDamage[ effect ] = damage * 0.25f;
+			break;
+		default:
+			break;
 		}
-
+		if ( IsEffect(ICED) )
+		{
+			damage = static_cast<int32_t>(static_cast<float>(damage) * 0.25f);
+		}
+		immortal_ = true;
 		hp_ -= damage;
 		immortalTime_ = 10;
 		if ( playerPtr_ )

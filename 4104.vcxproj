@@ -126,7 +126,6 @@
     <ClCompile Include="Source\Node\ReinforcementNode.cpp" />
     <ClCompile Include="Source\Node\ShopNode.cpp" />
     <ClCompile Include="Source\Node\TransactionNode.cpp" />
-    <ClCompile Include="Source\NPC\NPCManager.cpp" />
     <ClCompile Include="Source\NPC\PowerUpCave.cpp" />
     <ClCompile Include="Source\NPC\DealDaemon.cpp" />
     <ClCompile Include="Source\NPC\NPC.cpp" />

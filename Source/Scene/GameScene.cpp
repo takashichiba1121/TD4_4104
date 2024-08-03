@@ -18,6 +18,7 @@ void GameScene::Initialize()
 
 	mapChip_ = std::make_unique<MapChip>();
 	mapChip_->Initialize();
+	mapChip_->SetPlayer(player_.get());
 
 	powerUp_ = std::make_unique<PowerUpCave>();
 	powerUp_->Initialize();
@@ -109,13 +110,11 @@ void GameScene::Update()
 void GameScene::Draw()
 {
 	DrawGraph(0,0,backGround_,true);
-	mapChip_->Draw({ 0,0 });
+	mapChip_->Draw(Scroll());
 	nodeManager_->Draw();
 	player_->Draw();
 
-	if (!chenged) powerUp_->Draw();
-
-	dealer_->Draw();
+	//if (!chenged) powerUp_->Draw();
 
 	nodeManager_->Draw();
 	
@@ -132,4 +131,11 @@ void GameScene::Finalize()
 {
 	PlayerBulletManager::Instance()->Clear();
 	EnemyManager::Finalize();
+}
+
+Vector2 GameScene::Scroll()
+{
+	Vector2 playerpos=player_->GetPos();
+
+	return { 0,0 };
 }
