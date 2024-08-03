@@ -47,7 +47,6 @@ private:
 	bool dealed_ = false;
 	bool selectmode_ = false;
 	RectShape* shape_;
-	ObjectUserData name_;
 public:
 	void Initialize() override;
 	void Update() override;

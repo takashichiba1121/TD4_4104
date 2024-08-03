@@ -1,11 +1,12 @@
-#include "PlayerLegNormal.h"
+#include"PLayerLegCerberus.h"
 #include"Input.h"
 #include"DxlibInclude.h"
 #include"json.hpp"
 #include <fstream>
 #include"GameConfig.h"
+#include"PlayerBulletManager.h"
 
-void PlayerLegNormal::Initialize(Vector2* playerVelocity,bool* direction,float* changeAcl)
+void PlayerLegCerberus::Initialize(Vector2* playerVelocity,bool* direction,float* changeAcl)
 {
 	playerVelocity_ = playerVelocity;
 
@@ -24,7 +25,7 @@ void PlayerLegNormal::Initialize(Vector2* playerVelocity,bool* direction,float* 
 	LoadDivGraph("Resources/Player/PlayerDush.png",5,5,1,128,128,( int* ) PlayerDushTexture_);
 }
 
-void PlayerLegNormal::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const float pow)
+void PlayerLegCerberus::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const float pow)
 {
 	isDirBottom_ = DirBOTTOM;
 
@@ -139,9 +140,22 @@ void PlayerLegNormal::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const
 			Falling();
 		}
 	}
+
+	if ( isBullet )
+	{
+		bulletInterval_++;
+		if ( bulletInterval_ == MAX_BULLET_INTERVAL_ )
+		{
+			std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
+			newBullet->Initialize({ 0,0 },pos,60,pow,1,1,PlayerBullet::Type::BURN);
+			PlayerBulletManager::Instance()->AddBullet(std::move(newBullet));
+
+			bulletInterval_ = 0;
+		}
+	}
 }
 
-void PlayerLegNormal::JumpStart()
+void PlayerLegCerberus::JumpStart()
 {
 	onGround_ = true;
 
@@ -150,9 +164,20 @@ void PlayerLegNormal::JumpStart()
 	playerVelocity_->y += jumpInitialVelocity_;
 
 	PlayerJumpTextureCount_ = 0;
+
+	isBullet = true;
+
+	if ( *direction_ )
+	{
+		playerVelocity_->x += evasionRollSpeed_;
+	}
+	else
+	{
+		playerVelocity_->x += -evasionRollSpeed_;
+	}
 }
 
-void PlayerLegNormal::Jump()
+void PlayerLegCerberus::Jump()
 {
 	playerVelocity_->y += jumpAcceleration_;
 
@@ -171,7 +196,7 @@ void PlayerLegNormal::Jump()
 
 }
 
-void PlayerLegNormal::EvasionRoll()
+void PlayerLegCerberus::EvasionRoll()
 {
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_Q) && isEvasionRoll_ == false )
 	{
@@ -213,7 +238,7 @@ void PlayerLegNormal::EvasionRoll()
 	}
 }
 
-void PlayerLegNormal::Falling()
+void PlayerLegCerberus::Falling()
 {
 	playerVelocity_->y += gravityAcceleration_;
 
@@ -231,10 +256,12 @@ void PlayerLegNormal::Falling()
 
 		PlayerDownTextureCount_ = 0;
 
+		isBullet = false;
+
 	}
 }
 
-void PlayerLegNormal::Draw(const Vector2& pos,const Vector2& size)
+void PlayerLegCerberus::Draw(const Vector2& pos,const Vector2& size)
 {
 	float leftPos = pos.x - size.x / 2;
 	float rightPos = pos.x + size.x / 2;
@@ -301,7 +328,7 @@ void PlayerLegNormal::Draw(const Vector2& pos,const Vector2& size)
 	}
 }
 
-void PlayerLegNormal::Load()
+void PlayerLegCerberus::Load()
 {
 	std::ifstream file;
 
@@ -324,11 +351,11 @@ void PlayerLegNormal::Load()
 
 	assert(lName.compare("Player") == 0);
 
-	topSpeed_ = jsonObject[ "TopSpeed" ];
-	acceleration_ = jsonObject[ "Acceleration" ];
-	airAcceleration_ = jsonObject[ "AirAcceleration" ];
-	deccelaration_ = jsonObject[ "Deccelaration" ];
-	airDeccelaration_ = jsonObject[ "AirDeccelaration" ];
+	topSpeed_ = 12.0f;
+	acceleration_ = 60.0f;
+	airAcceleration_ = 24.0f;
+	deccelaration_ = 88.0;
+	airDeccelaration_ = 124.0f;
 	gravityAcceleration_ = jsonObject[ "GravityAcceleration" ];
 	jumpAcceleration_ = jsonObject[ "JumpAcceleration" ];
 	jumpInitialVelocity_ = jsonObject[ "JumpInitialVelocity" ];

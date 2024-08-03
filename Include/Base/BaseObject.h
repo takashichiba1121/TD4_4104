@@ -23,7 +23,7 @@ protected:
 	bool islive_;
 	Vector2 pos_;
 	Vector2 hitboxSize_;
-	Vector2 drawSize_;
+	Vector2 drawSize_ = { 64,128 };
 	float speed_;
 	float originalSpeed_;
 	Vector2 velocity_;
