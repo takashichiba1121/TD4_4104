@@ -55,11 +55,11 @@ void TitleScene::Update()
 
 	if ( downAlpha_ )
 	{
-		alpha_.CountDown((maxAlpha_ - minAlpha_) / ALPHACHENGETIME);
+		alpha_.CountDown((maxAlpha_ - minAlpha_) / ALPHACHENGETIME_);
 	}
 	else
 	{
- 		alpha_.CountUp((maxAlpha_ - minAlpha_) / ALPHACHENGETIME);
+ 		alpha_.CountUp((maxAlpha_ - minAlpha_) / ALPHACHENGETIME_);
 	}
 
 	if ( alpha_.GetCount() >= maxAlpha_ )
@@ -77,12 +77,11 @@ void TitleScene::Draw()
 {
 	DrawRotaGraph(GameConfig::GetWindowWidth()/2,GameConfig::GetWindowHeight()/2,1,0,backTex_,TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA,alpha_.GetCount());
-	DrawRotaGraph(mistPos_.x + mistPosOffSet_.x * WIDHT, mistPos_.y + mistPosOffSet_.y * WIDHT,2,0,mistTex_,TRUE);
+	DrawRotaGraph(mistPos_.x + mistPosOffSet_.x * WIDHT_, mistPos_.y + mistPosOffSet_.y * WIDHT_,2,0,mistTex_,TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	DrawRotaGraph(GameConfig::GetWindowWidth() / 2,200,1,0,titleTex_,TRUE);
 
 	DrawFormatString(470,450,GetColor(255,255,255),"Start To EnterKey");
-	DrawFormatString(170,100,GetColor(255,255,255),"%f",alpha_.GetCount());
 }
 
 void TitleScene::SpriteDraw()
