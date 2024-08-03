@@ -52,106 +52,105 @@ void EnemyManager::Pop()
 	}
 }
 
-void EnemyManager::SetEnemyPOP(std::string enemyType,Vector2 pos,Vector2 Velocity)
+void EnemyManager::SetEnemyPop(EnemyType enemyType,Vector2 pos,Vector2 velocity)
 {
-	if ( enemyType == "Fly" )
+	if ( enemyType == FLY )
 	{
 		unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
 		temp->Initialize();
 		temp->SetPlayerPtr(playerPtr_);
 		temp->SetPos(pos);
-		temp->SetVelocity(Velocity);
+		temp->SetVelocity(velocity);
 		enemylist_.push_back(move(temp));
+	}
+	else if ( enemyType == SHOOT )
+	{
+		unique_ptr<ShootEnemy> temp = make_unique<ShootEnemy>();
+		temp->Initialize();
+		temp->SetPos(pos);
+		temp->SetMapChip(mapchip_);
+		temp->SetPlayerPtr(playerPtr_);
+		temp->SetVelocity(velocity);
+		enemylist_.push_back(move(temp));
+		popEnemyCount_++;
 	}
 	else
 	{
 		unique_ptr<WalkEnemy> temp = make_unique<WalkEnemy>();
 		temp->Initialize();
 		temp->SetPos(pos);
-		temp->SetVelocity(Velocity);
+		temp->SetVelocity(velocity);
 		enemylist_.push_back(move(temp));
 	}
 }
-
-void EnemyManager::SetEnemyPOP(EnemyType enemyType,Vector2 pos)
+void EnemyManager::SetEnemyPop(EnemyType enemyType,Vector2 pos)
 {
-	popTime_--;
-	if ( popTime_ <= 0 )
+	if ( enemyType == FLY )
 	{
-		if ( enemylist_.size() >= MAX_ENEMY_NUM || popEnemyCount_ >= MAX_POP_ENEMY_NUM ) return;
-		popTime_ = POP_INTERVAL;
-		if ( enemyType == FLY )
-		{
-			unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
-			temp->Initialize();
-			temp->SetPlayerPtr(playerPtr_);
-			temp->SetPos(pos);
-			temp->SetMapChip(mapchip_);
-			enemylist_.push_back(move(temp));
-			popEnemyCount_++;
-		}
-		else if ( enemyType == SHOOT )
-		{
-			unique_ptr<ShootEnemy> temp = make_unique<ShootEnemy>();
-			temp->Initialize();
-			temp->SetPos(pos);
-			temp->SetMapChip(mapchip_);
-			temp->SetPlayerPtr(playerPtr_);
-			enemylist_.push_back(move(temp));
-			popEnemyCount_++;
-		}
-		else
-		{
-			unique_ptr<WalkEnemy> temp = make_unique<WalkEnemy>();
-			temp->Initialize();
-			temp->SetPos(pos);
-			temp->SetMapChip(mapchip_);
-			temp->SetPlayerPtr(playerPtr_);
-			enemylist_.push_back(move(temp));
-			popEnemyCount_++;
-		}
+		unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
+		temp->Initialize();
+		temp->SetPlayerPtr(playerPtr_);
+		temp->SetPos(pos);
+		temp->SetMapChip(mapchip_);
+		enemylist_.push_back(move(temp));
+		popEnemyCount_++;
+	}
+	else if ( enemyType == SHOOT )
+	{
+		unique_ptr<ShootEnemy> temp = make_unique<ShootEnemy>();
+		temp->Initialize();
+		temp->SetPos(pos);
+		temp->SetMapChip(mapchip_);
+		temp->SetPlayerPtr(playerPtr_);
+		enemylist_.push_back(move(temp));
+		popEnemyCount_++;
+	}
+	else
+	{
+		unique_ptr<WalkEnemy> temp = make_unique<WalkEnemy>();
+		temp->Initialize();
+		temp->SetPos(pos);
+		temp->SetMapChip(mapchip_);
+		temp->SetPlayerPtr(playerPtr_);
+		enemylist_.push_back(move(temp));
+		popEnemyCount_++;
 	}
 }
 
 
 void EnemyManager::SetPosPop(Vector2 pos)
 {
-	popTime_--;
-	if ( popTime_ <= 0 )
+
+	int32_t rand = GetRand(1000);
+	if ( rand <= 200 )
 	{
-		if ( enemylist_.size() >= MAX_ENEMY_NUM || popEnemyCount_ >= MAX_POP_ENEMY_NUM ) return;
-		popTime_ = POP_INTERVAL;
-		int32_t rand = GetRand(1000);
-		if ( rand <= 200 )
-		{
-			unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
-			temp->Initialize();
-			temp->SetPlayerPtr(playerPtr_);
-			temp->SetPos(pos);
-			temp->SetMapChip(mapchip_);
-			enemylist_.push_back(move(temp));
-			popEnemyCount_++;
-		}
-		else if ( rand <= 550 )
-		{
-			unique_ptr<ShootEnemy> temp = make_unique<ShootEnemy>();
-			temp->Initialize();
-			temp->SetPos(pos);
-			temp->SetMapChip(mapchip_);
-			temp->SetPlayerPtr(playerPtr_);
-			enemylist_.push_back(move(temp));
-			popEnemyCount_++;
-		}
-		else
-		{
-			unique_ptr<WalkEnemy> temp = make_unique<WalkEnemy>();
-			temp->Initialize();
-			temp->SetPos(pos);
-			temp->SetMapChip(mapchip_);
-			temp->SetPlayerPtr(playerPtr_);
-			enemylist_.push_back(move(temp));
-			popEnemyCount_++;
-		}
+		unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
+		temp->Initialize();
+		temp->SetPlayerPtr(playerPtr_);
+		temp->SetPos(pos);
+		temp->SetMapChip(mapchip_);
+		enemylist_.push_back(move(temp));
+		popEnemyCount_++;
+	}
+	else if ( rand <= 550 )
+	{
+		unique_ptr<ShootEnemy> temp = make_unique<ShootEnemy>();
+		temp->Initialize();
+		temp->SetPos(pos);
+		temp->SetMapChip(mapchip_);
+		temp->SetPlayerPtr(playerPtr_);
+		enemylist_.push_back(move(temp));
+		popEnemyCount_++;
+	}
+	else
+	{
+		unique_ptr<WalkEnemy> temp = make_unique<WalkEnemy>();
+		temp->Initialize();
+		temp->SetPos(pos);
+		temp->SetMapChip(mapchip_);
+		temp->SetPlayerPtr(playerPtr_);
+		enemylist_.push_back(move(temp));
+		popEnemyCount_++;
 	}
 }
 
