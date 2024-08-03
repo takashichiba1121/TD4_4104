@@ -173,8 +173,6 @@ public:
 
 	bool AddCdmg(int32_t Cdmg);
 
-	bool AddCost(int32_t cost);
-
 	void AddMaxCost(int32_t AddMaxCost);
 
 	bool SubSpd(int32_t spd);
