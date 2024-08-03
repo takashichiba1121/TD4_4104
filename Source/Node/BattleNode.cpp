@@ -1,6 +1,7 @@
 #include "BattleNode.h"
 #include<CollisionManager.h>
 #include<NodeManager.h>
+#include<DxlibInclude.h>
 
 void BattleNode::Initialize()
 {
@@ -21,39 +22,32 @@ void BattleNode::Draw()
 
 void BattleNode::Reset()
 {
-	mapChip_->MapLoad("Resources/Export/Map/Map_01.json");
+	{
+		int32_t rand = GetRand(3);
+
+		switch ( rand )
+		{
+		case 0:
+			mapChip_->MapLoad("Resources/Export/Map/Map_01.json");
+			break;
+		case 1:
+			mapChip_->MapLoad("Resources/Export/Map/Map_02.json");
+			break;
+		case 2:
+			mapChip_->MapLoad("Resources/Export/Map/Map_03.json");
+			break;
+		case 3:
+			mapChip_->MapLoad("Resources/Export/Map/Map_04.json");
+			break;
+		default:
+			break;
+		}
+	}
+
 
 	player_->Reset();
 
-	int32_t i = 0;
-	int32_t count = 0;
-	for ( auto& chip : mapChip_->GetMapChip()[ mapChip_->GetMapChip().size() - 1 ] )
-	{
-		if ( chip == ChipIndex::NEXT )
-		{
-			NextDoor nextDoor;
-			nextDoor.pos = { float(i), float(mapChip_->GetMapChip().size() - 1) };
-			nextDoor.id = count;
-			nextdoors_.push_back(nextDoor);
-			count++;
-		}
-
-		i++;
-	}
-
-	if ( nextdoors_.size() > nextDoorsNum_ )
-	{
-		std::vector<NextDoor> tmpNextdoors = nextdoors_;
-
-		while ( tmpNextdoors.size() > nextDoorsNum_ && tmpNextdoors.size() != 1 )
-		{
-			NextDoor door = tmpNextdoors.back();
-			mapChip_->MapWrite(door.pos.x,door.pos.y,ChipIndex::ROAD);
-			tmpNextdoors.pop_back();
-
-		}
-
-	}
+	GetNextDoors();
 
 	CollisionManager::GetInstance()->SetMapChip(mapChip_->GetMapChipPtr());
 }
