@@ -40,3 +40,5 @@ public:
 	int32_t GetEndCount();
 
 };
+
+constexpr float DEG_TO_RAD = 3.141592f / 180.0f;

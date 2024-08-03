@@ -126,7 +126,7 @@ void GameConfig::Load(const std::string& filePath)
 				boss.longRange.bulletSpeed = bulletObject[ "Speed" ];
 				boss.longRange.bulletSizeX = bulletObject[ "Size" ][ 0 ];
 				boss.longRange.bulletSizeY = bulletObject[ "Size" ][ 1 ];
-				boss.longRange.bulletPower = bulletObject[ "Power" ];
+				boss.longRange.bulletRotateSpeed = bulletObject[ "RotateSpeed" ];
 
 			}
 		}

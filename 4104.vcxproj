@@ -107,6 +107,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Include\Util\DxlibInclude.cpp" />
     <ClCompile Include="Source\Enemy\Boss\BossBullet.cpp" />
     <ClCompile Include="Source\Enemy\Boss\BossLongRangeAttack.cpp" />
     <ClCompile Include="Source\Node\BossNode.cpp" />
@@ -167,6 +168,7 @@
     <ClCompile Include="Source\Player\PlayerBulletManager.cpp" />
     <ClCompile Include="Source\Player\PlayerLegNormal.cpp" />
     <ClCompile Include="Source\Node\StartNode.cpp" />
+    <ClCompile Include="Source\Base\TextureManager.cpp" />
     <ClCompile Include="ThirdParty\imgui\imgui.cpp" />
     <ClCompile Include="ThirdParty\imgui\imgui_demo.cpp" />
     <ClCompile Include="ThirdParty\imgui\imgui_draw.cpp" />
@@ -244,6 +246,7 @@
     <ClInclude Include="Include\NPC\PowerUpCave.h" />
     <ClInclude Include="Include\Deal\ItemShop.h" />
     <ClInclude Include="Include\Node\StartNode.h" />
+    <ClInclude Include="Include\Base\TextureManager.h" />
     <ClInclude Include="ThirdParty\imgui\imconfig.h" />
     <ClInclude Include="ThirdParty\imgui\imgui.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_impl_dx11.h" />

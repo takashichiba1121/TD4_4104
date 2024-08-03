@@ -34,7 +34,7 @@ void GameScene::Initialize()
 	nodeManager_->SetPowerUp(powerUp_.get());
 	nodeManager_->Initialize();
 	nodeManager_->StartNodeSet(0);
-	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
+	backGround_ = LoadGraph(std::string("Resources/BackGround/BackGround.png"));
 }
 
 void GameScene::Update()

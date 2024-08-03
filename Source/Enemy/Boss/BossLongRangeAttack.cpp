@@ -1,4 +1,6 @@
 #include "BossLongRangeAttack.h"
+#include <DxlibInclude.h>
+#include<GameConfig.h>
 
 BossLongRangeAttack::BossLongRangeAttack()
 {
@@ -7,76 +9,96 @@ BossLongRangeAttack::BossLongRangeAttack()
 
 void BossLongRangeAttack::Attack()
 {
-	isAttack_ = true;
+	if ( !bullet_->IsAttack() )
+	{
+		isAttack_ = true;
+		isPreparation_ = false;
+		bullet_->SetDir(dir_);
+		bullet_->SetBossPos(bossPos_);
+		bullet_->Preparation();
+	}
+}
+
+void BossLongRangeAttack::Preparation()
+{
+	isPreparation_ = true;
 }
 
 void BossLongRangeAttack::Initialize()
 {
 	bullet_->Initialize();
+
+	chargeImg_ = LoadGraph(std::string("Resources/Enemy/chargeBoss.png"));
+	animeFrame_ = GameConfig::GetBossConfig()->charge.animeFrame;
+
+	int32_t graphSizeX;
+	int32_t graphSizeY;
+	GetGraphSize(chargeImg_,&graphSizeX,&graphSizeY);
+
+	animeNum_ = graphSizeX / 192;
+	drawSize_ = { 192,192 };
 }
 
 void BossLongRangeAttack::Update()
 {
-	if ( chargeTime_ == 0 )
+	if ( isAttack_ )
 	{
-		if ( bullet_->IsAttack())
+		AnimeUpdate();
+
+		if ( chargeTime_ == 0 )
 		{
+			if ( bullet_->IsAttack() )
+			{
+				freezeTime_ = FREEZE_TIME;
+				chargeTime_ = CHARGE_TIME;
+				isAttack_ = isShot_ = false;
+			}
+
+			if ( !isShot_ && !bullet_->IsAttack() )
+			{
+				isShot_ = true;
+				bullet_->Attack();
+				chargeTime_ = -1;
+			}
+		}
+		else if( chargeTime_ != -1 )
+		{
+
+			chargeTime_--;
+		}
+
+		if ( freezeTime_ == 0 )
+		{
+			freezeTime_ = -1;
 			freezeTime_ = FREEZE_TIME;
 			chargeTime_ = CHARGE_TIME;
-			isAttack_ = isShot_ = false;
+			isAttack_ = false;
+			return;
 		}
-
-		if ( !isShot_ &&!bullet_->IsAttack())
+		else if ( isShot_)
 		{
-			isShot_ = true;
-			bullet_->SetDir(dir_);
-			bullet_->SetBossPos(bossPos_);
-			bullet_->Attack();
-			chargeTime_ = -1;
+			freezeTime_--;
 		}
-	}
-	else
-	{
-		chargeTime_--;
-	}
-
-	if ( freezeTime_ == 0 )
-	{
-		freezeTime_ = -1;
-		freezeTime_ = FREEZE_TIME;
-		chargeTime_ = CHARGE_TIME;
-		isAttack_ = false;
-		return;
-	}
-	else if ( isShot_ && bullet_->IsAttack() )
-	{
-		freezeTime_--;
-	}
-
-	if ( freezeTime_ == -1 && chargeTime_ == -1 )
-	{
-		freezeTime_ = FREEZE_TIME;
-		chargeTime_ = CHARGE_TIME;
-		isAttack_ = false;
 	}
 
 	if ( !bullet_->IsAttack() )
 	{
 		isShot_ = false;
 	}
-
 }
 
 void BossLongRangeAttack::BulletUpdate()
 {
-	if ( isShot_ )
-	{
 		bullet_->Update();
-	}
 }
 
 void BossLongRangeAttack::Draw()
 {
+	if ( isAttack_ )
+	{
+		DrawRectGraphF(bossPos_.x - drawSize_.x / 2,bossPos_.y - drawSize_.y / 2,0 + drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,chargeImg_,true,dir_ == 1);
+	}
+
 	bullet_->Draw();
 }
 
@@ -92,7 +114,7 @@ void BossLongRangeAttack::SetBossPos(const Vector2& pos)
 
 void BossLongRangeAttack::SetChargeTime(int32_t time)
 {
-	chargeTime_ = CHARGE_TIME + time;
+	chargeTime_ = CHARGE_TIME = time;
 }
 
 void BossLongRangeAttack::SetFreezeTime(int32_t time)
@@ -133,4 +155,19 @@ bool BossLongRangeAttack::IsAttack() const
 bool BossLongRangeAttack::IsShot() const
 {
 	return isShot_;
+}
+
+void BossLongRangeAttack::AnimeUpdate()
+{
+	animeTimer_++;
+
+	if ( animeTimer_ == animeFrame_ )
+	{
+		animeTimer_ = 0;
+		anime_++;
+		if ( anime_ == animeNum_ )
+		{
+			anime_ = 0;
+		}
+	}
 }

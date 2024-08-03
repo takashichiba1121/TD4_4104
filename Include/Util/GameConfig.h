@@ -64,6 +64,7 @@ public:
 			int32_t bulletSizeX;
 			int32_t bulletSizeY;
 			int32_t bulletPower;
+			int32_t bulletRotateSpeed;
 		};
 
 		int32_t hp;

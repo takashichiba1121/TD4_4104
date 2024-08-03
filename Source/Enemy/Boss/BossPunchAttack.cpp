@@ -10,12 +10,13 @@ void BossPunchAttack::Attack()
 	CollisionEnable();
 	time_ = TIME;
 
-	isPreparation = false;
+	isPreparation_ = false;
 }
 
 void BossPunchAttack::Initialize()
 {
-	rightHandImg = LoadGraph("Resources/Enemy/rightHand.png");
+
+	rightHandImg_ = LoadGraph(std::string("Resources/Enemy/rightHand.png"));
 
 	shape_ = new RectShape();
 	shape_->SetRadius(size_ / 2);
@@ -32,7 +33,7 @@ void BossPunchAttack::Initialize()
 
 void BossPunchAttack::Update()
 {
-	if ( isPreparation )
+	if ( isPreparation_ )
 	{
 		shape_->SetCenter({ bossPos_.x + offset_.x + size_.x / 2 * -dir_ , bossPos_.y + offset_.y });
 	}
@@ -53,7 +54,7 @@ void BossPunchAttack::Update()
 
 void BossPunchAttack::Draw()
 {
-	DrawRotaGraph(shape_->GetCenter().x,shape_->GetCenter().y,1.0,-3.14/4,rightHandImg,true,dir_ == 1);
+	DrawRotaGraph(shape_->GetCenter().x,shape_->GetCenter().y,1.0,-3.14/4,rightHandImg_,true,dir_ == 1);
 }
 
 void BossPunchAttack::DebugDraw()
@@ -100,13 +101,13 @@ void BossPunchAttack::SetOffset(const Vector2& offset)
 
 void BossPunchAttack::Preparation()
 {
-	isPreparation = true;
+	isPreparation_ = true;
 	shape_->SetCenter({ bossPos_.x + offset_.x + size_.x / 2 * -dir_ , bossPos_.y + offset_.y });
 }
 
 bool BossPunchAttack::IsAttack() const
 {
-	return isAttack_ || isPreparation;
+	return isAttack_ || isPreparation_;
 }
 
 void BossPunchAttack::OnCollision()

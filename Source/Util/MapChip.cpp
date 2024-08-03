@@ -31,8 +31,8 @@ static int Random(int low,int high)
 
 void MapChip::Initialize()
 {
-	roadChipHandle_ = LoadGraph("Resources/Chip/RoadChip.png");
-	wallChipHandle_ = LoadGraph("Resources/Chip/WallChip.png");
+	roadChipHandle_ = LoadGraph(std::string("Resources/Chip/RoadChip.png"));
+	wallChipHandle_ = LoadGraph(std::string("Resources/Chip/WallChip.png"));
 }
 
 void MapChip::MapLoad(const std::string& path)

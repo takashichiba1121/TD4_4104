@@ -21,8 +21,8 @@ void BossChargeAttack::Attack()
 
 void BossChargeAttack::Initialize()
 {
-	chargeImg_ = LoadGraph("Resources/Enemy/chargeBoss.png");
-	effectImg_ = LoadGraph("Resources/Enemy/tackleEffect.png");
+	chargeImg_ = LoadGraph(std::string("Resources/Enemy/chargeBoss.png"));
+	effectImg_ = LoadGraph(std::string("Resources/Enemy/tackleEffect.png"));
 
 	int32_t graphSizeX;
 	int32_t graphSizeY;

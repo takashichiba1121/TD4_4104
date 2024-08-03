@@ -87,7 +87,8 @@
                     48, 
                     48
                 ],
-                "Power":1
+                "Power":1,
+                "RotateSpeed":25
             }
             
         }

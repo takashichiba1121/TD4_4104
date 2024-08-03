@@ -19,8 +19,8 @@ private:
 	ObjectUserData tag;
 	int32_t attackPower_;
 	bool isAttack_;
-	bool isPreparation;
-	int32_t rightHandImg;
+	bool isPreparation_;
+	int32_t rightHandImg_;
 
 public:
 
