@@ -5,6 +5,7 @@
 #include "Player.h"
 #include<Collision.h>
 #include<GameConfig.h>
+#include<Input.h>
 
 void BossEnemy::Initialize()
 {
@@ -107,6 +108,11 @@ void BossEnemy::Update()
 	AnimeUpdate();
 
 	Move();
+
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_UP) )
+	{
+		hp_--;
+	}
 }
 
 void BossEnemy::Move()
@@ -227,9 +233,10 @@ void BossEnemy::ApproachMove()
 	float hpRet = hp_ / float(HP);
 	int32_t hp = hpRet * 100;
 
-	if ( hp == 50 || hp == 25 || hp == 10 )
+	if ( hp == 50 && longRangeAttackCount_ ==  0  || hp == 25 && longRangeAttackCount_ == 1 || hp == 10 && longRangeAttackCount_ == 2 )
 	{
 		velocity_.x = 0;
+		longRangeAttackCount_++;
 
 		nextPhase_ = GetPhase();
 		phase_ = LONG_RANGE;

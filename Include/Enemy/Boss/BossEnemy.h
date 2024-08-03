@@ -51,6 +51,8 @@ private:
 	std::discrete_distribution<int> distribution;
 	int32_t probabilities[ 2 ] = {};
 
+	int8_t longRangeAttackCount_ = 0;
+
 public:
 
 	void Initialize() override;

@@ -54,7 +54,15 @@ void BossPunchAttack::Update()
 
 void BossPunchAttack::Draw()
 {
-	DrawRotaGraph(shape_->GetCenter().x,shape_->GetCenter().y,1.0,-3.14/4,rightHandImg_,true,dir_ == 1);
+	if ( dir_ == 1 )
+	{
+		DrawRotaGraph(shape_->GetCenter().x,shape_->GetCenter().y,1.0,3.14 / 4,rightHandImg_,true,true);
+	}
+	else
+	{
+		DrawRotaGraph(shape_->GetCenter().x,shape_->GetCenter().y,1.0,-3.14 / 4,rightHandImg_,true,false);
+	}
+	
 }
 
 void BossPunchAttack::DebugDraw()

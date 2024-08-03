@@ -127,7 +127,7 @@ void CollisionManager::Update()
 		}
 	}
 
-	for ( auto itr : mapChipObjects_ )
+	for ( auto& itr : mapChipObjects_ )
 	{
 
 		if (! itr->mapChipObject_ )
@@ -135,7 +135,7 @@ void CollisionManager::Update()
 			continue;
 		}
 
-		itr->dir_ = 0;
+		uint8_t dir = 0;
 
 		if ( itr->speed_.x  == 0)
 		{
@@ -145,14 +145,14 @@ void CollisionManager::Update()
 		{
 			if ( LeftCollision(itr) )
 			{
-				itr->dir_ |= 0b1 << 0b1 << OnDir::LEFT;
+				dir |= 0b1 << 0b1 << OnDir::LEFT;
 			}
 		}
 		else
 		{
 			if ( RightCollision(itr) )
 			{
-				itr->dir_ |= 0b1 << OnDir::RIGHT;
+				dir |= 0b1 << OnDir::RIGHT;
 			}
 		}
 
@@ -164,17 +164,20 @@ void CollisionManager::Update()
 		{
 			if ( TopCollision(itr) )
 			{
-				itr->dir_ |= 0b1 << OnDir::UP;
+				dir |= 0b1 << OnDir::UP;
 			}
 		}
 		else
 		{
 			if ( DownCollision(itr) )
 			{
-				itr->dir_ |= 0b1 << OnDir::BOTTOM;
+				dir |= 0b1 << OnDir::BOTTOM;
 			}
 		}
 
+		itr->speed_.x = 0;
+		itr->speed_.y = 0;
+		itr->dir_ = dir;
 	}
 }
 
