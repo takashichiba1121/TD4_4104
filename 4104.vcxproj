@@ -188,6 +188,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Scene\TitleScene.h" />
     <ClInclude Include="Include\Util\FontManager.h" />
     <ClInclude Include="Include\Base\SoundManager.h" />
     <ClInclude Include="Include\Enemy\Boss\BossBullet.h" />
