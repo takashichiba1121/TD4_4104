@@ -8,11 +8,15 @@
 #include"Input.h"
 #include"PlayerBulletManager.h"
 #include"GameConfig.h"
-
+#include "FontManager.h"
 #include<SceneManager.h>
 
 void GameScene::Initialize()
 {
+	FontManager::CreateFontHandle(NULL,16,3,"normal");
+
+	EnemyManager::TexLoad();
+
 	player_ = std::make_unique<Player>();
 	player_->Initialize();
 
@@ -29,16 +33,23 @@ void GameScene::Initialize()
 	dealer_->Initialize();
 
 
+	enemys_ = std::make_unique<EnemyManager>();
+	enemys_->Initialize();
+	enemys_->SetMapChip(mapChip_.get());
+	enemys_->SetPlayerPtr(player_.get());
+	enemys_->SoundLoad();
+
 	nodeManager_ = NodeManager::GetInstance();
 	nodeManager_->SetMapChip(mapChip_.get());
 	nodeManager_->SetPlayer(player_.get());
 	nodeManager_->SetPowerUp(powerUp_.get());
 	nodeManager_->SetDealer(dealer_.get());
+	nodeManager_->SetEnemys(enemys_.get());
 	nodeManager_->Initialize();
 	nodeManager_->StartNodeSet(0);
 	backGround_ = LoadGraph(std::string("Resources/BackGround/BackGround.png"));
 
-	EnemyManager::TexLoad();
+
 }
 
 void GameScene::Update()
@@ -88,7 +99,10 @@ void GameScene::Update()
 	{
 		nodeManager_->Update();
 
-		player_->Update();
+		if ( !nodeManager_->IsMapDraw() )
+		{
+			player_->Update();
+		}
 
 		CollisionManager::GetInstance()->SetScreenPos(mapChip_->GetScreenPos());
 		CollisionManager::GetInstance()->Update();
@@ -118,7 +132,7 @@ void GameScene::Update()
 void GameScene::Draw()
 {
 	Vector2 s = Scroll();
-
+	enemys_->SetScroll(s);
 	DrawGraph(0,0,backGround_,true);
 	mapChip_->Draw(s);
 	nodeManager_->Draw();
@@ -142,6 +156,7 @@ void GameScene::Finalize()
 {
 	PlayerBulletManager::Instance()->Clear();
 	EnemyManager::Finalize();
+	FontManager::Finalize();
 }
 
 Vector2 GameScene::Scroll()
@@ -150,7 +165,7 @@ Vector2 GameScene::Scroll()
 
 	Vector2 playerPos = player_->GetPos();
 
-	Vector2 mapChipLeftTopPos = {0,0};
+	Vector2 mapChipLeftTopPos = { 0,0 };
 	Vector2 mapChipTopBottomPos = mapChip_->GetRightTopBottom();
 
 	int32_t WindowHeight = GameConfig::GetWindowHeight();
@@ -162,13 +177,13 @@ Vector2 GameScene::Scroll()
 
 	if ( mapChipTopBottomPos.x > 0 && mapChipTopBottomPos.y > 0 )
 	{
-		if ( playerPos.x >= mapChipTopBottomPos.x - WindowWidth/2 )
+		if ( playerPos.x >= mapChipTopBottomPos.x - WindowWidth / 2 )
 		{
- 			scroll.x = -(mapChipTopBottomPos.x - WindowWidth);
+			scroll.x = -( mapChipTopBottomPos.x - WindowWidth );
 		}
-		if ( playerPos.y >= mapChipTopBottomPos.y - WindowHeight/2 )
+		if ( playerPos.y >= mapChipTopBottomPos.y - WindowHeight / 2 )
 		{
-			scroll.y = -(mapChipTopBottomPos.y - WindowHeight);
+			scroll.y = -( mapChipTopBottomPos.y - WindowHeight );
 		}
 	}
 	if ( playerPos.x <= mapChipLeftTopPos.x + WindowWidth / 2 )

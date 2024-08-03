@@ -9,7 +9,7 @@ public:
 	void SetVelocity(Vector2 velocity);
 	void Initialize() override;
 	void Update() override;
-	void Draw() override;
+	void Draw(Vector2 scroll) override;
 	void OnCollision() override;
 
 };

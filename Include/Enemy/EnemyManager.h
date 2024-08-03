@@ -4,6 +4,7 @@
 #include "ShootEnemy.h"
 #include <list>
 #include <memory>
+#include <unordered_map>
 
 class MapChip;
 class Player;
@@ -28,8 +29,10 @@ private:
 	size_t deadEnemyCount_;
 	BaseEnemy* cursedEnemy_;
 	size_t screenEnemy_ = 0;
+	Vector2 scroll_;
 
-	static std::array<int32_t,3> texs_;
+	static std::unordered_map<std::string,int32_t> texs_;
+	static std::unordered_map<std::string,int32_t> sounds_;
 
 	void Pop();
 	//自動ランダム生成
@@ -50,8 +53,11 @@ public:
 	bool GameEnd();
 	bool IsEnemyEmpty();
 	void EnemysClear();
-	static int32_t GetTexHandle(EnemyType type);
+	static int32_t GetTexHandle(std::string name);
+	static int32_t GetSoundHandle(std::string name);
 	static void TexLoad();
+	static void SoundLoad();
 	static void Finalize();
+	void SetScroll(Vector2 scroll);
 };
 
