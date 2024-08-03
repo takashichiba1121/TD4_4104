@@ -185,7 +185,20 @@ void PowerUpCave::Draw()
 
 	if ( !dealed_ )
 	{
-		DrawBox(pos_.x - hitboxSize_.x/2,pos_.y - hitboxSize_.y/2,pos_.x + hitboxSize_.x/2,pos_.y + hitboxSize_.y/2,0xffffff,true);
+		if ( nowProductType == "Attack")
+		{
+			caveColor = color_[ 0 ];
+		}
+		else if ( nowProductType == "survival" )
+		{
+			caveColor = color_[ 1 ];
+		}
+		else
+		{
+			caveColor = color_[ 2 ];
+		}
+		DrawBox(pos_.x - hitboxSize_.x/2,pos_.y - hitboxSize_.y/2,pos_.x + hitboxSize_.x/2,
+			pos_.y + hitboxSize_.y/2,caveColor,true);
 	}
 }
 

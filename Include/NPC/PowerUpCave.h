@@ -36,6 +36,7 @@ class PowerUpCave:public BaseObject
 private:
 	Player* playerPtr_;
 	std::array<PowerUp*,3> selectProducts_;
+	std::array<int32_t,3> color_ = {0xf10000,0x00f100,0x0000f1};
 	uint8_t selectNum_ = 0;
 	std::unordered_map<std::string,std::vector<std::unique_ptr<PowerUp>>> products_;
 	std::vector<std::string> productKey_;
