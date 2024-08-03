@@ -18,12 +18,12 @@ private:
 	Counter alphaChengeTimer_;
 	float maxAlpha_ = 200;
 	float minAlpha_ = 100;
-	const float ALPHACHENGETIME_ = 240;
+	const float ALPHACHENGETIME = 240;
 	bool downAlpha_ = false;
 
 	Vector2 mistPos_;
 	Vector2 mistPosOffSet_;
-	const int32_t WIDHT_ = 15;
+	const int32_t WIDHT = 15;
 	Counter moveTime_;
 	int32_t moveCount_ = 70;
 
