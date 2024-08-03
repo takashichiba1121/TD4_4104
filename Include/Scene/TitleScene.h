@@ -21,7 +21,7 @@ private:
 	const float ALPHACHENGETIME = 240;
 	bool downAlpha_ = false;
 
-	Vector2 mistPos_ = { GameConfig::GetWindowWidth() / 2,200 };
+	Vector2 mistPos_;
 	Vector2 mistPosOffSet_;
 	const int32_t WIDHT = 15;
 	Counter moveTime_;
