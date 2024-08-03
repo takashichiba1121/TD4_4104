@@ -146,13 +146,13 @@ bool PowerUpCave::StatusChenge()
 
 void PowerUpCave::SetSlect(uint8_t selectNum)
 {
-	selectNum_ = min(selectNum,selectProducts_.size() - 1);
+	selectNum_ = static_cast< uint8_t >(min(static_cast<size_t>(selectNum),selectProducts_.size() - 1));
 }
 
 void PowerUpCave::SetPriducts()
 {
 	nowProductType = productKey_[ GetRand(productKey_.size() - 1) ];
-	for ( int i = 0; i < selectProducts_.size(); i++ )
+	for ( size_t i = 0; i < selectProducts_.size(); i++ )
 	{
 		selectProducts_[ i ] = products_[ nowProductType ][ GetRand(products_[ nowProductType ].size()-1) ].get();
 
@@ -173,19 +173,18 @@ void PowerUpCave::Draw()
 {
 	if ( selectmode_ && !dealed_)
 	{
-		for ( int i = 0; i < selectProducts_.size(); i++ )
-			{
-			int64_t color = 0x000000;
-			if ( i == selectNum_ )
-			{
-				color = 0xf00f00;
-			}
-				DrawBox(( boxLeftTop_.x + i * boxDist_ ),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,color,true);
-			DrawFormatString(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,
-								0xffffff,"%s\nPowerUp\nStatus:%s \nUP:%d\nCost\nStatus:%s \nDown:%d",nowProductType.c_str(),
-								selectProducts_[ i ]->statusNames.first.c_str(),
-								selectProducts_[ i ]->power,selectProducts_[ i ]->statusNames.second.c_str(),selectProducts_[ i ]->cost);
-			}
+	for ( size_t i = 0; i < selectProducts_.size(); i++ )
+	{
+		int64_t color = 0x000000;
+		if ( i == selectNum_ )
+		{
+			color = 0xf00f00;
+		}
+			DrawBox(( boxLeftTop_.x + i * boxDist_ ),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,color,true);
+		DrawFormatString(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,
+				0xffffff,"%s\nPowerUp\nStatus:%s \nUP:%d\nCost\nStatus:%s \nDown:%d",nowProductType.c_str(),selectProducts_[ i ]->statusNames.first.c_str(),
+				selectProducts_[ i ]->power,selectProducts_[ i ]->statusNames.second.c_str(),selectProducts_[ i ]->cost);
+		}
 	}
 
 	if ( !dealed_ )

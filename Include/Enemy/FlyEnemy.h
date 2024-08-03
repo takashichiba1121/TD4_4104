@@ -13,11 +13,13 @@ private:
 	Vector2 attackBeforePos_;
 	bool isAttack_;
 	bool back_;
+	bool attackFinish_;
 	const int64_t ATTACK_INTERVAL = 120;
 	const int64_t ATTACK_TIME = 10;
 	RectShape* shape_;
 	std::unique_ptr<CircleShape> searchArea_;
 	Counter moveTimer_;
+	Counter stanTimer_;
 	Vector2 targetPos_;
 	std::array<Vector2,5> moveCheckPoint_;
 

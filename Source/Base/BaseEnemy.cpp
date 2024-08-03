@@ -4,7 +4,7 @@
 void BaseEnemy::EffectUpdate()
 {
 
-	for ( int i = 0; i < effectTimer.size(); i++ )
+	for ( size_t i = 0; i < effectTimer.size(); i++ )
 	{
 		Effects ef = static_cast< Effects >( i );
 		effectTimer[ i ].CountUp();
@@ -34,7 +34,7 @@ void BaseEnemy::EffectUpdate()
 				break;
 			}
 		}
-		else if ( effectTimer[ i ].IsCountEnd() && !ef == CURSE)
+		else if ( effectTimer[ i ].IsCountEnd() && ef != CURSE)
 		{
 			ReleaseEffect(ef);
 		}
@@ -49,33 +49,39 @@ void BaseEnemy::Damage(int32_t damage,Effects effect,bool effectD)
 {
 	if (!immortal_)
 	{
-		if ( !effectD )
+		SetEffect(effect);
+		switch ( effect )
 		{
-			SetEffect(effect);
-			switch ( effect )
+		case BIND:
+			effectDamage[ effect ] = damage * 0.15f;
+			break;
+		case ICED:
+			effectDamage[ effect ] = damage * 0.50f;
+			break;
+		case BURN:
+			effectDamage[ effect ] = damage * 0.25f;
+			break;
+		default:
+			break;
+		}
+		if ( IsEffect(ICED) )
+		{
+			damage = static_cast<int32_t>(static_cast<float>(damage) * 0.25f);
+		}
+		immortal_ = true;
+		hp_ -= damage;
+		immortalTime_ = 10;
+		if ( playerPtr_ )
+		{
+			if ( playerPtr_->GetEyeTag() == PlayerEyeTags::Curse )
 			{
-			case BIND:
-				effectDamage[ effect ] = damage * 0.15f;
-				break;
-			case ICED:
-				effectDamage[ effect ] = damage * 0.50f;
-				break;
-			default:
-				break;
-			}
-			if ( IsEffect(ICED) )
-			{
-				damage = static_cast< int32_t >( static_cast< float >( damage ) * 0.25f );
-			}
-			immortal_ = true;
-			immortalTime_ = 10;
-			if ( IsEffect(CURSE) )
-			{
-				curseStack++;
+				isCursedDamage_ = true;
 			}
 		}
-
-		hp_ -= damage;
+		if ( IsEffect(CURSE) )
+		{
+			curseStack++;
+		}
 	}
 }
 
@@ -141,4 +147,19 @@ int32_t BaseEnemy::GetImmortalTime()
 int32_t BaseEnemy::GetCurseStack()
 {
 	return curseStack;
+}
+
+void BaseEnemy::AnimeUpdate()
+{
+	animeTimer_++;
+
+	if ( animeTimer_ == 60 )
+	{
+		animeTimer_ = 0;
+		anime_++;
+		if ( anime_ == animeNum_ )
+		{
+			anime_ = 0;
+		}
+	}
 }

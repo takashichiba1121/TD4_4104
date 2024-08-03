@@ -41,22 +41,22 @@ void ShootEnemy::Initialize()
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
 	CollisionManager::GetInstance()->AddObject(this);
-	attackPower_ = 100;
+	attackPower_ = 85;
 
 	attackInterval_ = 45;
 	beforeAttackFrame_ = 5;
 	attackFrame_ = 25;
-
+	maxHp_ = hp_;
 	hp_ = 70;
 
 }
 
 void ShootEnemy::Update()
 {
-	if ( !islive_ ) return;
+	if ( !islive_ || !playerPtr_ ) return;
 	immortalTime_--;
 	attackIntervalCounter_.CountUp();
-
+	isCursedDamage_ = false;
 
 	searchArea_->SetCenter({ ( sign(-velocity_.x) * searchArea_->GetRadius().x ) + pos_.x,pos_.y });
 
@@ -208,8 +208,15 @@ void ShootEnemy::Draw()
 		itr->Draw();
 	}
 
-	DrawFormatString(100,100,0xffffff,"%d",nextElement_);
 
+	if ( playerPtr_->GetEyeTag() == PlayerEyeTags::Clairvoyance )
+	{
+		DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2 - hpBerOffSet_,
+		pos_.x + drawSize_.x / 2,pos_.y - drawSize_.x / 2 - hpBerOffSetUnder_,GetColor(155,0,155),false);
+		int32_t r = pos_.x + drawSize_.x / 2;
+		DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2 - hpBerOffSet_,
+		 r * ( hp_ / maxHp_ ),pos_.y - drawSize_.x / 2 - hpBerOffSetUnder_,GetColor(155,0,155),true);
+	}
 
 }
 

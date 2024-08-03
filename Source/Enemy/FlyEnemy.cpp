@@ -4,21 +4,24 @@
 #include "Util.h"
 #include "Player.h"
 #include "Collision.h"
+#include "GameConfig.h"
+
 
 using namespace std;
 void FlyEnemy::Initialize()
 {
+	maxHp_ = 1;
 	hp_ = 1;
 
 	islive_ = true;
 	shape_ = new RectShape();
 	shape_->SetRadius(drawSize_ / 2);
-	pos_.x = GetRand(850) + 50.f;
-	pos_.y = 100.f;
-	for ( int i = 0; i < moveCheckPoint_.size(); i++ )
+	pos_.x = GameConfig::GetWindowWidth() / 2;
+	pos_.y = GameConfig::GetWindowHeight() / 2+ 50;
+	for ( size_t i = 0; i < moveCheckPoint_.size(); i++ )
 	{
-		int8_t r = GetRand(200) + 300;
-		float theta = 2 * PI * ( GetRand(120) / 120 + (i * 0.15f));
+		int8_t r = GetRand(200) + 500;
+		float theta = 2 * PI * ( GetRand(60) / 360 + (i * 0.15f));
 
 
 		moveCheckPoint_[ i ].x = r * cosf(theta) + pos_.x;
@@ -32,7 +35,7 @@ void FlyEnemy::Initialize()
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
 	CollisionManager::GetInstance()->AddObject(this);
-	attackPower_ = 1;
+	attackPower_ = 100;
 
 	moveTimer_.SetEndCount(20);
 	beforeAttackFrame_ = 40;
@@ -46,14 +49,14 @@ void FlyEnemy::Initialize()
 
 void FlyEnemy::Update()
 {
-	if ( !islive_ ) return;
+	if ( !islive_ || !playerPtr_ ) return;
 	immortalTime_--;
 	attackIntervalCounter_.CountUp();
-
+	isCursedDamage_ = false;
 
 	searchArea_->SetCenter({ pos_.x,pos_.y });
 
-	if ( Collision::Circle2Circle(*playerPtr_->GetCircleShape() ,*searchArea_.get()))
+	if ( Collision::Circle2Circle(*playerPtr_->GetCircleShape() ,*searchArea_.get()) && attackIntervalCounter_.IsCountEnd())
 	{
 		if ( actionMode != ATTACK )
 		{
@@ -64,7 +67,7 @@ void FlyEnemy::Update()
 	}
 	else if(actionMode != ATTACK)
 	{
-		targetPos_ = Vector2(playerPtr_->GetPos(),pos_);
+		targetPos_ = playerPtr_->GetPos();
 	}
 
 	if ( immortalTime_ <= 0 )
@@ -134,9 +137,12 @@ void FlyEnemy::Move()
 
 void FlyEnemy::Attack()
 {
+	attackIntervalCounter_.SetEndCount(attackInterval_);
 	if ( !beforeAttackCounter_.IsCountEnd() )
 	{
+		attackFinish_ = false;
 		beforeAttackCounter_.CountUp();
+		speed_ = 0;
 	}
 	else if ( !attackCounter_.IsCountEnd() )
 	{
@@ -146,25 +152,42 @@ void FlyEnemy::Attack()
 
 		attackIntervalCounter_.SetEndCount(attackInterval_);
 	}
-	else if(Vector2(pos_,targetPos_).GetLenge() <= 10 )
+	if ( !attackFinish_ )
 	{
-		actionMode = MOVE;
-	}
-
-	if ( beforeAttackCounter_.IsCountEnd() )
-	{
-		Vector2 targetVelo(targetPos_,pos_);
+		speed_ = InQuad(0,5,attackCounter_.GetEndCount(),attackCounter_.GetCount());
+		Vector2 targetVelo(pos_,targetPos_);
 		targetVelo.Normalize();
 		pos_ += targetVelo * speed_;
+	}
+	else
+	{
+		stanTimer_.CountUp();
+		if ( stanTimer_.IsCountEnd() )
+		{
+			actionMode = MOVE;
+		}
+	}
+	if ( Vector2(pos_,targetPos_).GetLenge() <= 10 )
+	{
+		attackFinish_ = true;
+		stanTimer_.SetEndCount(30);
 	}
 }
 
 void FlyEnemy::Draw()
 {
-	if ( !islive_ ) return;
+	if ( !islive_ || !playerPtr_) return;
 	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2,
 		pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,155),true);
-	DrawFormatString(100,100,0xffffff,"%f",Vector2(pos_,moveCheckPoint_[ targetCheckPoint_ ]).GetLenge());
+	DrawFormatString(100,100,0xffffff,"%f",Vector2(pos_,targetPos_).GetLenge());
+	if ( playerPtr_->GetEyeTag() == PlayerEyeTags::Clairvoyance )
+	{
+		DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2 - hpBerOffSet_,
+		pos_.x + drawSize_.x / 2,pos_.y - drawSize_.x / 2 - hpBerOffSetUnder_,GetColor(155,0,155),false);
+		int32_t r = pos_.x + drawSize_.x / 2;
+		DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2 - hpBerOffSet_,
+		 r * (hp_/maxHp_),pos_.y - drawSize_.x / 2 - hpBerOffSetUnder_,GetColor(155,0,155),true);
+	}
 }
 
 void FlyEnemy::OnCollision()
@@ -174,6 +197,7 @@ void FlyEnemy::OnCollision()
 		if ( static_cast<UserData*>(GetCollisionInfo().userData)->tag == "Player" )
 		{
 			dynamic_cast< Player* >( GetCollisionInfo().object )->Damage(attackPower_);
+			actionMode = MOVE;
 		}
 	}
 }

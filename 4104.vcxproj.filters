@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="ソース ファイル">
@@ -239,6 +239,10 @@
     </ClCompile>
     <ClCompile Include="Source\Scene\GameOverScene.cpp">
       <Filter>ソース ファイル\Scene</Filter>
+    </ClInclude>
+=========
+    <ClCompile Include="Source\Player\PlayerLegCerberus.cpp">
+      <Filter>ソース ファイル\player</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene\GameScene.cpp">
       <Filter>ソース ファイル\Scene</Filter>
@@ -317,13 +321,13 @@
     </ClCompile>
     <ClCompile Include="Source\Enemy\Boss\BossBullet.cpp">
       <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Base\TextureManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Include\Util\DxlibInclude.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+>>>>>>>>> Temporary merge branch 2
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ThirdParty\imgui\imconfig.h">
@@ -433,6 +437,9 @@
     </ClInclude>
     <ClInclude Include="Include\NPC\PowerUpCave.h">
       <Filter>ヘッダー ファイル\PowerUp</Filter>
+    <ClInclude Include="ThirdParty\magic_enum.hpp">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
     </ClInclude>
     <ClInclude Include="Include\Deal\ItemShop.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -466,14 +473,12 @@
     </ClInclude>
     <ClInclude Include="Include\Player\PlayerAttackSpider.h">
       <Filter>ヘッダー ファイル\player</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Player\PlayerAttackGun.h">
-      <Filter>ヘッダー ファイル\player</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Player\PlayerAttackSpider.h">
+    <ClInclude Include="Include\Enemy\EnemyBullet.h">
+      <Filter>ヘッダー ファイル\Enemy</Filter>
       <Filter>ヘッダー ファイル\player</Filter>
     </ClInclude>
     <ClInclude Include="Include\Scene\GameScene.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Include\Enemy\Boss\BossEnemy.h">
