@@ -6,6 +6,7 @@
 #include <fstream>
 #include "CollisionManager.h"
 #include <strconv.h>
+#include "FontManager.h"
 
 using namespace std;
 using namespace nlohmann;
@@ -56,8 +57,8 @@ void DealDaemon::Initialize()
 		temp->partsInfo = utf8_to_sjis(static_cast<string>(obj["partsInfo"]));
 		products_.push_back(std::move(temp));
 	}
-	nameFontHandle_ = DxLib::CreateFontToHandle(NULL,16,3);
-	infoFontHandle_ = DxLib::CreateFontToHandle(NULL,16,3);
+	nameFontHandle_ = FontManager::GetFontHandle("normal");
+	infoFontHandle_ = FontManager::GetFontHandle("normal");
 	
 
 	SetPriducts();

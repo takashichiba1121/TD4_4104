@@ -38,6 +38,11 @@ void BaseNode::SetNodeManagerr(NodeManager* nodeManager)
 	nodeManager_ = nodeManager;
 }
 
+void BaseNode::SetEnemyManager(EnemyManager* enemyManager)
+{
+	enemys_ = enemyManager;
+}
+
 void BaseNode::PlayerNodeMove()
 {
 	Vector2 playerPos = mapChip_->GetPos(player_->GetPos().x,player_->GetPos().y);

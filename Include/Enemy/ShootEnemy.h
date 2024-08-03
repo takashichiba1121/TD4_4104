@@ -23,6 +23,7 @@ private:
 
 	bool tern_ = false;
 	bool shootReady_ = false;
+	bool beforeAttackSoundPlayed_ = false;
 	int8_t ternInverval_;
 	int8_t ternInvervalTimer_;
 	std::unique_ptr<RectShape> searchArea_;

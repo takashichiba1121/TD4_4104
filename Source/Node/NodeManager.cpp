@@ -59,6 +59,9 @@ void NodeManager::Initialize()
 	startImg = LoadGraph(std::string("Resources/Node/start.png"));
 	backGroundImg = LoadGraph(std::string("Resources/BackGround/mapBackGround.png"));
 
+	openSound_ = LoadSoundMem(std::string("Resources/Sound/SFX_UI_map_open.mp3"));
+	closeSound_ = LoadSoundMem(std::string("Resources/Sound/SFX_UI_map_close.mp3"));
+
 	distribution = std::discrete_distribution<int32_t>(nodeProbabilities,nodeProbabilities + NodeType::TYPE_NUM);
 
 	rooms_[ NodeType::REINFORCEMENT ] = std::make_unique<ReinforcementNode>();
@@ -77,6 +80,7 @@ void NodeManager::Initialize()
 		room->SetNodeManagerr(this);
 		room->SetPowerUp(powerUp_);
 		room->SetDealer(dealer_);
+		room->SetEnemyManager(enemys_);
 		room->Initialize();
 	}
 
@@ -207,15 +211,22 @@ void NodeManager::Update()
 	{
 		if ( isNodeDraw )
 		{
+			PlaySoundMem(closeSound_,DX_PLAYTYPE_BACK);
 			isNodeDraw = false;
+			
 		}
 		else
 		{
+			PlaySoundMem(openSound_,DX_PLAYTYPE_BACK);
 			isNodeDraw = true;
 		}
 	}
 
-	node_->Update();
+	if ( !isNodeDraw )
+	{
+		node_->Update();
+	}
+
 }
 
 void NodeManager::Draw()
@@ -376,6 +387,16 @@ void NodeManager::SetPowerUp(PowerUpCave* powerUp)
 void NodeManager::SetDealer(DealDaemon* dealer)
 {
 	dealer_ = dealer;
+}
+
+void NodeManager::SetEnemys(EnemyManager* enemys)
+{
+	enemys_ = enemys;
+}
+
+bool NodeManager::IsMapDraw()
+{
+	return isNodeDraw;
 }
 
 void NodeManager::GenerateInitialGrid()
