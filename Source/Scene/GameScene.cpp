@@ -54,7 +54,7 @@ void GameScene::Update()
 	{
 		powerUp_->Update();
 
-		uint32_t powerUpNum=player_->PowerUp();
+		uint32_t powerUpNum = player_->PowerUp();
 
 		powerUp_->SetSlect(powerUpNum);
 		if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) )
@@ -117,7 +117,7 @@ void GameScene::Draw()
 	//if (!chenged) powerUp_->Draw();
 
 	nodeManager_->Draw();
-	
+
 	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
 	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");
 	DrawFormatString(0,40,0xffffff,"ATTACK:Z X");
@@ -125,6 +125,7 @@ void GameScene::Draw()
 
 void GameScene::SpriteDraw()
 {
+
 }
 
 void GameScene::Finalize()
@@ -135,7 +136,19 @@ void GameScene::Finalize()
 
 Vector2 GameScene::Scroll()
 {
-	Vector2 playerpos=player_->GetPos();
+	Vector2 scroll = { 0,0 };
 
-	return { 0,0 };
+	Vector2 playerPos = player_->GetPos();
+
+	Vector2 mapChipLeftTopPos = mapChip_->GetLeftTopPos();
+	Vector2 mapChipTopBottomPos = mapChip_->GetRightTopBottom();
+
+	uint32_t WindowHeight = GameConfig::GetWindowHeight();
+	uint32_t WindowWidth = GameConfig::GetWindowWidth();
+
+	scroll.x = WindowWidth / 2 - playerPos.x;
+
+	scroll.y = WindowHeight / 2 - playerPos.y;
+
+	return scroll;
 }
