@@ -253,9 +253,9 @@ int32_t EnemyManager::GetTexHandle(EnemyType type)
 
 void EnemyManager::TexLoad()
 {
-	texs_[ FLY ] = LoadGraph("Resources\\Enemy\\enemyFly.png");
-	texs_[ SHOOT ] = LoadGraph("Resources\\Enemy\\enemyFly.png");
-	texs_[ ADJACENT ] = LoadGraph("Resources\\Enemy\\enemyFly.png");
+	texs_[ FLY ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
+	texs_[ SHOOT ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
+	texs_[ ADJACENT ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
 }
 
 void EnemyManager::Finalize()
