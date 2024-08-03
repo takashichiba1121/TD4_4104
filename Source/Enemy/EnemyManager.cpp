@@ -198,7 +198,7 @@ void EnemyManager::Draw()
 {
 	for ( auto& itr : enemylist_ )
 	{
-		itr->Draw();
+		itr->Draw({0,0});
 	}
 	DrawFormatString(GameConfig::GetWindowWidth() - 200,10,0xffffff,"KillEnemy %d / %d",deadEnemyCount_,MAX_POP_ENEMY_NUM);
 }
@@ -227,11 +227,16 @@ void EnemyManager::EnemysClear()
 	enemylist_.clear();
 }
 
+int32_t EnemyManager::GetTexHandle(EnemyType type)
+{
+	return texs_[type];
+}
+
 void EnemyManager::TexLoad()
 {
-	texs_[0] = LoadGraph("Resources\\Enemy\\enemyFly.png");
-	texs_[1] = LoadGraph("Resources\\Enemy\\enemyFly.png");
-	texs_[2] = LoadGraph("Resources\\Enemy\\enemyFly.png");
+	texs_[ FLY ] = LoadGraph("Resources\\Enemy\\enemyFly.png");
+	texs_[ SHOOT ] = LoadGraph("Resources\\Enemy\\enemyFly.png");
+	texs_[ ADJACENT ] = LoadGraph("Resources\\Enemy\\enemyFly.png");
 }
 
 void EnemyManager::Finalize()

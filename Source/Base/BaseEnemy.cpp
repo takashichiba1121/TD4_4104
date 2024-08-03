@@ -153,7 +153,7 @@ void BaseEnemy::AnimeUpdate()
 {
 	animeTimer_++;
 
-	if ( animeTimer_ == 60 )
+	if ( animeTimer_ == animeSpeed_ )
 	{
 		animeTimer_ = 0;
 		anime_++;

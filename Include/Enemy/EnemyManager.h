@@ -21,7 +21,7 @@ private:
 	int32_t popTime_;
 	const uint32_t POP_INTERVAL = 30;
 	const uint32_t MAX_POP_ENEMY_NUM = 15;
-	const uint32_t MAX_ENEMY_NUM = 1;
+	const uint32_t MAX_ENEMY_NUM = 5;
 	MapChip* mapchip_;
 	static Player* playerPtr_;
 	size_t popEnemyCount_;
@@ -47,6 +47,7 @@ public:
 	size_t GetEnemyCount();
 	bool GameEnd();
 	void EnemysClear();
+	static int32_t GetTexHandle(EnemyType type);
 	static void TexLoad();
 	static void Finalize();
 };

@@ -1,4 +1,10 @@
 #include "BaseObject.h"
+void BaseObject::Draw()
+{
+}
+void BaseObject::Draw(Vector2 scroll)
+{
+}
 void BaseObject::Damage(int32_t damage)
 {
 	hp_ -= damage;
