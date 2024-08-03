@@ -59,26 +59,51 @@ void MapChip::MapLoad(const std::string& path)
 	{
 		for ( size_t j = 0; j < map_[ i ].size(); j++ )
 		{
-			map_[ i ][ j ] = jsonData[ "Map" ][ index ];
+			ChipIndex chip = jsonData[ "Map" ][ index ];
+
+			switch ( chip )
+			{
+			case START:
+				player_->SetPos({ 32 + 64 * j,32 + 64 * i });
+				map_[ i ][ j ] = ChipIndex::NONE;
+				break;
+			case FLY_RANGE_ENEMY:
+				map_[ i ][ j ] = ChipIndex::NONE;
+				enemyManager_->SetEnemyPOP();
+				break;
+			case LONG_RANGE_ENEMY:
+				map_[ i ][ j ] = ChipIndex::NONE;
+				enemyManager_->SetEnemyPOP();
+				break;
+			case SHORT_RANGE_ENEMY:
+				map_[ i ][ j ] = ChipIndex::NONE;
+				enemyManager_->SetEnemyPOP();
+				break;
+			case RANDOM_ENEMY:
+				map_[ i ][ j ] = ChipIndex::NONE;
+				enemyManager_->SetEnemyPOP();
+				break;
+
+			case NONE:
+
+			case ROAD:
+			case WALL:
+
+			case DOOR:
+			case ROOM:
+			case LOCK_ROOM:
+
+			case NEXT:
+
+			default:
+
+				map_[ i ][ j ] = chip;
+				break;
+			}
+
 			index++;
 		}
 	}
-
-	nlohmann::json& roomSettings = jsonData[ "3_RoomSettings" ];
-
-
-	for ( size_t i = 0; i < jsonData[ "2_RoomNum" ][ 0 ]; i++ )
-	{
-		std::string directoryPath = "Resources/Export/Room/" + std::string(roomSettings[ i ][ "RoomName" ]);
-		int32_t tmp = roomSettings[ i ][ "LeftTop" ][ 0 ];
-		Vector2 leftTop;
-		leftTop.x = float(tmp - 1);
-		tmp = roomSettings[ i ][ "LeftTop" ][ 1 ];
-		leftTop.y = float(tmp - 1);
-
-		RoomInstallation(directoryPath,leftTop);
-	}
-
 }
 
 void MapChip::MapWrite(int32_t x,int32_t y,uint8_t index)
@@ -120,6 +145,16 @@ uint8_t MapChip::GetNumOfArrayElement(int32_t x, int32_t y) const
 const Vector2& MapChip::GetScreenPos() const
 {
 	return screenPos_;
+}
+
+void MapChip::SetPlayer(Player* player)
+{
+	player_ = player;
+}
+
+void MapChip::SetEnemyManager(EnemyManager* enemyManager)
+{
+	enemyManager_ = enemyManager;
 }
 
 void MapChip::Draw(const Vector2& screenPos)
