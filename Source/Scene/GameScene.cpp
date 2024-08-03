@@ -36,9 +36,9 @@ void GameScene::Initialize()
 	nodeManager_->SetDealer(dealer_.get());
 	nodeManager_->Initialize();
 	nodeManager_->StartNodeSet(0);
+	backGround_ = LoadGraph(std::string("Resources/BackGround/BackGround.png"));
 
 	EnemyManager::TexLoad();
-	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
 }
 
 void GameScene::Update()
