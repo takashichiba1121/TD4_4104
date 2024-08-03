@@ -468,11 +468,6 @@ bool Player::AddCdmg(int32_t Cdmg)
 	return true;
 }
 
-bool Player::AddCost(int32_t cost)
-{
-	return false;
-}
-
 void Player::AddMaxCost(int32_t AddMaxCost)
 {
 	changeMaxCost_ += AddMaxCost;
