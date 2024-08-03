@@ -139,9 +139,7 @@ private:
 
 	uint32_t nowMouthCost_ = 0;
 
-	Vector2 scroll_ = {0,0};
-
-
+	uint32_t money_=0;
 public:
 	void Initialize() override;
 
@@ -177,6 +175,8 @@ public:
 
 	bool AddCost(int32_t cost);
 
+	void AddMoney(int32_t money);
+
 	bool SubSpd(int32_t spd);
 
 	bool SubPow(int32_t pow);
@@ -188,6 +188,8 @@ public:
 	bool SubCrit(int32_t Crit);
 
 	bool SubCdmg(int32_t Cdmg);
+
+	bool SubMoney(int32_t money);
 
 	int32_t GetCost() {
 		return nowCost_;
@@ -256,8 +258,5 @@ public:
 		return MAX_HP_ * changeMaxHp_;
 	}
 
-	void SetScroll(Vector2 scroll)
-	{
 
-	}
 };

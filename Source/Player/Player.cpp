@@ -467,6 +467,12 @@ bool Player::AddCdmg(int32_t Cdmg)
 
 	return true;
 }
+
+void Player::AddMoney(int32_t money)
+{
+	money_ += money;
+}
+
 bool Player::SubSpd(int32_t spd)
 {
 	if (changeSpd_ - float(spd) / 100.0f <= 0)
@@ -527,6 +533,17 @@ bool Player::SubCdmg(int32_t Cdmg)
 	changeCdmg_ -= float(Cdmg) / 100.0f;
 
 	return true;
+}
+
+bool Player::SubMoney(int32_t money)
+{
+	if (money_- money>=0 )
+	{
+		money_ -= money;
+
+		return true;
+	}
+	return false;
 }
 
 void Player::Draw(Vector2 scroll)
