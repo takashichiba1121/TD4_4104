@@ -109,7 +109,7 @@ bool DealDaemon::Deal()
 	if (GetRand(1000) <= dealSucces_[dealCount_])
 	{
 		dealCount_++;
-		dealCount_ = min(dealCount_, dealSucces_.size() - 1);
+		dealCount_ = static_cast<int8_t>(min(dealCount_, dealSucces_.size() - 1));
 		SetPriducts(true);
 	}
 	else
@@ -150,13 +150,21 @@ void DealDaemon::SetSlect(uint8_t selectNum)
 
 void DealDaemon::SetPriducts(bool deal)
 {
+	for ( size_t i = 0; i < selectProducts_.size(); i++ )
+	{
+		selectProducts_[i] = nullptr;
+	}
 
-	for (int i = 0; i < selectProducts_.size(); i++)
+	for (size_t i = 0; i < selectProducts_.size(); i++)
 	{
 		Parts* temp = products_[ GetRand(products_.size() - 1) ].get();
-		while ( playerPtr_->CheckHavePart(magic_enum::enum_cast< PartsName >( temp->productType).value(),temp->partsName))
+		for ( size_t i = 0; i < selectProducts_.size(); i++ )
 		{
-			temp = products_[ GetRand(products_.size() - 1) ].get();
+			while ( playerPtr_->CheckHavePart(magic_enum::enum_cast< PartsName >( temp->productType ).value(),temp->partsName)
+					|| temp == selectProducts_[i] )
+			{
+				temp = products_[ GetRand(products_.size() - 1) ].get();
+			}
 		}
 		selectProducts_[ i ] = temp;
 		if ( selectProducts_[ i ]->productType == "ARM" )
