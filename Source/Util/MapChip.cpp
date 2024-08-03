@@ -69,19 +69,19 @@ void MapChip::MapLoad(const std::string& path)
 				break;
 			case FLY_RANGE_ENEMY:
 				map_[ i ][ j ] = ChipIndex::NONE;
-				enemyManager_->SetEnemyPOP();
+				enemyManager_->SetEnemyPop(EnemyType::FLY,{ 32 + 64 * j,32 + 64 * i });
 				break;
 			case LONG_RANGE_ENEMY:
 				map_[ i ][ j ] = ChipIndex::NONE;
-				enemyManager_->SetEnemyPOP();
+				enemyManager_->SetEnemyPop(EnemyType::SHOOT,{ 32 + 64 * j,32 + 64 * i });
 				break;
 			case SHORT_RANGE_ENEMY:
 				map_[ i ][ j ] = ChipIndex::NONE;
-				enemyManager_->SetEnemyPOP();
+				enemyManager_->SetEnemyPop(EnemyType::ADJACENT,{ 32 + 64 * j,32 + 64 * i });
 				break;
 			case RANDOM_ENEMY:
 				map_[ i ][ j ] = ChipIndex::NONE;
-				enemyManager_->SetEnemyPOP();
+				enemyManager_->SetPosPop({ 32 + 64 * j,32 + 64 * i });
 				break;
 
 			case NONE:
