@@ -142,9 +142,9 @@ bool BaseEnemy::IsImmortal()
 
 bool BaseEnemy::OnScreen(Vector2 scrool)
 {
-	if (pos_.x - scrool.x >= 0 && pos_.x - scrool.x <= GameConfig::GetWindowWidth())
+	if (pos_.x + scrool.x >= 0 && pos_.x + scrool.x <= GameConfig::GetWindowWidth())
 	{
-		if (pos_.y - scrool.y >= 0 && pos_.y - scrool.y <= GameConfig::GetWindowHeight())
+		if (pos_.y + scrool.y >= 0 && pos_.y + scrool.y <= GameConfig::GetWindowHeight())
 		{
 			return true;
 		}
@@ -162,7 +162,7 @@ int32_t BaseEnemy::GetCurseStack()
 	return curseStack;
 }
 
-void BaseEnemy::AnimeUpdate()
+void BaseEnemy::AnimeUpdate(bool loop)
 {
 	animeTimer_++;
 
@@ -170,7 +170,8 @@ void BaseEnemy::AnimeUpdate()
 	{
 		animeTimer_ = 0;
 		anime_++;
-		if ( anime_ == animeNum_ )
+		anime_ = min(animeNum_-1,anime_);
+		if ( anime_ == animeNum_ && loop)
 		{
 			anime_ = 0;
 		}

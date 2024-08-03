@@ -4,11 +4,10 @@
 
 void BattleNode::Initialize()
 {
-	enemys_ = std::make_unique<EnemyManager>();
-	enemys_->Initialize();
-	enemys_->SetMapChip(mapChip_);
-	enemys_->SetPlayerPtr(player_);
-	mapChip_->SetEnemyManager(enemys_.get());
+
+	mapChip_->SetEnemyManager(enemys_);
+
+	mapChip_->MapLoad("Resources/Export/Map/TestMap.json");
 }
 
 void BattleNode::Update()

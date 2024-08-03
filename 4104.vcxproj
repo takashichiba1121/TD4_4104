@@ -107,6 +107,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Util\FontManager.cpp" />
     <ClCompile Include="Include\Util\DxlibInclude.cpp" />
     <ClCompile Include="Source\Base\SoundManager.cpp" />
     <ClCompile Include="Source\Enemy\Boss\BossBullet.cpp" />
@@ -187,6 +188,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Util\FontManager.h" />
     <ClInclude Include="Include\Base\SoundManager.h" />
     <ClInclude Include="Include\Enemy\Boss\BossBullet.h" />
     <ClInclude Include="Include\Enemy\Boss\BossLongRangeAttack.h" />

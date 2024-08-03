@@ -13,13 +13,14 @@ ShootEnemy::~ShootEnemy()
 }
 void ShootEnemy::Initialize()
 {
-	animeNum_ = 4;
-	animeSpeed_ = 5;
-	drawSize_ = { 64,64 };
+	animeNum_ = 5;
+	animeSpeed_ = 10;
+	drawSize_ = { 128,128 };
+	hitboxSize_ = { 64,128 };
 
 	MapChipObjectEnable();
 	SetMapChipCenter(&pos_);
-	SetMapChipRadius({ drawSize_.x / 2,drawSize_.y / 2 });
+	SetMapChipRadius({ hitboxSize_.x / 2,hitboxSize_.y / 2 });
 
 	ternInverval_ = 2;
 	gravity_ = { 0,1 };
@@ -38,9 +39,9 @@ void ShootEnemy::Initialize()
 	islive_ = true;
 
 	searchArea_ = make_unique<RectShape>();
-	searchArea_->SetRadius({ ( drawSize_.x * 5 / 2 ),drawSize_.y / 2 });
+	searchArea_->SetRadius({ ( hitboxSize_.x * 5 / 2 ),hitboxSize_.y / 2 });
 	shape_ = new RectShape();
-	shape_->SetRadius(drawSize_ / 2);
+	shape_->SetRadius(hitboxSize_ / 2);
 	SetShape(shape_);
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
@@ -53,6 +54,8 @@ void ShootEnemy::Initialize()
 	maxHp_ = hp_;
 	hp_ = 70;
 
+
+	tex_ = EnemyManager::GetTexHandle("shootMove");
 }
 
 void ShootEnemy::Update()
@@ -90,9 +93,11 @@ void ShootEnemy::Update()
 		{
 		case MOVE:
 			Move();
+			tex_ = EnemyManager::GetTexHandle("shootMove");
 			break;
 		case ATTACK:
 			Attack();
+			tex_ = EnemyManager::GetTexHandle("shootAttack");
 			break;
 		default:
 			break;
@@ -110,7 +115,8 @@ void ShootEnemy::Update()
 		return bullet->IsLive() == false;
 	});
 
-	AnimeUpdate();
+	bool loop = ( actionMode != ATTACK );
+	AnimeUpdate(loop);
 	EffectUpdate();
 }
 
@@ -129,9 +135,9 @@ void ShootEnemy::Move()
 	if ( GetOnDir() & 0b1 << OnDir::BOTTOM )
 	{
 		gravity_ = { 0,0 };
-		prevElement_ = mapchip_->GetPosElement(pos_.x,pos_.y + ( drawSize_.y / 2 ) + 64);
+		prevElement_ = mapchip_->GetPosElement(pos_.x,pos_.y + ( hitboxSize_.y / 2 ) + 64);
 	}
-	Vector2 nextPos_ = { pos_.x + ( ( velocity_.x * speed_ ) ) + ( ( drawSize_.x / 2 + 32 ) * -sign(velocity_.x) ),pos_.y + ( drawSize_.y / 2 ) };
+	Vector2 nextPos_ = { pos_.x + ( ( velocity_.x * speed_ ) ) + ( ( hitboxSize_.x / 2 + 32 ) * -sign(velocity_.x) ),pos_.y + ( hitboxSize_.y / 2 ) };
 	nextElement_ = mapchip_->GetPosElement(static_cast< int32_t >( nextPos_.x ),static_cast< int32_t >( nextPos_.y ) + 64);
 	if ( ( nextElement_ == NEXT || ( nextElement_ == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM ) ) && !tern_ )
 	{
@@ -178,6 +184,11 @@ void ShootEnemy::Attack()
 	if ( !beforeAttackCounter_.IsCountEnd() )
 	{
 		beforeAttackCounter_.CountUp();
+		if ( !beforeAttackSoundPlayed_ )
+		{
+			beforeAttackSoundPlayed_ = true;
+			PlaySoundMem(EnemyManager::GetSoundHandle("shootBeforeAttack"),DX_PLAYTYPE_BACK);
+		}
 	}
 	else if ( !attackCounter_.IsCountEnd() )
 	{
@@ -196,6 +207,9 @@ void ShootEnemy::Attack()
 		attackIntervalCounter_.SetEndCount(attackInterval_);
 		actionMode = MOVE;
 		shootReady_ = false;
+		beforeAttackSoundPlayed_ = false;
+		PlaySoundMem(EnemyManager::GetSoundHandle("shootAttack"),DX_PLAYTYPE_BACK);
+		anime_ = 0;
 	}
 	SetMapChipSpeed({ 0.f,gravity_.y });
 
@@ -207,15 +221,15 @@ void ShootEnemy::Draw(Vector2 scroll)
 {
 	if ( !islive_ ) return;
 	bool flag = false;
-	if ( velocity_.x < 0 )
+	if ( velocity_.x > 0 )
 	{
 		flag = true;
 	}
-	DrawRectRotaGraph(pos_.x - scroll.x,pos_.y - scroll.x,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,EnemyManager::GetTexHandle(SHOOT),true,flag);
+	DrawRectRotaGraph(pos_.x + scroll.x,pos_.y + scroll.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,tex_,true,flag);
 
 	for ( auto& itr : bullets )
 	{
-		itr->Draw();
+		itr->Draw(scroll);
 	}
 
 

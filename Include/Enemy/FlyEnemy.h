@@ -34,4 +34,5 @@ public:
 	void Attack() override;
 	void Draw(Vector2 scroll) override;
 	void OnCollision() override;
+	void SetMovePos();
 };

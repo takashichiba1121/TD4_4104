@@ -8,11 +8,15 @@
 #include"Input.h"
 #include"PlayerBulletManager.h"
 #include"GameConfig.h"
-
+#include "FontManager.h"
 #include<SceneManager.h>
 
 void GameScene::Initialize()
 {
+	FontManager::CreateFontHandle(NULL,16,3,"normal");
+
+	EnemyManager::TexLoad();
+
 	player_ = std::make_unique<Player>();
 	player_->Initialize();
 
@@ -29,16 +33,23 @@ void GameScene::Initialize()
 	dealer_->Initialize();
 
 
+	enemys_ = std::make_unique<EnemyManager>();
+	enemys_->Initialize();
+	enemys_->SetMapChip(mapChip_.get());
+	enemys_->SetPlayerPtr(player_.get());
+	enemys_->SoundLoad();
+
 	nodeManager_ = NodeManager::GetInstance();
 	nodeManager_->SetMapChip(mapChip_.get());
 	nodeManager_->SetPlayer(player_.get());
 	nodeManager_->SetPowerUp(powerUp_.get());
 	nodeManager_->SetDealer(dealer_.get());
+	nodeManager_->SetEnemys(enemys_.get());
 	nodeManager_->Initialize();
 	nodeManager_->StartNodeSet(0);
 	backGround_ = LoadGraph(std::string("Resources/BackGround/BackGround.png"));
 
-	EnemyManager::TexLoad();
+
 }
 
 void GameScene::Update()
@@ -118,7 +129,7 @@ void GameScene::Update()
 void GameScene::Draw()
 {
 	Vector2 s = Scroll();
-
+	enemys_->SetScroll(s);
 	DrawGraph(0,0,backGround_,true);
 	mapChip_->Draw(s);
 	nodeManager_->Draw();
@@ -142,6 +153,7 @@ void GameScene::Finalize()
 {
 	PlayerBulletManager::Instance()->Clear();
 	EnemyManager::Finalize();
+	FontManager::Finalize();
 }
 
 Vector2 GameScene::Scroll()

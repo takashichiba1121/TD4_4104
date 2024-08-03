@@ -10,13 +10,14 @@ using namespace std;
 void WalkEnemy::Initialize()
 {
 
-	animeNum_ = 4;
-	animeSpeed_ = 5;
-	drawSize_ = { 64,64 };
+	animeNum_ = 5;
+	animeSpeed_ = 10;
+	drawSize_ = { 128,128 };
+	hitboxSize_ = { 64,128 };
 
 	MapChipObjectEnable();
 	SetMapChipCenter(&pos_);
-	SetMapChipRadius({ drawSize_.x / 2,drawSize_.y / 2 });
+	SetMapChipRadius({ hitboxSize_.x / 2,hitboxSize_.y / 2 });
 
 	ternInverval_ = 2;
 	gravity_ = { 0,1 };
@@ -33,11 +34,11 @@ void WalkEnemy::Initialize()
 	islive_ = true;
 
 	searchArea_ = make_unique<RectShape>();
-	searchArea_->SetRadius({ ( drawSize_.x * 3 / 2 ),drawSize_.y / 2 });
+	searchArea_->SetRadius({ ( hitboxSize_.x * 3 / 2 ),hitboxSize_.y / 2 });
 	attackArea_ = make_unique<RectShape>();
-	attackArea_->SetRadius({ drawSize_.x ,drawSize_.y / 2});
+	attackArea_->SetRadius({ hitboxSize_.x ,hitboxSize_.y / 2});
 	shape_ = new RectShape();
-	shape_->SetRadius(drawSize_ / 2);
+	shape_->SetRadius(hitboxSize_ / 2);
 	SetShape(shape_);
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
@@ -48,7 +49,7 @@ void WalkEnemy::Initialize()
 	attackFrame_ = 25;
 	maxHp_ = 150;
 	hp_ = 150;
-
+	tex_ = EnemyManager::GetTexHandle("adjacentMove");
 	tag.tag = "Enemy";
 	userData_ = &tag;
 
@@ -104,12 +105,15 @@ void WalkEnemy::Update()
 		{
 		case MOVE:
 			Move();
+			tex_ = EnemyManager::GetTexHandle("adjacentMove");
 			break;
 		case ENEMYAPPROACH:
 			Approach();
+			tex_ = EnemyManager::GetTexHandle("adjacentDash");
 			break;
 		case ATTACK:
 			Attack();
+			tex_ = EnemyManager::GetTexHandle("adjacentAttack");
 			break;
 		default:
 			break;
@@ -117,8 +121,8 @@ void WalkEnemy::Update()
 		
 	}
 	shape_->SetCenter({ pos_.x , pos_.y });
-
-	AnimeUpdate();
+	bool loop = (actionMode != ATTACK);
+	AnimeUpdate(loop);
 
 	EffectUpdate();
 }
@@ -139,9 +143,9 @@ void WalkEnemy::Move()
 	if ( GetOnDir() & 0b1 << OnDir::BOTTOM )
 	{
 		gravity_ = { 0,0 };
-		prevElement_ = mapchip_->GetPosElement(pos_.x,pos_.y + ( drawSize_.y / 2 ) + 64);
+		prevElement_ = mapchip_->GetPosElement(pos_.x,pos_.y + ( hitboxSize_.y / 2 ) + 64);
 	}
-	 nextPos_ = { pos_.x + ( ( velocity_.x * speed_ ) ) + ( (drawSize_.x / 2 + 32)* -sign(velocity_.x) ),pos_.y + ( drawSize_.y / 2 )};
+	 nextPos_ = { pos_.x + ( ( velocity_.x * speed_ ) ) + ( ( hitboxSize_.x / 2 + 32)* -sign(velocity_.x) ),pos_.y + ( hitboxSize_.y / 2 )};
 	 nextElement_ = mapchip_->GetPosElement(static_cast<int32_t>(nextPos_.x),static_cast< int32_t >( nextPos_.y)+64);
 	if ((nextElement_ == NEXT ||(nextElement_ == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM )) &&  !tern_ )
 	{
@@ -165,8 +169,8 @@ void WalkEnemy::Move()
 			ternInvervalTimer_ = 0;
 		}
 	}
-	 nextElement_ = mapchip_->GetPosElement(pos_.x +(( velocity_.x * speed_ )) + ( drawSize_.x / 2 ),
-		pos_.y + ( drawSize_.y / 2 ) + 1);
+	 nextElement_ = mapchip_->GetPosElement(pos_.x +(( velocity_.x * speed_ )) + ( hitboxSize_.x / 2 ),
+		pos_.y + ( hitboxSize_.y / 2 ) + 1);
 
 	if (( nextElement_ == NEXT || ( nextElement_ == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM )) && !tern_ )
 	{
@@ -211,10 +215,10 @@ void WalkEnemy::Approach()
 	if ( GetOnDir() & 0b1 << OnDir::BOTTOM )
 	{
 		gravity_ = { 0,0 };
-		prevElement_ = mapchip_->GetPosElement(pos_.x,pos_.y + ( drawSize_.y / 2 ) + 1);
+		prevElement_ = mapchip_->GetPosElement(pos_.x,pos_.y + ( hitboxSize_.y / 2 ) + 1);
 	}
-	nextElement_ = mapchip_->GetPosElement(pos_.x + ( ( velocity_.x * speed_ ) ) + ( drawSize_.x / 2 * sign(velocity_.x) ),
-	   pos_.y + ( drawSize_.y / 2 ) + 5);
+	nextElement_ = mapchip_->GetPosElement(pos_.x + ( ( velocity_.x * speed_ ) ) + ( hitboxSize_.x / 2 * sign(velocity_.x) ),
+	   pos_.y + ( hitboxSize_.y / 2 ) + 5);
 
 	if ( ( nextElement_ == NEXT || ( nextElement_ == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM ) ) && !tern_ )
 	{
@@ -254,6 +258,11 @@ void WalkEnemy::Attack()
 	}
 	else if ( !attackCounter_.IsCountEnd() )
 	{
+		if ( !attackSoundPlayed_ )
+		{
+			PlaySoundMem(EnemyManager::GetSoundHandle("shootAttack"),DX_PLAYTYPE_BACK);
+			attackSoundPlayed_ = true;
+		}
 		attackCounter_.CountUp();
 		if ( Collision::Rect2Rect(*dynamic_cast< RectShape* >( playerPtr_->GetShape() ),*attackArea_.get()) )
 		{
@@ -264,6 +273,7 @@ void WalkEnemy::Attack()
 	else
 	{
 		actionMode = MOVE;
+		attackSoundPlayed_ = false;
 	}
 	SetMapChipSpeed({ 0.f,gravity_.y });
 
@@ -273,23 +283,31 @@ void WalkEnemy::Draw(Vector2 scroll)
 {
 	if ( !islive_ ) return;
 	bool flag = false;
-	if ( velocity_.x < 0 )
+	if ( velocity_.x > 0 )
 	{
 		flag = true;
 	}
-	DrawRectRotaGraph(pos_.x - scroll.x,pos_.y - scroll.x,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,EnemyManager::GetTexHandle(ADJACENT),true,flag);
+	DrawRectRotaGraph(pos_.x + scroll.x,pos_.y + scroll.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,tex_,true,flag);
 
-
+#ifdef _DEBUG
 	if ( actionMode == ATTACK )
 	{
-		DrawBox(attackArea_->GetCenter().x - attackArea_->GetRadius().x ,attackArea_->GetCenter().y - attackArea_->GetRadius().y,
-		attackArea_->GetCenter().x + attackArea_->GetRadius().x ,attackArea_->GetCenter().y + attackArea_->GetRadius().y,GetColor(155,0,0),false);
+		DrawBox(attackArea_->GetCenter().x - attackArea_->GetRadius().x + scroll.x,
+			attackArea_->GetCenter().y - attackArea_->GetRadius().y + scroll.y,
+		attackArea_->GetCenter().x + attackArea_->GetRadius().x + scroll.x,
+			attackArea_->GetCenter().y + attackArea_->GetRadius().y + scroll.y
+			,GetColor(155,0,0),false);
 	}
 	else
 	{
-		DrawBox(searchArea_->GetCenter().x - searchArea_->GetRadius().x,pos_.y - searchArea_->GetRadius().y,
-		searchArea_->GetCenter().x + searchArea_->GetRadius().x,pos_.y + searchArea_->GetRadius().y,GetColor(155,0,0),false);
+		DrawBox(searchArea_->GetCenter().x - searchArea_->GetRadius().x + scroll.x,
+			pos_.y - searchArea_->GetRadius().y + scroll.y,
+		searchArea_->GetCenter().x + searchArea_->GetRadius().x + scroll.x
+			,pos_.y + searchArea_->GetRadius().y + scroll.y,GetColor(155,0,0),false);
 	}
+#endif // DEBUG
+
+	
 
 	if ( playerPtr_->GetEyeTag() == PlayerEyeTags::Clairvoyance )
 	{
