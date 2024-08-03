@@ -134,10 +134,10 @@ Vector2 MapChip::GetPos(int32_t x,int32_t y) const
 uint8_t MapChip::GetNumOfArrayElement(int32_t x,int32_t y) const
 {
 	int32_t posY = min(uint32_t(y),map_.size() - 1);
-	posY = max(y,0);
+	posY = max(posY,0);
 
 	int32_t posX = min(uint32_t(x),map_[ posY ].size() - 1);
-	posX = max(x,0);
+	posX = max(posX,0);
 
 	return map_[ posY ][ posX ];
 }
