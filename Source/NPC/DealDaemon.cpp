@@ -100,6 +100,7 @@ bool DealDaemon::PartsChenge()
 		break;
 	}
 	dealCount_ = 0;
+	dealed_ = isBuy;
 	return isBuy;
 }
 
@@ -194,16 +195,30 @@ void DealDaemon::Draw()
 			}
 			DrawBox(( boxLeftTop_.x + i * boxDist_ ),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,color,true);
 
+			string nameTemp = selectProducts_[ i ]->uiPartsName;
 
-			DrawStringToHandle(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,selectProducts_[ i ]->uiPartsName.c_str(),
+			if ( selectProducts_[ i ]->productType == "ARM" )
+			{
+				if ( selectProducts_[ i ]->isLeft )
+				{
+					nameTemp += utf8_to_sjis("(左腕)");
+				}
+				else
+				{
+					nameTemp += utf8_to_sjis("(右腕)");
+				}
+			}
+
+			DrawStringToHandle(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,nameTemp.c_str(),
 			0xffffff,nameFontHandle_);
 
-			string temp = utf8_to_sjis(string("価格:" + selectProducts_[ i ]->cost));
+			string temp = utf8_to_sjis("価格:");
+			temp += to_string(selectProducts_[ i ]->cost);
 
 			DrawStringToHandle(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 75,temp.c_str(),
 			0xffffff,infoFontHandle_);
 
-			DrawStringToHandle(( boxLeftTop_.x + i * boxDist_ ) + 25,boxLeftTop_.y + 100,selectProducts_[ i ]->partsInfo.c_str(),
+			DrawStringToHandle(( boxLeftTop_.x + i * boxDist_ ) + 25,boxLeftTop_.y + 125,selectProducts_[ i ]->partsInfo.c_str(),
 			0xffffff,infoFontHandle_);
 		}
 	}
