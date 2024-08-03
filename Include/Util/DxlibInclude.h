@@ -7,5 +7,6 @@
 #include<string>
 #pragma warning(pop)
 
-
 int LoadGraph(const std::string& FileName);
+
+int LoadSoundMem(const std::string& FileName);
