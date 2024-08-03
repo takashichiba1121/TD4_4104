@@ -73,7 +73,7 @@ void Player::Initialize()
 
 	circelShape_->SetRadius(hitboxSize_.y);
 
-	ChangeLeg("Fenrir",0);
+	//ChangeLeg("Fenrir",0);
 }
 
 void Player::Update()

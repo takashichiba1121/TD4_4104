@@ -149,12 +149,12 @@ const Vector2& MapChip::GetScreenPos() const
 
 const Vector2& MapChip::GetLeftTopPos() const
 {
-	return leftTopPos_;
+	return  { float(BLOCK_SIZE/2) ,float(BLOCK_SIZE/2) };
 }
 
 const Vector2& MapChip::GetRightTopBottom() const
 {
-	return rightTopBottom_;
+	return { float((map_[ 0 ].size() - 1) * BLOCK_SIZE) ,float((map_.size() - 1) * BLOCK_SIZE) };
 }
 
 void MapChip::SetPlayer(Player* player)
@@ -181,7 +181,7 @@ void MapChip::Draw(const Vector2& screenPos)
 				leftTopPos_ = { ( j * BLOCK_SIZE ) + screenPos.x - 32,( i * BLOCK_SIZE ) + screenPos.y - 32 };
 			}
 
-			if ( i == map_.size() - 1 && j == map_[ map_.size() - 1 ].size()-1 )
+			if ( i == map_.size() - 1 && j == map_[ map_.size() - 1 ].size() - 1 )
 			{
 				rightTopBottom_ = { ( j * BLOCK_SIZE ) + screenPos.x + 32,( i * BLOCK_SIZE ) + screenPos.y + 32 };
 			}

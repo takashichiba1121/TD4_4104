@@ -117,10 +117,12 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
+	Vector2 s = Scroll();
+
 	DrawGraph(0,0,backGround_,true);
-	mapChip_->Draw(Scroll());
+	mapChip_->Draw(s);
 	nodeManager_->Draw();
-	player_->Draw(Scroll());
+	player_->Draw(s);
 
 	//if (!chenged) powerUp_->Draw();
 
@@ -148,7 +150,7 @@ Vector2 GameScene::Scroll()
 
 	Vector2 playerPos = player_->GetPos();
 
-	Vector2 mapChipLeftTopPos = mapChip_->GetLeftTopPos();
+	Vector2 mapChipLeftTopPos = {0,0};
 	Vector2 mapChipTopBottomPos = mapChip_->GetRightTopBottom();
 
 	int32_t WindowHeight = GameConfig::GetWindowHeight();
@@ -160,20 +162,20 @@ Vector2 GameScene::Scroll()
 
 	if ( mapChipTopBottomPos.x > 0 && mapChipTopBottomPos.y > 0 )
 	{
-		if ( scroll.x >= mapChipTopBottomPos.x - WindowWidth )
+		if ( playerPos.x >= mapChipTopBottomPos.x - WindowWidth/2 )
 		{
-			scroll.x = mapChipTopBottomPos.x - WindowWidth;
+ 			scroll.x = -(mapChipTopBottomPos.x - WindowWidth);
 		}
-		if ( scroll.y >= mapChipTopBottomPos.y - WindowHeight )
+		if ( playerPos.y >= mapChipTopBottomPos.y - WindowHeight/2 )
 		{
-			scroll.y = mapChipTopBottomPos.y - WindowHeight;
+			scroll.y = -(mapChipTopBottomPos.y - WindowHeight);
 		}
 	}
-	if ( scroll.x <= mapChipLeftTopPos.x )
+	if ( playerPos.x <= mapChipLeftTopPos.x + WindowWidth / 2 )
 	{
 		scroll.x = mapChipLeftTopPos.x;
 	}
-	if ( scroll.y <= mapChipLeftTopPos.y )
+	if ( playerPos.y <= mapChipLeftTopPos.y + WindowHeight / 2 )
 	{
 		scroll.y = mapChipLeftTopPos.y;
 	}

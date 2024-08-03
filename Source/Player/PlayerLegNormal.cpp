@@ -332,5 +332,5 @@ void PlayerLegNormal::Load()
 	airDeccelaration_ = jsonObject[ "AirDeccelaration" ];
 	gravityAcceleration_ = jsonObject[ "GravityAcceleration" ];
 	jumpAcceleration_ = jsonObject[ "JumpAcceleration" ];
-	jumpInitialVelocity_ = jsonObject[ "JumpInitialVelocity" ];
+	jumpInitialVelocity_ = jsonObject[ "JumpInitialVelocity" ]*5;
 }
