@@ -176,9 +176,14 @@ void EnemyManager::Update()
 {
 	Pop();
 
+	screenEnemy_ = 0;
 	for ( auto& itr : enemylist_ )
 	{
-		itr->Update();
+		if ( itr->OnScreen({ 0,0 }) )
+		{
+			itr->Update();
+			screenEnemy_++;
+		}
 	}
 
 	deadEnemyCount_ += enemylist_.remove_if([](unique_ptr<BaseEnemy>& enemy )
@@ -212,7 +217,10 @@ void EnemyManager::Draw()
 {
 	for ( auto& itr : enemylist_ )
 	{
-		itr->Draw();
+		if ( itr->OnScreen({ 0,0 }) )
+		{
+			itr->Draw({ 0,0 });
+		}
 	}
 	DrawFormatString(GameConfig::GetWindowWidth() - 200,10,0xffffff,"KillEnemy %d / %d",deadEnemyCount_,MAX_POP_ENEMY_NUM);
 }
@@ -236,16 +244,26 @@ bool EnemyManager::GameEnd()
 	return false;
 }
 
+bool EnemyManager::IsEnemyEmpty()
+{
+	return screenEnemy_ <= 0;
+}
+
 void EnemyManager::EnemysClear()
 {
 	enemylist_.clear();
 }
 
+int32_t EnemyManager::GetTexHandle(EnemyType type)
+{
+	return texs_[type];
+}
+
 void EnemyManager::TexLoad()
 {
-	texs_[0] = LoadGraph("Resources\\Enemy\\enemyFly.png");
-	texs_[1] = LoadGraph("Resources\\Enemy\\enemyFly.png");
-	texs_[2] = LoadGraph("Resources\\Enemy\\enemyFly.png");
+	texs_[ FLY ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
+	texs_[ SHOOT ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
+	texs_[ ADJACENT ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
 }
 
 void EnemyManager::Finalize()

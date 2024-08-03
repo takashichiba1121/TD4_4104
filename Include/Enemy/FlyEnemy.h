@@ -32,6 +32,6 @@ public:
 	void Update() override;
 	void Move() override;
 	void Attack() override;
-	void Draw() override;
+	void Draw(Vector2 scroll) override;
 	void OnCollision() override;
 };

@@ -5,14 +5,17 @@
 #include "Player.h"
 #include "Collision.h"
 #include "GameConfig.h"
-
+#include "EnemyManager.h"
 
 using namespace std;
 void FlyEnemy::Initialize()
 {
+	animeNum_ = 4;
+	animeSpeed_ = 5;
+	drawSize_ = { 64,64 };
+
 	maxHp_ = 1;
 	hp_ = 1;
-
 	islive_ = true;
 	shape_ = new RectShape();
 	shape_->SetRadius(drawSize_ / 2);
@@ -101,7 +104,7 @@ void FlyEnemy::Update()
 	}
 	shape_->SetCenter({ pos_.x , pos_.y });
 
-
+	AnimeUpdate();
 	EffectUpdate();
 }
 
@@ -174,12 +177,16 @@ void FlyEnemy::Attack()
 	}
 }
 
-void FlyEnemy::Draw()
+void FlyEnemy::Draw(Vector2 scroll)
 {
 	if ( !islive_ || !playerPtr_) return;
-	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2,
-		pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,155),true);
-	DrawFormatString(100,100,0xffffff,"%f",Vector2(pos_,targetPos_).GetLenge());
+	bool flag = false;
+	if ( velocity_.x < 0 )
+	{
+		flag = true;
+	}
+	DrawRectRotaGraph(pos_.x - scroll.x,pos_.y - scroll.x,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,EnemyManager::GetTexHandle(FLY),true,flag);
+
 	if ( playerPtr_->GetEyeTag() == PlayerEyeTags::Clairvoyance )
 	{
 		DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2 - hpBerOffSet_,

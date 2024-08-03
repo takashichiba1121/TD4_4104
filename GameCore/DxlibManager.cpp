@@ -15,9 +15,11 @@ LRESULT WINAPI WndProc(HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam)
 	return 0;
 }
 
+
 bool DxlibManager::Initialize(const GameConfig::Config* config)
 {
-	DxLib::SetUseCharCodeFormat(DX_CHARCODEFORMAT_UTF8);//DrawFormatStringで日本語を表示させる為に追加しました。この行追加以外はいじってないです。byアベ
+	//DxLib::SetUseCharCodeFormat(DX_CHARCODEFORMAT_UTF8);//DrawFormatStringで日本語を表示させる為に追加しました。この行追加以外はいじってないです。byアベ
+	
 
 	DxLib::SetOutApplicationLogValidFlag(false);
 	DxLib::ChangeWindowMode(true);

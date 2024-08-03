@@ -4,10 +4,15 @@
 #include "Player.h"
 #include "MapChip.h"
 #include "Collision.h"
+#include "EnemyManager.h"
 
 using namespace std;
 void WalkEnemy::Initialize()
 {
+
+	animeNum_ = 4;
+	animeSpeed_ = 5;
+	drawSize_ = { 64,64 };
 
 	MapChipObjectEnable();
 	SetMapChipCenter(&pos_);
@@ -113,6 +118,7 @@ void WalkEnemy::Update()
 	}
 	shape_->SetCenter({ pos_.x , pos_.y });
 
+	AnimeUpdate();
 
 	EffectUpdate();
 }
@@ -263,11 +269,15 @@ void WalkEnemy::Attack()
 
 }
 
-void WalkEnemy::Draw()
+void WalkEnemy::Draw(Vector2 scroll)
 {
 	if ( !islive_ ) return;
-	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.y / 2,
-		pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,0),true);
+	bool flag = false;
+	if ( velocity_.x < 0 )
+	{
+		flag = true;
+	}
+	DrawRectRotaGraph(pos_.x - scroll.x,pos_.y - scroll.x,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,EnemyManager::GetTexHandle(ADJACENT),true,flag);
 
 
 	if ( actionMode == ATTACK )
