@@ -211,7 +211,7 @@ void ShootEnemy::Draw(Vector2 scroll)
 	{
 		flag = true;
 	}
-	DrawRectRotaGraph(pos_.x - scroll.x,pos_.y - scroll.x,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,EnemyManager::GetTexHandle(SHOOT),true,flag);
+	DrawRectRotaGraph(pos_.x + scroll.x,pos_.y + scroll.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,EnemyManager::GetTexHandle(SHOOT),true,flag);
 
 	for ( auto& itr : bullets )
 	{

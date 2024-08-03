@@ -75,6 +75,7 @@ private:
 	Player* player_;
 	PowerUpCave* powerUp_;
 	DealDaemon* dealer_;
+	EnemyManager* enemys_;
 
 	bool isNodeDraw;
 
@@ -98,6 +99,7 @@ public:
 	void SetPlayer(Player* player);
 	void SetPowerUp(PowerUpCave* powerUp);
 	void SetDealer (DealDaemon* dealer );
+	void SetEnemys (EnemyManager* enemys_);
 
 private:
 

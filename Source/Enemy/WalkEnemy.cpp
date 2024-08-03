@@ -277,19 +277,27 @@ void WalkEnemy::Draw(Vector2 scroll)
 	{
 		flag = true;
 	}
-	DrawRectRotaGraph(pos_.x - scroll.x,pos_.y - scroll.x,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,EnemyManager::GetTexHandle(ADJACENT),true,flag);
+	DrawRectRotaGraph(pos_.x + scroll.x,pos_.y + scroll.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,EnemyManager::GetTexHandle(ADJACENT),true,flag);
 
-
+#ifdef _DEBUG
 	if ( actionMode == ATTACK )
 	{
-		DrawBox(attackArea_->GetCenter().x - attackArea_->GetRadius().x ,attackArea_->GetCenter().y - attackArea_->GetRadius().y,
-		attackArea_->GetCenter().x + attackArea_->GetRadius().x ,attackArea_->GetCenter().y + attackArea_->GetRadius().y,GetColor(155,0,0),false);
+		DrawBox(attackArea_->GetCenter().x - attackArea_->GetRadius().x + scroll.x,
+			attackArea_->GetCenter().y - attackArea_->GetRadius().y + scroll.y,
+		attackArea_->GetCenter().x + attackArea_->GetRadius().x + scroll.x,
+			attackArea_->GetCenter().y + attackArea_->GetRadius().y + scroll.y
+			,GetColor(155,0,0),false);
 	}
 	else
 	{
-		DrawBox(searchArea_->GetCenter().x - searchArea_->GetRadius().x,pos_.y - searchArea_->GetRadius().y,
-		searchArea_->GetCenter().x + searchArea_->GetRadius().x,pos_.y + searchArea_->GetRadius().y,GetColor(155,0,0),false);
+		DrawBox(searchArea_->GetCenter().x - searchArea_->GetRadius().x + scroll.x,
+			pos_.y - searchArea_->GetRadius().y + scroll.y,
+		searchArea_->GetCenter().x + searchArea_->GetRadius().x + scroll.x
+			,pos_.y + searchArea_->GetRadius().y + scroll.y,GetColor(155,0,0),false);
 	}
+#endif // DEBUG
+
+	
 
 	if ( playerPtr_->GetEyeTag() == PlayerEyeTags::Clairvoyance )
 	{

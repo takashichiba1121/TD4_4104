@@ -28,6 +28,7 @@ private:
 	size_t deadEnemyCount_;
 	BaseEnemy* cursedEnemy_;
 	size_t screenEnemy_ = 0;
+	Vector2 scroll_;
 
 	static std::array<int32_t,3> texs_;
 
@@ -53,5 +54,6 @@ public:
 	static int32_t GetTexHandle(EnemyType type);
 	static void TexLoad();
 	static void Finalize();
+	void SetScroll(Vector2 scroll);
 };
 

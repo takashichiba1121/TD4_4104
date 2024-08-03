@@ -2,6 +2,7 @@
 #include "DxlibInclude.h"
 #include "GameConfig.h"
 #include<BossEnemy.h>
+#include "Player.h"
 
 using namespace std;
 std::list<std::unique_ptr<BaseEnemy>> EnemyManager::enemylist_;
@@ -35,9 +36,9 @@ void EnemyManager::Pop()
 		if ( rand <= 200)
 		{
 			unique_ptr<ShootEnemy> temp = make_unique<ShootEnemy>();
+			temp->SetPos({ GetRand(850) + 50.f,100.f });
 			temp->Initialize();
 			temp->SetPlayerPtr(playerPtr_);
-			temp->SetPos({ GetRand(850) + 50.f,100.f });
 			temp->SetMapChip(mapchip_);
 			enemylist_.push_back(move(temp));
 			popEnemyCount_++;
@@ -59,6 +60,7 @@ void EnemyManager::Pop()
 			temp->SetPos({ GetRand(850) + 50.f,100.f });
 			temp->SetMapChip(mapchip_);
 			temp->SetPlayerPtr(playerPtr_);
+			temp->SetMovePos();
 			enemylist_.push_back(move(temp));
 			popEnemyCount_++;
 		}
@@ -70,10 +72,11 @@ void EnemyManager::SetEnemyPop(EnemyType enemyType,Vector2 pos,Vector2 velocity)
 	if ( enemyType == FLY )
 	{
 		unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
+		temp->SetPos(pos);
 		temp->Initialize();
 		temp->SetPlayerPtr(playerPtr_);
-		temp->SetPos(pos);
 		temp->SetVelocity(velocity);
+		temp->SetMovePos();
 		enemylist_.push_back(move(temp));
 	}
 	else if ( enemyType == SHOOT )
@@ -102,9 +105,10 @@ void EnemyManager::SetEnemyPop(EnemyType enemyType,Vector2 pos)
 	{
 		unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
 		temp->Initialize();
-		temp->SetPlayerPtr(playerPtr_);
 		temp->SetPos(pos);
+		temp->SetPlayerPtr(playerPtr_);
 		temp->SetMapChip(mapchip_);
+		temp->SetMovePos();
 		enemylist_.push_back(move(temp));
 		popEnemyCount_++;
 	}
@@ -138,10 +142,11 @@ void EnemyManager::SetPosPop(Vector2 pos)
 	if ( rand <= 200 )
 	{
 		unique_ptr<FlyEnemy> temp = make_unique<FlyEnemy>();
+		temp->SetPos(pos);
 		temp->Initialize();
 		temp->SetPlayerPtr(playerPtr_);
-		temp->SetPos(pos);
 		temp->SetMapChip(mapchip_);
+		temp->SetMovePos();
 		enemylist_.push_back(move(temp));
 		popEnemyCount_++;
 	}
@@ -179,7 +184,7 @@ void EnemyManager::Update()
 	screenEnemy_ = 0;
 	for ( auto& itr : enemylist_ )
 	{
-		if ( itr->OnScreen({ 0,0 }) )
+		if ( itr->OnScreen(scroll_) )
 		{
 			itr->Update();
 			screenEnemy_++;
@@ -217,9 +222,9 @@ void EnemyManager::Draw()
 {
 	for ( auto& itr : enemylist_ )
 	{
-		if ( itr->OnScreen({ 0,0 }) )
+		if ( itr->OnScreen(scroll_) )
 		{
-			itr->Draw({ 0,0 });
+			itr->Draw(scroll_);
 		}
 	}
 	DrawFormatString(GameConfig::GetWindowWidth() - 200,10,0xffffff,"KillEnemy %d / %d",deadEnemyCount_,MAX_POP_ENEMY_NUM);
@@ -273,4 +278,9 @@ void EnemyManager::Finalize()
 	{
 		DeleteGraph(texs_[ i ]);
 	}
+}
+
+void EnemyManager::SetScroll(Vector2 scroll)
+{
+	scroll_ = scroll;
 }
