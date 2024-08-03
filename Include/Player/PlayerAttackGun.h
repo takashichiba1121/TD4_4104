@@ -42,7 +42,7 @@ public:
 
 	void Attack() override;
 
-	void Draw() override;
+	void Draw(Vector2 scroll) override;
 
 	bool IsAttack() override {
 		return isAttack_;

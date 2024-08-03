@@ -139,7 +139,9 @@ private:
 
 	uint32_t nowMouthCost_ = 0;
 
-		
+	Vector2 scroll_ = {0,0};
+
+
 public:
 	void Initialize() override;
 
@@ -191,7 +193,7 @@ public:
 		return nowCost_;
 	}
 
-	void Draw() override;
+	void Draw(Vector2 scroll) override;
 
 	bool ItemGet(Item newItem);
 
@@ -254,4 +256,8 @@ public:
 		return MAX_HP_ * changeMaxHp_;
 	}
 
+	void SetScroll(Vector2 scroll)
+	{
+
+	}
 };

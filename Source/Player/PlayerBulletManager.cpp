@@ -20,11 +20,11 @@ void PlayerBulletManager::Update()
 	}
 }
 
-void PlayerBulletManager::Draw()
+void PlayerBulletManager::Draw(Vector2 scroll)
 {
 	for ( std::unique_ptr<PlayerBullet>& bullet : bullets_ )
 	{
-		bullet->Draw();
+		bullet->Draw(scroll);
 	}
 }
 

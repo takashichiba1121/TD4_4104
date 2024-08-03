@@ -238,12 +238,12 @@ void PlayerLegNormal::Falling()
 	}
 }
 
-void PlayerLegNormal::Draw(const Vector2& pos,const Vector2& size)
+void PlayerLegNormal::Draw(const Vector2& pos,const Vector2& size,Vector2 scroll)
 {
-	float leftPos = pos.x - size.x / 2;
-	float rightPos = pos.x + size.x / 2;
-	float upPos = pos.y - size.y / 2;
-	float downPos = pos.y + size.y / 2;
+	float leftPos = scroll.x+pos.x - size.x / 2;
+	float rightPos = scroll.x+pos.x + size.x / 2;
+	float upPos = scroll.y+pos.y - size.y / 2;
+	float downPos = scroll.y+pos.y + size.y / 2;
 
 	if ( isEvasionRoll_ )
 	{
@@ -332,5 +332,5 @@ void PlayerLegNormal::Load()
 	airDeccelaration_ = jsonObject[ "AirDeccelaration" ];
 	gravityAcceleration_ = jsonObject[ "GravityAcceleration" ];
 	jumpAcceleration_ = jsonObject[ "JumpAcceleration" ];
-	jumpInitialVelocity_ = jsonObject[ "JumpInitialVelocity" ];
+	jumpInitialVelocity_ = jsonObject[ "JumpInitialVelocity" ]*5;
 }
