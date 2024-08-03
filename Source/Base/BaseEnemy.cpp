@@ -170,10 +170,12 @@ void BaseEnemy::AnimeUpdate(bool loop)
 	{
 		animeTimer_ = 0;
 		anime_++;
-		anime_ = min(animeNum_-1,anime_);
+
 		if ( anime_ == animeNum_ && loop)
 		{
 			anime_ = 0;
 		}
+
+		anime_ = min(animeNum_-1,anime_);
 	}
 }

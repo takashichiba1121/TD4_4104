@@ -49,7 +49,8 @@ void GameScene::Initialize()
 	nodeManager_->StartNodeSet(0);
 	backGround_ = LoadGraph(std::string("Resources/BackGround/BackGround.png"));
 
-
+	bgm_ = LoadSoundMem(std::string("Resources\\Sound\\BGM_gameplay.mp3"));
+	PlaySoundMem(bgm_,DX_PLAYTYPE_LOOP);
 }
 
 void GameScene::Update()
@@ -157,6 +158,7 @@ void GameScene::Finalize()
 	PlayerBulletManager::Instance()->Clear();
 	EnemyManager::Finalize();
 	FontManager::Finalize();
+	StopSoundMem(bgm_);
 }
 
 Vector2 GameScene::Scroll()

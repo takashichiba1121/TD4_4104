@@ -19,19 +19,19 @@ private:
 
 	bool isEvasionRoll_;
 
-	uint32_t PlayerStandTexture_[ 10 ];
+	uint32_t PlayerStandTexture_;
 
 	uint32_t PlayerStandTextureCount_ = 0;
 
-	uint32_t PlayerJumpTexture_[ 4 ];
+	uint32_t PlayerJumpTexture_;
 
 	uint32_t PlayerJumpTextureCount_ = 0;
 
-	uint32_t PlayerDownTexture_[ 4 ];
+	uint32_t PlayerDownTexture_;
 
 	uint32_t PlayerDownTextureCount_ = 0;
 
-	uint32_t PlayerDushTexture_[ 5 ];
+	uint32_t PlayerDushTexture_;
 
 	uint32_t PlayerDushTextureCount_ = 0;
 
