@@ -7,7 +7,7 @@ enum ActionMode
 {
 	STAY,
 	MOVE,
-	APPROACH,
+	ENEMYAPPROACH,
 	ATTACK
 };
 

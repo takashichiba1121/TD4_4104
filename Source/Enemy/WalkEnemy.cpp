@@ -62,7 +62,7 @@ void WalkEnemy::Update()
 
 	if ( Collision::Rect2Rect(*dynamic_cast< RectShape* >( playerPtr_->GetShape() ),*searchArea_.get()) && actionMode != ATTACK )
 	{
-		actionMode = APPROACH;
+		actionMode = ENEMYAPPROACH;
 	}
 	else if ( actionMode != ATTACK )
 	{
@@ -100,7 +100,7 @@ void WalkEnemy::Update()
 		case MOVE:
 			Move();
 			break;
-		case APPROACH:
+		case ENEMYAPPROACH:
 			Approach();
 			break;
 		case ATTACK:

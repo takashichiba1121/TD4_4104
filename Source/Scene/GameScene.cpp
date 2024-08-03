@@ -89,8 +89,6 @@ void GameScene::Draw()
 
 	//if (!chenged) powerUp_->Draw();
 
-	nodeManager_->NodeMapDraw();
-
 	nodeManager_->Draw();
 	
 	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
