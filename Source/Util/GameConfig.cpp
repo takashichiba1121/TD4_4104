@@ -67,7 +67,7 @@ void GameConfig::Load(const std::string& filePath)
 		node.startPoints = object[ "StartPoints" ];
 		for ( size_t i = 0; i < node.nodeProbabilities.size(); i++ )
 		{
-			node.nodeProbabilities[i] = object[ "NodeProbabilities" ][i];
+			node.nodeProbabilities[ i ] = object[ "NodeProbabilities" ][ i ];
 		}
 	}
 
@@ -85,24 +85,50 @@ void GameConfig::Load(const std::string& filePath)
 
 		boss.hp = object[ "Hp" ];
 		boss.attackInterval = object[ "AttackInterval" ];
-		boss.approachHitBoxX = object[ "ApproachHitBox" ][0];
-		boss.approachHitBoxY = object[ "ApproachHitBox" ][1];
+		boss.chargeApproachHitBoxX = object[ "ChargeApproachHitBox" ][ 0 ];
+		boss.chargeApproachHitBoxY = object[ "ChargeApproachHitBox" ][ 1 ];
+		boss.attackApproachHitBoxX = object[ "AttackApproachHitBox" ][ 0 ];
+		boss.attackApproachHitBoxY = object[ "AttackApproachHitBox" ][ 1 ];
+		boss.probabilitie1 = object[ "Probabilities" ][ 0 ];
+		boss.probabilitie2 = object[ "Probabilities" ][ 1 ];
 
 		{
 			nlohmann::json& attackObject = object[ "Attack" ];
-			boss.attack.sizeX = attackObject[ "Size" ][0];
-			boss.attack.sizeY = attackObject[ "Size" ][1];
+			boss.attack.sizeX = attackObject[ "Size" ][ 0 ];
+			boss.attack.sizeY = attackObject[ "Size" ][ 1 ];
+			boss.attack.offsetX = attackObject[ "Offset" ][ 0 ];
+			boss.attack.offsetY = attackObject[ "Offset" ][ 1 ];
 			boss.attack.time = attackObject[ "Time" ];
 			boss.attack.power = attackObject[ "Power" ];
 		}
 
 		{
 			nlohmann::json& chargeObject = object[ "Charge" ];
+
 			boss.charge.sizeX = chargeObject[ "Size" ][ 0 ];
 			boss.charge.sizeY = chargeObject[ "Size" ][ 1 ];
 			boss.charge.time = chargeObject[ "Time" ];
 			boss.charge.power = chargeObject[ "Power" ];
 			boss.charge.speed = chargeObject[ "Speed" ];
+			boss.charge.animeFrame = chargeObject[ "AnimeFrame" ];
+			boss.charge.anime2Frame = chargeObject[ "Anime2Frame" ];
+
+		}
+
+		{
+			nlohmann::json& longRangeObject = object[ "LongRange" ];
+			boss.longRange.chargeTime = longRangeObject[ "ChargeTime" ];
+			boss.longRange.freezeTime = longRangeObject[ "FreezeTime" ];
+
+			{
+				nlohmann::json& bulletObject = longRangeObject[ "Bullet" ];
+				boss.longRange.bulletTime = bulletObject[ "Time" ];
+				boss.longRange.bulletSpeed = bulletObject[ "Speed" ];
+				boss.longRange.bulletSizeX = bulletObject[ "Size" ][ 0 ];
+				boss.longRange.bulletSizeY = bulletObject[ "Size" ][ 1 ];
+				boss.longRange.bulletRotateSpeed = bulletObject[ "RotateSpeed" ];
+
+			}
 		}
 	}
 }

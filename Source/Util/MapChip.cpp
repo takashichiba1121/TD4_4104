@@ -31,8 +31,8 @@ static int Random(int low,int high)
 
 void MapChip::Initialize()
 {
-	roadChipHandle_ = LoadGraph("Resources/Chip/RoadChip.png");
-	wallChipHandle_ = LoadGraph("Resources/Chip/WallChip.png");
+	roadChipHandle_ = LoadGraph(std::string("Resources/Chip/RoadChip.png"));
+	wallChipHandle_ = LoadGraph(std::string("Resources/Chip/WallChip.png"));
 }
 
 void MapChip::MapLoad(const std::string& path)
@@ -108,10 +108,10 @@ Vector2 MapChip::GetPos(int32_t x,int32_t y) const
 
 uint8_t MapChip::GetNumOfArrayElement(int32_t x, int32_t y) const
 {
-	int32_t posY = min(y,map_.size() - 1);
+	int32_t posY = min(y,int32_t(map_.size() - 1));
 	posY = max(y,0);
 
-	int32_t posX = min(x,map_[ posY ].size() - 1);
+	int32_t posX = min(x,int32_t(map_[ posY ].size() - 1));
 	posX = max(x,0);
 
 	return map_[posY][posX];
