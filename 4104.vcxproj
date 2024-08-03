@@ -107,6 +107,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\NPC\HealObject.cpp" />
     <ClCompile Include="Source\Util\FontManager.cpp" />
     <ClCompile Include="Include\Util\DxlibInclude.cpp" />
     <ClCompile Include="Source\Base\SoundManager.cpp" />
@@ -188,6 +189,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\NPC\HealObject.h" />
     <ClInclude Include="Include\Scene\TitleScene.h" />
     <ClInclude Include="Include\Util\FontManager.h" />
     <ClInclude Include="Include\Base\SoundManager.h" />
