@@ -13,19 +13,19 @@ void BaseEnemy::EffectUpdate()
 			switch ( ef )
 			{
 			case BURN:
-				if ( effectTimer[ i ].GetCount() % effectDamageInterval[i] == 0)
+				if ( static_cast<int32_t>(effectTimer[ i ].GetCount())% effectDamageInterval[i] == 0)
 				{
 					playerPtr_->Damage(effectDamage[ ef ]);
 				}
 				break;
 			case ICED:
-				if ( effectTimer[ i ].GetCount() % effectDamageInterval[ i ] == 0 )
+				if ( static_cast<int32_t>(effectTimer[ i ].GetCount())% effectDamageInterval[ i ] == 0 )
 				{
 					playerPtr_->Damage(effectDamage[ ef ]);
 				}
 				break;
 			case BIND:
-				if ( effectTimer[ i ].GetCount() % effectDamageInterval[ i ] == 0 )
+				if (static_cast<int32_t>( effectTimer[ i ].GetCount()) % effectDamageInterval[ i ] == 0 )
 				{
 					playerPtr_->Damage(effectDamage[ ef ]);
 				}
