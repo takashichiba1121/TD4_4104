@@ -65,6 +65,8 @@ private:
 
 	bool isDirBottom_;
 
+	bool oldIsDirBottom_;
+
 #pragma endregion
 
 public:
