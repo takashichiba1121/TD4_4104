@@ -228,5 +228,7 @@ void EnemyManager::EnemysClear()
 
 void EnemyManager::TexLoad()
 {
-
+	texs_[0] = LoadGraph("Resources\\Enemy\\enemyFly.png");
+	texs_[1] = LoadGraph("Resources\\Enemy\\enemyFly.png");
+	texs_[2] = LoadGraph("Resources\\Enemy\\enemyFly.png");
 }
