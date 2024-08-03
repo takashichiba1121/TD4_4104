@@ -105,6 +105,14 @@ void GameScene::Update()
 			SceneManager::GetInstance()->ChangeScene("GAMEOVER");
 		}
 	}
+
+	Vector2 s = Scroll();
+
+	ImGui::Begin("Scroll");
+
+	ImGui::Text("%f,%f",s.x,s.y);
+
+	ImGui::End();
 }
 
 void GameScene::Draw()
@@ -143,12 +151,32 @@ Vector2 GameScene::Scroll()
 	Vector2 mapChipLeftTopPos = mapChip_->GetLeftTopPos();
 	Vector2 mapChipTopBottomPos = mapChip_->GetRightTopBottom();
 
-	uint32_t WindowHeight = GameConfig::GetWindowHeight();
-	uint32_t WindowWidth = GameConfig::GetWindowWidth();
+	int32_t WindowHeight = GameConfig::GetWindowHeight();
+	int32_t WindowWidth = GameConfig::GetWindowWidth();
 
 	scroll.x = WindowWidth / 2 - playerPos.x;
 
 	scroll.y = WindowHeight / 2 - playerPos.y;
+
+	if ( mapChipTopBottomPos.x > 0 && mapChipTopBottomPos.y > 0 )
+	{
+		if ( scroll.x >= mapChipTopBottomPos.x - WindowWidth )
+		{
+			scroll.x = mapChipTopBottomPos.x - WindowWidth;
+		}
+		if ( scroll.y >= mapChipTopBottomPos.y - WindowHeight )
+		{
+			scroll.y = mapChipTopBottomPos.y - WindowHeight;
+		}
+	}
+	if ( scroll.x <= mapChipLeftTopPos.x )
+	{
+		scroll.x = mapChipLeftTopPos.x;
+	}
+	if ( scroll.y <= mapChipLeftTopPos.y )
+	{
+		scroll.y = mapChipLeftTopPos.y;
+	}
 
 	return scroll;
 }
