@@ -37,6 +37,7 @@ private:
 
 	CollisionInfo collisionInfo_;
 
+	bool isCollision_ = true;
 	bool mapChipObject_ = false;
 	Vector2* center_;
 	Vector2 r_;
@@ -47,6 +48,9 @@ protected:
 	void* userData_;
 
 public:
+
+	IObject() = default;
+	virtual ~IObject();
 
 	virtual void OnCollision();
 
@@ -78,6 +82,9 @@ public:
 
 	void MapChipObjectEnable();
 	void MapChipObjectDisable();
+
+	void CollisionEnable();
+	void CollisionDisable();
 
 private:
 

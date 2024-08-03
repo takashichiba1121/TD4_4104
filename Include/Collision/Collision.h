@@ -10,6 +10,7 @@ public:
 
 	static bool Rect2Rect(const RectShape& rectA,const RectShape& rectB);
 
+	static bool Rect2Circe(const RectShape& rect,const CircleShape& circle);
 
 };
 

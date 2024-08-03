@@ -1,4 +1,12 @@
 #include "IObject.h"
+#include"CollisionManager.h"
+
+IObject::~IObject()
+{
+	shape_.release();
+	shape_.reset(nullptr);
+	CollisionManager::GetInstance()->RemoveObject(this);
+}
 
 void IObject::OnCollision()
 {
@@ -87,6 +95,16 @@ void IObject::MapChipObjectEnable()
 void IObject::MapChipObjectDisable()
 {
 	mapChipObject_ = false;
+}
+
+void IObject::CollisionEnable()
+{
+	isCollision_ = true;
+}
+
+void IObject::CollisionDisable()
+{
+	isCollision_ = false;
 }
 
 void IObject::Update()

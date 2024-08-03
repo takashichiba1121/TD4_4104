@@ -6,6 +6,14 @@ class WalkEnemy:public BaseEnemy
 private:
 	Vector2 gravity_;
 	RectShape* shape_;
+
+	int8_t nextElement;
+	int8_t prevElement;
+	ObjectUserData user;
+
+	bool tern = false;
+	int8_t ternInverval;
+	int8_t ternInvervalTimer;
 public:
 
 	void Initialize() override;

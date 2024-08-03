@@ -17,12 +17,10 @@ void FlyEnemy::Initialize()
 	velocity_ = { 1,0 };
 	islive_ = true;
 	attackIntervalTime_ = ATTACK_INTERVAL;
-
-
 	MapChipObjectEnable();
 	SetMapChipCenter(&pos_);
 	SetMapChipRadius({ drawSize_.x / 2,drawSize_.y / 2 });
-
+	hp_ = 10;
 	if ( GetRand(2) >= 2 )
 	{
 		velocity_ = { 1,0 };
@@ -31,9 +29,13 @@ void FlyEnemy::Initialize()
 	{
 		velocity_ = { -1,0 };
 	}
+	user.tag = "FlyEnemy";
+	userData_ = &user;
+
 	islive_ = true;
 	shape_ = new RectShape();
 	shape_->SetRadius(drawSize_ / 2);
+
 	SetShape(shape_);
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
@@ -43,26 +45,47 @@ void FlyEnemy::Initialize()
 
 void FlyEnemy::Update()
 {
-	if ( isAttack_ )
+	immortalTime_--;
+	if ( immortalTime_ <= 0 )
 	{
-		Attack();
+		immortal_ = false;
+	}
+
+	if ( IsEffect(DELAY) )
+	{
+		speed_ = 1;
 	}
 	else
 	{
-		attackIntervalTime_--;
-		if ( attackIntervalTime_ <= 0 && playerPtr_)
-		{
-			back_ = false;
-			isAttack_ = true;
-			targetPos_ = playerPtr_->GetPos();
-			attackIntervalTime_ = ATTACK_INTERVAL;
-			attackTimer_ = 0;
-			attackBeforePos_ = pos_;
-		}
+		speed_ = originalSpeed_;
 	}
 
-	Move();
 
+	if ( !IsEffect(BIND) && !IsEffect(ICED) )
+	{
+		if ( isAttack_ )
+		{
+			Attack();
+		}
+		else
+		{
+			attackIntervalTime_--;
+			if ( attackIntervalTime_ <= 0 && playerPtr_ )
+			{
+				back_ = false;
+				isAttack_ = true;
+				targetPos_ = playerPtr_->GetPos();
+				attackIntervalTime_ = ATTACK_INTERVAL;
+				attackTimer_ = 0;
+				attackBeforePos_ = pos_;
+				velocity_ = GetVector2d(targetPos_,pos_);
+			}
+		}
+
+		Move();
+	}
+
+	EffectUpdate();
 }
 
 void FlyEnemy::Move()
@@ -79,16 +102,12 @@ void FlyEnemy::Move()
 		velocity_.y = 0;
 	}
 	SetMapChipSpeed({ velocity_.x * speed_,velocity_.y * speed_ });
-	
+	shape_->SetCenter(pos_);
 
 }
 
 void FlyEnemy::Attack()
 {
-	if ( !back_ )
-	{
-		velocity_ = GetVector2d(targetPos_,pos_);
-	}
 	if ( ATTACK_TIME >= attackTimer_ )
 	{
 		attackTimer_++;
@@ -107,7 +126,7 @@ void FlyEnemy::Attack()
 	{
 		speed_ = OutQuad(0.f,5.f,ATTACK_TIME,attackTimer_);
 	}
-	if ( pos_.y <= attackBeforePos_.y && velocity_.y < 0  )
+	if ( pos_.y - 1 <= attackBeforePos_.y && back_  )
 	{
 		isAttack_ = false;
 		velocity_.y = 0.f;
@@ -121,13 +140,16 @@ void FlyEnemy::Draw()
 {
 	if ( !islive_ ) return;
 	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2,
-		pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,0),true);
+		pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,155),true);
 }
 
 void FlyEnemy::OnCollision()
 {
-	if ( GetCollisionInfo().object->GetCollisionAttribute() & COLLISION_ATTRIBUTE_PLAYRE )
+	if ( GetCollisionInfo().userData )
 	{
-		dynamic_cast< Player* >( GetCollisionInfo().object )->Damage(attackPower_);
+		if ( static_cast<UserData*>(GetCollisionInfo().userData)->tag == "Player" )
+		{
+			dynamic_cast< Player* >( GetCollisionInfo().object )->Damage(attackPower_);
+		}
 	}
 }

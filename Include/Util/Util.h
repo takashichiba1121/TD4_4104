@@ -12,3 +12,32 @@ double OutOutRelayQuad(double startPos,double endPos,double relayPos,double maxT
 double EaseInBack(double startPos,double endPos,double maxTime,double time);
 double EaseInBack2(double startPos,double endPos,double maxTime,double time);
 double EaseOutBounce(double startPos,double endPos,double time,double maxTime);
+
+enum Effects
+{
+	BIND,
+	ICED,
+	BURN,
+	DELAY,
+	CURSE,
+	END //配列制御のための目印として使用。実際の状態異常では使用しない。
+};
+
+class Counter
+{
+private:
+	float nowCount_;
+	float endCount_;
+public:
+	void CountUp(float up = 1);
+	void CountDown(float down = 1);
+	bool IsCountEnd();
+	bool IsCountZero();
+	bool IsCountUnderZero();
+	void SetEndCount(float endCount);
+	void SetNowCount(float count);
+	void ReSetCount();
+	float GetCount();
+	float GetEndCount();
+
+};

@@ -10,17 +10,19 @@ class CollisionManager
 private:
 	std::forward_list<IObject*>objects_;
 
-	const size_t BLOCK_SIZE = 32;
+	const size_t BLOCK_SIZE = 64;
 	std::forward_list<IObject*>mapChipObjects_;
-	std::vector<std::vector<uint8_t>>mapChip_;
-
+	std::vector<std::vector<uint8_t>>* mapChip_;
+	Vector2 screenPos_;
 
 public:
 
 	void AddObject(IObject* object);
 	void RemoveObject(IObject* object);
 
-	void SetMapChip(const std::vector<std::vector<uint8_t>>&mapChip);
+	void SetMapChip(std::vector<std::vector<uint8_t>>* mapChip);
+
+	void SetScreenPos(const Vector2& screenPos);
 
 	void Update();
 

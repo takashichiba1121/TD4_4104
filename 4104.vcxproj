@@ -58,8 +58,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;$(ProjectDir)\ThirdParty\imgui;$(ProjectDir)\Include\Util\Player</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Collision;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;$(ProjectDir)\Include\Base;$(ProjectDir)\ThirdParty\imgui;$(ProjectDir)\Include\Util\Player</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Collision;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include\Node;$(ProjectDir)\Include\Base;$(ProjectDir)\Include\Util\Player;$(ProjectDir)\Include;$(ProjectDir)\Include\NPC;$(ProjectDir)\Include\Deal;$(ProjectDir)\Include\Player;$(ProjectDir)\ThirdParty\imgui;$(ProjectDir)\Include\Enemy\Boss</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>Core.h</PrecompiledHeaderFile>
@@ -94,9 +93,10 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Collision;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include\Base;$(ProjectDir)\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Collision;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Enemy;$(ProjectDir)\Include\Util;$(ProjectDir)\Include\Node;$(ProjectDir)\Include\Base;$(ProjectDir)\Include\Util\Player;$(ProjectDir)\Include;$(ProjectDir)\Include\NPC;$(ProjectDir)\Include\Deal;$(ProjectDir)\Include\Player;$(ProjectDir)\ThirdParty\imgui;$(ProjectDir)\Include\Enemy\Boss</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <DisableSpecificWarnings>4244</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -107,6 +107,33 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Node\BossNode.cpp" />
+    <ClCompile Include="Source\Player\PlayerAttackCerberus.cpp" />
+    <ClCompile Include="Source\Player\PlayerAttackFenrir.cpp" />
+    <ClCompile Include="Source\Player\PlayerAttackMars.cpp" />
+    <ClCompile Include="Source\Enemy\Boss\BossChargeAttack.cpp" />
+    <ClCompile Include="Source\Enemy\Boss\BossPunchAttack.cpp" />
+    <ClCompile Include="Source\Enemy\Boss\BossEnemy.cpp" />
+    <ClCompile Include="Source\NPC\PowerUpCave.cpp" />
+    <ClCompile Include="Source\NPC\DealDaemon.cpp" />
+    <ClCompile Include="Source\NPC\NPC.cpp" />
+    <ClCompile Include="Source\Player\PlayerAttackSpider.cpp" />
+    <ClCompile Include="Source\Node\BaseNode.cpp" />
+    <ClCompile Include="Source\Node\BattleNode.cpp" />
+    <ClCompile Include="Source\Node\HealingNode.cpp" />
+    <ClCompile Include="Source\Node\NodeManager.cpp" />
+    <ClCompile Include="Source\Node\ReinforcementNode.cpp" />
+    <ClCompile Include="Source\Node\ShopNode.cpp" />
+    <ClCompile Include="Source\Node\TransactionNode.cpp" />
+    <ClCompile Include="Source\NPC\NPCManager.cpp" />
+    <ClCompile Include="Source\Player\PlayerAttackSpider.cpp" />
+    <ClCompile Include="Source\Player\PlayerAttackVine.cpp" />
+    <ClCompile Include="Source\Player\PlayerLegFenrir.cpp" />
+    <ClCompile Include="Source\Player\PlayerMouth.cpp" />
+    <ClCompile Include="Source\Scene\ClearScene.cpp" />
+    <ClCompile Include="Source\Scene\GameOverScene.cpp" />
+    <ClCompile Include="Source\Base\BaseEnemy.cpp" />
+    <ClCompile Include="Source\Scene\TitleScene.cpp" />
     <ClCompile Include="Source\Util\MapChip.cpp" />
     <ClCompile Include="Source\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Source\Enemy\FlyEnemy.cpp" />
@@ -120,16 +147,14 @@
     <ClCompile Include="GameCore\FPS.cpp" />
     <ClCompile Include="GameCore\FrameWork.cpp" />
     <ClCompile Include="GameCore\Input.cpp" />
-    <ClCompile Include="Source\Enemy\BaseEnemy.cpp" />
-    <ClCompile Include="Include\Util\Player\PlayerBullet.cpp" />
-    <ClCompile Include="Source\Enemy\BaseEnemy.cpp" />
+    <ClCompile Include="Source\Player\PlayerBullet.cpp" />
     <ClCompile Include="Source\Collision\IObject.cpp" />
     <ClCompile Include="Source\Collision\IShape.cpp" />
     <ClCompile Include="Source\Collision\RectShape.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Collision;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;$(ProjectDir)\ThirdParty\imgui;$(ProjectDir)\Include\Util\Player</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;$(ProjectDir)\GameCore;$(ProjectDir)\Include\Collision;$(ProjectDir)\Include\Scene;$(ProjectDir)\Include\Util\Math;$(ProjectDir)\Include\Util;$(ProjectDir)\Include;</AdditionalIncludeDirectories>
     </ClCompile>
-    <ClCompile Include="Source\Util\Player\PlayerAttackFist.cpp" />
+    <ClCompile Include="Source\Player\PlayerAttackFist.cpp" />
     <ClCompile Include="Source\Util\GameConfig.cpp" />
     <ClCompile Include="Source\GameMain.cpp" />
     <ClCompile Include="Source\Scene\GameScene.cpp" />
@@ -137,9 +162,11 @@
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Scene\SceneFactrory.cpp" />
     <ClCompile Include="GameCore\SceneManager.cpp" />
-    <ClCompile Include="Source\Util\Player\Player.cpp" />
-    <ClCompile Include="Source\Util\Player\PlayerAttackWeapon.cpp" />
-    <ClCompile Include="Source\Util\Player\PlayerBulletManager.cpp" />
+    <ClCompile Include="Source\Player\Player.cpp" />
+    <ClCompile Include="Source\Player\PlayerAttackGun.cpp" />
+    <ClCompile Include="Source\Player\PlayerBulletManager.cpp" />
+    <ClCompile Include="Source\Player\PlayerLegNormal.cpp" />
+    <ClCompile Include="Source\Node\StartNode.cpp" />
     <ClCompile Include="ThirdParty\imgui\imgui.cpp" />
     <ClCompile Include="ThirdParty\imgui\imgui_demo.cpp" />
     <ClCompile Include="ThirdParty\imgui\imgui_draw.cpp" />
@@ -153,6 +180,30 @@
     <ClCompile Include="Source\Util\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Node\BossNode.h" />
+    <ClInclude Include="Include\Enemy\Boss\BossChargeAttack.h" />
+    <ClInclude Include="Include\Enemy\Boss\BossPunchAttack.h" />
+    <ClInclude Include="Include\Enemy\Boss\BossEnemy.h" />
+    <ClInclude Include="Include\NPC\DealDaemon.h" />
+    <ClInclude Include="Include\Node\BaseNode.h" />
+    <ClInclude Include="Include\Node\BattleNode.h" />
+    <ClInclude Include="Include\Node\HealingNode.h" />
+    <ClInclude Include="Include\Node\NodeManager.h" />
+    <ClInclude Include="Include\Node\NodeType.h" />
+    <ClInclude Include="Include\Node\ReinforcementNode.h" />
+    <ClInclude Include="Include\Node\ShopNode.h" />
+    <ClInclude Include="Include\Node\TransactionNode.h" />
+    <ClInclude Include="Include\Player\PlayerAttackCerberus.h" />
+    <ClInclude Include="Include\Player\PlayerAttackFenrir.h" />
+    <ClInclude Include="Include\Player\PlayerAttackMars.h" />
+    <ClInclude Include="Include\Player\PlayerAttackVine.h" />
+    <ClInclude Include="Include\Player\PlayerLeg.h" />
+    <ClInclude Include="Include\Player\PlayerLegFenrir.h" />
+    <ClInclude Include="Include\Player\PlayerLegNormal.h" />
+    <ClInclude Include="Include\Scene\ClearScene.h" />
+    <ClInclude Include="Include\Scene\GameOverScene.h" />
+    <ClInclude Include="Include\Player\PlayerAttackSpider.h" />
+    <ClInclude Include="Include\Player\PlayerMouth.h" />
     <ClInclude Include="Include\Util\ChipIndex.h" />
     <ClInclude Include="Include\Enemy\EnemyManager.h" />
     <ClInclude Include="Include\Base\BaseObject.h" />
@@ -176,16 +227,21 @@
     <ClInclude Include="GameCore\ImGuiManager.h" />
     <ClInclude Include="Include\Scene\SceneFactrory.h" />
     <ClInclude Include="GameCore\SceneManager.h" />
-    <ClInclude Include="Include\Util\Player\Player.h" />
-    <ClInclude Include="Include\Util\Player\PlayerAttack.h" />
-    <ClInclude Include="Include\Util\Player\PlayerAttackFist.h" />
-    <ClInclude Include="Include\Util\Player\PlayerAttackWeapon.h" />
-    <ClInclude Include="Include\Util\Player\PlayerBullet.h" />
-    <ClInclude Include="Include\Util\Player\PlayerBulletManager.h" />
+    <ClInclude Include="Include\Player\Player.h" />
+    <ClInclude Include="Include\Player\PlayerAttack.h" />
+    <ClInclude Include="Include\Player\PlayerAttackFist.h" />
+    <ClInclude Include="Include\Player\PlayerAttackGun.h" />
+    <ClInclude Include="Include\Player\PlayerBullet.h" />
+    <ClInclude Include="Include\Player\PlayerBulletManager.h" />
     <ClInclude Include="Include\Collision\IObject.h" />
     <ClInclude Include="Include\Collision\IShape.h" />
     <ClInclude Include="Include\Collision\RectShape.h" />
     <ClInclude Include="Include\Util\MapChip.h" />
+    <ClInclude Include="Include\NPC\NPC.h" />
+    <ClInclude Include="Include\NPC\NPCManager.h" />
+    <ClInclude Include="Include\NPC\PowerUpCave.h" />
+    <ClInclude Include="Include\Deal\ItemShop.h" />
+    <ClInclude Include="Include\Node\StartNode.h" />
     <ClInclude Include="ThirdParty\imgui\imconfig.h" />
     <ClInclude Include="ThirdParty\imgui\imgui.h" />
     <ClInclude Include="ThirdParty\imgui\imgui_impl_dx11.h" />

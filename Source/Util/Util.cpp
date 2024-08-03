@@ -103,3 +103,66 @@ double EaseOutBounce(double startPos,double endPos,double time,double maxTime)
 		return n1 * ( time -= 2.625 / d1 ) * time + 0.984375 + startPos + change;
 	}
 }
+
+void Counter::ReSetCount()
+{
+	nowCount_ = 0;
+}
+
+void Counter::SetEndCount(float endCount)
+{
+	nowCount_ = 0;
+	endCount_ = endCount;
+}
+
+void Counter::SetNowCount(float count)
+{
+	nowCount_ = count;
+}
+
+bool Counter::IsCountUnderZero()
+{
+	if ( nowCount_ < 0 )
+	{
+		return true;
+	}
+	return false;
+}
+
+bool Counter::IsCountZero()
+{
+	if ( nowCount_ == 0 )
+	{
+		return true;
+	}
+	return false;
+}
+
+bool Counter::IsCountEnd()
+{
+	if ( nowCount_ > endCount_ )
+	{
+		return true;
+	}
+	return false;
+}
+
+void Counter::CountDown(float down)
+{
+	nowCount_ -= down;
+}
+
+void Counter::CountUp(float up)
+{
+	nowCount_ += up;
+}
+
+float Counter::GetCount()
+{
+	return nowCount_;
+}
+
+float Counter::GetEndCount()
+{
+	return endCount_;
+}
