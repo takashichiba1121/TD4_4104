@@ -49,6 +49,9 @@ private:
 	int32_t startImg;
 	int32_t backGroundImg;
 
+	int32_t openSound_;
+	int32_t closeSound_;
+
 	int32_t playerNodePos;
 
 	float leftBottomX;
@@ -100,6 +103,8 @@ public:
 	void SetPowerUp(PowerUpCave* powerUp);
 	void SetDealer (DealDaemon* dealer );
 	void SetEnemys (EnemyManager* enemys_);
+
+	bool IsMapDraw();
 
 private:
 
