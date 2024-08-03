@@ -35,7 +35,7 @@ void GameScene::Initialize()
 	nodeManager_->SetDealer(dealer_.get());
 	nodeManager_->Initialize();
 	nodeManager_->StartNodeSet(0);
-	backGround_ = LoadGraph("Resources/BackGround/BackGround.png");
+	backGround_ = LoadGraph(std::string("Resources/BackGround/BackGround.png"));
 }
 
 void GameScene::Update()
@@ -112,14 +112,9 @@ void GameScene::Draw()
 	mapChip_->Draw({ 0,0 });
 	nodeManager_->Draw();
 	player_->Draw();
-
-	if (!chenged) powerUp_->Draw();
-
-	dealer_->Draw();
-
-	//nodeManager_->NodeMapDraw();
-
-	//nodeManager_->Draw();
+	enemys_->Draw();
+	nodeManager_->Draw();
+	if(!chenged) powerUp_->Draw();
 	
 	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
 	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");

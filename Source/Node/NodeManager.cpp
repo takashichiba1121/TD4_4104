@@ -51,13 +51,12 @@ void NodeManager::Initialize()
 		}
 	}
 
-	reinforcementImg = LoadGraph("Resources/Node/reinforcement.png");
-	transactionImg = LoadGraph("Resources/Node/transaction.png");
-	battleImg = LoadGraph("Resources/Node/battle.png");
-	shopImg = LoadGraph("Resources/Node/shop.png");
-	healingImg = LoadGraph("Resources/Node/healing.png");
-	startImg = LoadGraph("Resources/Node/start.png");
-	backGroundImg = LoadGraph("Resources/BackGround/mapBackGround.png");
+	reinforcementImg = LoadGraph(std::string("Resources/Node/reinforcement.png"));
+	transactionImg = LoadGraph(std::string("Resources/Node/transaction.png"));
+	battleImg = LoadGraph(std::string("Resources/Node/battle.png"));
+	shopImg = LoadGraph(std::string("Resources/Node/shop.png"));
+	healingImg = LoadGraph(std::string("Resources/Node/healing.png"));
+	startImg = LoadGraph(std::string("Resources/Node/start.png"));
 
 	distribution = std::discrete_distribution<int>(nodeProbabilities,nodeProbabilities + NodeType::TYPE_NUM);
 
@@ -139,7 +138,7 @@ void NodeManager::Initialize()
 	int32_t bossNodeX = 0;
 	int32_t nodeCount = 0;
 
-	for ( size_t i = 0; i < MAP_WIDTH; i++ )
+	for ( int32_t i = 0; i < MAP_WIDTH; i++ )
 	{
 		if ( !nodes_[ FLOORS - 1 ][ i ].previews.empty() )
 		{
