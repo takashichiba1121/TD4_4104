@@ -4,7 +4,7 @@
 void BaseEnemy::EffectUpdate()
 {
 
-	for ( int i = 0; i < effectTimer.size(); i++ )
+	for ( size_t i = 0; i < effectTimer.size(); i++ )
 	{
 		Effects ef = static_cast< Effects >( i );
 		effectTimer[ i ].CountUp();
@@ -34,7 +34,7 @@ void BaseEnemy::EffectUpdate()
 				break;
 			}
 		}
-		else if ( effectTimer[ i ].IsCountEnd() && !ef == CURSE)
+		else if ( effectTimer[ i ].IsCountEnd() && ef != CURSE)
 		{
 			ReleaseEffect(ef);
 		}
