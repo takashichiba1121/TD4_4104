@@ -63,6 +63,6 @@ public:
 	bool OnScreen(Vector2 scrool);
 	int32_t GetImmortalTime();
 	int32_t GetCurseStack();
-	void AnimeUpdate();
+	void AnimeUpdate(bool loop = true);
 };
 

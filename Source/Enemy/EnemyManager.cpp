@@ -272,8 +272,16 @@ int32_t EnemyManager::GetSoundHandle(std::string name)
 void EnemyManager::TexLoad()
 {
 	texs_[ "fly" ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
-	texs_[ "shoot" ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
-	texs_[ "adjacent" ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
+
+	texs_[ "shootMove" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));
+
+	texs_[ "shootAttack" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));
+
+	texs_[ "adjacentMove" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));
+
+	texs_[ "adjacentAttack" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));
+
+	texs_[ "adjacentDash" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));
 
 
 }

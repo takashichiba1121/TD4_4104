@@ -162,7 +162,7 @@ int32_t BaseEnemy::GetCurseStack()
 	return curseStack;
 }
 
-void BaseEnemy::AnimeUpdate()
+void BaseEnemy::AnimeUpdate(bool loop)
 {
 	animeTimer_++;
 
@@ -170,7 +170,8 @@ void BaseEnemy::AnimeUpdate()
 	{
 		animeTimer_ = 0;
 		anime_++;
-		if ( anime_ == animeNum_ )
+		anime_ = min(animeNum_-1,anime_);
+		if ( anime_ == animeNum_ && loop)
 		{
 			anime_ = 0;
 		}
