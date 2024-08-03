@@ -6,7 +6,8 @@
 
 using namespace std;
 std::list<std::unique_ptr<BaseEnemy>> EnemyManager::enemylist_;
-std::array<int32_t,3> EnemyManager::texs_;
+std::unordered_map<string,int32_t> EnemyManager::texs_;
+std::unordered_map<string,int32_t> EnemyManager::sounds_;
 Player* EnemyManager::playerPtr_ = nullptr;
 
 void EnemyManager::BossPop()
@@ -258,25 +259,43 @@ void EnemyManager::EnemysClear()
 	enemylist_.clear();
 }
 
-int32_t EnemyManager::GetTexHandle(EnemyType type)
+int32_t EnemyManager::GetTexHandle(std::string type)
 {
 	return texs_[type];
 }
 
+int32_t EnemyManager::GetSoundHandle(std::string name)
+{
+	return sounds_[name];
+}
+
 void EnemyManager::TexLoad()
 {
-	texs_[ FLY ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
-	texs_[ SHOOT ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
-	texs_[ ADJACENT ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
+	texs_[ "fly" ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
+	texs_[ "shoot" ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
+	texs_[ "adjacent" ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
+
+
+}
+
+void EnemyManager::SoundLoad()
+{
+
+	sounds_[ "shootAttack" ] =
+		LoadSoundMem(string("Resources\\Sound\\Enemy\\SFX_enemy_archer_arrowRelease.mp3"));
+	sounds_[ "shootBeforeAttack" ] =
+		LoadSoundMem(string("Resources\\Sound\\Enemy\\SFX_enemy_archer_DrawingBow.mp3"));
+	sounds_[ "flyBeforeAttack" ] =
+		LoadSoundMem(string("Resources\\Sound\\Enemy\\SFX_enemy_fly_DetectPlayer.mp3"));
+	sounds_[ "freeze" ] =
+		LoadSoundMem(string("Resources\\Sound\\Enemy\\SFX_enemy_freeze.mp3"));
+	sounds_[ "meleeAttack" ] =
+		LoadSoundMem(string("Resources\\Sound\\Enemy\\SFX_enemy_melee_Attack.mp3"));
 }
 
 void EnemyManager::Finalize()
 {
 	enemylist_.clear();
-	for ( size_t i = 0; i < texs_.size(); i++ )
-	{
-		DeleteGraph(texs_[ i ]);
-	}
 }
 
 void EnemyManager::SetScroll(Vector2 scroll)

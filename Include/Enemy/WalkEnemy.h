@@ -17,7 +17,7 @@ private:
 
 	
 
-
+	bool attackSoundPlayed_ = false;
 	bool tern_ = false;
 	int8_t ternInverval_;
 	int8_t ternInvervalTimer_;

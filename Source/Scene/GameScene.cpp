@@ -37,6 +37,7 @@ void GameScene::Initialize()
 	enemys_->Initialize();
 	enemys_->SetMapChip(mapChip_.get());
 	enemys_->SetPlayerPtr(player_.get());
+	enemys_->SoundLoad();
 
 	nodeManager_ = NodeManager::GetInstance();
 	nodeManager_->SetMapChip(mapChip_.get());

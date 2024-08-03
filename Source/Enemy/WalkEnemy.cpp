@@ -48,7 +48,7 @@ void WalkEnemy::Initialize()
 	attackFrame_ = 25;
 	maxHp_ = 150;
 	hp_ = 150;
-
+	tex_ = EnemyManager::GetTexHandle("adjacent");
 	tag.tag = "Enemy";
 	userData_ = &tag;
 
@@ -254,6 +254,11 @@ void WalkEnemy::Attack()
 	}
 	else if ( !attackCounter_.IsCountEnd() )
 	{
+		if ( !attackSoundPlayed_ )
+		{
+			PlaySoundMem(EnemyManager::GetSoundHandle("shootAttack"),DX_PLAYTYPE_BACK);
+			attackSoundPlayed_ = true;
+		}
 		attackCounter_.CountUp();
 		if ( Collision::Rect2Rect(*dynamic_cast< RectShape* >( playerPtr_->GetShape() ),*attackArea_.get()) )
 		{
@@ -264,6 +269,7 @@ void WalkEnemy::Attack()
 	else
 	{
 		actionMode = MOVE;
+		attackSoundPlayed_ = false;
 	}
 	SetMapChipSpeed({ 0.f,gravity_.y });
 
@@ -277,7 +283,7 @@ void WalkEnemy::Draw(Vector2 scroll)
 	{
 		flag = true;
 	}
-	DrawRectRotaGraph(pos_.x + scroll.x,pos_.y + scroll.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,EnemyManager::GetTexHandle(ADJACENT),true,flag);
+	DrawRectRotaGraph(pos_.x + scroll.x,pos_.y + scroll.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,tex_,true,flag);
 
 #ifdef _DEBUG
 	if ( actionMode == ATTACK )

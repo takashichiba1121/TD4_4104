@@ -53,6 +53,8 @@ void ShootEnemy::Initialize()
 	maxHp_ = hp_;
 	hp_ = 70;
 
+
+	tex_ = EnemyManager::GetTexHandle("shoot");
 }
 
 void ShootEnemy::Update()
@@ -178,6 +180,11 @@ void ShootEnemy::Attack()
 	if ( !beforeAttackCounter_.IsCountEnd() )
 	{
 		beforeAttackCounter_.CountUp();
+		if ( !beforeAttackSoundPlayed_ )
+		{
+			beforeAttackSoundPlayed_ = true;
+			PlaySoundMem(EnemyManager::GetSoundHandle("shootBeforeAttack"),DX_PLAYTYPE_BACK);
+		}
 	}
 	else if ( !attackCounter_.IsCountEnd() )
 	{
@@ -196,6 +203,8 @@ void ShootEnemy::Attack()
 		attackIntervalCounter_.SetEndCount(attackInterval_);
 		actionMode = MOVE;
 		shootReady_ = false;
+		beforeAttackSoundPlayed_ = false;
+		PlaySoundMem(EnemyManager::GetSoundHandle("shootAttack"),DX_PLAYTYPE_BACK);
 	}
 	SetMapChipSpeed({ 0.f,gravity_.y });
 
@@ -211,11 +220,11 @@ void ShootEnemy::Draw(Vector2 scroll)
 	{
 		flag = true;
 	}
-	DrawRectRotaGraph(pos_.x + scroll.x,pos_.y + scroll.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,EnemyManager::GetTexHandle(SHOOT),true,flag);
+	DrawRectRotaGraph(pos_.x + scroll.x,pos_.y + scroll.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,tex_,true,flag);
 
 	for ( auto& itr : bullets )
 	{
-		itr->Draw();
+		itr->Draw(scroll);
 	}
 
 

@@ -37,7 +37,7 @@ void FlyEnemy::Initialize()
 
 	tag.tag = "Enemy";
 	userData_ = &tag;
-
+	tex_ = EnemyManager::GetTexHandle("fly");
 }
 
 void FlyEnemy::Update()
@@ -55,6 +55,7 @@ void FlyEnemy::Update()
 		{
 			beforeAttackCounter_.SetEndCount(beforeAttackFrame_);
 			attackCounter_.SetEndCount(attackFrame_);
+			PlaySoundMem(EnemyManager::GetSoundHandle("flyBeforeAttack"),DX_PLAYTYPE_BACK);
 		}
 		actionMode = ATTACK;
 	}
@@ -175,7 +176,7 @@ void FlyEnemy::Draw(Vector2 scroll)
 	{
 		flag = true;
 	}
-	DrawRectRotaGraph(pos_.x + scroll.x,pos_.y + scroll.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,EnemyManager::GetTexHandle(FLY),true,flag);
+	DrawRectRotaGraph(pos_.x + scroll.x,pos_.y + scroll.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,tex_,true,flag);
 
 	if ( playerPtr_->GetEyeTag() == PlayerEyeTags::Clairvoyance )
 	{
