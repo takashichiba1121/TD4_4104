@@ -31,6 +31,7 @@ private:
 	bool chenged;
 
 	bool scrollStop = false;
+	bool isSelect = false;
 
 	Vector2 nowScroll = { 0,0 };
 
