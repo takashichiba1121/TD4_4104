@@ -105,6 +105,11 @@ void GameScene::Update()
 			player_->Update();
 		}
 
+		if ( nodeManager_->IsNodeReset() )
+		{
+			scrollStop = false;
+		}
+
 		CollisionManager::GetInstance()->SetScreenPos(mapChip_->GetScreenPos());
 		CollisionManager::GetInstance()->Update();
 

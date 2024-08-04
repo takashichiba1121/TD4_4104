@@ -660,8 +660,6 @@ void Player::EndChangeParts()
 
 void Player::Reset()
 {
-	pos_.x = GameConfig::GetGameConfig()->windowWidth / 2;
-	pos_.y = GameConfig::GetGameConfig()->windowHeight / 2;
 	isDealed_ = false;
 }
 
