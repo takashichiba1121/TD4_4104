@@ -70,7 +70,7 @@ void GameScene::Update()
 		uint32_t powerUpNum = player_->PowerUp();
 
 		powerUp_->SetSlect(powerUpNum);
-		if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) )
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) || Input::Instance()->TriggerPadKey(PAD_INPUT_1) )
 		{
 			powerUp_->StatusChenge();
 
@@ -85,12 +85,12 @@ void GameScene::Update()
 
 		dealer_->SetSlect(powerUpNum);
 
-		if ( Input::Instance()->TriggerKey(KEY_INPUT_RETURN) )
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_RETURN) || Input::Instance()->TriggerPadKey(PAD_INPUT_2) )
 		{
 			dealer_->Deal();
 		}
 
-		if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) )
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) || Input::Instance()->TriggerPadKey(PAD_INPUT_1) )
 		{
 			dealer_->PartsChenge();
 

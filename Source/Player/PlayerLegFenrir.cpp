@@ -37,7 +37,9 @@ void PlayerLegFenrir::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const
 
 	isDirBottom_ = DirBOTTOM;
 
-	if ( ( Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A) ) && !isEvasionRoll_ && !isAttack && !isJump_ )
+	int X = Input::Instance()->PadX();
+
+	if ( ( Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A) ) || X <= -500 && !isEvasionRoll_ && !isAttack && !isJump_ )
 	{
 		*direction_ = false;
 		if ( playerVelocity_->x > topSpeed_ * *changeAcl_ )
@@ -80,7 +82,7 @@ void PlayerLegFenrir::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const
 			PlayerStandTextureCount_ = 0;
 		}
 	}
-	if ( ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) ) && !isEvasionRoll_ && !isAttack && !isJump_ )
+	if ( ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) ) || X >= 500 && !isEvasionRoll_ && !isAttack && !isJump_ )
 	{
 		*direction_ = true;
 		if ( playerVelocity_->x < topSpeed_ * *changeAcl_ )
@@ -125,7 +127,7 @@ void PlayerLegFenrir::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const
 		}
 	}
 
-	if ( Input::Instance()->PushKey(KEY_INPUT_SPACE) && !onGround_ )
+	if ( Input::Instance()->PushKey(KEY_INPUT_SPACE) || Input::Instance()->PushPadKey(PAD_INPUT_1) && !onGround_ )
 	{
 		JumpStart();
 	}
@@ -201,7 +203,7 @@ void PlayerLegFenrir::Jump()
 		}
 	}
 
-	if ( Input::Instance()->ReleaseKey(KEY_INPUT_SPACE) || playerVelocity_->y >= 0 )
+	if ( Input::Instance()->ReleaseKey(KEY_INPUT_SPACE) || Input::Instance()->ReleasePadKey(PAD_INPUT_1) || playerVelocity_->y >= 0 )
 	{
 		isJump_ = false;
 
@@ -212,7 +214,7 @@ void PlayerLegFenrir::Jump()
 
 void PlayerLegFenrir::EvasionRoll()
 {
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_Q) && isEvasionRoll_ == false )
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_Q) || Input::Instance()->TriggerPadKey(PAD_INPUT_2) && isEvasionRoll_ == false )
 	{
 		isEvasionRoll_ = true;
 
