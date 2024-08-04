@@ -53,8 +53,8 @@ void HealObject::OnCollision()
 	{
 		if ( static_cast< UserData* >( GetCollisionInfo().userData )->tag == "Player" )
 		{
-			int32_t heal = dynamic_cast< Player* >( GetCollisionInfo().object )->GetMaxHp() * healPower;
-			dynamic_cast< Player* >( GetCollisionInfo().object )->Heel(heal);
+			int32_t healP = dynamic_cast< Player* >( GetCollisionInfo().object )->GetMaxHp() * healPower;
+			dynamic_cast< Player* >( GetCollisionInfo().object )->Heel(healP);
 			heal = false;
 		}
 	}
