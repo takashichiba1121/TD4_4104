@@ -195,8 +195,8 @@ void PowerUpCave::Draw()
 				temp = "精密の道";
 			}
 			temp = temp + "\n\n強化\nステータス:" + selectProducts_[ i ]->statusNames.first +
-				"\n増加量:"+ to_string(selectProducts_[ i ]->power) + "\n\n\n代償\nステータス: "+
-				selectProducts_[ i ]->statusNames.second + "\n減少量:"+ to_string(selectProducts_[ i ]->cost);
+				"\n増加量:"+ to_string(selectProducts_[ i ]->power) + "%" + "\n\n\n代償\nステータス: " +
+				selectProducts_[ i ]->statusNames.second + "\n減少量:"+ to_string(selectProducts_[ i ]->cost) + "%";
 
 			temp = utf8_to_sjis(temp);
 			DrawStringToHandle(( boxLeftTop_.x + i * boxDist_ ) + 50,boxLeftTop_.y + 50,temp.c_str(),
