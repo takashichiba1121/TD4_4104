@@ -18,7 +18,7 @@ void PowerUpCave::Initialize()
 	dealed_ = true;
 	CollisionDisable();
 	hitboxSize_ = { 128,128 };
-	pos_ = { 650,640 };
+	pos_ = { 650,600 };
 
 	tex_ = LoadGraph(string("Resources\\Node\\reinforcement.png"));
 
@@ -220,7 +220,7 @@ void PowerUpCave::Draw()
 		}
 
 
-		DrawRotaGraph(pos_.x,pos_.y,2,0,tex_,false);
+		DrawRotaGraph(pos_.x,pos_.y,2,0,tex_,true);
 		SetDrawBright(0xff,0xff,0xff);
 	}
 }

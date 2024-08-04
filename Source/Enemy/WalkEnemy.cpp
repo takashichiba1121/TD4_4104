@@ -17,7 +17,7 @@ void WalkEnemy::Initialize()
 
 	MapChipObjectEnable();
 	SetMapChipCenter(&pos_);
-	SetMapChipRadius({ hitboxSize_.x / 2,hitboxSize_.y / 2 });
+	SetMapChipRadius({ hitboxSize_.x / 2,hitboxSize_.y / 2 - 10 });
 
 	ternInverval_ = 2;
 	gravity_ = { 0,1 };

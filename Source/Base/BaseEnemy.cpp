@@ -108,6 +108,10 @@ void BaseEnemy::SetMapChip(MapChip* mapptr)
 
 void BaseEnemy::SetEffect(Effects effect)
 {
+	if ( effect >= END )
+	{
+		return;
+	}
 	int8_t effectBit = 0b1 << effect;
 	statusEffects_ |= effectBit;
 	effectTimer[ effect ].SetEndCount(60);

@@ -20,7 +20,7 @@ void ShootEnemy::Initialize()
 
 	MapChipObjectEnable();
 	SetMapChipCenter(&pos_);
-	SetMapChipRadius({ hitboxSize_.x / 2,hitboxSize_.y / 2 });
+	SetMapChipRadius({ hitboxSize_.x / 2,hitboxSize_.y / 2-5 });
 
 	ternInverval_ = 2;
 	gravity_ = { 0,1 };
@@ -39,7 +39,7 @@ void ShootEnemy::Initialize()
 	islive_ = true;
 
 	searchArea_ = make_unique<RectShape>();
-	searchArea_->SetRadius({ ( hitboxSize_.x * 5 / 2 ),hitboxSize_.y / 2 });
+	searchArea_->SetRadius({ ( hitboxSize_.x * 5 / 2 ),hitboxSize_.y / 2 - 10 });
 	shape_ = new RectShape();
 	shape_->SetRadius(hitboxSize_ / 2);
 	SetShape(shape_);
