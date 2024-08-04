@@ -73,7 +73,7 @@ void Player::Initialize()
 
 	circelShape_->SetRadius(hitboxSize_.y);
 
-	ChangeLeg("Fenrir",0);
+	//ChangeLeg("Fenrir",0);
 
 	//ChangeLeftArm("Vine",0);
 
@@ -82,7 +82,6 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	powerUpText_ = false;
 	hp_ = 100;
 	if (isPowerUp_)
 	{
@@ -126,6 +125,8 @@ void Player::Update()
 		circelShape_->SetCenter(pos_);
 	}
 
+	powerUpText_ = false;
+
 #ifdef _DEBUG
 
 	ImGui::Begin("PlayerSituation");
@@ -155,24 +156,27 @@ void Player::Update()
 
 void Player::Attack()
 {
-	if (Input::Instance()->TriggerKey(KEY_INPUT_Z) && leftArm_ != nullptr && !rightArm_->IsAttack())
+	if ( !powerUpText_ )
 	{
-		leftArm_->AttackInit(changePow_, changeCrit_, changeCdmg_);
-	}
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && leftArm_ != nullptr && !rightArm_->IsAttack() )
+		{
+			leftArm_->AttackInit(changePow_,changeCrit_,changeCdmg_);
+		}
 
-	if (Input::Instance()->TriggerKey(KEY_INPUT_X) && rightArm_ != nullptr && !leftArm_->IsAttack())
-	{
-		rightArm_->AttackInit(changePow_, changeCrit_, changeCdmg_);
-	}
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && rightArm_ != nullptr && !leftArm_->IsAttack() )
+		{
+			rightArm_->AttackInit(changePow_,changeCrit_,changeCdmg_);
+		}
 
-	if (leftArm_ != nullptr)
-	{
-		leftArm_->Attack();
-	}
+		if ( leftArm_ != nullptr )
+		{
+			leftArm_->Attack();
+		}
 
-	if (rightArm_ != nullptr)
-	{
-		rightArm_->Attack();
+		if ( rightArm_ != nullptr )
+		{
+			rightArm_->Attack();
+		}
 	}
 }
 void Player::Damage(int32_t damage)
