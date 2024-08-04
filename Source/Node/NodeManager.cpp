@@ -13,6 +13,7 @@
 
 #include<GameConfig.h>
 #include<Input.h>
+#include<Collision.h>
 
 int32_t GetRand(int32_t min_,int32_t max_)
 {
@@ -175,6 +176,10 @@ void NodeManager::Initialize()
 		bossNode_.row = FLOORS;
 
 		node_ = nullptr;
+
+		circleMouseShape_.SetRadius(2);
+		circleShape_.SetRadius(32);
+		selectNode_ = startNodes_[ 0 ];
 	}
 	else
 	{
@@ -499,6 +504,84 @@ void NodeManager::MapDraw()
 	if ( isNodeDraw )
 	{
 		NodeMapDraw();
+	}
+}
+
+bool NodeManager::StartNodeSelect()
+{
+	playerNodePos = selectNode_->row + 3;
+	playerNodePos = min(playerNodePos,FLOORS);
+
+	int32_t mouseX;
+	int32_t mouseY;
+
+	GetMousePoint(&mouseX,&mouseY);
+
+	circleMouseShape_.SetCenter({ float( mouseX ) ,float( mouseY ) });
+
+	selectNodeX = -1;
+	selectNodeY = -1;
+
+	for ( int32_t i = 0; i < playerNodePos; ++i )
+	{
+		for ( int32_t j = 0; j < MAP_WIDTH; ++j )
+		{
+			circleShape_.SetCenter({ leftBottomX + nodes_[ i ][ j ].position.x,leftBottomY + nodes_[ i ][ j ].position.y });
+
+			if ( Collision::Circle2Circle(circleShape_,circleMouseShape_) && nodes_[ i ][ j ].type.value == NodeType::START )
+			{
+				selectNodeX = j;
+				selectNodeY = i;
+
+				if ( GetMouseInput() & MOUSE_INPUT_LEFT )
+				{
+					isMouseInput_ = true;
+				}
+			}
+		}
+	}
+
+	if ( isMouseInput_ )
+	{
+		for ( auto& itr : startNodes_ )
+		{
+			if ( itr->column == selectNodeX && itr->row == selectNodeY )
+			{
+				nextNode_ = itr;
+
+				return true;
+			}
+		}
+	}
+
+
+	return false;
+}
+
+void NodeManager::StartNodeSelectMapDraw()
+{
+	selectNode_ = startNodes_[ 0 ];
+	playerNodePos = selectNode_->row + 3;
+	playerNodePos = min(playerNodePos,FLOORS);
+
+	DrawRotaGraph(GameConfig::GetWindowWidth() / 2,GameConfig::GetWindowHeight() / 2 - 2,1.0f,0.0,backGroundImg,true);
+
+	for ( int32_t i = 0; i < playerNodePos; ++i )
+	{
+		for ( int32_t j = 0; j < MAP_WIDTH; ++j )
+		{
+			if ( selectNodeX == j && selectNodeY == i )
+			{
+				DrawCircle(leftBottomX + nodes_[ i ][ j ].position.x,leftBottomY + nodes_[ i ][ j ].position.y,20,GetColor(255,0,0));
+			}
+
+			NodeDrew(leftBottomX,leftBottomY,nodes_[ i ][ j ],true);
+
+			if ( playerNodePos == FLOORS )
+			{
+				NodeDrew(leftBottomX,leftBottomY,bossNode_,true);
+			}
+		}
 	}
 }
 
