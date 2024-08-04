@@ -63,6 +63,7 @@ void DealDaemon::Initialize()
 
 	SetPriducts();
 
+	textureId_ = LoadGraph("Resources\\Deal\\dealMonster.png");
 }
 
 void DealDaemon::Update()
@@ -249,7 +250,7 @@ void DealDaemon::ReSet()
 	selectmode_ = false;
 	dealed_ = false;
 	hitboxSize_ = { 128,128 };
-	pos_ = { 650,640 };
+	pos_ = { 650,610 };
 	SetPriducts();
 	CollisionEnable();
 }

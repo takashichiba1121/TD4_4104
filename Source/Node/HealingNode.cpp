@@ -2,10 +2,12 @@
 #include<CollisionManager.h>
 #include<NodeManager.h>
 
+
 void HealingNode::Initialize()
 {
 	
 	healObj_.Initialize();
+
 }
 
 void HealingNode::Update()
