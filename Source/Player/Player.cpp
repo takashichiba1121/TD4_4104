@@ -61,13 +61,13 @@ void Player::Initialize()
 
 	leg_->Initialize(&velocity_, &direction_, &changeSpd_);
 
-	Item item;
+	//Item item;
 
-	item.power = 50;
+	//item.power = 50;
 
-	item.statusName = "ATK";
+	//item.statusName = "ATK";
 
-	ItemGet(item);
+	//ItemGet(item);
 
 	circelShape_ = std::make_unique<CircleShape>();
 
@@ -93,7 +93,7 @@ void Player::Update()
 			DamageInterval_++;
 		}
 
-		if (Input::Instance()->TriggerKey(KEY_INPUT_1))
+		/*if (Input::Instance()->TriggerKey(KEY_INPUT_1))
 		{
 			selectItems_ = 1;
 		}
@@ -109,7 +109,7 @@ void Player::Update()
 		if (Input::Instance()->TriggerKey(KEY_INPUT_RETURN))
 		{
 			UseItem();
-		}
+		}*/
 
 		leg_->Move(GetOnDir() & 0b1 << OnDir::BOTTOM, leftArm_->IsAttack() || rightArm_->IsAttack(), pos_, changePow_);
 
@@ -561,7 +561,7 @@ void Player::Draw(Vector2 scroll)
 		rightArm_->Draw(scroll);
 	}
 
-	DrawFormatString(0, GameConfig::GetWindowHeight() - 20, 0xffffff, "PlayerHP:%d/%d", hp_, MAX_HP_*changeMaxHp_);
+	DrawFormatString(0, GameConfig::GetWindowHeight() - 20, 0xffffff, "PlayerHP:%d/%d", hp_, int(MAX_HP_*changeMaxHp_));
 
 	if (powerUpText_ && isPowerUp_ == false)
 	{
