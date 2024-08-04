@@ -33,6 +33,8 @@ private:
 
 	int textureId_;
 
+	int soundId_;
+
 public:
 
 	static const uint32_t ArmCost = 15;

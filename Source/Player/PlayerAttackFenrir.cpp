@@ -23,6 +23,8 @@ void PlayerAttackFenrir::Initialize(Vector2* playerPos,Vector2* velocity,bool* d
 	CollisionDisable();
 
 	textureId_ = LoadGraph(std::string("Resources\\Player\\Parts\\fenrirArm.png"));
+
+	soundId_ = LoadSoundMem(std::string("Resources\\Sound\\Player\\SFX_player_arm_cerberus_attack.mp3"));
 }
 void PlayerAttackFenrir::AttackInit(float pow,float changeCrit,float changeCdmg)
 {
@@ -48,6 +50,8 @@ void PlayerAttackFenrir::AttackInit(float pow,float changeCrit,float changeCdmg)
 		}
 
 		CollisionEnable();
+
+		PlaySoundMem(soundId_,DX_PLAYTYPE_BACK);
 	}
 }
 

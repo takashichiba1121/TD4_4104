@@ -75,7 +75,7 @@ void Player::Initialize()
 
 	//ChangeLeg("Fenrir",0);
 
-	//ChangeLeftArm("Vine",0);
+	//ChangeLeftArm("Cerberus",0);
 
 	//ChangeRightArm("Gun",0);
 }

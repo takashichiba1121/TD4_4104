@@ -140,6 +140,8 @@ private:
 	uint32_t nowEyeCost_=0;
 
 	uint32_t nowMouthCost_ = 0;
+
+	int soundId_;
 public:
 	void Initialize() override;
 

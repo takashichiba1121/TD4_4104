@@ -11,6 +11,8 @@ void PlayerAttackGun::Initialize(Vector2* playerPos,Vector2* velocity,bool* dire
 	velocity_ = velocity;
 
 	textureId_ = LoadGraph(std::string("Resources\\Player\\Parts\\gunArm.png"));
+
+	soundId_ = LoadSoundMem(std::string("Resources\\Sound\\Player\\SFX_player_arm_gun_Attack.mp3"));
 }
 
 void PlayerAttackGun::AttackInit(float pow,float changeCrit,float changeCdmg)
@@ -35,6 +37,8 @@ void PlayerAttackGun::AttackInit(float pow,float changeCrit,float changeCdmg)
 		}
 
 		PlayerBulletManager::Instance()->AddBullet(std::move(newBullet));
+
+		PlaySoundMem(soundId_,DX_PLAYTYPE_BACK);
 	}
 }
 
