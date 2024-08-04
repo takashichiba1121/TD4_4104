@@ -284,11 +284,13 @@ void EnemyManager::TexLoad()
 
 	texs_[ "shootAttack" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));//遠距離攻撃
 
-	texs_[ "adjacentMove" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));//近距離移動
+	texs_[ "adjacentMove" ] = LoadGraph(string("Resources\\Enemy\\meleeEnemyStand.png"));//近距離移動
 
-	texs_[ "adjacentAttack" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));//近距離攻撃
+	texs_[ "adjacentAttack" ] = LoadGraph(string("Resources\\Enemy\\meleeAtackPlay.png"));//近距離攻撃
 
-	texs_[ "adjacentDash" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));//近距離ダッシュ(プレイヤーに接近)
+	texs_[ "adjacentAttackBefore" ] = LoadGraph(string("Resources\\Enemy\\meleeAtackCharge.png"));//近距離攻撃前
+
+	texs_[ "adjacentDash" ] = LoadGraph(string("Resources\\Player\\meleeEnemyStand.png"));//近距離ダッシュ(プレイヤーに接近)
 
 
 }

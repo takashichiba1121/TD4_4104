@@ -11,6 +11,7 @@ void HealObject::Initialize()
 	shape_->SetRadius(drawSize_ / 2);
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
+	SetShape(shape_);
 	CollisionManager::GetInstance()->AddObject(this);
 	textureId_ = LoadGraph("Resources\\healBall.png");
 	pos_.x = GameConfig::GetWindowWidth() / 2;
