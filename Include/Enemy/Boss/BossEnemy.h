@@ -53,6 +53,9 @@ private:
 
 	int8_t longRangeAttackCount_ = 0;
 
+	int32_t hpBerBackgroundTextureId_;
+	int32_t hpBerTextureId_;
+
 
 public:
 
