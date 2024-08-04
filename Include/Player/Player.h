@@ -115,9 +115,9 @@ private:
 
 	UserData name_;
 
-	const uint32_t DAMAGE_INTERVAL_MAX_ = 16;
+	const uint32_t DAMAGE_INTERVAL_MAX_ = 20;
 
-	uint32_t DamageInterval_ = DAMAGE_INTERVAL_MAX_;
+	uint32_t DamageInterval_ = 20;
 
 	std::list<Item> items_;
 

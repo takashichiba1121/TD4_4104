@@ -180,9 +180,7 @@ void Player::Attack()
 }
 void Player::Damage(int32_t damage)
 {
-	if (DamageInterval_ >= DAMAGE_INTERVAL_MAX_/*||
-		(leftArm_->IsAttack()&& leftAtaackTag_==PlayerAttackTags::Mars)&&
-		( rightArm_->IsAttack() && rightAtaackTag_ == PlayerAttackTags::Mars )*/)
+	if (DamageInterval_ >= DAMAGE_INTERVAL_MAX_&&!leg_->IsEvasionRoll())
 	{
 		if (damage - (changeDef_ * leg_->GetDef()) >= 5)
 		{
@@ -546,7 +544,7 @@ void Player::Draw(Vector2 scroll)
 {
 	PlayerBulletManager::Instance()->Draw(scroll);
 
-	if (DamageInterval_ % 2 == 0)
+	if (DamageInterval_ % 5 == 0)
 	{
 		leg_->Draw(pos_, drawSize_,scroll);
 	}

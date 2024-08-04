@@ -58,7 +58,7 @@ private:
 
 	float airDeccelaration_ = 0;
 
-	float evasionRollSpeed_ = 16;
+	float evasionRollSpeed_ = 24;
 
 	//戦闘
 
@@ -102,5 +102,9 @@ public:
 		return DEF_;
 	}
 
+	bool IsEvasionRoll()override
+	{
+		return isEvasionRoll_;
+	}
 };
 
