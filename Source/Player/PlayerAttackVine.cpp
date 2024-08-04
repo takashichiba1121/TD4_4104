@@ -21,6 +21,8 @@ void PlayerAttackVine::Initialize(Vector2* playerPos,Vector2* velocity,bool* dir
 	CollisionManager::GetInstance()->AddObject(this);
 
 	CollisionDisable();
+
+	textureId_ = LoadGraph(std::string("Resources\\Player\\Parts\\vineWhip.png"));
 }
 void PlayerAttackVine::AttackInit(float pow,float changeCrit,float changeCdmg)
 {
@@ -71,6 +73,7 @@ void PlayerAttackVine::Attack()
 		{
 			CollisionDisable();
 			isAttack_ = false;
+			isGiveDamage_ = false;
 		}
 	}
 	else
@@ -83,9 +86,18 @@ void PlayerAttackVine::Draw(Vector2 scroll)
 {
 	if ( isAttack_ )
 	{
-		DrawBox(scroll.x + DrawPos_.x - COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y - COLISION_SIZE_.y / 2,
-			scroll.x + DrawPos_.x + COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y + COLISION_SIZE_.y / 2,
-			GetColor(0,255,0),false);
+		if ( *direction_ )
+		{
+			DrawExtendGraph(scroll.x + DrawPos_.x - COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y - COLISION_SIZE_.y / 2,
+				scroll.x + DrawPos_.x + COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y + COLISION_SIZE_.y / 2,
+				textureId_,true);
+		}
+		else
+		{
+			DrawExtendGraph(scroll.x + DrawPos_.x + COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y - COLISION_SIZE_.y / 2,
+				scroll.x + DrawPos_.x - COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y + COLISION_SIZE_.y / 2,
+				textureId_,true);
+		}
 	}
 }
 
