@@ -171,6 +171,10 @@ void BossChargeAttack::OnCollision()
 	}
 }
 
+BossChargeAttack::~BossChargeAttack()
+{
+}
+
 void BossChargeAttack::AnimeUpdate()
 {
 	animeTimer_++;

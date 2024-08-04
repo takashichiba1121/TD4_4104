@@ -195,7 +195,7 @@ void DealDaemon::Draw()
 	if ( selectmode_ && !dealed_ )
 	{
 
-		for ( int i = 0; i < selectProducts_.size(); i++ )
+		for ( uint32_t i = 0; i < selectProducts_.size(); i++ )
 		{
 			int64_t color = 0x000000;
 			if ( i == selectNum_ )

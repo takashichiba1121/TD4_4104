@@ -39,6 +39,7 @@ private:
 
 	bool isCollision_ = true;
 	bool mapChipObject_ = false;
+	bool isMapChipCollision_ = false;
 	Vector2* center_;
 	Vector2 r_;
 	Vector2 speed_;

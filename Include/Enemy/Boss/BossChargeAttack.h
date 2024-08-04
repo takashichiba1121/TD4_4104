@@ -61,6 +61,8 @@ public:
 
 	void OnCollision()override;
 
+	~BossChargeAttack();
+
 private:
 
 	void AnimeUpdate();

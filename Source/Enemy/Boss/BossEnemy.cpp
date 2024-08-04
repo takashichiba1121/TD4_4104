@@ -142,7 +142,7 @@ void BossEnemy::Move()
 	longRange_->BulletUpdate();
 }
 
-void BossEnemy::Draw()
+void BossEnemy::Draw(Vector2 scrool)
 {
 	switch ( phase_ )
 	{
@@ -190,6 +190,11 @@ void BossEnemy::OnCollision()
 			dynamic_cast< Player* >( GetCollisionInfo().object )->Damage(attackPower_);
 		}
 	}
+}
+
+BossEnemy::~BossEnemy()
+{
+	
 }
 
 void BossEnemy::DebugDraw()

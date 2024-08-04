@@ -6,7 +6,6 @@
 void BattleNode::Initialize()
 {
 
-	mapChip_->SetEnemyManager(enemys_);
 }
 
 void BattleNode::Update()
