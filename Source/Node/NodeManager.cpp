@@ -185,6 +185,8 @@ void NodeManager::Initialize()
 
 void NodeManager::Update()
 {
+	isNodeReset_ = false;
+
 	if ( isNodeDraw )
 	{
 		int32_t scroll = GetMouseWheelRotVol();
@@ -221,6 +223,7 @@ void NodeManager::Update()
 
 		selectNode_ = nextNode_;
 		nextNode_ = nullptr;
+		isNodeReset_ = true;
 	}
 
 	if ( Input::Instance()->TriggerKey(KEY_INPUT_M) )
@@ -479,6 +482,11 @@ bool NodeManager::IsMapDraw()
 bool NodeManager::GameEnd()
 {
 	return isGameEnd_;
+}
+
+bool NodeManager::IsNodeReset()
+{
+	return isNodeReset_;
 }
 
 void NodeManager::End()

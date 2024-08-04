@@ -82,7 +82,7 @@ private:
 	bool isNodeDraw;
 	bool isGameEnd_;
 	bool init_;
-
+	bool isNodeReset_;
 public:
 
 	static NodeManager* GetInstance();
@@ -107,6 +107,7 @@ public:
 
 	bool IsMapDraw();
 	bool GameEnd();
+	bool IsNodeReset();
 	void End();
 
 private:
