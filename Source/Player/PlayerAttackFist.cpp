@@ -21,10 +21,12 @@ void PlayerAttackFist::Initialize(Vector2* playerPos,Vector2* velocity,bool* dir
 	CollisionManager::GetInstance()->AddObject(this);
 
 	CollisionDisable();
+
+	textureId_ = LoadGraph(std::string("Resources\\Player\\Parts\\normalPunch.png"));
 }
 void PlayerAttackFist::AttackInit(float pow,float changeCrit,float changeCdmg)
 {
-	if (INTERVAL_<=AttackInterval_ )
+	if ( INTERVAL_ <= AttackInterval_ )
 	{
 		playerPow_ = pow;
 
@@ -52,7 +54,7 @@ void PlayerAttackFist::AttackInit(float pow,float changeCrit,float changeCdmg)
 void PlayerAttackFist::Attack()
 {
 
-	if (isAttack_ )
+	if ( isAttack_ )
 	{
 		if ( *direction_ )
 		{
@@ -83,9 +85,18 @@ void PlayerAttackFist::Draw(Vector2 scroll)
 {
 	if ( isAttack_ )
 	{
-		DrawBox(scroll.x + DrawPos_.x - COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y - COLISION_SIZE_.y / 2,
-			scroll.x + DrawPos_.x + COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y + COLISION_SIZE_.y / 2,
-			GetColor(0,255,0),false);
+		if ( *direction_ )
+		{
+			DrawExtendGraph(scroll.x + DrawPos_.x - COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y - COLISION_SIZE_.y / 2,
+				scroll.x + DrawPos_.x + COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y + COLISION_SIZE_.y / 2,
+				textureId_,true);
+		}
+		else
+		{
+			DrawExtendGraph(scroll.x + DrawPos_.x + COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y - COLISION_SIZE_.y / 2,
+				scroll.x + DrawPos_.x - COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y + COLISION_SIZE_.y / 2,
+				textureId_,true);
+		}
 	}
 }
 

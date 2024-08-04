@@ -27,7 +27,7 @@ protected:
 
 	float playerPow_;
 
-	const Vector2 SIZE_ = { 10,10 };
+	const Vector2 SIZE_ = { 48,48 };
 
 	RectShape* shape_;
 

@@ -40,6 +40,8 @@ private:
 
 	Vector2* velocity_;
 
+	int textureId_;
+
 public:
 
 	static const uint32_t ArmCost = 0;
