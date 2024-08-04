@@ -126,7 +126,7 @@ void PlayerLegNormal::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const
 		}
 	}
 
-	if ( Input::Instance()->PushKey(KEY_INPUT_SPACE)|| Input::Instance()->PushPadKey(PAD_INPUT_1) && !onGround_ )
+	if ( (  Input::Instance()->PushKey(KEY_INPUT_SPACE) || Input::Instance()->PushPadKey(PAD_INPUT_1) ) && !onGround_ )
 	{
 		JumpStart();
 	}

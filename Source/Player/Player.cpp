@@ -78,6 +78,10 @@ void Player::Initialize()
 	//ChangeLeftArm("Cerberus",0);
 
 	//ChangeRightArm("Gun",0);
+
+	hpBerTextureId_ = LoadGraph(std::string("Resources\\UI\\UI_HP_Bar.png"));
+
+	hpBerBackgroundTextureId_= LoadGraph(std::string("Resources\\UI\\UI_HP_Background.png"));
 }
 
 void Player::Update()
@@ -541,8 +545,14 @@ void Player::Draw(Vector2 scroll)
 	{
 		rightArm_->Draw(scroll);
 	}
+	DrawExtendGraph(30,GameConfig::GetWindowHeight() - 40,
+		MAX_HP_ * changeMaxHp_*2,GameConfig::GetWindowHeight() - 8,
+		hpBerBackgroundTextureId_,false);
+	DrawExtendGraph(30,GameConfig::GetWindowHeight() - 40,
+		hp_*2,GameConfig::GetWindowHeight() - 8,
+		hpBerTextureId_,false);
+	DrawFormatString(40, GameConfig::GetWindowHeight() - 30, 0xffffff, "%d/%d", hp_, int(MAX_HP_*changeMaxHp_));
 
-	DrawFormatString(0, GameConfig::GetWindowHeight() - 20, 0xffffff, "PlayerHP:%d/%d", hp_, int(MAX_HP_*changeMaxHp_));
 
 	if (powerUpText_ && isPowerUp_ == false)
 	{
