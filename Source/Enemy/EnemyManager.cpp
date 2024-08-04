@@ -238,7 +238,6 @@ void EnemyManager::Draw()
 			itr->Draw(scroll_);
 		}
 	}
-	DrawFormatString(GameConfig::GetWindowWidth() - 200,10,0xffffff,"KillEnemy %d / %d",deadEnemyCount_,MAX_POP_ENEMY_NUM);
 }
 
 void EnemyManager::SetMapChip(MapChip* mapchip)
