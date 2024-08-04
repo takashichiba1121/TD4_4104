@@ -511,7 +511,8 @@ void NodeManager::MapDraw()
 
 bool NodeManager::StartNodeSelect()
 {
-	if ( !GetJoypadNum() )
+	int num = GetJoypadType(DX_INPUT_PAD1);
+	if ( num  == DX_PADTYPE_OTHER )
 	{
 		playerNodePos = selectNode_->row + 3;
 		playerNodePos = min(playerNodePos,FLOORS);
@@ -587,7 +588,8 @@ bool NodeManager::StartNodeSelect()
 
 void NodeManager::StartNodeSelectMapDraw()
 {
-	if ( !GetJoypadNum() )
+	int num = GetJoypadType(DX_INPUT_PAD1);
+	if ( num == DX_PADTYPE_OTHER )
 	{
 		selectNode_ = startNodes_[ 0 ];
 		playerNodePos = selectNode_->row + 3;
