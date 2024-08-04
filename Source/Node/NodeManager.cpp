@@ -14,6 +14,7 @@
 #include<GameConfig.h>
 #include<Input.h>
 #include<Collision.h>
+#include<strconv.h>
 
 int32_t GetRand(int32_t min_,int32_t max_)
 {
@@ -385,6 +386,8 @@ void NodeManager::NodeMapDraw()
 
 	DrawRotaGraph(GameConfig::GetWindowWidth() / 2,GameConfig::GetWindowHeight() / 2 - 2,1.0f,0.0,backGroundImg,true);
 
+	NodeExplain();
+
 	DrawCircle(leftBottomX + selectNode_->position.x,leftBottomY + selectNode_->position.y,20,GetColor(255,0,0));
 	for ( int32_t i = 0; i < playerNodePos; ++i )
 	{
@@ -512,7 +515,7 @@ void NodeManager::MapDraw()
 bool NodeManager::StartNodeSelect()
 {
 	int num = GetJoypadType(DX_INPUT_PAD1);
-	if ( num  == DX_PADTYPE_OTHER )
+	if ( num == DX_PADTYPE_OTHER )
 	{
 		playerNodePos = selectNode_->row + 3;
 		playerNodePos = min(playerNodePos,FLOORS);
@@ -597,6 +600,8 @@ void NodeManager::StartNodeSelectMapDraw()
 
 		DrawRotaGraph(GameConfig::GetWindowWidth() / 2,GameConfig::GetWindowHeight() / 2 - 2,1.0f,0.0,backGroundImg,true);
 
+		NodeExplain();
+
 		for ( int32_t i = 0; i < playerNodePos; ++i )
 		{
 			for ( int32_t j = 0; j < MAP_WIDTH; ++j )
@@ -622,6 +627,8 @@ void NodeManager::StartNodeSelectMapDraw()
 		playerNodePos = min(playerNodePos,FLOORS);
 
 		DrawRotaGraph(GameConfig::GetWindowWidth() / 2,GameConfig::GetWindowHeight() / 2 - 2,1.0f,0.0,backGroundImg,true);
+
+		NodeExplain();
 
 		for ( int32_t i = 0; i < playerNodePos; ++i )
 		{
@@ -850,4 +857,27 @@ bool NodeManager::RoomHasParentOfType(Node* room,NodeType type)
 	}
 
 	return false;
+}
+
+void NodeManager::NodeExplain()
+{
+	{
+		DrawRotaGraph(350,150 + 96 * 0,0.5,0,reinforcementImg,true);
+		DrawString(330,170 + 96 * 0,utf8_to_sjis("強化").c_str(),0x000000);
+	}
+
+	{
+		DrawRotaGraph(350,150 + 96 * 1,0.5,0,transactionImg,true);
+		DrawString(330,170 + 96 * 1,utf8_to_sjis("取引").c_str(),0x000000);
+	}
+
+	{
+		DrawRotaGraph(350,150 + 96 * 2,0.5,0,battleImg,true);
+		DrawString(330,170 + 96 * 2,utf8_to_sjis("戦闘").c_str(),0x000000);
+	}
+
+	{
+		DrawRotaGraph(350,150 + 96 * 3,0.5,0,healingImg,true);
+		DrawString(330,170 + 96 * 3,utf8_to_sjis("回復").c_str(),0x000000);
+	}
 }

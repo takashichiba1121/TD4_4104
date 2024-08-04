@@ -135,6 +135,8 @@ private:
 	void SetRoomRandomly(Node* roomToSet);
 	bool RoomHasParentOfType(Node* room,NodeType type);
 
+	void NodeExplain();
+
 	NodeManager() = default;
 	~NodeManager() = default;
 };
