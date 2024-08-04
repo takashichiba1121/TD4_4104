@@ -17,8 +17,8 @@ void DealDaemon::Initialize()
 	selectmode_ = false;
 	dealed_ = true;
 	CollisionDisable();
-	hitboxSize_ = { 128,128 };
-	drawSize_ = { 128,128 };
+	hitboxSize_ = { 192,128 };
+	drawSize_ = { 192,128 };
 	pos_ = { 650,640 };
 
 	tag.tag = "Parts";

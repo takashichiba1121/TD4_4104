@@ -22,7 +22,7 @@ void TitleScene::Initialize()
 
 void TitleScene::Update()
 {
-	if ( input_->TriggerKey(KEY_INPUT_RETURN) )
+	if ( input_->TriggerKey(KEY_INPUT_RETURN) || input_->TriggerPadKey(PAD_INPUT_1) )
 	{
 		SceneManager::GetInstance()->ChangeScene("GAME");
 		PlaySoundMem(startSound_,DX_PLAYTYPE_BACK);
@@ -83,7 +83,7 @@ void TitleScene::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	DrawRotaGraph(GameConfig::GetWindowWidth() / 2,200,1,0,titleTex_,TRUE);
 
-	DrawFormatString(470,450,GetColor(255,255,255),"Start To EnterKey");
+	DrawFormatString(470,450,GetColor(255,255,255),"Start To EnterKey or A");
 }
 
 void TitleScene::SpriteDraw()

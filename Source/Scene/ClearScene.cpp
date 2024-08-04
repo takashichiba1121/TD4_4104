@@ -8,11 +8,13 @@ void ClearScene::Initialize()
 	input_ = Input::Instance();
 	assert(input_);
 	SetFontSize(40);
+
+	backGround_ = LoadGraph(std::string("Resources/Result/gameclear.png"));
 }
 
 void ClearScene::Update()
 {
-	if ( input_->TriggerKey(KEY_INPUT_RETURN) )
+	if ( input_->TriggerKey(KEY_INPUT_RETURN) || input_->TriggerPadKey(PAD_INPUT_1) )
 	{
 		SceneManager::GetInstance()->ChangeScene("TITLE");
 	}
@@ -20,9 +22,9 @@ void ClearScene::Update()
 
 void ClearScene::Draw()
 {
-	DrawFormatString(560,200,GetColor(255,255,255),"Clear");
+	DrawGraph(0,0,backGround_,true);
 
-	DrawFormatString(470,450,GetColor(255,255,255),"Title To EnterKey");
+	DrawFormatString(470,450,GetColor(255,255,255),"Title To EnterKey or A");
 }
 
 void ClearScene::SpriteDraw()

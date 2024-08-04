@@ -38,7 +38,7 @@ void PlayerLegNormal::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const
 
 	int X = Input::Instance()->PadX();
 
-	if ( ( Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A) ) || X<= -500 && !isEvasionRoll_ && !isAttack )
+	if ( ( Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A)  || X<= -500) && !isEvasionRoll_ && !isAttack )
 	{
 		*direction_ = false;
 		if ( playerVelocity_->x > topSpeed_ * *changeAcl_ )
@@ -81,7 +81,7 @@ void PlayerLegNormal::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const
 			PlayerStandTextureCount_ = 0;
 		}
 	}
-	else if ( ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) )|| X >= 500 && !isEvasionRoll_ && !isAttack )
+	else if ( ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) || X >= 500) && !isEvasionRoll_ && !isAttack )
 	{
 		*direction_ = true;
 		if ( playerVelocity_->x < topSpeed_ * *changeAcl_ )
@@ -174,7 +174,7 @@ void PlayerLegNormal::Jump()
 		PlayerJumpTextureCount_ = 0;
 	}
 
-	if ( Input::Instance()->ReleaseKey(KEY_INPUT_SPACE)|| Input::Instance()->ReleasePadKey(PAD_INPUT_1) || playerVelocity_->y >= 0 )
+	if ( (Input::Instance()->ReleaseKey(KEY_INPUT_SPACE)|| Input::Instance()->ReleasePadKey(PAD_INPUT_1)) || playerVelocity_->y >= 0 )
 	{
 		isJump_ = false;
 
@@ -185,7 +185,7 @@ void PlayerLegNormal::Jump()
 
 void PlayerLegNormal::EvasionRoll()
 {
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_Q)|| Input::Instance()->TriggerPadKey(PAD_INPUT_2) && isEvasionRoll_ == false )
+	if ( (Input::Instance()->TriggerKey(KEY_INPUT_Q)|| Input::Instance()->TriggerPadKey(PAD_INPUT_2)) && isEvasionRoll_ == false )
 	{
 		isEvasionRoll_ = true;
 
