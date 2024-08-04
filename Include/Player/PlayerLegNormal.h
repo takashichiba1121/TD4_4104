@@ -57,7 +57,7 @@ private:
 
 	float airDeccelaration_ = 0;
 
-	float evasionRollSpeed_=24;
+	float evasionRollSpeed_=32;
 
 	//戦闘
 

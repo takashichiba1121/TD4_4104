@@ -30,6 +30,8 @@ void PlayerBullet::Initialize(Vector2 velocity,Vector2 position,uint32_t life,fl
 	SetCollisionMask(~COLLISION_ATTRIBUTE_PLAYRE);
 
 	CollisionManager::GetInstance()->AddObject(this);
+
+	bulletTexId_ = LoadGraph(std::string("Resources\\Player\\Parts\\vineWhip.png"));
 }
 
 void PlayerBullet::Update()

@@ -130,7 +130,7 @@ void NodeManager::Initialize()
 			if ( !nodes_[ FLOORS - 1 ][ i ].previews.empty() )
 			{
 				nodes_[ FLOORS - 1 ][ i ].nexts.push_back(&bossNode_);
-				nodes_[ FLOORS - 1 ][ i ].type.value = NodeType::Type::NONE;
+				nodes_[ FLOORS - 1 ][ i ].type.value = NodeType::Type::START;
 			}
 		}
 

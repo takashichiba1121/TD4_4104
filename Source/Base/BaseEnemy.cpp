@@ -71,6 +71,10 @@ void BaseEnemy::Damage(int32_t damage,Effects effect,bool effectD)
 		}
 		immortal_ = true;
 		hp_ -= damage;
+		if ( hp_ < 0 )
+		{
+			hp_ = 0;
+		}
 		immortalTime_ = 10;
 		if ( playerPtr_ )
 		{

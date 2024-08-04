@@ -83,7 +83,7 @@ void TitleScene::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	DrawRotaGraph(GameConfig::GetWindowWidth() / 2,200,1,0,titleTex_,TRUE);
 
-	DrawFormatString(470,450,GetColor(255,255,255),"Start To EnterKey or A");
+	DrawFormatString(380,450,GetColor(255,255,255),"Start To EnterKey or A");
 }
 
 void TitleScene::SpriteDraw()
