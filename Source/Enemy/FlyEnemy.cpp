@@ -23,7 +23,7 @@ void FlyEnemy::Initialize()
 
 	targetCheckPoint_ = 0;
 	searchArea_ = make_unique<CircleShape>();
-	searchArea_->SetRadius({ ( drawSize_.x * 3 / 2 )});
+	searchArea_->SetRadius({ ( drawSize_.x * 5 / 2 )});
 	SetShape(shape_);
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
