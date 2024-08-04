@@ -18,6 +18,7 @@ void DealDaemon::Initialize()
 	dealed_ = true;
 	CollisionDisable();
 	hitboxSize_ = { 128,128 };
+	drawSize_ = { 128,128 };
 	pos_ = { 650,640 };
 
 	tag.tag = "Parts";
@@ -62,14 +63,17 @@ void DealDaemon::Initialize()
 	
 
 	SetPriducts();
-
+	animeNum_ = 10;
+	animeSpeed_ = 10;
 	textureId_ = LoadGraph("Resources\\Deal\\dealMonster.png");
+	
 }
 
 void DealDaemon::Update()
 {
 	selectmode_ = playerPtr_->IsChangeParts();
 	shape_->SetCenter(pos_);
+	AnimeUpdate();
 }
 
 bool DealDaemon::PartsChenge()
@@ -188,6 +192,7 @@ void DealDaemon::SetPriducts(bool deal)
 void DealDaemon::SetPlayer(Player* player)
 {
 	playerPtr_ = player;
+	AnimeUpdate();
 }
 
 
@@ -235,7 +240,7 @@ void DealDaemon::Draw()
 
 	if ( !dealed_ )
 	{
-		DrawBox(pos_.x - hitboxSize_.x / 2,pos_.y - hitboxSize_.y / 2,pos_.x + hitboxSize_.x / 2,pos_.y + hitboxSize_.y / 2,0xffffff,true);
+		DrawRectRotaGraph(pos_.x,pos_.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,textureId_,true);
 	}
 
 }
@@ -253,4 +258,22 @@ void DealDaemon::ReSet()
 	pos_ = { 650,610 };
 	SetPriducts();
 	CollisionEnable();
+}
+
+void DealDaemon::AnimeUpdate(bool loop)
+{
+	animeTimer_++;
+
+	if ( animeTimer_ == animeSpeed_ )
+	{
+		animeTimer_ = 0;
+		anime_++;
+
+		if ( anime_ == animeNum_ && loop )
+		{
+			anime_ = 0;
+		}
+
+		anime_ = min(animeNum_ - 1,anime_);
+	}
 }
