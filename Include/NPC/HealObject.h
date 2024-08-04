@@ -3,7 +3,7 @@
 class HealObject:public BaseObject
 {
 private:
-	int32_t healPower;
+	float healPower;
 	RectShape* shape_;
 	bool heal = true;
 public:

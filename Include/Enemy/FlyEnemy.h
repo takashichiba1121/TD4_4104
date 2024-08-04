@@ -25,6 +25,7 @@ private:
 
 	int8_t targetCheckPoint_;
 	Counter moveTime;
+	Counter maxAttackTime;
 	ObjectUserData user_;
 public:
 
