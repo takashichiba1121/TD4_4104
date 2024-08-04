@@ -26,6 +26,7 @@ void HealingNode::Reset()
 
 	mapChip_->MapLoad("Resources/Export/Map/TestMap.json");
 	player_->Reset();
+	healObj_.Reset();
 
 	GetNextDoors();
 
