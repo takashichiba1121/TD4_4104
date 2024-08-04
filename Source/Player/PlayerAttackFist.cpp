@@ -3,6 +3,7 @@
 #include"CollisionManager.h"
 #include"FlyEnemy.h"
 #include"WalkEnemy.h"
+#include"BossEnemy.h"
 void PlayerAttackFist::Initialize(Vector2* playerPos,Vector2* velocity,bool* direction)
 {
 	playerPos_ = playerPos;
@@ -97,11 +98,23 @@ void PlayerAttackFist::OnCollision()
 		{
 			if ( GetRand(1000) <= playerCrit_ * 1000 )
 			{
-				dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(( playerPow_ * POW_ ) + ( playerPow_ * POW_ * playerCdmg_ ));
+				dynamic_cast< BaseEnemy* >( GetCollisionInfo().object )->Damage(( playerPow_ * POW_ ) + ( playerPow_ * POW_ * playerCdmg_ ));
 			}
 			else
 			{
-				dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_);
+				dynamic_cast< BaseEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_);
+			}
+			isGiveDamage_ = true;
+		}
+		if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "BossEnemy" )
+		{
+			if ( GetRand(1000) <= playerCrit_ * 1000 )
+			{
+				dynamic_cast< BossEnemy* >( GetCollisionInfo().object )->Damage(( playerPow_ * POW_ ) + ( playerPow_ * POW_ * playerCdmg_ ));
+			}
+			else
+			{
+				dynamic_cast< BossEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_);
 			}
 			isGiveDamage_ = true;
 		}
