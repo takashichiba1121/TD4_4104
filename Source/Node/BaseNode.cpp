@@ -117,7 +117,7 @@ void BaseNode::GetNextDoors()
 
 	if ( nextdoors_.size() > nextDoorsNum_ )
 	{
-		std::vector<NextDoor> tmpNextdoors = nextdoors_;
+		std::vector<NextDoor>& tmpNextdoors = nextdoors_;
 
 		while ( tmpNextdoors.size() > nextDoorsNum_ && tmpNextdoors.size() != 1 )
 		{
