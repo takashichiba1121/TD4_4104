@@ -148,7 +148,7 @@ void WalkEnemy::Move()
 	 nextPos_ = { pos_.x + ( ( velocity_.x * speed_ ) ) + ( ( hitboxSize_.x / 2 + 32)* -sign(velocity_.x) ),pos_.y + ( hitboxSize_.y / 2 )};
 	 nextElement_ = mapchip_->GetPosElement(static_cast<int32_t>(nextPos_.x),static_cast< int32_t >( nextPos_.y)+64);
 
-	 if ( ( nextElement_ == NEXT || ( nextElement_ == NONE && ( prevElement_ != NONE || prevElement_ != NEXT ) ) )
+	 if ( ( nextElement_ == NEXT || ( nextElement_ == NONE && ( prevElement_ != NONE && prevElement_ != NEXT ) ) )
 	 && !tern_ )
 	{
 		velocity_ *= -1;
@@ -206,7 +206,7 @@ void WalkEnemy::Approach()
 	nextElement_ = mapchip_->GetPosElement(pos_.x + ( ( velocity_.x * speed_ ) ) + ( hitboxSize_.x / 2 * sign(velocity_.x) ),
 	   pos_.y + ( hitboxSize_.y / 2 ) + 5);
 
-	if ( ( nextElement_ == NEXT || ( nextElement_ == NONE &&(prevElement_ != NONE || prevElement_ != NEXT) ) ) && !tern_ )
+	if ( ( nextElement_ == NEXT || ( nextElement_ == NONE &&(prevElement_ != NONE && prevElement_ != NEXT) ) ) && !tern_ )
 	{
 		actionMode = MOVE;
 		return;
