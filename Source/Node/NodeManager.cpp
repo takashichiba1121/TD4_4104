@@ -567,13 +567,13 @@ bool NodeManager::StartNodeSelect()
 		XINPUT_STATE st;
 		GetJoypadXInputState(DX_INPUT_PAD1,&st);
 
-		if ( st.Buttons[ XINPUT_BUTTON_LEFT_SHOULDER ] )
+		if ( Input::Instance()->TriggerPadKey(PAD_INPUT_5) )
 		{
 			selectNodeX--;
 			selectNodeX = max(0,selectNodeX);
 		}
 
-		if ( st.Buttons[ XINPUT_BUTTON_RIGHT_SHOULDER ] )
+		if ( Input::Instance()->TriggerPadKey(PAD_INPUT_6) )
 		{
 			selectNodeX++;
 			selectNodeX = min(selectNodeX,startNodes_.size() - 1);
