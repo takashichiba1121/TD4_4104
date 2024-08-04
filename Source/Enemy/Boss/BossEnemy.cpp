@@ -122,6 +122,7 @@ void BossEnemy::Update()
 void BossEnemy::Move()
 {
 	velocity_.Normalize();
+	immortalTime_--;
 
 	gravity_.y += 0.5f;
 	gravity_.y = max(gravity_.y,4);
@@ -143,42 +144,49 @@ void BossEnemy::Move()
 		AttackMove();
 	}
 
+	if ( immortalTime_ <= 0 )
+	{
+		immortal_ = false;
+	}
+
 	longRange_->BulletUpdate();
 }
 
 void BossEnemy::Draw(Vector2 scrool)
 {
-	switch ( phase_ )
+	if ( immortalTime_ <= 0 || immortalTime_ % 3 != 0 )
 	{
-	case APPROACH:
-		DrawRectGraphF(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.y / 2,
-		0 + drawSize_.x * anime_,0,
-		drawSize_.x,drawSize_.y,
-		textureId_,true,playerDir_ == 1);
-		break;
-	case PUNCH:
-		DrawRotaGraph(pos_.x,pos_.y,1.0,0.0,bodyImg_,true,playerDir_ == 1);
-		punch_->Draw();
-		break;
-	case CHARGE:
-		charge_->Draw();
-		break;
-	case LONG_RANGE:
-
-		if ( !longRange_->IsAttack() )
+		switch ( phase_ )
 		{
+		case APPROACH:
+			DrawRectGraphF(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.y / 2,
+			0 + drawSize_.x * anime_,0,
+			drawSize_.x,drawSize_.y,
+			textureId_,true,playerDir_ == 1);
+			break;
+		case PUNCH:
 			DrawRotaGraph(pos_.x,pos_.y,1.0,0.0,bodyImg_,true,playerDir_ == 1);
+			punch_->Draw();
+			break;
+		case CHARGE:
+			charge_->Draw();
+			break;
+		case LONG_RANGE:
 
+			if ( !longRange_->IsAttack() )
+			{
+				DrawRotaGraph(pos_.x,pos_.y,1.0,0.0,bodyImg_,true,playerDir_ == 1);
+
+			}
+
+			break;
+		default:
+			break;
 		}
-
-		break;
-	default:
-		break;
 	}
 
-
 	DrawRotaGraphFast3(120,50,0,0,1.0,1.0,0.0,hpBerBackgroundTextureId_,true);
-	DrawRotaGraphFast3(120,50,0,0,float(hp_) / float( HP ),1.0,0.0,hpBerTextureId_,true);
+	DrawRotaGraphFast3(120,50,0,0,float(hp_) / float(HP),1.0,0.0,hpBerTextureId_,true);
 
 	longRange_->Draw();
 
@@ -246,7 +254,9 @@ void BossEnemy::ApproachMove()
 	float hpRet = hp_ / float(HP);
 	int32_t hp = hpRet * 100;
 
-	if ( hp == 50 && longRangeAttackCount_ == 0 || hp == 25 && longRangeAttackCount_ == 1 || hp == 10 && longRangeAttackCount_ == 2 )
+	if ( hp <= 50 && hp > 25 && longRangeAttackCount_ == 0 ||
+		hp <= 25 && hp > 10 && longRangeAttackCount_ == 1 ||
+		hp <= 10 && longRangeAttackCount_ == 2 )
 	{
 		velocity_.x = 0;
 		longRangeAttackCount_++;
