@@ -15,13 +15,19 @@ void PlayerLegNormal::Initialize(Vector2* playerVelocity,bool* direction,float* 
 
 	Load();
 
-	PlayerStandTexture_ = LoadGraph(std::string("Resources\\Player\\PlayerStand_sheet.png"));
+	playerStandTexture_ = LoadGraph(std::string("Resources\\Player\\PlayerStand_sheet.png"));
 
-	PlayerJumpTexture_ = LoadGraph(std::string("Resources\\Player\\PlayerJumpUp.png"));
+	playerJumpTexture_ = LoadGraph(std::string("Resources\\Player\\PlayerJumpUp.png"));
 
-	PlayerDownTexture_ = LoadGraph(std::string("Resources\\Player\\PlayerJumpDown.png"));
+	playerDownTexture_ = LoadGraph(std::string("Resources\\Player\\PlayerJumpDown.png"));
 
-	PlayerDushTexture_ = LoadGraph(std::string("Resources\\Player\\PlayerDush.png"));
+	playerDushTexture_ = LoadGraph(std::string("Resources\\Player\\PlayerDush.png"));
+
+	evasionRollSoundId_ = LoadSoundMem(std::string("Resources\\Sound\\Player\\SFX_player_DodgeRoll.mp3"));
+
+	jumpSoundId_ = LoadSoundMem(std::string("Resources\\Sound\\Player\\SFX_player_Jump.mp3"));
+
+	landingSoundId_ = LoadSoundMem(std::string("Resources\\Sound\\Player\\SFX_player_Landing.mp3"));
 }
 
 void PlayerLegNormal::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const float pow)
@@ -152,6 +158,8 @@ void PlayerLegNormal::JumpStart()
 	playerVelocity_->y += jumpInitialVelocity_;
 
 	PlayerJumpTextureCount_ = 0;
+
+	PlaySoundMem(jumpSoundId_,DX_PLAYTYPE_BACK);
 }
 
 void PlayerLegNormal::Jump()
@@ -187,6 +195,8 @@ void PlayerLegNormal::EvasionRoll()
 		{
 			*playerVelocity_ = { -evasionRollSpeed_,0 };
 		}
+
+		PlaySoundMem(evasionRollSoundId_,DX_PLAYTYPE_BACK);
 	}
 	if ( isEvasionRoll_ )
 	{
@@ -235,6 +245,7 @@ void PlayerLegNormal::Falling()
 
 		PlayerDownTextureCount_ = 0;
 
+		//PlaySoundMem(landingSoundId_,DX_PLAYTYPE_BACK);
 	}
 }
 
@@ -250,12 +261,12 @@ void PlayerLegNormal::Draw(const Vector2& pos,const Vector2& size,Vector2 scroll
 		if ( *direction_ )
 		{
 			DrawRectGraph(leftPos,upPos,PlayerDushTextureCount_ * size.x,0,
-				size.x,size.y,PlayerDushTexture_,true,false);
+				size.x,size.y,playerDushTexture_,true,false);
 		}
 		else
 		{
 			DrawRectGraph(leftPos,upPos,PlayerDushTextureCount_ * size.x,0,
-				size.x,size.y,PlayerDushTexture_,true,true);
+				size.x,size.y,playerDushTexture_,true,true);
 		}
 	}
 	else if ( isJump_ )
@@ -263,12 +274,12 @@ void PlayerLegNormal::Draw(const Vector2& pos,const Vector2& size,Vector2 scroll
 		if ( *direction_ )
 		{
 			DrawRectGraph(leftPos,upPos,( PlayerJumpTextureCount_ / 10 ) * size.x,0,
-				size.x,size.y,PlayerJumpTexture_,true,false);
+				size.x,size.y,playerJumpTexture_,true,false);
 		}
 		else
 		{
 			DrawRectGraph(leftPos,upPos,( PlayerJumpTextureCount_ / 10 ) * size.x,0,
-				size.x,size.y,PlayerJumpTexture_,true,true);
+				size.x,size.y,playerJumpTexture_,true,true);
 		}
 	}
 	else if ( !isDirBottom_ && !oldIsDirBottom_ )
@@ -276,12 +287,12 @@ void PlayerLegNormal::Draw(const Vector2& pos,const Vector2& size,Vector2 scroll
 		if ( *direction_ )
 		{
 			DrawRectGraph(leftPos,upPos,( PlayerDownTextureCount_ / 10 ) * size.x,0,
-				size.x,size.y,PlayerDownTexture_,true,false);
+				size.x,size.y,playerDownTexture_,true,false);
 		}
 		else
 		{
 			DrawRectGraph(leftPos,upPos,( PlayerDownTextureCount_ / 10 ) * size.x,0,
-				size.x,size.y,PlayerDownTexture_,true,true);
+				size.x,size.y,playerDownTexture_,true,true);
 		}
 	}
 	else if ( isWalk )
@@ -289,12 +300,12 @@ void PlayerLegNormal::Draw(const Vector2& pos,const Vector2& size,Vector2 scroll
 		if ( *direction_ )
 		{
 			DrawRectGraph(leftPos,upPos,( PlayerStandTextureCount_ / 2 ) * size.x,0,
-				size.x,size.y,PlayerStandTexture_,true,false);
+				size.x,size.y,playerStandTexture_,true,false);
 		}
 		else
 		{
 			DrawRectGraph(leftPos,upPos,( PlayerStandTextureCount_ / 2 ) * size.x,0,
-				size.x,size.y,PlayerStandTexture_,true,true);
+				size.x,size.y,playerStandTexture_,true,true);
 		}
 	}
 	else
@@ -302,12 +313,12 @@ void PlayerLegNormal::Draw(const Vector2& pos,const Vector2& size,Vector2 scroll
 		if ( *direction_ )
 		{
 			DrawRectGraph(leftPos,upPos,( PlayerStandTextureCount_ / 2 ) * size.x,0,
-				size.x,size.y,PlayerStandTexture_,true,false);
+				size.x,size.y,playerStandTexture_,true,false);
 		}
 		else
 		{
 			DrawRectGraph(leftPos,upPos,( PlayerStandTextureCount_ / 2 ) * size.x,0,
-				size.x,size.y,PlayerStandTexture_,true,true);
+				size.x,size.y,playerStandTexture_,true,true);
 		}
 	}
 }

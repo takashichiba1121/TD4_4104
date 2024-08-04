@@ -32,7 +32,7 @@ void FlyEnemy::Initialize()
 
 	moveTimer_.SetEndCount(20);
 	beforeAttackFrame_ = 40;
-	attackInterval_ = 120;
+	attackInterval_ = 240;
 	attackFrame_ = 5;
 
 	tag.tag = "Enemy";
@@ -56,12 +56,9 @@ void FlyEnemy::Update()
 			beforeAttackCounter_.SetEndCount(beforeAttackFrame_);
 			attackCounter_.SetEndCount(attackFrame_);
 			PlaySoundMem(EnemyManager::GetSoundHandle("flyBeforeAttack"),DX_PLAYTYPE_BACK);
+			targetPos_ = playerPtr_->GetPos();
 		}
 		actionMode = ATTACK;
-	}
-	else if(actionMode != ATTACK)
-	{
-		targetPos_ = playerPtr_->GetPos();
 	}
 
 	if ( immortalTime_ <= 0 )

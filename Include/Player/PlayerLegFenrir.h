@@ -39,7 +39,11 @@ private:
 
 	const uint32_t DEF_ = 80;
 
+	int evasionRollSoundId_;
 
+	int cerberusJumpSoundId_;
+
+	int landingSoundId_;
 #pragma region ステータス
 
 //移動
@@ -54,7 +58,7 @@ private:
 
 	float airDeccelaration_ = 0;
 
-	float evasionRollSpeed_ = 16;
+	float evasionRollSpeed_ = 24;
 
 	//戦闘
 
@@ -98,5 +102,9 @@ public:
 		return DEF_;
 	}
 
+	bool IsEvasionRoll()override
+	{
+		return isEvasionRoll_;
+	}
 };
 

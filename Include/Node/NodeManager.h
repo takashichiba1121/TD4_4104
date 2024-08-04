@@ -8,6 +8,7 @@
 #include<Vector2.h>
 #include<BaseNode.h>
 #include<MapChip.h>
+#include<CircleShape.h>
 
 struct Node
 {
@@ -83,6 +84,13 @@ private:
 	bool isGameEnd_;
 	bool init_;
 	bool isNodeReset_;
+
+	CircleShape circleShape_;
+	CircleShape circleMouseShape_;
+
+	int32_t selectNodeX;
+	int32_t selectNodeY;
+	bool isMouseInput_;
 public:
 
 	static NodeManager* GetInstance();
@@ -112,6 +120,9 @@ public:
 	void End();
 
 	void MapDraw();
+
+	bool StartNodeSelect();
+	void StartNodeSelectMapDraw();
 
 private:
 

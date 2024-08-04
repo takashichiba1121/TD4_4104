@@ -10,7 +10,7 @@ using namespace std;
 void WalkEnemy::Initialize()
 {
 
-	animeNum_ = 5;
+	animeNum_ = 4;
 	animeSpeed_ = 10;
 	drawSize_ = { 128,128 };
 	hitboxSize_ = { 64,128 };
@@ -44,8 +44,8 @@ void WalkEnemy::Initialize()
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
 	CollisionManager::GetInstance()->AddObject(this);
 	attackPower_ = 90;
-	attackInterval_ = 60;
-	beforeAttackFrame_ = 5;
+	attackInterval_ = 120;
+	beforeAttackFrame_ = 10;
 	attackFrame_ = 25;
 	maxHp_ = 150;
 	hp_ = 150;
@@ -64,7 +64,7 @@ void WalkEnemy::Update()
 
 	searchArea_->SetCenter({ ( sign(-velocity_.x) * searchArea_->GetRadius().x ) + pos_.x,pos_.y });
 
-	attackArea_->SetCenter({ ( sign(-velocity_.x) * attackArea_->GetRadius().x ) + pos_.x,pos_.y });
+	attackArea_->SetCenter({ ( sign(-velocity_.x) * attackArea_->GetRadius().x ) + pos_.x - (sign(-velocity_.x) * 32),pos_.y });
 
 	if ( Collision::Rect2Rect(*dynamic_cast< RectShape* >( playerPtr_->GetShape() ),*searchArea_.get()) && actionMode != ATTACK )
 	{
@@ -104,16 +104,16 @@ void WalkEnemy::Update()
 		switch ( actionMode )
 		{
 		case MOVE:
-			Move();
 			tex_ = EnemyManager::GetTexHandle("adjacentMove");
+			Move();
 			break;
 		case ENEMYAPPROACH:
+			tex_ = EnemyManager::GetTexHandle("adjacentMove");
 			Approach();
-			tex_ = EnemyManager::GetTexHandle("adjacentDash");
 			break;
 		case ATTACK:
+			tex_ = EnemyManager::GetTexHandle("adjacentAttackBefore");
 			Attack();
-			tex_ = EnemyManager::GetTexHandle("adjacentAttack");
 			break;
 		default:
 			break;
@@ -129,7 +129,8 @@ void WalkEnemy::Update()
 
 void WalkEnemy::Move()
 {
-
+	animeNum_ = 4;
+	animeSpeed_ = 10;
 	velocity_.Normalize();
 
 	gravity_.y += 0.5f;
@@ -181,7 +182,8 @@ void WalkEnemy::Move()
 
 void WalkEnemy::Approach()
 {
-
+	animeNum_ = 4;
+	animeSpeed_ = 5;
 	velocity_ = Vector2(playerPtr_->GetPos(),pos_);
 	const float defaultSpeed = speed_;
 	speed_ += 1;
@@ -237,10 +239,11 @@ void WalkEnemy::Approach()
 
 void WalkEnemy::Attack()
 {
-	
+	anime_ = 0;
 	if ( !beforeAttackCounter_.IsCountEnd() )
 	{
 		beforeAttackCounter_.CountUp();
+		tex_ = EnemyManager::GetTexHandle("adjacentAttackBefore");
 	}
 	else if ( !attackCounter_.IsCountEnd() )
 	{
@@ -249,6 +252,7 @@ void WalkEnemy::Attack()
 			PlaySoundMem(EnemyManager::GetSoundHandle("meleeAttack"),DX_PLAYTYPE_BACK);
 			attackSoundPlayed_ = true;
 		}
+		tex_ = EnemyManager::GetTexHandle("adjacentAttack");
 		attackCounter_.CountUp();
 		if ( Collision::Rect2Rect(*dynamic_cast< RectShape* >( playerPtr_->GetShape() ),*attackArea_.get()) )
 		{
@@ -273,7 +277,11 @@ void WalkEnemy::Draw(Vector2 scroll)
 	{
 		flag = true;
 	}
-	DrawRectRotaGraph(pos_.x + scroll.x,pos_.y + scroll.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,tex_,true,flag);
+
+	if ( immortalTime_ <= 0 || immortalTime_ % 3 != 0 )
+	{
+		DrawRectRotaGraph(pos_.x + scroll.x,pos_.y + scroll.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,tex_,true,flag);
+	}
 
 #ifdef _DEBUG
 	if ( actionMode == ATTACK )

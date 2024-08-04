@@ -13,7 +13,7 @@ void EnemyBullet::SetVelocity(Vector2 velocity)
 
 void EnemyBullet::Initialize()
 {
-	speed_ = 3;
+	speed_ = 6;
 	drawSize_ = {32,32};
 	islive_ = true;
 	shape_ = new RectShape();
@@ -21,9 +21,10 @@ void EnemyBullet::Initialize()
 	SetShape(shape_);
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
+
 	CollisionManager::GetInstance()->AddObject(this);
 	damage_ = 85;
-
+	textureId_ = LoadGraph(std::string("Resources\\Enemy\\arrow.png"));
 	tag.tag = "EnemyBullet";
 	userData_ = &tag;
 
@@ -55,6 +56,10 @@ void EnemyBullet::OnCollision()
 }
 void EnemyBullet::Draw(Vector2 scroll)
 {
-	DrawBox(pos_.x - drawSize_.x / 2+scroll.x,pos_.y - drawSize_.y / 2 + scroll.y,
-		pos_.x + drawSize_.x / 2 + scroll.x,pos_.y + drawSize_.y / 2 + scroll.y,GetColor(155,0,0),true);
+	bool flag = false;
+	if ( velocity_.x > 0 )
+	{
+		flag = true;
+	}
+	DrawRotaGraph(pos_.x + scroll.x,pos_.y + scroll.y,1,0,textureId_,true,!flag);
 }

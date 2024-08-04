@@ -146,9 +146,9 @@ bool BaseEnemy::IsImmortal()
 
 bool BaseEnemy::OnScreen(Vector2 scrool)
 {
-	if (pos_.x + scrool.x >= 0 && pos_.x + scrool.x <= GameConfig::GetWindowWidth())
+	if (pos_.x + scrool.x >= -32 && pos_.x + scrool.x <= GameConfig::GetWindowWidth()+32)
 	{
-		if (pos_.y + scrool.y >= 0 && pos_.y + scrool.y <= GameConfig::GetWindowHeight())
+		if (pos_.y + scrool.y >= -32 && pos_.y + scrool.y <= GameConfig::GetWindowHeight()+32)
 		{
 			return true;
 		}

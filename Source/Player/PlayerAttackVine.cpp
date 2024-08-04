@@ -23,6 +23,8 @@ void PlayerAttackVine::Initialize(Vector2* playerPos,Vector2* velocity,bool* dir
 	CollisionDisable();
 
 	textureId_ = LoadGraph(std::string("Resources\\Player\\Parts\\vineWhip.png"));
+
+	soundId_= LoadSoundMem(std::string("Resources\\Sound\\Player\\SFX_player_arm_vine_Attack.mp3"));
 }
 void PlayerAttackVine::AttackInit(float pow,float changeCrit,float changeCdmg)
 {

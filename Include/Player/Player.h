@@ -115,9 +115,9 @@ private:
 
 	UserData name_;
 
-	const uint32_t DAMAGE_INTERVAL_MAX_ = 16;
+	const uint32_t DAMAGE_INTERVAL_MAX_ = 20;
 
-	uint32_t DamageInterval_ = DAMAGE_INTERVAL_MAX_;
+	uint32_t DamageInterval_ = 20;
 
 	std::list<Item> items_;
 
@@ -140,6 +140,8 @@ private:
 	uint32_t nowEyeCost_=0;
 
 	uint32_t nowMouthCost_ = 0;
+
+	int soundId_;
 public:
 	void Initialize() override;
 

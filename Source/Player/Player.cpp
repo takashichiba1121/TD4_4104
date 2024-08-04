@@ -61,28 +61,27 @@ void Player::Initialize()
 
 	leg_->Initialize(&velocity_, &direction_, &changeSpd_);
 
-	Item item;
+	//Item item;
 
-	item.power = 50;
+	//item.power = 50;
 
-	item.statusName = "ATK";
+	//item.statusName = "ATK";
 
-	ItemGet(item);
+	//ItemGet(item);
 
 	circelShape_ = std::make_unique<CircleShape>();
 
 	circelShape_->SetRadius(hitboxSize_.y);
 
-	ChangeLeg("Fenrir",0);
+	//ChangeLeg("Fenrir",0);
 
-	//ChangeLeftArm("Vine",0);
+	//ChangeLeftArm("Cerberus",0);
 
 	//ChangeRightArm("Gun",0);
 }
 
 void Player::Update()
 {
-	powerUpText_ = false;
 	if (isPowerUp_)
 	{
 		PowerUp();
@@ -94,7 +93,7 @@ void Player::Update()
 			DamageInterval_++;
 		}
 
-		if (Input::Instance()->TriggerKey(KEY_INPUT_1))
+		/*if (Input::Instance()->TriggerKey(KEY_INPUT_1))
 		{
 			selectItems_ = 1;
 		}
@@ -110,7 +109,7 @@ void Player::Update()
 		if (Input::Instance()->TriggerKey(KEY_INPUT_RETURN))
 		{
 			UseItem();
-		}
+		}*/
 
 		leg_->Move(GetOnDir() & 0b1 << OnDir::BOTTOM, leftArm_->IsAttack() || rightArm_->IsAttack(), pos_, changePow_);
 
@@ -124,6 +123,8 @@ void Player::Update()
 
 		circelShape_->SetCenter(pos_);
 	}
+
+	powerUpText_ = false;
 
 #ifdef _DEBUG
 
@@ -154,31 +155,32 @@ void Player::Update()
 
 void Player::Attack()
 {
-	if (Input::Instance()->TriggerKey(KEY_INPUT_Z) && leftArm_ != nullptr && !rightArm_->IsAttack())
+	if ( !powerUpText_ )
 	{
-		leftArm_->AttackInit(changePow_, changeCrit_, changeCdmg_);
-	}
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && leftArm_ != nullptr && !rightArm_->IsAttack() )
+		{
+			leftArm_->AttackInit(changePow_,changeCrit_,changeCdmg_);
+		}
 
-	if (Input::Instance()->TriggerKey(KEY_INPUT_X) && rightArm_ != nullptr && !leftArm_->IsAttack())
-	{
-		rightArm_->AttackInit(changePow_, changeCrit_, changeCdmg_);
-	}
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && rightArm_ != nullptr && !leftArm_->IsAttack() )
+		{
+			rightArm_->AttackInit(changePow_,changeCrit_,changeCdmg_);
+		}
 
-	if (leftArm_ != nullptr)
-	{
-		leftArm_->Attack();
-	}
+		if ( leftArm_ != nullptr )
+		{
+			leftArm_->Attack();
+		}
 
-	if (rightArm_ != nullptr)
-	{
-		rightArm_->Attack();
+		if ( rightArm_ != nullptr )
+		{
+			rightArm_->Attack();
+		}
 	}
 }
 void Player::Damage(int32_t damage)
 {
-	if (DamageInterval_ >= DAMAGE_INTERVAL_MAX_/*||
-		(leftArm_->IsAttack()&& leftAtaackTag_==PlayerAttackTags::Mars)&&
-		( rightArm_->IsAttack() && rightAtaackTag_ == PlayerAttackTags::Mars )*/)
+	if (DamageInterval_ >= DAMAGE_INTERVAL_MAX_&&!leg_->IsEvasionRoll())
 	{
 		if (damage - (changeDef_ * leg_->GetDef()) >= 5)
 		{
@@ -542,7 +544,7 @@ void Player::Draw(Vector2 scroll)
 {
 	PlayerBulletManager::Instance()->Draw(scroll);
 
-	if (DamageInterval_ % 2 == 0)
+	if (DamageInterval_ % 5 == 0)
 	{
 		leg_->Draw(pos_, drawSize_,scroll);
 	}
@@ -557,11 +559,11 @@ void Player::Draw(Vector2 scroll)
 		rightArm_->Draw(scroll);
 	}
 
-	DrawFormatString(0, GameConfig::GetWindowHeight() - 20, 0xffffff, "PlayerHP:%d/%d", hp_, MAX_HP_);
+	DrawFormatString(0, GameConfig::GetWindowHeight() - 20, 0xffffff, "PlayerHP:%d/%d", hp_, int(MAX_HP_*changeMaxHp_));
 
 	if (powerUpText_ && isPowerUp_ == false)
 	{
-		DrawFormatString(pos_.x, pos_.y - drawSize_.y + 40, 0xffffff, "Push to KEY Z", hp_, MAX_HP_);
+		DrawFormatString(pos_.x, pos_.y - drawSize_.y + 40, 0xffffff, "Push to KEY Z");
 	}
 }
 

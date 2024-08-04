@@ -51,6 +51,10 @@ private:
 	const std::array<int32_t,7> dealSucces_ = { 950,750,500,200,100,50,20 };
 	int32_t statusDownIvent_ = 250;
 	const std::array<int32_t,3> downStatus_ = {250,500,750};
+	int32_t animeTimer_;
+	int32_t anime_;
+	int32_t animeNum_;
+	int32_t animeSpeed_;
 public:
 	void Initialize() override;
 	void Update() override;
@@ -62,5 +66,6 @@ public:
 	void Draw() override;
 	void NoDeal();
 	void ReSet();
+	void AnimeUpdate(bool loop = true);
 };
 
