@@ -495,11 +495,11 @@ bool Player::SubDef(int32_t def)
 
 bool Player::SubMaxHp(int32_t maxHp)
 {
-	if (changeMaxHp_ - maxHp <= 0)
+	if (changeMaxHp_ - maxHp/100.0f <= 0)
 	{
 		return false;
 	}
-	changeMaxHp_ -= maxHp;
+	changeMaxHp_ -= maxHp / 100.0f;
 
 	if (hp_ >= MAX_HP_ * changeMaxHp_)
 	{
