@@ -55,7 +55,7 @@ public:
 	void SetMapChip(MapChip* mapchip);
 	size_t GetEnemyCount();
 	bool GameEnd();
-	bool IsEnemyEmpty();
+	bool IsScreenEnemyEmpty();
 	void EnemysClear();
 	bool IsBossAlive();
 	static int32_t GetTexHandle(std::string name);

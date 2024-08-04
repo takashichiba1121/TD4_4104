@@ -251,7 +251,7 @@ bool EnemyManager::GameEnd()
 	return false;
 }
 
-bool EnemyManager::IsEnemyEmpty()
+bool EnemyManager::IsScreenEnemyEmpty()
 {
 	return screenEnemy_ <= 0;
 }
