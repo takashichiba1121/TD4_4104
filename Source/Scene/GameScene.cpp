@@ -58,32 +58,30 @@ void GameScene::Update()
 {
 	//ImGui::ShowDemoWindow();
 
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_R) )
+	if ( isSelect )
 	{
-		nodeManager_->Reset();
-	}
+		if ( player_->IsPowerUp() )
+		{
+			powerUp_->Update();
 
-	if ( player_->IsPowerUp() )
-	{
-		powerUp_->Update();
+			uint32_t powerUpNum = player_->PowerUp();
 
-		uint32_t powerUpNum = player_->PowerUp();
-
+ 
 		powerUp_->SetSlect(powerUpNum);
 		if ( Input::Instance()->TriggerKey(KEY_INPUT_SPACE) || Input::Instance()->TriggerPadKey(PAD_INPUT_1) )
 		{
 			powerUp_->StatusChenge();
 
-			player_->EndPowerUp();
+				player_->EndPowerUp();
+			}
 		}
-	}
-	else if ( player_->IsChangeParts() )
-	{
-		dealer_->Update();
+		else if ( player_->IsChangeParts() )
+		{
+			dealer_->Update();
 
-		uint32_t powerUpNum = player_->PowerUp();
+			uint32_t powerUpNum = player_->PowerUp();
 
-		dealer_->SetSlect(powerUpNum);
+			dealer_->SetSlect(powerUpNum);
 
 		if ( Input::Instance()->TriggerKey(KEY_INPUT_RETURN) || Input::Instance()->TriggerPadKey(PAD_INPUT_2) )
 		{
@@ -94,66 +92,69 @@ void GameScene::Update()
 		{
 			dealer_->PartsChenge();
 
-			player_->EndChangeParts();
+				player_->EndChangeParts();
+			}
 		}
-	}
-	else
-	{
-		nodeManager_->Update();
-
-		if ( !nodeManager_->IsMapDraw() )
+		else
 		{
-			player_->Update();
-		}
+			nodeManager_->Update();
 
-		if ( nodeManager_->IsNodeReset() )
-		{
-			scrollStop = false;
-		}
+			if ( !nodeManager_->IsMapDraw() )
+			{
+				player_->Update();
+			}
 
-		CollisionManager::GetInstance()->SetScreenPos(mapChip_->GetScreenPos());
-		CollisionManager::GetInstance()->Update();
+			if ( nodeManager_->IsNodeReset() )
+			{
+				scrollStop = false;
+			}
 
-	//TODO
-	//if ( enemys_->GameEnd())
-	//{
-	//	SceneManager::GetInstance()->ChangeScene("CLEAR");
-	//}
+			CollisionManager::GetInstance()->SetScreenPos(mapChip_->GetScreenPos());
+			CollisionManager::GetInstance()->Update();
 
 		//TODO
-		if ( player_->GetHp() <= 0 )
-		{
-			SceneManager::GetInstance()->ChangeScene("GAMEOVER");
-			enemys_->EnemysClear();
+		//if ( enemys_->GameEnd())
+		//{
+		//	SceneManager::GetInstance()->ChangeScene("CLEAR");
+		//}
+
+			//TODO
+			if ( player_->GetHp() <= 0 )
+			{
+				SceneManager::GetInstance()->ChangeScene("GAMEOVER");
+				enemys_->EnemysClear();
+			}
+
+			if ( nodeManager_->GameEnd() )
+			{
+				SceneManager::GetInstance()->ChangeScene("CLEAR");
+				enemys_->EnemysClear();
+			}
 		}
 
-		if ( nodeManager_->GameEnd() )
-		{
-			SceneManager::GetInstance()->ChangeScene("CLEAR");
-			enemys_->EnemysClear();
-		}
 	}
 
-	Vector2 s = Scroll();
-
-	ImGui::Begin("Scroll");
-
-	ImGui::Text("%f,%f",s.x,s.y);
-
-	ImGui::End();
 }
 
 void GameScene::Draw()
 {
-	Vector2 s = Scroll();
-	enemys_->SetScroll(s);
 	DrawGraph(0,0,backGround_,true);
-	mapChip_->Draw(s);
-	nodeManager_->Draw();
-	player_->Draw(s);
-	nodeManager_->MapDraw();
-	//if (!chenged) powerUp_->Draw();
 
+	if ( isSelect )
+	{
+		Vector2 s = Scroll();
+		enemys_->SetScroll(s);
+		mapChip_->Draw(s);
+		nodeManager_->Draw();
+		player_->Draw(s);
+		nodeManager_->MapDraw();
+		//if (!chenged) powerUp_->Draw();
+	}
+	else
+	{
+		nodeManager_->StartNodeSelectMapDraw();
+		isSelect = nodeManager_->StartNodeSelect();
+	}
 
 	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
 	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");
@@ -175,7 +176,7 @@ void GameScene::Finalize()
 
 Vector2 GameScene::Scroll()
 {
-	if (scrollStop )
+	if ( scrollStop )
 	{
 		return nowScroll;
 	}

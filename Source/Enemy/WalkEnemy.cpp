@@ -44,8 +44,8 @@ void WalkEnemy::Initialize()
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
 	CollisionManager::GetInstance()->AddObject(this);
 	attackPower_ = 90;
-	attackInterval_ = 60;
-	beforeAttackFrame_ = 5;
+	attackInterval_ = 120;
+	beforeAttackFrame_ = 10;
 	attackFrame_ = 25;
 	maxHp_ = 150;
 	hp_ = 150;
@@ -277,7 +277,11 @@ void WalkEnemy::Draw(Vector2 scroll)
 	{
 		flag = true;
 	}
-	DrawRectRotaGraph(pos_.x + scroll.x,pos_.y + scroll.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,tex_,true,flag);
+
+	if ( immortalTime_ <= 0 || immortalTime_ % 3 != 0 )
+	{
+		DrawRectRotaGraph(pos_.x + scroll.x,pos_.y + scroll.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,tex_,true,flag);
+	}
 
 #ifdef _DEBUG
 	if ( actionMode == ATTACK )

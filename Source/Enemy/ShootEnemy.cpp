@@ -48,7 +48,7 @@ void ShootEnemy::Initialize()
 	CollisionManager::GetInstance()->AddObject(this);
 	attackPower_ = 85;
 
-	attackInterval_ = 45;
+	attackInterval_ = 90;
 	beforeAttackFrame_ = 10;
 	attackFrame_ = 25;
 	maxHp_ = hp_;
@@ -232,8 +232,10 @@ void ShootEnemy::Draw(Vector2 scroll)
 	{
 		flag = true;
 	}
-	DrawRectRotaGraph(pos_.x + scroll.x,pos_.y + scroll.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,tex_,true,flag);
-
+	if ( immortalTime_ <= 0 || immortalTime_ % 3 != 0 )
+	{
+		DrawRectRotaGraph(pos_.x + scroll.x,pos_.y + scroll.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,tex_,true,flag);
+	}
 	for ( auto& itr : bullets )
 	{
 		itr->Draw(scroll);
