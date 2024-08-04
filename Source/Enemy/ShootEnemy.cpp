@@ -13,14 +13,14 @@ ShootEnemy::~ShootEnemy()
 }
 void ShootEnemy::Initialize()
 {
-	animeNum_ = 5;
+	animeNum_ = 4;
 	animeSpeed_ = 10;
 	drawSize_ = { 128,128 };
 	hitboxSize_ = { 64,128 };
 
 	MapChipObjectEnable();
 	SetMapChipCenter(&pos_);
-	SetMapChipRadius({ hitboxSize_.x / 2,hitboxSize_.y / 2 });
+	SetMapChipRadius({ hitboxSize_.x / 2,hitboxSize_.y / 2-5 });
 
 	ternInverval_ = 2;
 	gravity_ = { 0,1 };
@@ -39,7 +39,7 @@ void ShootEnemy::Initialize()
 	islive_ = true;
 
 	searchArea_ = make_unique<RectShape>();
-	searchArea_->SetRadius({ ( hitboxSize_.x * 5 / 2 ),hitboxSize_.y / 2 });
+	searchArea_->SetRadius({ ( hitboxSize_.x * 5 / 2 ),hitboxSize_.y / 2 - 10 });
 	shape_ = new RectShape();
 	shape_->SetRadius(hitboxSize_ / 2);
 	SetShape(shape_);
@@ -49,7 +49,7 @@ void ShootEnemy::Initialize()
 	attackPower_ = 85;
 
 	attackInterval_ = 45;
-	beforeAttackFrame_ = 5;
+	beforeAttackFrame_ = 10;
 	attackFrame_ = 25;
 	maxHp_ = hp_;
 	hp_ = 70;
@@ -96,8 +96,8 @@ void ShootEnemy::Update()
 			tex_ = EnemyManager::GetTexHandle("shootMove");
 			break;
 		case ATTACK:
-			Attack();
 			tex_ = EnemyManager::GetTexHandle("shootAttack");
+			Attack();
 			break;
 		default:
 			break;
@@ -122,6 +122,7 @@ void ShootEnemy::Update()
 
 void ShootEnemy::Move()
 {
+	animeNum_ = 4;
 	velocity_.Normalize();
 
 	gravity_.y += 0.5f;
@@ -139,7 +140,8 @@ void ShootEnemy::Move()
 	}
 	Vector2 nextPos_ = { pos_.x + ( ( velocity_.x * speed_ ) ) + ( ( hitboxSize_.x / 2 + 32 ) * -sign(velocity_.x) ),pos_.y + ( hitboxSize_.y / 2 ) };
 	nextElement_ = mapchip_->GetPosElement(static_cast< int32_t >( nextPos_.x ),static_cast< int32_t >( nextPos_.y ) + 64);
-	if ( ( nextElement_ == NEXT || ( nextElement_ == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM ) ) && !tern_ )
+	if ( ( nextElement_ == NEXT || ( nextElement_ == NONE && ( prevElement_ != NONE && prevElement_ != NEXT ) ) )
+	&& !tern_ )
 	{
 		velocity_ *= -1;
 		tern_ = true;
@@ -170,6 +172,8 @@ void ShootEnemy::Move()
 
 void ShootEnemy::Attack()
 {
+	animeNum_ = 1;
+	anime_ = 0;
 	if ( attackIntervalCounter_.IsCountEnd() )
 	{
 		if ( beforeAttackCounter_.IsCountEnd() && attackCounter_.IsCountEnd() )
@@ -178,12 +182,14 @@ void ShootEnemy::Attack()
 			attackCounter_.SetEndCount(attackFrame_);
 			shootReady_ = true;
 		}
+		tex_ = EnemyManager::GetTexHandle("shootAttack");
 	}
 
 
 	if ( !beforeAttackCounter_.IsCountEnd() )
 	{
 		beforeAttackCounter_.CountUp();
+		tex_ = EnemyManager::GetTexHandle("shootAttackBefore");
 		if ( !beforeAttackSoundPlayed_ )
 		{
 			beforeAttackSoundPlayed_ = true;
@@ -210,6 +216,7 @@ void ShootEnemy::Attack()
 		beforeAttackSoundPlayed_ = false;
 		PlaySoundMem(EnemyManager::GetSoundHandle("shootAttack"),DX_PLAYTYPE_BACK);
 		anime_ = 0;
+		tex_ = EnemyManager::GetTexHandle("shootAttack");
 	}
 	SetMapChipSpeed({ 0.f,gravity_.y });
 

@@ -73,13 +73,16 @@ void Player::Initialize()
 
 	circelShape_->SetRadius(hitboxSize_.y);
 
-	//ChangeLeg("Fenrir",0);
+	ChangeLeg("Fenrir",0);
+
+	//ChangeLeftArm("Vine",0);
+
+	//ChangeRightArm("Gun",0);
 }
 
 void Player::Update()
 {
 	powerUpText_ = false;
-
 	if (isPowerUp_)
 	{
 		PowerUp();
@@ -660,8 +663,6 @@ void Player::EndChangeParts()
 
 void Player::Reset()
 {
-	pos_.x = GameConfig::GetGameConfig()->windowWidth / 2;
-	pos_.y = GameConfig::GetGameConfig()->windowHeight / 2;
 	isDealed_ = false;
 }
 

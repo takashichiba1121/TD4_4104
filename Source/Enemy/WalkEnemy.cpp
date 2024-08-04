@@ -10,14 +10,14 @@ using namespace std;
 void WalkEnemy::Initialize()
 {
 
-	animeNum_ = 5;
+	animeNum_ = 4;
 	animeSpeed_ = 10;
 	drawSize_ = { 128,128 };
 	hitboxSize_ = { 64,128 };
 
 	MapChipObjectEnable();
 	SetMapChipCenter(&pos_);
-	SetMapChipRadius({ hitboxSize_.x / 2,hitboxSize_.y / 2 });
+	SetMapChipRadius({ hitboxSize_.x / 2,hitboxSize_.y / 2 - 10 });
 
 	ternInverval_ = 2;
 	gravity_ = { 0,1 };
@@ -64,7 +64,7 @@ void WalkEnemy::Update()
 
 	searchArea_->SetCenter({ ( sign(-velocity_.x) * searchArea_->GetRadius().x ) + pos_.x,pos_.y });
 
-	attackArea_->SetCenter({ ( sign(-velocity_.x) * attackArea_->GetRadius().x ) + pos_.x,pos_.y });
+	attackArea_->SetCenter({ ( sign(-velocity_.x) * attackArea_->GetRadius().x ) + pos_.x - (sign(-velocity_.x) * 32),pos_.y });
 
 	if ( Collision::Rect2Rect(*dynamic_cast< RectShape* >( playerPtr_->GetShape() ),*searchArea_.get()) && actionMode != ATTACK )
 	{
@@ -104,16 +104,16 @@ void WalkEnemy::Update()
 		switch ( actionMode )
 		{
 		case MOVE:
-			Move();
 			tex_ = EnemyManager::GetTexHandle("adjacentMove");
+			Move();
 			break;
 		case ENEMYAPPROACH:
+			tex_ = EnemyManager::GetTexHandle("adjacentMove");
 			Approach();
-			tex_ = EnemyManager::GetTexHandle("adjacentDash");
 			break;
 		case ATTACK:
+			tex_ = EnemyManager::GetTexHandle("adjacentAttackBefore");
 			Attack();
-			tex_ = EnemyManager::GetTexHandle("adjacentAttack");
 			break;
 		default:
 			break;
@@ -129,7 +129,8 @@ void WalkEnemy::Update()
 
 void WalkEnemy::Move()
 {
-
+	animeNum_ = 4;
+	animeSpeed_ = 10;
 	velocity_.Normalize();
 
 	gravity_.y += 0.5f;
@@ -147,7 +148,9 @@ void WalkEnemy::Move()
 	}
 	 nextPos_ = { pos_.x + ( ( velocity_.x * speed_ ) ) + ( ( hitboxSize_.x / 2 + 32)* -sign(velocity_.x) ),pos_.y + ( hitboxSize_.y / 2 )};
 	 nextElement_ = mapchip_->GetPosElement(static_cast<int32_t>(nextPos_.x),static_cast< int32_t >( nextPos_.y)+64);
-	if ((nextElement_ == NEXT ||(nextElement_ == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM )) &&  !tern_ )
+
+	 if ( ( nextElement_ == NEXT || ( nextElement_ == NONE && ( prevElement_ != NONE && prevElement_ != NEXT ) ) )
+	 && !tern_ )
 	{
 		velocity_ *= -1;
 		tern_ = true;
@@ -169,24 +172,7 @@ void WalkEnemy::Move()
 			ternInvervalTimer_ = 0;
 		}
 	}
-	 nextElement_ = mapchip_->GetPosElement(pos_.x +(( velocity_.x * speed_ )) + ( hitboxSize_.x / 2 ),
-		pos_.y + ( hitboxSize_.y / 2 ) + 1);
 
-	if (( nextElement_ == NEXT || ( nextElement_ == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM )) && !tern_ )
-	{
-		velocity_ *= -1;
-		tern_ = true;
-	}
-
-	if ( tern_ )
-	{
-		ternInvervalTimer_++;
-		if ( ternInverval_ < ternInvervalTimer_)
-		{
-			tern_ = false;
-			ternInvervalTimer_ = 0;
-		}
-	}
 
 	SetMapChipSpeed({ velocity_ * speed_,gravity_ });
 	shape_->SetCenter(pos_);
@@ -196,7 +182,8 @@ void WalkEnemy::Move()
 
 void WalkEnemy::Approach()
 {
-
+	animeNum_ = 4;
+	animeSpeed_ = 5;
 	velocity_ = Vector2(playerPtr_->GetPos(),pos_);
 	const float defaultSpeed = speed_;
 	speed_ += 1;
@@ -215,12 +202,13 @@ void WalkEnemy::Approach()
 	if ( GetOnDir() & 0b1 << OnDir::BOTTOM )
 	{
 		gravity_ = { 0,0 };
-		prevElement_ = mapchip_->GetPosElement(pos_.x,pos_.y + ( hitboxSize_.y / 2 ) + 1);
+		
 	}
+	prevElement_ = mapchip_->GetPosElement(pos_.x,pos_.y + ( hitboxSize_.y / 2 ) + 18);
 	nextElement_ = mapchip_->GetPosElement(pos_.x + ( ( velocity_.x * speed_ ) ) + ( hitboxSize_.x / 2 * sign(velocity_.x) ),
 	   pos_.y + ( hitboxSize_.y / 2 ) + 5);
 
-	if ( ( nextElement_ == NEXT || ( nextElement_ == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM ) ) && !tern_ )
+	if ( ( nextElement_ == NEXT || ( nextElement_ == NONE &&(prevElement_ != NONE && prevElement_ != NEXT) ) ) && !tern_ )
 	{
 		actionMode = MOVE;
 		return;
@@ -251,18 +239,20 @@ void WalkEnemy::Approach()
 
 void WalkEnemy::Attack()
 {
-	
+	anime_ = 0;
 	if ( !beforeAttackCounter_.IsCountEnd() )
 	{
 		beforeAttackCounter_.CountUp();
+		tex_ = EnemyManager::GetTexHandle("adjacentAttackBefore");
 	}
 	else if ( !attackCounter_.IsCountEnd() )
 	{
 		if ( !attackSoundPlayed_ )
 		{
-			PlaySoundMem(EnemyManager::GetSoundHandle("shootAttack"),DX_PLAYTYPE_BACK);
+			PlaySoundMem(EnemyManager::GetSoundHandle("meleeAttack"),DX_PLAYTYPE_BACK);
 			attackSoundPlayed_ = true;
 		}
+		tex_ = EnemyManager::GetTexHandle("adjacentAttack");
 		attackCounter_.CountUp();
 		if ( Collision::Rect2Rect(*dynamic_cast< RectShape* >( playerPtr_->GetShape() ),*attackArea_.get()) )
 		{

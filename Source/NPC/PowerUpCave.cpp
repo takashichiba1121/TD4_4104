@@ -18,7 +18,9 @@ void PowerUpCave::Initialize()
 	dealed_ = true;
 	CollisionDisable();
 	hitboxSize_ = { 128,128 };
-	pos_ = { 650,640 };
+	pos_ = { 650,550 };
+
+	tex_ = LoadGraph(string("Resources\\Node\\reinforcement.png"));
 
 	shape_ = new RectShape();
 	shape_->SetRadius(hitboxSize_ / 2);
@@ -206,18 +208,20 @@ void PowerUpCave::Draw()
 	{
 		if ( nowProductType == "Attack")
 		{
-			caveColor = color_[ 0 ];
+			SetDrawBright(0xf1,0x00,0x00);
 		}
 		else if ( nowProductType == "survival" )
 		{
-			caveColor = color_[ 1 ];
+			SetDrawBright(0x00,0xf1,0x00);
 		}
 		else
 		{
-			caveColor = color_[ 2 ];
+			SetDrawBright(0xf1,0xf1,0x00);
 		}
-		DrawBox(pos_.x - hitboxSize_.x/2,pos_.y - hitboxSize_.y/2,pos_.x + hitboxSize_.x/2,
-			pos_.y + hitboxSize_.y/2,caveColor,true);
+
+
+		DrawRotaGraph(pos_.x,pos_.y,2,0,tex_,true);
+		SetDrawBright(0xff,0xff,0xff);
 	}
 }
 
@@ -226,7 +230,7 @@ void PowerUpCave::ReSet()
 	selectmode_ = false;
 	dealed_ = false;
 	hitboxSize_ = { 128,128 };
-	pos_ = { 650,640 };
+	pos_ = { 650,610 };
 	SetPriducts();
 	CollisionEnable();
 }

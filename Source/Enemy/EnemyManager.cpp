@@ -1,7 +1,6 @@
 #include "EnemyManager.h"
 #include "DxlibInclude.h"
 #include "GameConfig.h"
-#include<BossEnemy.h>
 #include "Player.h"
 
 using namespace std;
@@ -16,6 +15,7 @@ void EnemyManager::BossPop()
 	temp->SetPos({ 150,GameConfig::GetWindowHeight() - 192 / 2.0f - 64 });
 	temp->SetPlayerPtr(playerPtr_);
 	temp->Initialize();
+	boss_ = temp.get();
 	enemylist_.push_back(move(temp));
 }
 
@@ -251,7 +251,7 @@ bool EnemyManager::GameEnd()
 	return false;
 }
 
-bool EnemyManager::IsEnemyEmpty()
+bool EnemyManager::IsScreenEnemyEmpty()
 {
 	return screenEnemy_ <= 0;
 }
@@ -259,6 +259,11 @@ bool EnemyManager::IsEnemyEmpty()
 void EnemyManager::EnemysClear()
 {
 	enemylist_.clear();
+}
+
+bool EnemyManager::IsBossAlive()
+{
+	return boss_->IsLive();
 }
 
 int32_t EnemyManager::GetTexHandle(std::string type)
@@ -273,17 +278,21 @@ int32_t EnemyManager::GetSoundHandle(std::string name)
 
 void EnemyManager::TexLoad()
 {
-	texs_[ "fly" ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
+	texs_[ "fly" ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));//飛行
 
-	texs_[ "shootMove" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));
+	texs_[ "shootMove" ] = LoadGraph(string("Resources\\Enemy\\aecherEnemyStand.png"));//遠距離移動
 
-	texs_[ "shootAttack" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));
+	texs_[ "shootAttack" ] = LoadGraph(string("Resources\\Enemy\\archerAtackPlay.png"));//遠距離攻撃
 
-	texs_[ "adjacentMove" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));
+	texs_[ "shootAttackBefore" ] = LoadGraph(string("Resources\\Enemy\\archerAtackCharge.png"));//遠距離前攻撃
 
-	texs_[ "adjacentAttack" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));
+	texs_[ "adjacentMove" ] = LoadGraph(string("Resources\\Enemy\\meleeEnemyStand.png"));//近距離移動
 
-	texs_[ "adjacentDash" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));
+	texs_[ "adjacentAttack" ] = LoadGraph(string("Resources\\Enemy\\meleeAtackPlay.png"));//近距離攻撃
+
+	texs_[ "adjacentAttackBefore" ] = LoadGraph(string("Resources\\Enemy\\meleeAtackCharge.png"));//近距離攻撃前
+
+	texs_[ "adjacentDash" ] = LoadGraph(string("Resources\\Player\\meleeEnemyStand.png"));//近距離ダッシュ(プレイヤーに接近)
 
 
 }

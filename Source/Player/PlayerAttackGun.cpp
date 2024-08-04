@@ -9,6 +9,8 @@ void PlayerAttackGun::Initialize(Vector2* playerPos,Vector2* velocity,bool* dire
 	direction_ = direction;
 
 	velocity_ = velocity;
+
+	textureId_ = LoadGraph(std::string("Resources\\Player\\Parts\\gunArm.png"));
 }
 
 void PlayerAttackGun::AttackInit(float pow,float changeCrit,float changeCdmg)
@@ -40,6 +42,15 @@ void PlayerAttackGun::Attack()
 {
 	if ( isAttack_ )
 	{
+		if ( *direction_ )
+		{
+			DrawPos_ = { playerPos_->x + ATTACK_POS_.x + COLISION_SIZE_.x / 2,playerPos_->y + ATTACK_POS_.y };
+		}
+		else
+		{
+			DrawPos_ = { playerPos_->x - ATTACK_POS_.x - COLISION_SIZE_.x / 2,playerPos_->y + ATTACK_POS_.y };
+		}
+
 		AttackTime_++;
 
 		if ( AttackTime_ > LAST_ATTACK_TIME_ )
@@ -53,5 +64,19 @@ void PlayerAttackGun::Attack()
 
 void PlayerAttackGun::Draw(Vector2 scroll)
 {
-
+	if ( isAttack_ )
+	{
+		if ( *direction_ )
+		{
+			DrawExtendGraph(scroll.x + DrawPos_.x - COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y - COLISION_SIZE_.y / 2,
+				scroll.x + DrawPos_.x + COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y + COLISION_SIZE_.y / 2,
+				textureId_,true);
+		}
+		else
+		{
+			DrawExtendGraph(scroll.x + DrawPos_.x + COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y - COLISION_SIZE_.y / 2,
+				scroll.x + DrawPos_.x - COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y + COLISION_SIZE_.y / 2,
+				textureId_,true);
+		}
+	}
 }

@@ -6,12 +6,27 @@
 void BattleNode::Initialize()
 {
 
-	mapChip_->SetEnemyManager(enemys_);
 }
 
 void BattleNode::Update()
 {
-	PlayerNodeMove();
+	if ( *isScrollStop_ && enemys_->IsScreenEnemyEmpty())
+	{
+		for ( auto& door : nextdoors_ )
+		{
+			mapChip_->MapWrite(door.pos.x,door.pos.y,ChipIndex::NEXT);
+		}
+
+		PlayerNodeMove();
+	}
+	else
+	{
+		for ( auto& door : nextdoors_ )
+		{
+			mapChip_->MapWrite(door.pos.x,door.pos.y,ChipIndex::ROAD);
+		}
+	}
+
 	enemys_->Update();
 }
 

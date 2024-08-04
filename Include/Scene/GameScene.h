@@ -30,6 +30,10 @@ private:
 	uint8_t num;
 	bool chenged;
 
+	bool scrollStop = false;
+
+	Vector2 nowScroll = { 0,0 };
+
 public:
 	void Initialize() override;
 	void Update() override;

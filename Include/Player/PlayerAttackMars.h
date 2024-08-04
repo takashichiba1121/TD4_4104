@@ -16,9 +16,9 @@ private:
 
 	const float LAST_ATTACK_TIME_=10;
 
-	const Vector2 ATTACK_POS_ = {15,-10};
+	const Vector2 ATTACK_POS_ = {0,-0};
 
-	const Vector2 COLISION_SIZE_ = {64,64};
+	const Vector2 COLISION_SIZE_ = {64,128};
 
 	const uint32_t INTERVAL_=60;
 
@@ -39,6 +39,8 @@ private:
 	bool* direction_;
 
 	Vector2* velocity_;
+
+	int textureId_;
 
 public:
 

@@ -43,6 +43,11 @@ void BaseNode::SetEnemyManager(EnemyManager* enemyManager)
 	enemys_ = enemyManager;
 }
 
+void BaseNode::SetScrollStop(bool* scrollStop)
+{
+	isScrollStop_ = scrollStop;
+}
+
 void BaseNode::PlayerNodeMove()
 {
 	Vector2 playerPos = mapChip_->GetPos(player_->GetPos().x+37,player_->GetPos().y+16);

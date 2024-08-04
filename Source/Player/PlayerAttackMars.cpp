@@ -20,6 +20,8 @@ void PlayerAttackMars::Initialize(Vector2* playerPos,Vector2* velocity,bool* dir
 	CollisionManager::GetInstance()->AddObject(this);
 
 	CollisionDisable();
+
+	textureId_ = LoadGraph(std::string("Resources\\Player\\Parts\\marsShield.png"));
 }
 void PlayerAttackMars::AttackInit(float pow,float changeCrit,float changeCdmg)
 {
