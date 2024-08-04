@@ -73,6 +73,7 @@ void PlayerAttackFist::Attack()
 		{
 			CollisionDisable();
 			isAttack_ = false;
+			isGiveDamage_ = false;
 		}
 	}
 	else

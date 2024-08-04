@@ -74,6 +74,7 @@ void PlayerAttackSpider::Attack()
 		{
 			CollisionDisable();
 			isAttack_ = false;
+			isGiveDamage_ = false;
 		}
 	}
 	else
