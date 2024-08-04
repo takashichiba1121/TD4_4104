@@ -105,6 +105,11 @@ void GameScene::Update()
 			player_->Update();
 		}
 
+		if ( nodeManager_->IsNodeReset() )
+		{
+			scrollStop = false;
+		}
+
 		CollisionManager::GetInstance()->SetScreenPos(mapChip_->GetScreenPos());
 		CollisionManager::GetInstance()->Update();
 
@@ -118,6 +123,13 @@ void GameScene::Update()
 		if ( player_->GetHp() <= 0 )
 		{
 			SceneManager::GetInstance()->ChangeScene("GAMEOVER");
+			enemys_->EnemysClear();
+		}
+
+		if ( nodeManager_->GameEnd() )
+		{
+			SceneManager::GetInstance()->ChangeScene("CLEAR");
+			enemys_->EnemysClear();
 		}
 	}
 

@@ -34,6 +34,7 @@ enum Status
 class PowerUpCave:public BaseObject
 {
 private:
+	int32_t tex_;
 	Player* playerPtr_;
 	int32_t font_;
 	std::array<PowerUp*,3> selectProducts_;

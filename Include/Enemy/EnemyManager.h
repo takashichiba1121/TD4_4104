@@ -2,6 +2,8 @@
 #include "WalkEnemy.h"
 #include "FlyEnemy.h"
 #include "ShootEnemy.h"
+#include<BossEnemy.h>
+
 #include <list>
 #include <memory>
 #include <unordered_map>
@@ -30,6 +32,8 @@ private:
 	BaseEnemy* cursedEnemy_;
 	size_t screenEnemy_ = 0;
 	Vector2 scroll_;
+	BossEnemy* boss_;
+
 
 	static std::unordered_map<std::string,int32_t> texs_;
 	static std::unordered_map<std::string,int32_t> sounds_;
@@ -37,8 +41,8 @@ private:
 	void Pop();
 	//自動ランダム生成
 
-	void BossPop();
 public:
+	void BossPop();
 	void SetEnemyPop(EnemyType enemyType,Vector2 pos,Vector2 Velocity);
 	//指定生成
 	void SetEnemyPop(EnemyType enemyType,Vector2 pos);
@@ -51,8 +55,9 @@ public:
 	void SetMapChip(MapChip* mapchip);
 	size_t GetEnemyCount();
 	bool GameEnd();
-	bool IsEnemyEmpty();
+	bool IsScreenEnemyEmpty();
 	void EnemysClear();
+	bool IsBossAlive();
 	static int32_t GetTexHandle(std::string name);
 	static int32_t GetSoundHandle(std::string name);
 	static void TexLoad();

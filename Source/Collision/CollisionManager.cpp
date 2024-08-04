@@ -130,7 +130,7 @@ void CollisionManager::Update()
 	for ( auto& itr : mapChipObjects_ )
 	{
 
-		if (! itr->mapChipObject_ )
+		if (! itr->isMapChipCollision_ )
 		{
 			continue;
 		}

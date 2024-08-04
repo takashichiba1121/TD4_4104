@@ -20,7 +20,7 @@ void ShootEnemy::Initialize()
 
 	MapChipObjectEnable();
 	SetMapChipCenter(&pos_);
-	SetMapChipRadius({ hitboxSize_.x / 2,hitboxSize_.y / 2 });
+	SetMapChipRadius({ hitboxSize_.x / 2,hitboxSize_.y / 2-5 });
 
 	ternInverval_ = 2;
 	gravity_ = { 0,1 };
@@ -39,7 +39,7 @@ void ShootEnemy::Initialize()
 	islive_ = true;
 
 	searchArea_ = make_unique<RectShape>();
-	searchArea_->SetRadius({ ( hitboxSize_.x * 5 / 2 ),hitboxSize_.y / 2 });
+	searchArea_->SetRadius({ ( hitboxSize_.x * 5 / 2 ),hitboxSize_.y / 2 - 10 });
 	shape_ = new RectShape();
 	shape_->SetRadius(hitboxSize_ / 2);
 	SetShape(shape_);
@@ -139,7 +139,8 @@ void ShootEnemy::Move()
 	}
 	Vector2 nextPos_ = { pos_.x + ( ( velocity_.x * speed_ ) ) + ( ( hitboxSize_.x / 2 + 32 ) * -sign(velocity_.x) ),pos_.y + ( hitboxSize_.y / 2 ) };
 	nextElement_ = mapchip_->GetPosElement(static_cast< int32_t >( nextPos_.x ),static_cast< int32_t >( nextPos_.y ) + 64);
-	if ( ( nextElement_ == NEXT || ( nextElement_ == NONE && GetOnDir() & 0b1 << OnDir::BOTTOM ) ) && !tern_ )
+	if ( ( nextElement_ == NEXT || ( nextElement_ == NONE && ( prevElement_ != NONE && prevElement_ != NEXT ) ) )
+	&& !tern_ )
 	{
 		velocity_ *= -1;
 		tern_ = true;
