@@ -120,7 +120,7 @@ void NodeManager::Initialize()
 			if ( nodes_[ 0 ][ point ].type.value != NodeType::Type::NO_CHILDREN )
 			{
 				startNodes_.push_back(&nodes_[ 0 ][ point ]);
-				nodes_[ 0 ][ point ].type.value = NodeType::BOSS;
+				nodes_[ 0 ][ point ].type.value = NodeType::START;
 			}
 		}
 
@@ -129,7 +129,7 @@ void NodeManager::Initialize()
 			if ( !nodes_[ FLOORS - 1 ][ i ].previews.empty() )
 			{
 				nodes_[ FLOORS - 1 ][ i ].nexts.push_back(&bossNode_);
-				nodes_[ FLOORS - 1 ][ i ].type.value = NodeType::Type::NONE;
+				nodes_[ FLOORS - 1 ][ i ].type.value = NodeType::Type::START;
 			}
 		}
 

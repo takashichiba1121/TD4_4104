@@ -156,9 +156,9 @@ void GameScene::Draw()
 		isSelect = nodeManager_->StartNodeSelect();
 	}
 
-	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
-	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");
-	DrawFormatString(0,40,0xffffff,"ATTACK:Z X");
+	//DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
+	//DrawFormatString(0,20,0xffffff,"JUMP:SPACE");
+	//DrawFormatString(0,40,0xffffff,"ATTACK:Z X");
 }
 
 void GameScene::SpriteDraw()
