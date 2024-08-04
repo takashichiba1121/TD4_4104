@@ -102,5 +102,9 @@ public:
 		return DEF_;
 	}
 
+	bool IsEvasionRoll()override
+	{
+		return isEvasionRoll_;
+	}
 };
 

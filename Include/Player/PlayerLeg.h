@@ -26,5 +26,7 @@ public:
 	virtual void Load() = 0;
 
 	virtual uint32_t GetDef()=0;
+
+	virtual bool IsEvasionRoll()=0;
 };
 

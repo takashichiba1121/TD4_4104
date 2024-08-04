@@ -102,5 +102,10 @@ public:
 	uint32_t GetDef() override {
 		return DEF_;
 	}
+
+	bool IsEvasionRoll()override
+	{
+		return isEvasionRoll_;
+	}
 };
 
