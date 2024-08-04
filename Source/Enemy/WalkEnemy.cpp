@@ -21,7 +21,7 @@ void WalkEnemy::Initialize()
 
 	ternInverval_ = 2;
 	gravity_ = { 0,1 };
-	originalSpeed_ = GetRand(4) + 1;
+	originalSpeed_ = GetRand(2) + 1;
 	if ( GetRand(2) >= 2 )
 	{
 		velocity_ = { 1,0 };

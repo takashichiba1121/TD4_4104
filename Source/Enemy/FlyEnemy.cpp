@@ -35,6 +35,8 @@ void FlyEnemy::Initialize()
 	attackInterval_ = 240;
 	attackFrame_ = 5;
 
+	
+
 	tag.tag = "Enemy";
 	userData_ = &tag;
 	tex_ = EnemyManager::GetTexHandle("fly");
@@ -134,6 +136,7 @@ void FlyEnemy::Attack()
 		attackFinish_ = false;
 		beforeAttackCounter_.CountUp();
 		speed_ = 0;
+		maxAttackTime.SetEndCount(60);
 	}
 	else if ( !attackCounter_.IsCountEnd() )
 	{
@@ -145,6 +148,7 @@ void FlyEnemy::Attack()
 	}
 	if ( !attackFinish_ )
 	{
+		maxAttackTime.CountUp();
 		speed_ = InQuad(0,5,attackCounter_.GetEndCount(),attackCounter_.GetCount());
 		Vector2 targetVelo(pos_,targetPos_);
 		targetVelo.Normalize();
@@ -153,15 +157,18 @@ void FlyEnemy::Attack()
 	else
 	{
 		stanTimer_.CountUp();
-		if ( stanTimer_.IsCountEnd() )
+		if ( stanTimer_.IsCountEnd())
 		{
 			actionMode = MOVE;
 		}
 	}
-	if ( Vector2(pos_,targetPos_).GetLenge() <= 25 )
+	if ( Vector2(pos_,targetPos_).GetLenge() <= 25 || maxAttackTime.IsCountEnd() )
 	{
 		attackFinish_ = true;
-		stanTimer_.SetEndCount(30);
+		if ( !attackFinish_ )
+		{
+			stanTimer_.SetEndCount(30);
+		}
 	}
 }
 
