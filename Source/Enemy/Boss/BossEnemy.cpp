@@ -101,6 +101,10 @@ void BossEnemy::Initialize()
 	phase_ = APPROACH;
 
 	approachHitBox_.SetRadius(attackApproachHitBox_.GetRadius());
+
+	hpBerTextureId_ = LoadGraph(std::string("Resources\\UI\\UI_enemy_boss_HP_bar.png"));
+
+	hpBerBackgroundTextureId_ = LoadGraph(std::string("Resources\\UI\\UI_enemy_boss_HP_frame.png"));
 }
 
 void BossEnemy::Update()
@@ -172,6 +176,10 @@ void BossEnemy::Draw(Vector2 scrool)
 		break;
 	}
 
+
+	DrawRotaGraphFast3(120,50,0,0,1.0,1.0,0.0,hpBerBackgroundTextureId_,true);
+	DrawRotaGraphFast3(120,50,0,0,float(hp_) / float( HP ),1.0,0.0,hpBerTextureId_,true);
+
 	longRange_->Draw();
 
 #ifdef _DEBUG
@@ -194,7 +202,7 @@ void BossEnemy::OnCollision()
 
 BossEnemy::~BossEnemy()
 {
-	
+
 }
 
 void BossEnemy::DebugDraw()
@@ -238,7 +246,7 @@ void BossEnemy::ApproachMove()
 	float hpRet = hp_ / float(HP);
 	int32_t hp = hpRet * 100;
 
-	if ( hp == 50 && longRangeAttackCount_ ==  0  || hp == 25 && longRangeAttackCount_ == 1 || hp == 10 && longRangeAttackCount_ == 2 )
+	if ( hp == 50 && longRangeAttackCount_ == 0 || hp == 25 && longRangeAttackCount_ == 1 || hp == 10 && longRangeAttackCount_ == 2 )
 	{
 		velocity_.x = 0;
 		longRangeAttackCount_++;
