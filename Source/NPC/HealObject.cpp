@@ -45,6 +45,10 @@ void HealObject::Draw()
 
 void HealObject::OnCollision()
 {
+	if ( !heal )
+	{
+		return;
+	}
 	if ( GetCollisionInfo().userData )
 	{
 		if ( static_cast< UserData* >( GetCollisionInfo().userData )->tag == "Player" )
