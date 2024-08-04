@@ -4,6 +4,7 @@
 #include"CollisionConfig.h"
 #include"CollisionManager.h"
 #include"BaseEnemy.h"
+#include"BossEnemy.h"
 
 void PlayerBullet::Initialize(Vector2 velocity,Vector2 position,uint32_t life,float pow,float changeCrit,float changeCdmg,PlayerBullet::Type type)
 {
@@ -64,6 +65,17 @@ void PlayerBullet::OnCollision()
 				else
 				{
 					dynamic_cast< BaseEnemy* >( GetCollisionInfo().object )->Damage(pow_);
+				}
+			}
+			if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "BossEnemy" )
+			{
+				if ( GetRand(1000) <= playerCrit_ * 1000 )
+				{
+					dynamic_cast< BossEnemy* >( GetCollisionInfo().object )->Damage(pow_ + ( pow_ * playerCdmg_ ));
+				}
+				else
+				{
+					dynamic_cast< BossEnemy* >( GetCollisionInfo().object )->Damage(pow_);
 				}
 			}
 			break;

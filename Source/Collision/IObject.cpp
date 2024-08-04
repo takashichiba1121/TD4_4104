@@ -60,6 +60,7 @@ bool IObject::IsMapChipObject() const
 void IObject::SetMapChipCenter(Vector2* center)
 {
 	center_ = center;
+	mapChipObject_ = true;
 }
 
 void IObject::SetMapChipRadius(const Vector2& r)
@@ -89,12 +90,13 @@ uint8_t IObject::GetOnDir()
 
 void IObject::MapChipObjectEnable()
 {
-	mapChipObject_ = true;
+	isMapChipCollision_ = true;
+
 }
 
 void IObject::MapChipObjectDisable()
 {
-	mapChipObject_ = false;
+	isMapChipCollision_ = false;
 }
 
 void IObject::CollisionEnable()

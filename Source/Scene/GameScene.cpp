@@ -105,6 +105,11 @@ void GameScene::Update()
 			player_->Update();
 		}
 
+		if ( nodeManager_->IsNodeReset() )
+		{
+			scrollStop = false;
+		}
+
 		CollisionManager::GetInstance()->SetScreenPos(mapChip_->GetScreenPos());
 		CollisionManager::GetInstance()->Update();
 
@@ -118,6 +123,13 @@ void GameScene::Update()
 		if ( player_->GetHp() <= 0 )
 		{
 			SceneManager::GetInstance()->ChangeScene("GAMEOVER");
+			enemys_->EnemysClear();
+		}
+
+		if ( nodeManager_->GameEnd() )
+		{
+			SceneManager::GetInstance()->ChangeScene("CLEAR");
+			enemys_->EnemysClear();
 		}
 	}
 
@@ -163,39 +175,49 @@ void GameScene::Finalize()
 
 Vector2 GameScene::Scroll()
 {
-	Vector2 scroll = { 0,0 };
-
-	Vector2 playerPos = player_->GetPos();
-
-	Vector2 mapChipLeftTopPos = { 0,0 };
-	Vector2 mapChipTopBottomPos = mapChip_->GetRightTopBottom();
-
-	int32_t WindowHeight = GameConfig::GetWindowHeight();
-	int32_t WindowWidth = GameConfig::GetWindowWidth();
-
-	scroll.x = WindowWidth / 2 - playerPos.x;
-
-	scroll.y = WindowHeight / 2 - playerPos.y;
-
-	if ( mapChipTopBottomPos.x > 0 && mapChipTopBottomPos.y > 0 )
+	if (scrollStop )
 	{
-		if ( playerPos.x >= mapChipTopBottomPos.x - WindowWidth / 2 )
+		return nowScroll;
+	}
+	else
+	{
+		Vector2 scroll = { 0,0 };
+
+		Vector2 playerPos = player_->GetPos();
+
+		Vector2 mapChipLeftTopPos = { 0,0 };
+		Vector2 mapChipTopBottomPos = mapChip_->GetRightTopBottom();
+
+		int32_t WindowHeight = GameConfig::GetWindowHeight();
+		int32_t WindowWidth = GameConfig::GetWindowWidth();
+
+		scroll.x = WindowWidth / 2 - playerPos.x;
+
+		scroll.y = WindowHeight / 2 - playerPos.y;
+
+		if ( mapChipTopBottomPos.x > 0 && mapChipTopBottomPos.y > 0 )
 		{
-			scroll.x = -( mapChipTopBottomPos.x - WindowWidth );
+			if ( playerPos.x >= mapChipTopBottomPos.x - WindowWidth / 2 )
+			{
+				scroll.x = -( mapChipTopBottomPos.x - WindowWidth );
+				scrollStop = true;
+			}
+			if ( playerPos.y >= mapChipTopBottomPos.y - WindowHeight / 2 )
+			{
+				scroll.y = -( mapChipTopBottomPos.y - WindowHeight );
+			}
 		}
-		if ( playerPos.y >= mapChipTopBottomPos.y - WindowHeight / 2 )
+		if ( playerPos.x <= mapChipLeftTopPos.x + WindowWidth / 2 )
 		{
-			scroll.y = -( mapChipTopBottomPos.y - WindowHeight );
+			scroll.x = mapChipLeftTopPos.x;
 		}
-	}
-	if ( playerPos.x <= mapChipLeftTopPos.x + WindowWidth / 2 )
-	{
-		scroll.x = mapChipLeftTopPos.x;
-	}
-	if ( playerPos.y <= mapChipLeftTopPos.y + WindowHeight / 2 )
-	{
-		scroll.y = mapChipLeftTopPos.y;
-	}
+		if ( playerPos.y <= mapChipLeftTopPos.y + WindowHeight / 2 )
+		{
+			scroll.y = mapChipLeftTopPos.y;
+		}
 
-	return scroll;
+		nowScroll = scroll;
+
+		return scroll;
+	}
 }

@@ -64,5 +64,6 @@ public:
 	int32_t GetImmortalTime();
 	int32_t GetCurseStack();
 	void AnimeUpdate(bool loop = true);
+	virtual ~BaseEnemy() = default;
 };
 

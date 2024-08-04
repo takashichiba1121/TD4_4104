@@ -165,3 +165,7 @@ void BossBullet::OnCollision()
 		}
 	}
 }
+
+BossBullet::~BossBullet()
+{
+}

@@ -1,7 +1,6 @@
 #include "EnemyManager.h"
 #include "DxlibInclude.h"
 #include "GameConfig.h"
-#include<BossEnemy.h>
 #include "Player.h"
 
 using namespace std;
@@ -16,6 +15,7 @@ void EnemyManager::BossPop()
 	temp->SetPos({ 150,GameConfig::GetWindowHeight() - 192 / 2.0f - 64 });
 	temp->SetPlayerPtr(playerPtr_);
 	temp->Initialize();
+	boss_ = temp.get();
 	enemylist_.push_back(move(temp));
 }
 
@@ -259,6 +259,11 @@ bool EnemyManager::IsEnemyEmpty()
 void EnemyManager::EnemysClear()
 {
 	enemylist_.clear();
+}
+
+bool EnemyManager::IsBossAlive()
+{
+	return boss_->IsLive();
 }
 
 int32_t EnemyManager::GetTexHandle(std::string type)

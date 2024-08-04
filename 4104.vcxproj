@@ -109,7 +109,7 @@
   <ItemGroup>
     <ClCompile Include="Source\NPC\HealObject.cpp" />
     <ClCompile Include="Source\Util\FontManager.cpp" />
-    <ClCompile Include="Include\Util\DxlibInclude.cpp" />
+    <ClCompile Include="Source\Base\DxlibInclude.cpp" />
     <ClCompile Include="Source\Base\SoundManager.cpp" />
     <ClCompile Include="Source\Enemy\Boss\BossBullet.cpp" />
     <ClCompile Include="Source\Enemy\Boss\BossLongRangeAttack.cpp" />
