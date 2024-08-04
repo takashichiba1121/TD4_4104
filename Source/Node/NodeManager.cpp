@@ -120,7 +120,7 @@ void NodeManager::Initialize()
 			if ( nodes_[ 0 ][ point ].type.value != NodeType::Type::NO_CHILDREN )
 			{
 				startNodes_.push_back(&nodes_[ 0 ][ point ]);
-				nodes_[ 0 ][ point ].type.value = NodeType::BOSS;
+				nodes_[ 0 ][ point ].type.value = NodeType::START;
 			}
 		}
 

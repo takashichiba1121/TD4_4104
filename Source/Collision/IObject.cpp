@@ -107,6 +107,7 @@ void IObject::CollisionEnable()
 void IObject::CollisionDisable()
 {
 	isCollision_ = false;
+	dir_ = 0;
 }
 
 void IObject::Update()
