@@ -14,7 +14,7 @@ uint32_t SoundManager::LoadSound(const std::string& path_)
 		Sound data;
 
 		data.path = path_;
-		data.id = DxLib::LoadGraph(path_.c_str());
+		data.id = DxLib::LoadSoundMem(path_.c_str());
 
 		soundDates_[path_] = data;
 

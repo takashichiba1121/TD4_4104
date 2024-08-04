@@ -31,7 +31,8 @@ protected:
 public:
 	virtual void Initialize() = 0;
 	virtual void Update() = 0;
-	virtual void Draw() = 0;
+	virtual void Draw();
+	virtual void Draw(Vector2 scroll);
 	//攻撃耐性等の特殊な処理を必要とする場合を考慮し仮想化
 	virtual void Damage(int32_t damage);
 	virtual void Damage(int32_t damage,Effects effect,bool effectD);
@@ -41,5 +42,6 @@ public:
 	int32_t GetHp();
 	Vector2 GetPos();
 	void SetPos(const Vector2& pos);
+	virtual ~BaseObject() = default;
 };
 

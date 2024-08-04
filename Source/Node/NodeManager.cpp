@@ -13,6 +13,7 @@
 
 #include<GameConfig.h>
 #include<Input.h>
+#include<Collision.h>
 
 int32_t GetRand(int32_t min_,int32_t max_)
 {
@@ -35,136 +36,164 @@ NodeManager* NodeManager::GetInstance()
 
 void NodeManager::Initialize()
 {
+	if ( !init_ )
 	{
-		GameConfig::Node* config = GameConfig::GetNodeConfig();
-		X_DIST = config->xDistance;
-		Y_DIST = config->yDistance;
-		PLACEMENT_RANDOMNESS = config->placementRandomness;
-		FLOORS = config->floors;
-		MAP_WIDTH = config->width;
-		PATHS = config->paths;
-		START_POINT = config->startPoints;
+		init_ = true;
 
-		for ( size_t i = 0; i < config->nodeProbabilities.size(); i++ )
 		{
-			nodeProbabilities[ i ] = config->nodeProbabilities[ i ];
-		}
-	}
+			GameConfig::Node* config = GameConfig::GetNodeConfig();
+			X_DIST = config->xDistance;
+			Y_DIST = config->yDistance;
+			PLACEMENT_RANDOMNESS = config->placementRandomness;
+			FLOORS = config->floors;
+			MAP_WIDTH = config->width;
+			PATHS = config->paths;
+			START_POINT = config->startPoints;
 
-	reinforcementImg = LoadGraph(std::string("Resources/Node/reinforcement.png"));
-	transactionImg = LoadGraph(std::string("Resources/Node/transaction.png"));
-	battleImg = LoadGraph(std::string("Resources/Node/battle.png"));
-	shopImg = LoadGraph(std::string("Resources/Node/shop.png"));
-	healingImg = LoadGraph(std::string("Resources/Node/healing.png"));
-	startImg = LoadGraph(std::string("Resources/Node/start.png"));
-	backGroundImg = LoadGraph(std::string("Resources/BackGround/mapBackGround.png"));
-
-	distribution = std::discrete_distribution<int32_t>(nodeProbabilities,nodeProbabilities + NodeType::TYPE_NUM);
-
-	rooms_[ NodeType::REINFORCEMENT ] = std::make_unique<ReinforcementNode>();
-	rooms_[ NodeType::TRANSACTION ] = std::make_unique<TransactionNode>();
-	rooms_[ NodeType::BATTLE ] = std::make_unique<BattleNode>();
-	rooms_[ NodeType::SHOP ] = std::make_unique<ShopNode>();
-	rooms_[ NodeType::HEALING ] = std::make_unique<HealingNode>();
-	rooms_[ NodeType::START ] = std::make_unique<StartNode>();
-
-	bossRoom_ = std::make_unique<BossNode>();
-
-	for ( auto& room : rooms_ )
-	{
-		room->SetMapChip(mapChip_);
-		room->SetPlayer(player_);
-		room->SetNodeManagerr(this);
-		room->SetPowerUp(powerUp_);
-		room->SetDealer(dealer_);
-		room->Initialize();
-	}
-
-	bossRoom_->SetMapChip(mapChip_);
-	bossRoom_->SetPlayer(player_);
-	bossRoom_->SetNodeManagerr(this);
-	bossRoom_->Initialize();
-
-	bossNode_.type.value = NodeType::BOSS;
-
-	GenerateInitialGrid();
-
-	std::vector<int32_t> startingPoints = GetRandomStartingPoints();
-
-	for ( int32_t k = 0; k < PATHS; k++ )
-	{
-		int32_t j = startingPoints[ DxLib::GetRand(startingPoints.size() - 1) ];
-
-		int32_t current_j = j;
-		for ( int32_t i = 0; i < FLOORS - 1; ++i )
-		{
-			current_j = SetupConnection(i,current_j);
-		}
-	}
-
-	for ( int32_t point : startingPoints )
-	{
-		if ( nodes_[ 0 ][ point ].type.value != NodeType::Type::NO_CHILDREN )
-		{
-			startNodes_.push_back(&nodes_[ 0 ][ point ]);
-			drawNode_.push_back(&nodes_[ 0 ][ point ]);
-			nodes_[ 0 ][ point ].type.value = NodeType::BATTLE;
-		}
-	}
-
-	for ( int32_t i = 0; i < MAP_WIDTH; ++i )
-	{
-		if ( !nodes_[ FLOORS - 1 ][ i ].previews.empty() )
-		{
-			nodes_[ FLOORS - 1 ][ i ].nexts.push_back(&bossNode_);
-			nodes_[ FLOORS - 1 ][ i ].type.value = NodeType::Type::NONE;
-		}
-	}
-
-	SetupRoomTypes();
-
-	for ( int32_t i = 0; i < FLOORS; ++i )
-	{
-		for ( int32_t j = 0; j < MAP_WIDTH; ++j )
-		{
-			if ( !nodes_[ i ][ j ].nexts.empty() )
+			for ( size_t i = 0; i < config->nodeProbabilities.size(); i++ )
 			{
-				std::vector<Node*>& nodes = nodes_[ i ][ j ].nexts;
-				std::sort(nodes.begin(),nodes.end(),[ ] (Node* node,Node* node2) { return node->column < node2->column; });
+				nodeProbabilities[ i ] = config->nodeProbabilities[ i ];
 			}
 		}
-	}
 
-	std::sort(startNodes_.begin(),startNodes_.end());
+		reinforcementImg = LoadGraph(std::string("Resources/Node/reinforcement.png"));
+		transactionImg = LoadGraph(std::string("Resources/Node/transaction.png"));
+		battleImg = LoadGraph(std::string("Resources/Node/battle.png"));
+		shopImg = LoadGraph(std::string("Resources/Node/shop.png"));
+		healingImg = LoadGraph(std::string("Resources/Node/healing.png"));
+		startImg = LoadGraph(std::string("Resources/Node/start.png"));
+		bossImg = LoadGraph(std::string("Resources/Node/boss.png"));
 
-	playerNodePos = 0;
-	leftBottomX = 450;
-	leftBottomY = 650;
+		backGroundImg = LoadGraph(std::string("Resources/BackGround/mapBackGround.png"));
 
-	int32_t bossNodeX = 0;
-	int32_t nodeCount = 0;
+		openSound_ = LoadSoundMem(std::string("Resources/Sound/SFX_UI_map_open.mp3"));
+		closeSound_ = LoadSoundMem(std::string("Resources/Sound/SFX_UI_map_close.mp3"));
 
-	for ( int32_t i = 0; i < MAP_WIDTH; i++ )
-	{
-		if ( !nodes_[ FLOORS - 1 ][ i ].previews.empty() )
+		distribution = std::discrete_distribution<int32_t>(nodeProbabilities,nodeProbabilities + NodeType::TYPE_NUM);
+
+		rooms_[ NodeType::REINFORCEMENT ] = std::make_unique<ReinforcementNode>();
+		rooms_[ NodeType::TRANSACTION ] = std::make_unique<TransactionNode>();
+		rooms_[ NodeType::BATTLE ] = std::make_unique<BattleNode>();
+		rooms_[ NodeType::SHOP ] = std::make_unique<ShopNode>();
+		rooms_[ NodeType::HEALING ] = std::make_unique<HealingNode>();
+		rooms_[ NodeType::START ] = std::make_unique<StartNode>();
+
+		bossRoom_ = std::make_unique<BossNode>();
+		mapChip_->SetEnemyManager(enemys_);
+
+		for ( auto& room : rooms_ )
 		{
-			nodeCount++;
-			bossNodeX += nodes_[ FLOORS - 1 ][ i ].position.x;
+			room->SetMapChip(mapChip_);
+			room->SetPlayer(player_);
+			room->SetNodeManagerr(this);
+			room->SetPowerUp(powerUp_);
+			room->SetDealer(dealer_);
+			room->SetEnemyManager(enemys_);
+			room->Initialize();
+		}
 
-			if ( bossNode_.position.y > nodes_[ FLOORS - 1 ][ i ].position.y )
+		bossRoom_->SetMapChip(mapChip_);
+		bossRoom_->SetPlayer(player_);
+		bossRoom_->SetEnemyManager(enemys_);
+		bossRoom_->SetNodeManagerr(this);
+		bossRoom_->Initialize();
+
+		bossNode_.type.value = NodeType::BOSS;
+
+		GenerateInitialGrid();
+
+		std::vector<int32_t> startingPoints = GetRandomStartingPoints();
+
+		for ( int32_t k = 0; k < PATHS; k++ )
+		{
+			int32_t j = startingPoints[ DxLib::GetRand(startingPoints.size() - 1) ];
+
+			int32_t current_j = j;
+			for ( int32_t i = 0; i < FLOORS - 1; ++i )
 			{
-				bossNode_.position.y = nodes_[ FLOORS - 1 ][ i ].position.y;
+				current_j = SetupConnection(i,current_j);
 			}
 		}
+
+		for ( int32_t point : startingPoints )
+		{
+			if ( nodes_[ 0 ][ point ].type.value != NodeType::Type::NO_CHILDREN )
+			{
+				startNodes_.push_back(&nodes_[ 0 ][ point ]);
+				nodes_[ 0 ][ point ].type.value = NodeType::START;
+			}
+		}
+
+		for ( int32_t i = 0; i < MAP_WIDTH; ++i )
+		{
+			if ( !nodes_[ FLOORS - 1 ][ i ].previews.empty() )
+			{
+				nodes_[ FLOORS - 1 ][ i ].nexts.push_back(&bossNode_);
+				nodes_[ FLOORS - 1 ][ i ].type.value = NodeType::Type::NONE;
+			}
+		}
+
+		SetupRoomTypes();
+
+		for ( int32_t i = 0; i < FLOORS; ++i )
+		{
+			for ( int32_t j = 0; j < MAP_WIDTH; ++j )
+			{
+				if ( !nodes_[ i ][ j ].nexts.empty() )
+				{
+					std::vector<Node*>& nodes = nodes_[ i ][ j ].nexts;
+					std::sort(nodes.begin(),nodes.end(),[ ] (Node* node,Node* node2)
+	 {
+			 return node->column < node2->column;
+	 });
+				}
+			}
+		}
+
+		std::sort(startNodes_.begin(),startNodes_.end());
+
+		playerNodePos = 0;
+		leftBottomX = 450;
+		leftBottomY = 650;
+
+		int32_t bossNodeX = 0;
+		int32_t nodeCount = 0;
+
+		for ( int32_t i = 0; i < MAP_WIDTH; i++ )
+		{
+			if ( !nodes_[ FLOORS - 1 ][ i ].previews.empty() )
+			{
+				nodeCount++;
+				bossNodeX += nodes_[ FLOORS - 1 ][ i ].position.x;
+
+				if ( bossNode_.position.y > nodes_[ FLOORS - 1 ][ i ].position.y )
+				{
+					bossNode_.position.y = nodes_[ FLOORS - 1 ][ i ].position.y;
+				}
+			}
+		}
+
+		bossNode_.position.y -= Y_DIST*2;
+		bossNode_.position.x = bossNodeX / nodeCount;
+		bossNode_.row = FLOORS;
+
+		node_ = nullptr;
+
+		circleMouseShape_.SetRadius(2);
+		circleShape_.SetRadius(32);
+		selectNode_ = startNodes_[ 0 ];
+	}
+	else
+	{
+		Reset();
 	}
 
-	bossNode_.position.y -= Y_DIST;
-	bossNode_.position.x = bossNodeX / nodeCount;
-	bossNode_.row = FLOORS;
 }
 
 void NodeManager::Update()
 {
+	isNodeReset_ = false;
+
 	if ( isNodeDraw )
 	{
 		int32_t scroll = GetMouseWheelRotVol();
@@ -201,35 +230,40 @@ void NodeManager::Update()
 
 		selectNode_ = nextNode_;
 		nextNode_ = nullptr;
+		isNodeReset_ = true;
 	}
 
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_M) )
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_M)||Input::Instance()->TriggerPadKey(PAD_INPUT_8) )
 	{
 		if ( isNodeDraw )
 		{
+			PlaySoundMem(closeSound_,DX_PLAYTYPE_BACK);
 			isNodeDraw = false;
+			
 		}
 		else
 		{
+			PlaySoundMem(openSound_,DX_PLAYTYPE_BACK);
 			isNodeDraw = true;
 		}
 	}
 
-	node_->Update();
+	if ( !isNodeDraw )
+	{
+		node_->Update();
+	}
+
 }
 
 void NodeManager::Draw()
 {
-	if ( isNodeDraw )
-	{
-		NodeMapDraw();
-	}
-
 	node_->Draw();
 }
 
 void NodeManager::Reset()
 {
+	startNodes_.clear();
+
 	for ( int32_t i = 0; i < FLOORS; ++i )
 	{
 		for ( int32_t j = 0; j < MAP_WIDTH; ++j )
@@ -238,9 +272,13 @@ void NodeManager::Reset()
 			nodes_[ i ][ j ].previews.clear();
 			nodes_[ i ][ j ].nextDoorsNum = 0;
 		}
+
+		nodes_[ i ].clear();
 	}
 
-	drawNode_.clear();
+	nodes_.clear();
+
+	GenerateInitialGrid();
 
 	std::vector<int32_t> startingPoints = GetRandomStartingPoints();
 
@@ -252,11 +290,8 @@ void NodeManager::Reset()
 		for ( int32_t i = 0; i < FLOORS - 1; ++i )
 		{
 			current_j = SetupConnection(i,current_j);
-
 		}
 	}
-
-	startNodes_.clear();
 
 	for ( int32_t point : startingPoints )
 	{
@@ -264,9 +299,19 @@ void NodeManager::Reset()
 		{
 			startNodes_.push_back(&nodes_[ 0 ][ point ]);
 			nodes_[ 0 ][ point ].type.value = NodeType::START;
-			drawNode_.push_back(&nodes_[ 0 ][ point ]);
 		}
 	}
+
+	for ( int32_t i = 0; i < MAP_WIDTH; ++i )
+	{
+		if ( !nodes_[ FLOORS - 1 ][ i ].previews.empty() )
+		{
+			nodes_[ FLOORS - 1 ][ i ].nexts.push_back(&bossNode_);
+			nodes_[ FLOORS - 1 ][ i ].type.value = NodeType::Type::NONE;
+		}
+	}
+
+	SetupRoomTypes();
 
 	for ( int32_t i = 0; i < FLOORS; ++i )
 	{
@@ -275,12 +320,60 @@ void NodeManager::Reset()
 			if ( !nodes_[ i ][ j ].nexts.empty() )
 			{
 				std::vector<Node*>& nodes = nodes_[ i ][ j ].nexts;
-				std::sort(nodes.begin(),nodes.end());
+				std::sort(nodes.begin(),nodes.end(),[ ] (Node* node,Node* node2)
+ {
+	return node->column < node2->column;
+ });
 			}
 		}
 	}
 
 	std::sort(startNodes_.begin(),startNodes_.end());
+
+	playerNodePos = 0;
+	leftBottomX = 450;
+	leftBottomY = 650;
+
+	int32_t bossNodeX = 0;
+	int32_t nodeCount = 0;
+
+	for ( int32_t i = 0; i < MAP_WIDTH; i++ )
+	{
+		if ( !nodes_[ FLOORS - 1 ][ i ].previews.empty() )
+		{
+			nodeCount++;
+			bossNodeX += nodes_[ FLOORS - 1 ][ i ].position.x;
+
+			if ( bossNode_.position.y > nodes_[ FLOORS - 1 ][ i ].position.y )
+			{
+				bossNode_.position.y = nodes_[ FLOORS - 1 ][ i ].position.y;
+			}
+		}
+	}
+
+	bossNode_.position.y -= Y_DIST * 2;
+	bossNode_.position.x = bossNodeX / nodeCount;
+	bossNode_.row = FLOORS;
+
+	isGameEnd_ = false;
+	node_ = nullptr;
+
+	mapChip_->SetEnemyManager(enemys_);
+
+	for ( auto& room : rooms_ )
+	{
+		room->SetMapChip(mapChip_);
+		room->SetPlayer(player_);
+		room->SetNodeManagerr(this);
+		room->SetPowerUp(powerUp_);
+		room->SetDealer(dealer_);
+		room->SetEnemyManager(enemys_);
+	}
+
+	bossRoom_->SetMapChip(mapChip_);
+	bossRoom_->SetPlayer(player_);
+	bossRoom_->SetEnemyManager(enemys_);
+	bossRoom_->SetNodeManagerr(this);
 
 }
 
@@ -339,7 +432,7 @@ void NodeManager::NodeDrew(int32_t leftBottomX,int32_t leftBottomY,const Node& n
 		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,0.5,0,startImg,true);
 		break;
 	case NodeType::Type::BOSS:
-		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,0.5,0,startImg,true);
+		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,1.0f,0,bossImg,true);
 		break;
 	default:
 		break;
@@ -376,6 +469,122 @@ void NodeManager::SetPowerUp(PowerUpCave* powerUp)
 void NodeManager::SetDealer(DealDaemon* dealer)
 {
 	dealer_ = dealer;
+}
+
+void NodeManager::SetEnemys(EnemyManager* enemys)
+{
+	enemys_ = enemys;
+}
+
+void NodeManager::SetScrollStop(bool* scrollStop)
+{
+	rooms_[ NodeType::BATTLE ]->SetScrollStop(scrollStop);
+}
+
+bool NodeManager::IsMapDraw()
+{
+	return isNodeDraw;
+}
+
+bool NodeManager::GameEnd()
+{
+	return isGameEnd_;
+}
+
+bool NodeManager::IsNodeReset()
+{
+	return isNodeReset_;
+}
+
+void NodeManager::End()
+{
+	isGameEnd_ = true;
+}
+
+void NodeManager::MapDraw()
+{
+	if ( isNodeDraw )
+	{
+		NodeMapDraw();
+	}
+}
+
+bool NodeManager::StartNodeSelect()
+{
+	playerNodePos = selectNode_->row + 3;
+	playerNodePos = min(playerNodePos,FLOORS);
+
+	int32_t mouseX;
+	int32_t mouseY;
+
+	GetMousePoint(&mouseX,&mouseY);
+
+	circleMouseShape_.SetCenter({ float( mouseX ) ,float( mouseY ) });
+
+	selectNodeX = -1;
+	selectNodeY = -1;
+
+	for ( int32_t i = 0; i < playerNodePos; ++i )
+	{
+		for ( int32_t j = 0; j < MAP_WIDTH; ++j )
+		{
+			circleShape_.SetCenter({ leftBottomX + nodes_[ i ][ j ].position.x,leftBottomY + nodes_[ i ][ j ].position.y });
+
+			if ( Collision::Circle2Circle(circleShape_,circleMouseShape_) && nodes_[ i ][ j ].type.value == NodeType::START )
+			{
+				selectNodeX = j;
+				selectNodeY = i;
+
+				if ( GetMouseInput() & MOUSE_INPUT_LEFT )
+				{
+					isMouseInput_ = true;
+				}
+			}
+		}
+	}
+
+	if ( isMouseInput_ )
+	{
+		for ( auto& itr : startNodes_ )
+		{
+			if ( itr->column == selectNodeX && itr->row == selectNodeY )
+			{
+				nextNode_ = itr;
+
+				return true;
+			}
+		}
+	}
+
+
+	return false;
+}
+
+void NodeManager::StartNodeSelectMapDraw()
+{
+	selectNode_ = startNodes_[ 0 ];
+	playerNodePos = selectNode_->row + 3;
+	playerNodePos = min(playerNodePos,FLOORS);
+
+	DrawRotaGraph(GameConfig::GetWindowWidth() / 2,GameConfig::GetWindowHeight() / 2 - 2,1.0f,0.0,backGroundImg,true);
+
+	for ( int32_t i = 0; i < playerNodePos; ++i )
+	{
+		for ( int32_t j = 0; j < MAP_WIDTH; ++j )
+		{
+			if ( selectNodeX == j && selectNodeY == i )
+			{
+				DrawCircle(leftBottomX + nodes_[ i ][ j ].position.x,leftBottomY + nodes_[ i ][ j ].position.y,20,GetColor(255,0,0));
+			}
+
+			NodeDrew(leftBottomX,leftBottomY,nodes_[ i ][ j ],true);
+
+			if ( playerNodePos == FLOORS )
+			{
+				NodeDrew(leftBottomX,leftBottomY,bossNode_,true);
+			}
+		}
+	}
 }
 
 void NodeManager::GenerateInitialGrid()

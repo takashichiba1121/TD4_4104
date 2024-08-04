@@ -1,5 +1,6 @@
 #include "BaseEnemy.h"
 #include <Player.h>
+#include "GameConfig.h"
 
 void BaseEnemy::EffectUpdate()
 {
@@ -107,6 +108,10 @@ void BaseEnemy::SetMapChip(MapChip* mapptr)
 
 void BaseEnemy::SetEffect(Effects effect)
 {
+	if ( effect >= END )
+	{
+		return;
+	}
 	int8_t effectBit = 0b1 << effect;
 	statusEffects_ |= effectBit;
 	effectTimer[ effect ].SetEndCount(60);
@@ -139,6 +144,18 @@ bool BaseEnemy::IsImmortal()
 	return immortal_;
 }
 
+bool BaseEnemy::OnScreen(Vector2 scrool)
+{
+	if (pos_.x + scrool.x >= -32 && pos_.x + scrool.x <= GameConfig::GetWindowWidth()+32)
+	{
+		if (pos_.y + scrool.y >= -32 && pos_.y + scrool.y <= GameConfig::GetWindowHeight()+32)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 int32_t BaseEnemy::GetImmortalTime()
 {
 	return immortalTime_;
@@ -149,17 +166,20 @@ int32_t BaseEnemy::GetCurseStack()
 	return curseStack;
 }
 
-void BaseEnemy::AnimeUpdate()
+void BaseEnemy::AnimeUpdate(bool loop)
 {
 	animeTimer_++;
 
-	if ( animeTimer_ == 60 )
+	if ( animeTimer_ == animeSpeed_ )
 	{
 		animeTimer_ = 0;
 		anime_++;
-		if ( anime_ == animeNum_ )
+
+		if ( anime_ == animeNum_ && loop)
 		{
 			anime_ = 0;
 		}
+
+		anime_ = min(animeNum_-1,anime_);
 	}
 }

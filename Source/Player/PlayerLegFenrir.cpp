@@ -16,13 +16,19 @@ void PlayerLegFenrir::Initialize(Vector2* playerVelocity,bool* direction,float* 
 
 	Load();
 
-	LoadDivGraph("Resources/Player/PlayerStand_sheet.png",10,10,1,128,128,( int* ) PlayerStandTexture_);
+	PlayerStandTexture_ = LoadGraph(std::string("Resources\\Player\\Parts\\fenrirStand.png"));
 
-	LoadDivGraph("Resources/Player/PlayerJumpUp.png",4,4,1,128,128,( int* ) PlayerJumpTexture_);
+	PlayerJumpTexture_ = LoadGraph(std::string("Resources\\Player\\Parts\\fenrirJumpUp.png"));
 
-	LoadDivGraph("Resources/Player/PlayerJumpDown.png",4,4,1,128,128,( int* ) PlayerDownTexture_);
+	PlayerDownTexture_ = LoadGraph(std::string("Resources\\Player\\Parts\\fenrirJumpDown.png"));
 
-	LoadDivGraph("Resources/Player/PlayerDush.png",5,5,1,128,128,( int* ) PlayerDushTexture_);
+	PlayerDushTexture_ = LoadGraph(std::string("Resources\\Player\\Parts\\fenrirDush.png"));
+
+	evasionRollSoundId_ = LoadSoundMem(std::string("Resources\\Sound\\Player\\SFX_player_DodgeRoll.mp3"));
+
+	cerberusJumpSoundId_ = LoadSoundMem(std::string("Resources\\Sound\\Player\\SFX_player_leg_cerberus_Jump.mp3"));
+
+	landingSoundId_ = LoadSoundMem(std::string("Resources\\Sound\\Player\\SFX_player_Landing.mp3"));
 }
 
 void PlayerLegFenrir::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const float pow)
@@ -31,7 +37,9 @@ void PlayerLegFenrir::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const
 
 	isDirBottom_ = DirBOTTOM;
 
-	if ( ( Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A) ) && !isEvasionRoll_ && !isAttack && !isJump_ )
+	int X = Input::Instance()->PadX();
+
+	if ( ( Input::Instance()->PushKey(KEY_INPUT_LEFT) || Input::Instance()->PushKey(KEY_INPUT_A) ) || X <= -500 && !isEvasionRoll_ && !isAttack && !isJump_ )
 	{
 		*direction_ = false;
 		if ( playerVelocity_->x > topSpeed_ * *changeAcl_ )
@@ -74,7 +82,7 @@ void PlayerLegFenrir::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const
 			PlayerStandTextureCount_ = 0;
 		}
 	}
-	if ( ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) ) && !isEvasionRoll_ && !isAttack && !isJump_ )
+	if ( ( Input::Instance()->PushKey(KEY_INPUT_RIGHT) || Input::Instance()->PushKey(KEY_INPUT_D) ) || X >= 500 && !isEvasionRoll_ && !isAttack && !isJump_ )
 	{
 		*direction_ = true;
 		if ( playerVelocity_->x < topSpeed_ * *changeAcl_ )
@@ -119,7 +127,7 @@ void PlayerLegFenrir::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const
 		}
 	}
 
-	if ( Input::Instance()->PushKey(KEY_INPUT_SPACE) && !onGround_ )
+	if ( Input::Instance()->PushKey(KEY_INPUT_SPACE) || Input::Instance()->PushPadKey(PAD_INPUT_1) && !onGround_ )
 	{
 		JumpStart();
 	}
@@ -177,6 +185,9 @@ void PlayerLegFenrir::JumpStart()
 	{
 		playerVelocity_->x += -evasionRollSpeed_;
 	}
+
+	PlaySoundMem(cerberusJumpSoundId_,DX_PLAYTYPE_BACK);
+
 }
 
 void PlayerLegFenrir::Jump()
@@ -192,7 +203,7 @@ void PlayerLegFenrir::Jump()
 		}
 	}
 
-	if ( Input::Instance()->ReleaseKey(KEY_INPUT_SPACE) || playerVelocity_->y >= 0 )
+	if ( Input::Instance()->ReleaseKey(KEY_INPUT_SPACE) || Input::Instance()->ReleasePadKey(PAD_INPUT_1) || playerVelocity_->y >= 0 )
 	{
 		isJump_ = false;
 
@@ -203,7 +214,7 @@ void PlayerLegFenrir::Jump()
 
 void PlayerLegFenrir::EvasionRoll()
 {
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_Q) && isEvasionRoll_ == false )
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_Q) || Input::Instance()->TriggerPadKey(PAD_INPUT_2) && isEvasionRoll_ == false )
 	{
 		isEvasionRoll_ = true;
 
@@ -215,6 +226,8 @@ void PlayerLegFenrir::EvasionRoll()
 		{
 			*playerVelocity_ = { -evasionRollSpeed_,0 };
 		}
+
+		PlaySoundMem(evasionRollSoundId_,DX_PLAYTYPE_BACK);
 	}
 	if ( isEvasionRoll_ )
 	{
@@ -263,69 +276,81 @@ void PlayerLegFenrir::Falling()
 
 		isBullet = false;
 
+		//PlaySoundMem(landingSoundId_,DX_PLAYTYPE_BACK);
 	}
+
 }
 
-void PlayerLegFenrir::Draw(const Vector2& pos,const Vector2& size)
+void PlayerLegFenrir::Draw(const Vector2& pos,const Vector2& size,Vector2 scroll)
 {
-	float leftPos = pos.x - size.x / 2;
-	float rightPos = pos.x + size.x / 2;
-	float upPos = pos.y - size.y / 2;
-	float downPos = pos.y + size.y / 2;
+	float leftPos = scroll.x + pos.x - size.x / 2;
+	float rightPos = scroll.x + pos.x + size.x / 2;
+	float upPos = scroll.y + pos.y - size.y / 2;
+	float downPos = scroll.y + pos.y + size.y / 2;
 
 	if ( isEvasionRoll_ )
 	{
 		if ( *direction_ )
 		{
-			DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerDushTexture_[ PlayerDushTextureCount_ ],TRUE);
+			DrawRectGraph(leftPos,upPos,PlayerDushTextureCount_ * size.x,0,
+				size.x,size.y,PlayerDushTexture_,true,false);
 		}
 		else
 		{
-			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerDushTexture_[ PlayerDushTextureCount_ ],TRUE);
+			DrawRectGraph(leftPos,upPos,PlayerDushTextureCount_ * size.x,0,
+				size.x,size.y,PlayerDushTexture_,true,true);
 		}
 	}
 	else if ( isJump_ )
 	{
 		if ( *direction_ )
 		{
-			DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerJumpTexture_[ PlayerJumpTextureCount_ / 10 ],TRUE);
+			DrawRectGraph(leftPos,upPos,( PlayerJumpTextureCount_ / 10 ) * size.x,0,
+				size.x,size.y,PlayerJumpTexture_,true,false);
 		}
 		else
 		{
-			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerJumpTexture_[ PlayerJumpTextureCount_ / 10 ],TRUE);
+			DrawRectGraph(leftPos,upPos,( PlayerJumpTextureCount_ / 10 ) * size.x,0,
+				size.x,size.y,PlayerJumpTexture_,true,true);
 		}
 	}
 	else if ( !isDirBottom_ && !oldIsDirBottom_ )
 	{
 		if ( *direction_ )
 		{
-			DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerDownTexture_[ PlayerDownTextureCount_ / 10 ],TRUE);
+			DrawRectGraph(leftPos,upPos,( PlayerDownTextureCount_ / 10 ) * size.x,0,
+				size.x,size.y,PlayerDownTexture_,true,false);
 		}
 		else
 		{
-			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerDownTexture_[ PlayerDownTextureCount_ / 10 ],TRUE);
+			DrawRectGraph(leftPos,upPos,( PlayerDownTextureCount_ / 10 ) * size.x,0,
+				size.x,size.y,PlayerDownTexture_,true,true);
 		}
 	}
 	else if ( isWalk )
 	{
 		if ( *direction_ )
 		{
-			DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_ / 2 ],TRUE);
+			DrawRectGraph(leftPos,upPos,( PlayerStandTextureCount_ / 2 ) * size.x,0,
+				size.x,size.y,PlayerStandTexture_,true,false);
 		}
 		else
 		{
-			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_ / 2 ],TRUE);
+			DrawRectGraph(leftPos,upPos,( PlayerStandTextureCount_ / 2 ) * size.x,0,
+				size.x,size.y,PlayerStandTexture_,true,true);
 		}
 	}
 	else
 	{
 		if ( *direction_ )
 		{
-			DrawExtendGraph(leftPos,upPos,rightPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_ / 2 ],TRUE);
+			DrawRectGraph(leftPos,upPos,( PlayerStandTextureCount_ / 2 ) * size.x,0,
+				size.x,size.y,PlayerStandTexture_,true,false);
 		}
 		else
 		{
-			DrawExtendGraph(rightPos,upPos,leftPos,downPos,PlayerStandTexture_[ PlayerStandTextureCount_ / 2 ],TRUE);
+			DrawRectGraph(leftPos,upPos,( PlayerStandTextureCount_ / 2 ) * size.x,0,
+				size.x,size.y,PlayerStandTexture_,true,true);
 		}
 	}
 }

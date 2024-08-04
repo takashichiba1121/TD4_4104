@@ -40,6 +40,10 @@ private:
 
 	Vector2* velocity_;
 
+	int textureId_;
+
+	int soundId_;
+
 public:
 
 	static const uint32_t ArmCost = 0;
@@ -51,7 +55,7 @@ public:
 
 	void Attack() override;
 
-	void Draw() override;
+	void Draw(Vector2 scroll) override;
 
 	bool IsAttack() override {
 		return isAttack_;

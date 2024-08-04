@@ -27,7 +27,9 @@ protected:
 
 	float playerPow_;
 
-	const Vector2 SIZE_ = { 10,10 };
+	const Vector2 SIZE_ = { 48,48 };
+
+	const Vector2 ORBIT_SIZE_ = { 8,8 };
 
 	RectShape* shape_;
 
@@ -57,7 +59,7 @@ public:
 	///<summary>
 	///描画
 	///</summary>
-	void Draw();
+	void Draw(Vector2 scroll);
 
 	///<summary>
 	///衝突を検出したら呼び出されたるコールバック関数

@@ -43,5 +43,7 @@ public:
 
 	void OnCollision()override;
 
+	~BossPunchAttack();
+
 };
 

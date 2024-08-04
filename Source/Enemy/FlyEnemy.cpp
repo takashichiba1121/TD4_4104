@@ -5,32 +5,25 @@
 #include "Player.h"
 #include "Collision.h"
 #include "GameConfig.h"
-
+#include "EnemyManager.h"
 
 using namespace std;
 void FlyEnemy::Initialize()
 {
+	animeNum_ = 4;
+	animeSpeed_ = 5;
+	drawSize_ = { 64,64 };
+
 	maxHp_ = 1;
 	hp_ = 1;
-
 	islive_ = true;
 	shape_ = new RectShape();
 	shape_->SetRadius(drawSize_ / 2);
-	pos_.x = GameConfig::GetWindowWidth() / 2;
-	pos_.y = GameConfig::GetWindowHeight() / 2+ 50;
-	for ( size_t i = 0; i < moveCheckPoint_.size(); i++ )
-	{
-		int8_t r = GetRand(200) + 500;
-		float theta = 2 * PI * ( GetRand(60) / 360 + (i * 0.15f));
 
 
-		moveCheckPoint_[ i ].x = r * cosf(theta) + pos_.x;
-		moveCheckPoint_[ i ].y = r * sinf(theta) + pos_.y;
-	}
-	pos_ = moveCheckPoint_[ 0 ];
 	targetCheckPoint_ = 0;
 	searchArea_ = make_unique<CircleShape>();
-	searchArea_->SetRadius({ ( drawSize_.x * 3 / 2 )});
+	searchArea_->SetRadius({ ( drawSize_.x * 5 / 2 )});
 	SetShape(shape_);
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
@@ -39,12 +32,12 @@ void FlyEnemy::Initialize()
 
 	moveTimer_.SetEndCount(20);
 	beforeAttackFrame_ = 40;
-	attackInterval_ = 120;
+	attackInterval_ = 240;
 	attackFrame_ = 5;
 
 	tag.tag = "Enemy";
 	userData_ = &tag;
-
+	tex_ = EnemyManager::GetTexHandle("fly");
 }
 
 void FlyEnemy::Update()
@@ -62,12 +55,10 @@ void FlyEnemy::Update()
 		{
 			beforeAttackCounter_.SetEndCount(beforeAttackFrame_);
 			attackCounter_.SetEndCount(attackFrame_);
+			PlaySoundMem(EnemyManager::GetSoundHandle("flyBeforeAttack"),DX_PLAYTYPE_BACK);
+			targetPos_ = playerPtr_->GetPos();
 		}
 		actionMode = ATTACK;
-	}
-	else if(actionMode != ATTACK)
-	{
-		targetPos_ = playerPtr_->GetPos();
 	}
 
 	if ( immortalTime_ <= 0 )
@@ -101,7 +92,7 @@ void FlyEnemy::Update()
 	}
 	shape_->SetCenter({ pos_.x , pos_.y });
 
-
+	AnimeUpdate();
 	EffectUpdate();
 }
 
@@ -167,19 +158,23 @@ void FlyEnemy::Attack()
 			actionMode = MOVE;
 		}
 	}
-	if ( Vector2(pos_,targetPos_).GetLenge() <= 10 )
+	if ( Vector2(pos_,targetPos_).GetLenge() <= 25 )
 	{
 		attackFinish_ = true;
 		stanTimer_.SetEndCount(30);
 	}
 }
 
-void FlyEnemy::Draw()
+void FlyEnemy::Draw(Vector2 scroll)
 {
 	if ( !islive_ || !playerPtr_) return;
-	DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2,
-		pos_.x + drawSize_.x / 2,pos_.y + drawSize_.y / 2,GetColor(155,0,155),true);
-	DrawFormatString(100,100,0xffffff,"%f",Vector2(pos_,targetPos_).GetLenge());
+	bool flag = false;
+	if ( velocity_.x < 0 )
+	{
+		flag = true;
+	}
+	DrawRectRotaGraph(pos_.x + scroll.x,pos_.y + scroll.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,tex_,true,flag);
+
 	if ( playerPtr_->GetEyeTag() == PlayerEyeTags::Clairvoyance )
 	{
 		DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2 - hpBerOffSet_,
@@ -200,4 +195,18 @@ void FlyEnemy::OnCollision()
 			actionMode = MOVE;
 		}
 	}
+}
+
+void FlyEnemy::SetMovePos()
+{
+	for ( size_t i = 0; i < moveCheckPoint_.size(); i++ )
+	{
+		int8_t r = GetRand(200) + 500;
+		float theta = 2 * PI * ( GetRand(60) / 360 + ( i * 0.15f ) );
+
+
+		moveCheckPoint_[ i ].x = r * cosf(theta) + pos_.x;
+		moveCheckPoint_[ i ].y = r * sinf(theta) + pos_.y;
+	}
+	pos_ = moveCheckPoint_[ 0 ];
 }

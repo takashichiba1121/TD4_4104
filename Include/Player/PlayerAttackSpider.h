@@ -22,7 +22,7 @@ private:
 
 	const Vector2 ATTACK_POS_ = {30,0 };
 
-	const Vector2 COLISION_SIZE_ = { 64,64 };
+	const Vector2 COLISION_SIZE_ = { 64,128 };
 
 	const uint32_t INTERVAL_ = 10;
 
@@ -44,6 +44,8 @@ private:
 
 	Vector2* velocity_;
 
+	int textureId_;
+
 public:
 
 	static const uint32_t ArmCost = 0;
@@ -55,7 +57,7 @@ public:
 
 	void Attack() override;
 
-	void Draw() override;
+	void Draw(Vector2 scroll) override;
 
 	bool IsAttack() override {
 		return isAttack_;

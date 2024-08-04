@@ -21,7 +21,7 @@
 
 void Player::Initialize()
 {
-	hitboxSize_ = { 64,128 };
+	hitboxSize_ = { 60,128 };
 
 	drawSize_ = { 128,128 };
 
@@ -61,25 +61,27 @@ void Player::Initialize()
 
 	leg_->Initialize(&velocity_, &direction_, &changeSpd_);
 
-	Item item;
+	//Item item;
 
-	item.power = 50;
+	//item.power = 50;
 
-	item.statusName = "ATK";
+	//item.statusName = "ATK";
 
-	ItemGet(item);
+	//ItemGet(item);
 
 	circelShape_ = std::make_unique<CircleShape>();
 
 	circelShape_->SetRadius(hitboxSize_.y);
 
-	ChangeLeg("Fenrir",0);
+	//ChangeLeg("Fenrir",0);
+
+	//ChangeLeftArm("Cerberus",0);
+
+	//ChangeRightArm("Gun",0);
 }
 
 void Player::Update()
 {
-	powerUpText_ = false;
-
 	if (isPowerUp_)
 	{
 		PowerUp();
@@ -91,7 +93,7 @@ void Player::Update()
 			DamageInterval_++;
 		}
 
-		if (Input::Instance()->TriggerKey(KEY_INPUT_1))
+		/*if (Input::Instance()->TriggerKey(KEY_INPUT_1))
 		{
 			selectItems_ = 1;
 		}
@@ -107,7 +109,7 @@ void Player::Update()
 		if (Input::Instance()->TriggerKey(KEY_INPUT_RETURN))
 		{
 			UseItem();
-		}
+		}*/
 
 		leg_->Move(GetOnDir() & 0b1 << OnDir::BOTTOM, leftArm_->IsAttack() || rightArm_->IsAttack(), pos_, changePow_);
 
@@ -122,28 +124,13 @@ void Player::Update()
 		circelShape_->SetCenter(pos_);
 	}
 
+	powerUpText_ = false;
+
 #ifdef _DEBUG
 
 	ImGui::Begin("PlayerSituation");
 
-	ImGui::Text("vec:%f,%f", velocity_.x, velocity_.y);
-
-	ImGui::Text("HP:%d", hp_);
-
-	ImGui::Text("MaxHP:%d", MAX_HP_);
-
-	ImGui::Text("Pow:%1.2f", changePow_);
-
-	ImGui::Text("Acl:%1.2f", changeSpd_);
-
-	ImGui::Text("Def:%1.2f", changeDef_);
-
-	ImGui::Text("Crit:%1.2f", changeCrit_);
-
-	ImGui::Text("Cdmg:%1.2f", changeCdmg_);
-
-	ImGui::Text("cost:%d", nowCost_);
-
+	ImGui::Text("vec:%d,%d", Input::Instance()->PadX(),Input::Instance()->PadY());
 	ImGui::End();
 
 #endif
@@ -151,31 +138,32 @@ void Player::Update()
 
 void Player::Attack()
 {
-	if (Input::Instance()->TriggerKey(KEY_INPUT_Z) && leftArm_ != nullptr && !rightArm_->IsAttack())
+	if ( !powerUpText_ )
 	{
-		leftArm_->AttackInit(changePow_, changeCrit_, changeCdmg_);
-	}
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_Z)|| Input::Instance()->TriggerPadKey(PAD_INPUT_3) && leftArm_ != nullptr && !rightArm_->IsAttack() )
+		{
+			leftArm_->AttackInit(changePow_,changeCrit_,changeCdmg_);
+		}
 
-	if (Input::Instance()->TriggerKey(KEY_INPUT_X) && rightArm_ != nullptr && !leftArm_->IsAttack())
-	{
-		rightArm_->AttackInit(changePow_, changeCrit_, changeCdmg_);
-	}
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_X)|| Input::Instance()->TriggerPadKey(PAD_INPUT_4) && rightArm_ != nullptr && !leftArm_->IsAttack() )
+		{
+			rightArm_->AttackInit(changePow_,changeCrit_,changeCdmg_);
+		}
 
-	if (leftArm_ != nullptr)
-	{
-		leftArm_->Attack();
-	}
+		if ( leftArm_ != nullptr )
+		{
+			leftArm_->Attack();
+		}
 
-	if (rightArm_ != nullptr)
-	{
-		rightArm_->Attack();
+		if ( rightArm_ != nullptr )
+		{
+			rightArm_->Attack();
+		}
 	}
 }
 void Player::Damage(int32_t damage)
 {
-	if (DamageInterval_ >= DAMAGE_INTERVAL_MAX_/*||
-		(leftArm_->IsAttack()&& leftAtaackTag_==PlayerAttackTags::Mars)&&
-		( rightArm_->IsAttack() && rightAtaackTag_ == PlayerAttackTags::Mars )*/)
+	if (DamageInterval_ >= DAMAGE_INTERVAL_MAX_&&!leg_->IsEvasionRoll())
 	{
 		if (damage - (changeDef_ * leg_->GetDef()) >= 5)
 		{
@@ -202,7 +190,7 @@ void Player::IventDamage(int32_t damage)
 }
 bool Player::ChangeLeftArm(std::string attackName, uint32_t cost)
 {
-	if (nowCost_ + cost - leftArm_->cost > 100)
+	if (nowCost_ + cost - leftArm_->cost > MAX_COST_ * changeMaxCost_ )
 	{
 		return false;
 	}
@@ -266,7 +254,7 @@ bool Player::ChangeLeftArm(std::string attackName, uint32_t cost)
 
 bool Player::ChangeRightArm(std::string attackName, uint32_t cost)
 {
-	if (nowCost_ + cost - rightArm_->cost > 100)
+	if (nowCost_ + cost - rightArm_->cost > MAX_COST_ * changeMaxCost_ )
 	{
 		return false;
 	}
@@ -331,7 +319,7 @@ bool Player::ChangeRightArm(std::string attackName, uint32_t cost)
 
 bool Player::ChangeLeg(std::string legName, uint32_t cost)
 {
-	if (nowCost_ + cost - leg_->cost > 100)
+	if (nowCost_ + cost - leg_->cost > MAX_COST_*changeMaxCost_)
 	{
 		return false;
 	}
@@ -368,7 +356,7 @@ bool Player::ChangeLeg(std::string legName, uint32_t cost)
 
 bool Player::ChangeEye(std::string eyeName, uint32_t cost)
 {
-	if (nowCost_ + cost - nowEyeCost_ > 100)
+	if (nowCost_ + cost - nowEyeCost_ > MAX_COST_ * changeMaxCost_ )
 	{
 		return false;
 	}
@@ -400,7 +388,7 @@ bool Player::ChangeEye(std::string eyeName, uint32_t cost)
 
 bool Player::ChangeMouth(std::string mouthName, uint32_t cost)
 {
-	if (nowCost_ + cost - nowMouthCost_ > 100)
+	if (nowCost_ + cost - nowMouthCost_ > MAX_COST_ * changeMaxCost_ )
 	{
 		return false;
 	}
@@ -467,6 +455,12 @@ bool Player::AddCdmg(int32_t Cdmg)
 
 	return true;
 }
+
+void Player::AddMaxCost(int32_t AddMaxCost)
+{
+	changeMaxCost_ += AddMaxCost;
+}
+
 bool Player::SubSpd(int32_t spd)
 {
 	if (changeSpd_ - float(spd) / 100.0f <= 0)
@@ -529,30 +523,30 @@ bool Player::SubCdmg(int32_t Cdmg)
 	return true;
 }
 
-void Player::Draw()
+void Player::Draw(Vector2 scroll)
 {
-	PlayerBulletManager::Instance()->Draw();
+	PlayerBulletManager::Instance()->Draw(scroll);
 
-	if (DamageInterval_ % 2 == 0)
+	if (DamageInterval_ % 5 == 0)
 	{
-		leg_->Draw(pos_, drawSize_);
+		leg_->Draw(pos_, drawSize_,scroll);
 	}
 
 	if (leftArm_ != nullptr)
 	{
-		leftArm_->Draw();
+		leftArm_->Draw(scroll);
 	}
 
 	if (rightArm_ != nullptr)
 	{
-		rightArm_->Draw();
+		rightArm_->Draw(scroll);
 	}
 
-	DrawFormatString(0, GameConfig::GetWindowHeight() - 20, 0xffffff, "PlayerHP:%d/%d", hp_, MAX_HP_);
+	DrawFormatString(0, GameConfig::GetWindowHeight() - 20, 0xffffff, "PlayerHP:%d/%d", hp_, int(MAX_HP_*changeMaxHp_));
 
 	if (powerUpText_ && isPowerUp_ == false)
 	{
-		DrawFormatString(pos_.x, pos_.y - drawSize_.y + 40, 0xffffff, "Push to KEY Z", hp_, MAX_HP_);
+		DrawFormatString(pos_.x, pos_.y - drawSize_.y + 40, 0xffffff, "Push to KEY X");
 	}
 }
 
@@ -620,7 +614,7 @@ void Player::UseItem()
 
 uint32_t Player::PowerUp()
 {
-	if (Input::Instance()->TriggerKey(KEY_INPUT_LEFT) || Input::Instance()->TriggerKey(KEY_INPUT_A))
+	if (Input::Instance()->TriggerKey(KEY_INPUT_LEFT) || Input::Instance()->TriggerKey(KEY_INPUT_A)|| Input::Instance()->TriggerPadKey(PAD_INPUT_5) )
 	{
 		if (powerUpNum_ == 0)
 		{
@@ -631,7 +625,7 @@ uint32_t Player::PowerUp()
 			powerUpNum_--;
 		}
 	}
-	if (Input::Instance()->TriggerKey(KEY_INPUT_RIGHT) || Input::Instance()->TriggerKey(KEY_INPUT_D))
+	if (Input::Instance()->TriggerKey(KEY_INPUT_RIGHT) || Input::Instance()->TriggerKey(KEY_INPUT_D)|| Input::Instance()->TriggerPadKey(PAD_INPUT_6) )
 	{
 		powerUpNum_++;
 		if (powerUpNum_ >= 3)
@@ -654,8 +648,6 @@ void Player::EndChangeParts()
 
 void Player::Reset()
 {
-	pos_.x = GameConfig::GetGameConfig()->windowWidth / 2;
-	pos_.y = GameConfig::GetGameConfig()->windowHeight / 2;
 	isDealed_ = false;
 }
 
@@ -664,7 +656,7 @@ void Player::OnCollision()
 	if (static_cast<ObjectUserData*>(GetCollisionInfo().userData)->tag == "PowerUp" && isDealed_ == false)
 	{
 		powerUpText_ = true;
-		if (Input::Instance()->TriggerKey(KEY_INPUT_Z))
+		if (Input::Instance()->TriggerKey(KEY_INPUT_Z)|| Input::Instance()->TriggerPadKey(PAD_INPUT_3) )
 		{
 			isPowerUp_ = true;
 
@@ -674,7 +666,7 @@ void Player::OnCollision()
 	if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "Parts" && isDealed_ == false )
 	{
 		powerUpText_ = true;
-		if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) )
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_Z)|| Input::Instance()->TriggerPadKey(PAD_INPUT_3) )
 		{
 			isChangeParts_ = true;
 
@@ -748,5 +740,15 @@ void Player::SoulMouth()
 		{
 			hp_ = MAX_HP_ * changeMaxHp_;
 		}
+	}
+}
+
+void Player::Heel(uint32_t heel)
+{
+	hp_ += heel;
+
+	if (hp_>MAX_HP_*changeMaxHp_ )
+	{
+		hp_ = MAX_HP_ * changeMaxHp_;
 	}
 }

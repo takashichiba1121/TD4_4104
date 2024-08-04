@@ -21,25 +21,29 @@ private:
 
 	bool isBullet=false;
 
-	uint32_t PlayerStandTexture_[ 10 ];
+	uint32_t PlayerStandTexture_;
 
 	uint32_t PlayerStandTextureCount_ = 0;
 
-	uint32_t PlayerJumpTexture_[ 4 ];
+	uint32_t PlayerJumpTexture_;
 
 	uint32_t PlayerJumpTextureCount_ = 0;
 
-	uint32_t PlayerDownTexture_[ 4 ];
+	uint32_t PlayerDownTexture_;
 
 	uint32_t PlayerDownTextureCount_ = 0;
 
-	uint32_t PlayerDushTexture_[ 5 ];
+	uint32_t PlayerDushTexture_;
 
 	uint32_t PlayerDushTextureCount_ = 0;
 
 	const uint32_t DEF_ = 80;
 
+	int evasionRollSoundId_;
 
+	int cerberusJumpSoundId_;
+
+	int landingSoundId_;
 #pragma region ステータス
 
 //移動
@@ -54,7 +58,7 @@ private:
 
 	float airDeccelaration_ = 0;
 
-	float evasionRollSpeed_ = 16;
+	float evasionRollSpeed_ = 24;
 
 	//戦闘
 
@@ -90,7 +94,7 @@ public:
 
 	void Falling() override;
 
-	void Draw(const Vector2& pos,const Vector2& size) override;
+	void Draw(const Vector2& pos,const Vector2& size,Vector2 scroll) override;
 
 	void Load() override;
 
@@ -98,5 +102,9 @@ public:
 		return DEF_;
 	}
 
+	bool IsEvasionRoll()override
+	{
+		return isEvasionRoll_;
+	}
 };
 

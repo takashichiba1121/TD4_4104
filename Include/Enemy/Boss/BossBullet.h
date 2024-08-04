@@ -50,4 +50,6 @@ public:
 
 	void OnCollision()override;
 
+	~BossBullet();
+
 };

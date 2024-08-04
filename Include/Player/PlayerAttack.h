@@ -18,7 +18,7 @@ public:
 
 	virtual void Attack() = 0;
 
-	virtual void Draw() = 0;
+	virtual void Draw(Vector2 scroll) = 0;
 
 	virtual	bool IsAttack()=0;
 };

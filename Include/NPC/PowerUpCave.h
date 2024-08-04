@@ -34,8 +34,11 @@ enum Status
 class PowerUpCave:public BaseObject
 {
 private:
+	int32_t tex_;
 	Player* playerPtr_;
+	int32_t font_;
 	std::array<PowerUp*,3> selectProducts_;
+	std::array<int32_t,3> color_ = {0xf10000,0x00f100,0xf1f100};
 	uint8_t selectNum_ = 0;
 	std::unordered_map<std::string,std::vector<std::unique_ptr<PowerUp>>> products_;
 	std::vector<std::string> productKey_;

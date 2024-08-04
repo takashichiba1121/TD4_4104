@@ -6,6 +6,7 @@
 #include <fstream>
 #include "CollisionManager.h"
 #include <strconv.h>
+#include "FontManager.h"
 
 using namespace std;
 using namespace nlohmann;
@@ -17,6 +18,7 @@ void DealDaemon::Initialize()
 	dealed_ = true;
 	CollisionDisable();
 	hitboxSize_ = { 128,128 };
+	drawSize_ = { 128,128 };
 	pos_ = { 650,640 };
 
 	tag.tag = "Parts";
@@ -56,18 +58,23 @@ void DealDaemon::Initialize()
 		temp->partsInfo = utf8_to_sjis(static_cast<string>(obj["partsInfo"]));
 		products_.push_back(std::move(temp));
 	}
-	nameFontHandle_ = DxLib::CreateFontToHandle(NULL,16,3);
-	infoFontHandle_ = DxLib::CreateFontToHandle(NULL,16,3);
+	nameFontHandle_ = FontManager::GetFontHandle("normal");
+	infoFontHandle_ = FontManager::GetFontHandle("normal");
 	
 
 	SetPriducts();
-
+	animeNum_ = 10;
+	animeSpeed_ = 10;
+	textureId_ = LoadGraph(std::string( "Resources\\Deal\\dealMonster.png" ));
+	dealBGImg_ = LoadGraph(std::string( "Resources\\Deal\\dealBG.png" ));
+	
 }
 
 void DealDaemon::Update()
 {
 	selectmode_ = playerPtr_->IsChangeParts();
 	shape_->SetCenter(pos_);
+	AnimeUpdate();
 }
 
 bool DealDaemon::PartsChenge()
@@ -109,7 +116,7 @@ bool DealDaemon::Deal()
 	if (GetRand(1000) <= dealSucces_[dealCount_])
 	{
 		dealCount_++;
-		dealCount_ = min(dealCount_, dealSucces_.size() - 1);
+		dealCount_ = static_cast<int8_t>(min(dealCount_, dealSucces_.size() - 1));
 		SetPriducts(true);
 	}
 	else
@@ -150,13 +157,21 @@ void DealDaemon::SetSlect(uint8_t selectNum)
 
 void DealDaemon::SetPriducts(bool deal)
 {
+	for ( size_t i = 0; i < selectProducts_.size(); i++ )
+	{
+		selectProducts_[i] = nullptr;
+	}
 
-	for (int i = 0; i < selectProducts_.size(); i++)
+	for (size_t i = 0; i < selectProducts_.size(); i++)
 	{
 		Parts* temp = products_[ GetRand(products_.size() - 1) ].get();
-		while ( playerPtr_->CheckHavePart(magic_enum::enum_cast< PartsName >( temp->productType).value(),temp->partsName))
+		for ( size_t i = 0; i < selectProducts_.size(); i++ )
 		{
-			temp = products_[ GetRand(products_.size() - 1) ].get();
+			while ( playerPtr_->CheckHavePart(magic_enum::enum_cast< PartsName >( temp->productType ).value(),temp->partsName)
+					|| temp == selectProducts_[i] )
+			{
+				temp = products_[ GetRand(products_.size() - 1) ].get();
+			}
 		}
 		selectProducts_[ i ] = temp;
 		if ( selectProducts_[ i ]->productType == "ARM" )
@@ -178,6 +193,7 @@ void DealDaemon::SetPriducts(bool deal)
 void DealDaemon::SetPlayer(Player* player)
 {
 	playerPtr_ = player;
+	AnimeUpdate();
 }
 
 
@@ -186,14 +202,15 @@ void DealDaemon::Draw()
 	if ( selectmode_ && !dealed_ )
 	{
 
-		for ( int i = 0; i < selectProducts_.size(); i++ )
+		for ( uint32_t i = 0; i < selectProducts_.size(); i++ )
 		{
 			int64_t color = 0x000000;
 			if ( i == selectNum_ )
 			{
 				color = 0xf00f00;
 			}
-			DrawBox(( boxLeftTop_.x + i * boxDist_ ),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,color,true);
+
+			DrawExtendGraph(( boxLeftTop_.x + i * boxDist_ ),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,dealBGImg_,true);
 
 			string nameTemp = selectProducts_[ i ]->uiPartsName;
 
@@ -225,7 +242,7 @@ void DealDaemon::Draw()
 
 	if ( !dealed_ )
 	{
-		DrawBox(pos_.x - hitboxSize_.x / 2,pos_.y - hitboxSize_.y / 2,pos_.x + hitboxSize_.x / 2,pos_.y + hitboxSize_.y / 2,0xffffff,true);
+		DrawRectRotaGraph(pos_.x,pos_.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,textureId_,true);
 	}
 
 }
@@ -240,7 +257,25 @@ void DealDaemon::ReSet()
 	selectmode_ = false;
 	dealed_ = false;
 	hitboxSize_ = { 128,128 };
-	pos_ = { 650,640 };
+	pos_ = { 650,610 };
 	SetPriducts();
 	CollisionEnable();
+}
+
+void DealDaemon::AnimeUpdate(bool loop)
+{
+	animeTimer_++;
+
+	if ( animeTimer_ == animeSpeed_ )
+	{
+		animeTimer_ = 0;
+		anime_++;
+
+		if ( anime_ == animeNum_ && loop )
+		{
+			anime_ = 0;
+		}
+
+		anime_ = min(animeNum_ - 1,anime_);
+	}
 }

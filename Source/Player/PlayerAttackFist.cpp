@@ -3,6 +3,7 @@
 #include"CollisionManager.h"
 #include"FlyEnemy.h"
 #include"WalkEnemy.h"
+#include"BossEnemy.h"
 void PlayerAttackFist::Initialize(Vector2* playerPos,Vector2* velocity,bool* direction)
 {
 	playerPos_ = playerPos;
@@ -20,10 +21,16 @@ void PlayerAttackFist::Initialize(Vector2* playerPos,Vector2* velocity,bool* dir
 	CollisionManager::GetInstance()->AddObject(this);
 
 	CollisionDisable();
+
+	textureId_ = LoadGraph(std::string("Resources\\Player\\Parts\\normalPunch.png"));
+
+	attackSoundId_ = LoadSoundMem(std::string("Resources\\Sound\\Player\\SFX_player_arm_punch_Attack.mp3"));
+
+	hitSoundId_ = LoadSoundMem(std::string("Resources\\Sound\\Player\\SFX_player_arm_punch_Hit.mp3"));
 }
 void PlayerAttackFist::AttackInit(float pow,float changeCrit,float changeCdmg)
 {
-	if (INTERVAL_<=AttackInterval_ )
+	if ( INTERVAL_ <= AttackInterval_ )
 	{
 		playerPow_ = pow;
 
@@ -45,13 +52,15 @@ void PlayerAttackFist::AttackInit(float pow,float changeCrit,float changeCdmg)
 		}
 
 		CollisionEnable();
+
+		PlaySoundMem(attackSoundId_,DX_PLAYTYPE_BACK);
 	}
 }
 
 void PlayerAttackFist::Attack()
 {
 
-	if (isAttack_ )
+	if ( isAttack_ )
 	{
 		if ( *direction_ )
 		{
@@ -70,6 +79,7 @@ void PlayerAttackFist::Attack()
 		{
 			CollisionDisable();
 			isAttack_ = false;
+			isGiveDamage_ = false;
 		}
 	}
 	else
@@ -78,13 +88,22 @@ void PlayerAttackFist::Attack()
 	}
 }
 
-void PlayerAttackFist::Draw()
+void PlayerAttackFist::Draw(Vector2 scroll)
 {
 	if ( isAttack_ )
 	{
-		DrawBox(DrawPos_.x - COLISION_SIZE_.x / 2,DrawPos_.y - COLISION_SIZE_.y / 2,
-			DrawPos_.x + COLISION_SIZE_.x / 2,DrawPos_.y + COLISION_SIZE_.y / 2,
-			GetColor(0,255,0),false);
+		if ( *direction_ )
+		{
+			DrawExtendGraph(scroll.x + DrawPos_.x - COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y - COLISION_SIZE_.y / 2,
+				scroll.x + DrawPos_.x + COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y + COLISION_SIZE_.y / 2,
+				textureId_,true);
+		}
+		else
+		{
+			DrawExtendGraph(scroll.x + DrawPos_.x + COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y - COLISION_SIZE_.y / 2,
+				scroll.x + DrawPos_.x - COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y + COLISION_SIZE_.y / 2,
+				textureId_,true);
+		}
 	}
 }
 
@@ -97,13 +116,29 @@ void PlayerAttackFist::OnCollision()
 		{
 			if ( GetRand(1000) <= playerCrit_ * 1000 )
 			{
-				dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(( playerPow_ * POW_ ) + ( playerPow_ * POW_ * playerCdmg_ ));
+				dynamic_cast< BaseEnemy* >( GetCollisionInfo().object )->Damage(( playerPow_ * POW_ ) + ( playerPow_ * POW_ * playerCdmg_ ));
 			}
 			else
 			{
-				dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_);
+				dynamic_cast< BaseEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_);
 			}
 			isGiveDamage_ = true;
+
+			PlaySoundMem(hitSoundId_,DX_PLAYTYPE_BACK);
+		}
+		if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "BossEnemy" )
+		{
+			if ( GetRand(1000) <= playerCrit_ * 1000 )
+			{
+				dynamic_cast< BossEnemy* >( GetCollisionInfo().object )->Damage(( playerPow_ * POW_ ) + ( playerPow_ * POW_ * playerCdmg_ ));
+			}
+			else
+			{
+				dynamic_cast< BossEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_);
+			}
+			isGiveDamage_ = true;
+
+			PlaySoundMem(hitSoundId_,DX_PLAYTYPE_BACK);
 		}
 	}
 }

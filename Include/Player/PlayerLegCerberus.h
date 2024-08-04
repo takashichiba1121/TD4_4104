@@ -21,19 +21,19 @@ private:
 
 	bool isBullet=false;
 
-	uint32_t PlayerStandTexture_[ 10 ];
+	uint32_t PlayerStandTexture_;
 
 	uint32_t PlayerStandTextureCount_ = 0;
 
-	uint32_t PlayerJumpTexture_[ 4 ];
+	uint32_t PlayerJumpTexture_;
 
 	uint32_t PlayerJumpTextureCount_ = 0;
 
-	uint32_t PlayerDownTexture_[ 4 ];
+	uint32_t PlayerDownTexture_;
 
 	uint32_t PlayerDownTextureCount_ = 0;
 
-	uint32_t PlayerDushTexture_[ 5 ];
+	uint32_t PlayerDushTexture_;
 
 	uint32_t PlayerDushTextureCount_ = 0;
 
@@ -53,7 +53,7 @@ private:
 
 	float airDeccelaration_ = 0;
 
-	float evasionRollSpeed_ = 24;
+	float evasionRollSpeed_ = 32;
 
 	//戦闘
 
@@ -73,6 +73,12 @@ private:
 
 	const uint32_t MAX_BULLET_INTERVAL_=5;
 
+	int evasionRollSoundId_;
+
+	int cerberusJumpSoundId_;
+
+	int landingSoundId_;
+
 #pragma endregion
 
 public:
@@ -89,12 +95,17 @@ public:
 
 	void Falling() override;
 
-	void Draw(const Vector2& pos,const Vector2& size) override;
+	void Draw(const Vector2& pos,const Vector2& size,Vector2 scroll) override;
 
 	void Load() override;
 
 	uint32_t GetDef() override {
 		return DEF_;
+	}
+
+	bool IsEvasionRoll()override
+	{
+		return isEvasionRoll_;
 	}
 };
 

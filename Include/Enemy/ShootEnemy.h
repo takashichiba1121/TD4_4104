@@ -23,6 +23,7 @@ private:
 
 	bool tern_ = false;
 	bool shootReady_ = false;
+	bool beforeAttackSoundPlayed_ = false;
 	int8_t ternInverval_;
 	int8_t ternInvervalTimer_;
 	std::unique_ptr<RectShape> searchArea_;
@@ -36,7 +37,7 @@ public:
 	void Update() override;
 	void Move() override;
 	void Attack() override;
-	void Draw() override;
+	void Draw(Vector2 scroll) override;
 	void OnCollision() override;
 };
 

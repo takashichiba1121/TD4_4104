@@ -4,6 +4,7 @@
 #include"CollisionConfig.h"
 #include"CollisionManager.h"
 #include"BaseEnemy.h"
+#include"BossEnemy.h"
 
 void PlayerBullet::Initialize(Vector2 velocity,Vector2 position,uint32_t life,float pow,float changeCrit,float changeCdmg,PlayerBullet::Type type)
 {
@@ -42,9 +43,28 @@ void PlayerBullet::Update()
 	shape_->SetCenter(position_);
 }
 
-void PlayerBullet::Draw()
+void PlayerBullet::Draw(Vector2 scroll)
 {
-	DrawBox(position_.x - SIZE_.x,position_.y - SIZE_.y,position_.x + SIZE_.x,position_.y + SIZE_.y,GetColor(255,0,0),true);
+	switch ( type_ )
+	{
+	case PlayerBullet::Type::Normal:
+		DrawBox(scroll.x + position_.x - SIZE_.x,scroll.y + position_.y - SIZE_.y,
+			scroll.x + position_.x + SIZE_.x,scroll.y + position_.y + SIZE_.y,
+			GetColor(255,0,0),true);
+		break;
+	case PlayerBullet::Type::ICED:
+		DrawBox(scroll.x + position_.x - ORBIT_SIZE_.x,scroll.y + position_.y - ORBIT_SIZE_.y,
+	scroll.x + position_.x + ORBIT_SIZE_.x,scroll.y + position_.y + ORBIT_SIZE_.y,
+	GetColor(255,0,0),true);
+		break;
+	case PlayerBullet::Type::BURN:
+		DrawBox(scroll.x + position_.x - ORBIT_SIZE_.x,scroll.y + position_.y - ORBIT_SIZE_.y,
+	scroll.x + position_.x + ORBIT_SIZE_.x,scroll.y + position_.y + ORBIT_SIZE_.y,
+	GetColor(255,0,0),true);
+		break;
+	default:
+		break;
+	}
 }
 
 void PlayerBullet::OnCollision()
@@ -64,6 +84,17 @@ void PlayerBullet::OnCollision()
 				else
 				{
 					dynamic_cast< BaseEnemy* >( GetCollisionInfo().object )->Damage(pow_);
+				}
+			}
+			if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "BossEnemy" )
+			{
+				if ( GetRand(1000) <= playerCrit_ * 1000 )
+				{
+					dynamic_cast< BossEnemy* >( GetCollisionInfo().object )->Damage(pow_ + ( pow_ * playerCdmg_ ));
+				}
+				else
+				{
+					dynamic_cast< BossEnemy* >( GetCollisionInfo().object )->Damage(pow_);
 				}
 			}
 			break;

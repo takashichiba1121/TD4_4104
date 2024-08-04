@@ -86,6 +86,8 @@ private:
 	float changeCdmg_ = 1.5f;
 
 	int32_t nowCost_=0;
+
+	uint32_t changeMaxCost_ = 0;
 #pragma endregion
 
 #pragma region ステータス初期値
@@ -94,7 +96,7 @@ private:
 
 	uint32_t DEF_ = 0;
 
-
+	const uint32_t MAX_COST_ = 75;
 #pragma endregion
 
 	bool direction_ = false;
@@ -113,9 +115,9 @@ private:
 
 	UserData name_;
 
-	const uint32_t DAMAGE_INTERVAL_MAX_ = 16;
+	const uint32_t DAMAGE_INTERVAL_MAX_ = 20;
 
-	uint32_t DamageInterval_ = DAMAGE_INTERVAL_MAX_;
+	uint32_t DamageInterval_ = 20;
 
 	std::list<Item> items_;
 
@@ -139,7 +141,7 @@ private:
 
 	uint32_t nowMouthCost_ = 0;
 
-		
+	int soundId_;
 public:
 	void Initialize() override;
 
@@ -173,7 +175,7 @@ public:
 
 	bool AddCdmg(int32_t Cdmg);
 
-	bool AddCost(int32_t cost);
+	void AddMaxCost(int32_t AddMaxCost);
 
 	bool SubSpd(int32_t spd);
 
@@ -191,7 +193,7 @@ public:
 		return nowCost_;
 	}
 
-	void Draw() override;
+	void Draw(Vector2 scroll) override;
 
 	bool ItemGet(Item newItem);
 
@@ -254,4 +256,6 @@ public:
 		return MAX_HP_ * changeMaxHp_;
 	}
 
+
+	void Heel(uint32_t heel);
 };

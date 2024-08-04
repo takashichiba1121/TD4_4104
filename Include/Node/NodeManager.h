@@ -8,6 +8,7 @@
 #include<Vector2.h>
 #include<BaseNode.h>
 #include<MapChip.h>
+#include<CircleShape.h>
 
 struct Node
 {
@@ -35,7 +36,7 @@ private:
 	int32_t nodeProbabilities[ NodeType::TYPE_NUM ] = {};
 
 	const int32_t STARTNODE_DREW_MAX_Y = 650;
-	const int32_t NODE_DREW_MIN_Y = 100;
+	const int32_t NODE_DREW_MIN_Y = 200;
 
 	int32_t oldRand = 0;
 	int32_t oldRandomJ = 0;
@@ -47,7 +48,11 @@ private:
 	int32_t shopImg;
 	int32_t healingImg;
 	int32_t startImg;
+	int32_t bossImg;
 	int32_t backGroundImg;
+
+	int32_t openSound_;
+	int32_t closeSound_;
 
 	int32_t playerNodePos;
 
@@ -58,7 +63,6 @@ private:
 	// 遒ｺ邇・・蟶・ｒ菴懈・縺吶ｋ
 	std::discrete_distribution<int> distribution;
 	std::array<std::unique_ptr<BaseNode>,NodeType::TYPE_NUM - 3>rooms_;
-	std::list<Node*> drawNode_;
 
 	
 	BaseNode* node_ = nullptr;
@@ -75,9 +79,19 @@ private:
 	Player* player_;
 	PowerUpCave* powerUp_;
 	DealDaemon* dealer_;
+	EnemyManager* enemys_;
 
 	bool isNodeDraw;
+	bool isGameEnd_;
+	bool init_;
+	bool isNodeReset_;
 
+	CircleShape circleShape_;
+	CircleShape circleMouseShape_;
+
+	int32_t selectNodeX;
+	int32_t selectNodeY;
+	bool isMouseInput_;
 public:
 
 	static NodeManager* GetInstance();
@@ -98,6 +112,18 @@ public:
 	void SetPlayer(Player* player);
 	void SetPowerUp(PowerUpCave* powerUp);
 	void SetDealer (DealDaemon* dealer );
+	void SetEnemys (EnemyManager* enemys_);
+	void SetScrollStop(bool* scrollStop);
+
+	bool IsMapDraw();
+	bool GameEnd();
+	bool IsNodeReset();
+	void End();
+
+	void MapDraw();
+
+	bool StartNodeSelect();
+	void StartNodeSelectMapDraw();
 
 private:
 

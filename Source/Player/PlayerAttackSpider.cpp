@@ -3,6 +3,7 @@
 #include"CollisionManager.h"
 #include"FlyEnemy.h"
 #include"WalkEnemy.h"
+#include"BossEnemy.h"
 void PlayerAttackSpider::Initialize(Vector2* playerPos,Vector2* velocity,bool* direction)
 {
 	playerPos_ = playerPos;
@@ -20,6 +21,8 @@ void PlayerAttackSpider::Initialize(Vector2* playerPos,Vector2* velocity,bool* d
 	CollisionManager::GetInstance()->AddObject(this);
 
 	CollisionDisable();
+
+	textureId_ = LoadGraph(std::string("Resources\\Player\\Parts\\spiderArm.png"));
 }
 void PlayerAttackSpider::AttackInit(float pow,float changeCrit,float changeCdmg)
 {
@@ -71,6 +74,7 @@ void PlayerAttackSpider::Attack()
 		{
 			CollisionDisable();
 			isAttack_ = false;
+			isGiveDamage_ = false;
 		}
 	}
 	else
@@ -79,13 +83,22 @@ void PlayerAttackSpider::Attack()
 	}
 }
 
-void PlayerAttackSpider::Draw()
+void PlayerAttackSpider::Draw(Vector2 scroll)
 {
 	if ( isAttack_ )
 	{
-		DrawBox(DrawPos_.x - COLISION_SIZE_.x / 2,DrawPos_.y - COLISION_SIZE_.y / 2,
-			DrawPos_.x + COLISION_SIZE_.x / 2,DrawPos_.y + COLISION_SIZE_.y / 2,
-			GetColor(0,255,0),false);
+		if ( *direction_ )
+		{
+			DrawExtendGraph(scroll.x + DrawPos_.x - COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y - COLISION_SIZE_.y / 2,
+				scroll.x + DrawPos_.x + COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y + COLISION_SIZE_.y / 2,
+				textureId_,true);
+		}
+		else
+		{
+			DrawExtendGraph(scroll.x + DrawPos_.x + COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y - COLISION_SIZE_.y / 2,
+				scroll.x + DrawPos_.x - COLISION_SIZE_.x / 2,scroll.y + DrawPos_.y + COLISION_SIZE_.y / 2,
+				textureId_,true);
+		}
 	}
 }
 
@@ -97,11 +110,23 @@ void PlayerAttackSpider::OnCollision()
 		{
 			if ( GetRand(1000) <= playerCrit_ * 1000 )
 			{
-				dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(( playerPow_ * POW_ ) + ( playerPow_ * POW_ * playerCdmg_ ),Effects::DELAY);
+				dynamic_cast< BaseEnemy* >( GetCollisionInfo().object )->Damage(( playerPow_ * POW_ ) + ( playerPow_ * POW_ * playerCdmg_ ),Effects::DELAY);
 			}
 			else
 			{
-				dynamic_cast< FlyEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_,Effects::DELAY);
+				dynamic_cast< BaseEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_,Effects::DELAY);
+			}
+			isGiveDamage_ = true;
+		}
+		if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "BossEnemy" )
+		{
+			if ( GetRand(1000) <= playerCrit_ * 1000 )
+			{
+				dynamic_cast< BossEnemy* >( GetCollisionInfo().object )->Damage(( playerPow_ * POW_ ) + ( playerPow_ * POW_ * playerCdmg_ ),Effects::DELAY);
+			}
+			else
+			{
+				dynamic_cast< BossEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_,Effects::DELAY);
 			}
 			isGiveDamage_ = true;
 		}
