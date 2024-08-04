@@ -13,7 +13,7 @@ void BossNode::Update()
 	PlayerNodeMove();
 	enemys_->Update();
 
-	if ( enemys_->IsEnemyEmpty() )
+	if ( enemys_->IsScreenEnemyEmpty() )
 	{
 		for ( auto& door : nextdoors_ )
 		{
