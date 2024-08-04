@@ -35,13 +35,6 @@
 		"partsInfo": "プレイヤーが向いてる方向に\n氷ビームを放つ腕。\n当たると敵を凍らせる"
 	},
 	{
-		"Type": "ARM",
-		"partsName": "マルスの楯腕",
-		"codeName": "Mars",
-		"cost": 25,
-		"partsInfo": "敵の攻撃をブロックする腕"
-	},
-	{
 		"Type": "LEG",
 		"partsName": "ケルベロスの爪",
 		"codeName": "Cerberus",
