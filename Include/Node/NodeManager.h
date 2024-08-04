@@ -36,7 +36,7 @@ private:
 	int32_t nodeProbabilities[ NodeType::TYPE_NUM ] = {};
 
 	const int32_t STARTNODE_DREW_MAX_Y = 650;
-	const int32_t NODE_DREW_MIN_Y = 100;
+	const int32_t NODE_DREW_MIN_Y = 200;
 
 	int32_t oldRand = 0;
 	int32_t oldRandomJ = 0;
@@ -48,6 +48,7 @@ private:
 	int32_t shopImg;
 	int32_t healingImg;
 	int32_t startImg;
+	int32_t bossImg;
 	int32_t backGroundImg;
 
 	int32_t openSound_;

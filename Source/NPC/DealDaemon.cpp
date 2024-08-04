@@ -65,7 +65,8 @@ void DealDaemon::Initialize()
 	SetPriducts();
 	animeNum_ = 10;
 	animeSpeed_ = 10;
-	textureId_ = LoadGraph("Resources\\Deal\\dealMonster.png");
+	textureId_ = LoadGraph(std::string( "Resources\\Deal\\dealMonster.png" ));
+	dealBGImg_ = LoadGraph(std::string( "Resources\\Deal\\dealBG.png" ));
 	
 }
 
@@ -208,7 +209,8 @@ void DealDaemon::Draw()
 			{
 				color = 0xf00f00;
 			}
-			DrawBox(( boxLeftTop_.x + i * boxDist_ ),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,color,true);
+
+			DrawExtendGraph(( boxLeftTop_.x + i * boxDist_ ),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,dealBGImg_,true);
 
 			string nameTemp = selectProducts_[ i ]->uiPartsName;
 

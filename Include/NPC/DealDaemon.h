@@ -41,8 +41,8 @@ private:
 	uint8_t selectNum_ = 0;
 	std::vector<std::unique_ptr<Parts>> products_;
 	Vector2 boxLeftTop_ = { 100,200 };
-	Vector2 boxSize_ = { 250,300 };
-	int32_t boxDist_ = 400;
+	Vector2 boxSize_ = { 300,350 };
+	int32_t boxDist_ = 420;
 	int8_t dealCount_;
 	bool isLeft_ = false;
 	bool dealed_ = false;
@@ -55,6 +55,7 @@ private:
 	int32_t anime_;
 	int32_t animeNum_;
 	int32_t animeSpeed_;
+	int32_t dealBGImg_;
 public:
 	void Initialize() override;
 	void Update() override;

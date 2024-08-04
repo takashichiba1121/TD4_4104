@@ -33,7 +33,7 @@ private:
 	size_t screenEnemy_ = 0;
 	Vector2 scroll_;
 	BossEnemy* boss_;
-
+	int32_t enemyDead_;
 
 	static std::unordered_map<std::string,int32_t> texs_;
 	static std::unordered_map<std::string,int32_t> sounds_;

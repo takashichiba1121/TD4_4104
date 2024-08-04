@@ -62,6 +62,8 @@ void NodeManager::Initialize()
 		shopImg = LoadGraph(std::string("Resources/Node/shop.png"));
 		healingImg = LoadGraph(std::string("Resources/Node/healing.png"));
 		startImg = LoadGraph(std::string("Resources/Node/start.png"));
+		bossImg = LoadGraph(std::string("Resources/Node/boss.png"));
+
 		backGroundImg = LoadGraph(std::string("Resources/BackGround/mapBackGround.png"));
 
 		openSound_ = LoadSoundMem(std::string("Resources/Sound/SFX_UI_map_open.mp3"));
@@ -171,7 +173,7 @@ void NodeManager::Initialize()
 			}
 		}
 
-		bossNode_.position.y -= Y_DIST;
+		bossNode_.position.y -= Y_DIST*2;
 		bossNode_.position.x = bossNodeX / nodeCount;
 		bossNode_.row = FLOORS;
 
@@ -349,7 +351,7 @@ void NodeManager::Reset()
 		}
 	}
 
-	bossNode_.position.y -= Y_DIST;
+	bossNode_.position.y -= Y_DIST * 2;
 	bossNode_.position.x = bossNodeX / nodeCount;
 	bossNode_.row = FLOORS;
 
@@ -430,7 +432,7 @@ void NodeManager::NodeDrew(int32_t leftBottomX,int32_t leftBottomY,const Node& n
 		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,0.5,0,startImg,true);
 		break;
 	case NodeType::Type::BOSS:
-		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,0.5,0,startImg,true);
+		DrawRotaGraph(leftBottomX + node.position.x,leftBottomY + node.position.y,1.0f,0,bossImg,true);
 		break;
 	default:
 		break;

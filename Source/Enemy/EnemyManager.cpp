@@ -24,6 +24,7 @@ void EnemyManager::Initialize()
 {
 	enemylist_.clear();
 	popTime_ = POP_INTERVAL;
+	enemyDead_ = LoadSoundMem(std::string("Resources/Sound/Enemy/SFX_enemy_Dead.mp3"));
 }
 
 void EnemyManager::Pop()
@@ -188,6 +189,14 @@ void EnemyManager::Update()
 		{
 			itr->Update();
 			screenEnemy_++;
+		}
+	}
+
+	for ( auto& itr : enemylist_ )
+	{
+		if ( itr->IsLive() == false )
+		{
+			PlaySoundMem(enemyDead_,DX_PLAYTYPE_BACK);
 		}
 	}
 
