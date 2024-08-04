@@ -18,7 +18,7 @@ void PowerUpCave::Initialize()
 	dealed_ = true;
 	CollisionDisable();
 	hitboxSize_ = { 128,128 };
-	pos_ = { 650,600 };
+	pos_ = { 650,550 };
 
 	tex_ = LoadGraph(string("Resources\\Node\\reinforcement.png"));
 
@@ -230,7 +230,7 @@ void PowerUpCave::ReSet()
 	selectmode_ = false;
 	dealed_ = false;
 	hitboxSize_ = { 128,128 };
-	pos_ = { 650,640 };
+	pos_ = { 650,610 };
 	SetPriducts();
 	CollisionEnable();
 }
