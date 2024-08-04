@@ -15,6 +15,12 @@ void Input::Update()
 	memcpy(oldKey_,key_,sizeof(key_));
 
 	GetHitKeyStateAll(key_);
+
+	oldPadkey = PadKey;
+
+	PadKey = GetJoypadInputState(DX_INPUT_PAD1);
+
+	GetJoypadAnalogInput(&padX,&padY,DX_INPUT_PAD1);
 }
 
 bool Input::PushKey(uint16_t keyNumber)
@@ -48,4 +54,47 @@ bool Input::ReleaseKey(uint16_t keyNumber)
 	}
 	//そうでなければfalse返す
 	return false;
+}
+
+bool Input::PushPadKey(uint16_t keyNumber)
+{
+		//指定キーを押していればtrueを返す
+	if ( PadKey & keyNumber )
+	{
+		return true;
+	}
+	//そうでなければfalse返す
+	return false;
+}
+
+bool Input::TriggerPadKey(uint16_t keyNumber)
+{
+	//指定キーを押していればtrueを返す
+	if ( PadKey & keyNumber && !(oldPadkey & keyNumber) )
+	{
+		return true;
+	}
+	//そうでなければfalse返す
+	return false;
+}
+
+bool Input::ReleasePadKey(uint16_t keyNumber)
+{
+		//指定キーを押していればtrueを返す
+	if ( !( PadKey & keyNumber ) && oldPadkey & keyNumber  )
+	{
+		return true;
+	}
+	//そうでなければfalse返す
+	return false;
+}
+
+uint32_t Input::PadX()
+{
+	return padX;
+}
+
+uint32_t Input::PadY()
+{
+	return padY;
 }

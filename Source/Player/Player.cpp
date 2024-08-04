@@ -130,24 +130,7 @@ void Player::Update()
 
 	ImGui::Begin("PlayerSituation");
 
-	ImGui::Text("vec:%f,%f", velocity_.x, velocity_.y);
-
-	ImGui::Text("HP:%d", hp_);
-
-	ImGui::Text("MaxHP:%d", MAX_HP_);
-
-	ImGui::Text("Pow:%1.2f", changePow_);
-
-	ImGui::Text("Acl:%1.2f", changeSpd_);
-
-	ImGui::Text("Def:%1.2f", changeDef_);
-
-	ImGui::Text("Crit:%1.2f", changeCrit_);
-
-	ImGui::Text("Cdmg:%1.2f", changeCdmg_);
-
-	ImGui::Text("cost:%d", nowCost_);
-
+	ImGui::Text("vec:%d,%d", Input::Instance()->PadX(),Input::Instance()->PadY());
 	ImGui::End();
 
 #endif
@@ -157,12 +140,12 @@ void Player::Attack()
 {
 	if ( !powerUpText_ )
 	{
-		if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && leftArm_ != nullptr && !rightArm_->IsAttack() )
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_Z)|| Input::Instance()->TriggerPadKey(PAD_INPUT_3) && leftArm_ != nullptr && !rightArm_->IsAttack() )
 		{
 			leftArm_->AttackInit(changePow_,changeCrit_,changeCdmg_);
 		}
 
-		if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && rightArm_ != nullptr && !leftArm_->IsAttack() )
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_X)|| Input::Instance()->TriggerPadKey(PAD_INPUT_4) && rightArm_ != nullptr && !leftArm_->IsAttack() )
 		{
 			rightArm_->AttackInit(changePow_,changeCrit_,changeCdmg_);
 		}
@@ -512,11 +495,11 @@ bool Player::SubDef(int32_t def)
 
 bool Player::SubMaxHp(int32_t maxHp)
 {
-	if (changeMaxHp_ - maxHp <= 0)
+	if (changeMaxHp_ - maxHp/100.0f <= 0)
 	{
 		return false;
 	}
-	changeMaxHp_ -= maxHp;
+	changeMaxHp_ -= maxHp / 100.0f;
 
 	if (hp_ >= MAX_HP_ * changeMaxHp_)
 	{
@@ -528,7 +511,7 @@ bool Player::SubMaxHp(int32_t maxHp)
 
 bool Player::SubCrit(int32_t Crit)
 {
-	changeCrit_ -= Crit;
+	changeCrit_ -= Crit/100.0;
 
 	return true;
 }
@@ -563,7 +546,7 @@ void Player::Draw(Vector2 scroll)
 
 	if (powerUpText_ && isPowerUp_ == false)
 	{
-		DrawFormatString(pos_.x, pos_.y - drawSize_.y + 40, 0xffffff, "Push to KEY Z");
+		DrawFormatString(pos_.x, pos_.y - drawSize_.y + 40, 0xffffff, "Push to KEY X");
 	}
 }
 
@@ -631,7 +614,7 @@ void Player::UseItem()
 
 uint32_t Player::PowerUp()
 {
-	if (Input::Instance()->TriggerKey(KEY_INPUT_LEFT) || Input::Instance()->TriggerKey(KEY_INPUT_A))
+	if (Input::Instance()->TriggerKey(KEY_INPUT_LEFT) || Input::Instance()->TriggerKey(KEY_INPUT_A)|| Input::Instance()->TriggerPadKey(PAD_INPUT_5) )
 	{
 		if (powerUpNum_ == 0)
 		{
@@ -642,7 +625,7 @@ uint32_t Player::PowerUp()
 			powerUpNum_--;
 		}
 	}
-	if (Input::Instance()->TriggerKey(KEY_INPUT_RIGHT) || Input::Instance()->TriggerKey(KEY_INPUT_D))
+	if (Input::Instance()->TriggerKey(KEY_INPUT_RIGHT) || Input::Instance()->TriggerKey(KEY_INPUT_D)|| Input::Instance()->TriggerPadKey(PAD_INPUT_6) )
 	{
 		powerUpNum_++;
 		if (powerUpNum_ >= 3)
@@ -673,7 +656,7 @@ void Player::OnCollision()
 	if (static_cast<ObjectUserData*>(GetCollisionInfo().userData)->tag == "PowerUp" && isDealed_ == false)
 	{
 		powerUpText_ = true;
-		if (Input::Instance()->TriggerKey(KEY_INPUT_Z))
+		if (Input::Instance()->TriggerKey(KEY_INPUT_Z)|| Input::Instance()->TriggerPadKey(PAD_INPUT_3) )
 		{
 			isPowerUp_ = true;
 
@@ -683,7 +666,7 @@ void Player::OnCollision()
 	if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "Parts" && isDealed_ == false )
 	{
 		powerUpText_ = true;
-		if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) )
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_Z)|| Input::Instance()->TriggerPadKey(PAD_INPUT_3) )
 		{
 			isChangeParts_ = true;
 

@@ -144,7 +144,7 @@ void NodeManager::Initialize()
 					std::vector<Node*>& nodes = nodes_[ i ][ j ].nexts;
 					std::sort(nodes.begin(),nodes.end(),[ ] (Node* node,Node* node2)
 	 {
-			 return node->column < node2->column;
+		 return node->column < node2->column;
 	 });
 				}
 			}
@@ -173,7 +173,7 @@ void NodeManager::Initialize()
 			}
 		}
 
-		bossNode_.position.y -= Y_DIST*2;
+		bossNode_.position.y -= Y_DIST * 2;
 		bossNode_.position.x = bossNodeX / nodeCount;
 		bossNode_.row = FLOORS;
 
@@ -233,13 +233,13 @@ void NodeManager::Update()
 		isNodeReset_ = true;
 	}
 
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_M) )
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_M) || Input::Instance()->TriggerPadKey(PAD_INPUT_8) )
 	{
 		if ( isNodeDraw )
 		{
 			PlaySoundMem(closeSound_,DX_PLAYTYPE_BACK);
 			isNodeDraw = false;
-			
+
 		}
 		else
 		{
@@ -322,7 +322,7 @@ void NodeManager::Reset()
 				std::vector<Node*>& nodes = nodes_[ i ][ j ].nexts;
 				std::sort(nodes.begin(),nodes.end(),[ ] (Node* node,Node* node2)
  {
-	return node->column < node2->column;
+	 return node->column < node2->column;
  });
 			}
 		}
@@ -383,7 +383,7 @@ void NodeManager::NodeMapDraw()
 	playerNodePos = selectNode_->row + 3;
 	playerNodePos = min(playerNodePos,FLOORS);
 
-	DrawRotaGraph(GameConfig::GetWindowWidth()/2,GameConfig::GetWindowHeight()/2-2,1.0f,0.0,backGroundImg,true);
+	DrawRotaGraph(GameConfig::GetWindowWidth() / 2,GameConfig::GetWindowHeight() / 2 - 2,1.0f,0.0,backGroundImg,true);
 
 	DrawCircle(leftBottomX + selectNode_->position.x,leftBottomY + selectNode_->position.y,20,GetColor(255,0,0));
 	for ( int32_t i = 0; i < playerNodePos; ++i )
@@ -511,77 +511,130 @@ void NodeManager::MapDraw()
 
 bool NodeManager::StartNodeSelect()
 {
-	playerNodePos = selectNode_->row + 3;
-	playerNodePos = min(playerNodePos,FLOORS);
-
-	int32_t mouseX;
-	int32_t mouseY;
-
-	GetMousePoint(&mouseX,&mouseY);
-
-	circleMouseShape_.SetCenter({ float( mouseX ) ,float( mouseY ) });
-
-	selectNodeX = -1;
-	selectNodeY = -1;
-
-	for ( int32_t i = 0; i < playerNodePos; ++i )
+	if ( !GetJoypadNum() )
 	{
-		for ( int32_t j = 0; j < MAP_WIDTH; ++j )
+		playerNodePos = selectNode_->row + 3;
+		playerNodePos = min(playerNodePos,FLOORS);
+
+		int32_t mouseX;
+		int32_t mouseY;
+
+		GetMousePoint(&mouseX,&mouseY);
+
+		circleMouseShape_.SetCenter({ float(mouseX) ,float(mouseY) });
+
+		selectNodeX = -1;
+		selectNodeY = -1;
+
+		for ( int32_t i = 0; i < playerNodePos; ++i )
 		{
-			circleShape_.SetCenter({ leftBottomX + nodes_[ i ][ j ].position.x,leftBottomY + nodes_[ i ][ j ].position.y });
-
-			if ( Collision::Circle2Circle(circleShape_,circleMouseShape_) && nodes_[ i ][ j ].type.value == NodeType::START )
+			for ( int32_t j = 0; j < MAP_WIDTH; ++j )
 			{
-				selectNodeX = j;
-				selectNodeY = i;
+				circleShape_.SetCenter({ leftBottomX + nodes_[ i ][ j ].position.x,leftBottomY + nodes_[ i ][ j ].position.y });
 
-				if ( GetMouseInput() & MOUSE_INPUT_LEFT )
+				if ( Collision::Circle2Circle(circleShape_,circleMouseShape_) && nodes_[ i ][ j ].type.value == NodeType::START )
 				{
-					isMouseInput_ = true;
+					selectNodeX = j;
+					selectNodeY = i;
+
+					if ( GetMouseInput() & MOUSE_INPUT_LEFT )
+					{
+						isMouseInput_ = true;
+					}
+				}
+			}
+		}
+
+		if ( isMouseInput_ )
+		{
+			for ( auto& itr : startNodes_ )
+			{
+				if ( itr->column == selectNodeX && itr->row == selectNodeY )
+				{
+					nextNode_ = itr;
+
+					return true;
 				}
 			}
 		}
 	}
-
-	if ( isMouseInput_ )
+	else
 	{
-		for ( auto& itr : startNodes_ )
-		{
-			if ( itr->column == selectNodeX && itr->row == selectNodeY )
-			{
-				nextNode_ = itr;
+		XINPUT_STATE st;
+		GetJoypadXInputState(DX_INPUT_PAD1,&st);
 
-				return true;
-			}
+		if ( st.Buttons[ XINPUT_BUTTON_LEFT_SHOULDER ] )
+		{
+			selectNodeX--;
+			selectNodeX = max(0,selectNodeX);
+		}
+
+		if ( st.Buttons[ XINPUT_BUTTON_RIGHT_SHOULDER ] )
+		{
+			selectNodeX++;
+			selectNodeX = min(selectNodeX,startNodes_.size() - 1);
+		}
+
+		if ( st.Buttons[ XINPUT_BUTTON_A ] )
+		{
+			nextNode_ = startNodes_[ selectNodeX ];
+			return true;
 		}
 	}
-
 
 	return false;
 }
 
 void NodeManager::StartNodeSelectMapDraw()
 {
-	selectNode_ = startNodes_[ 0 ];
-	playerNodePos = selectNode_->row + 3;
-	playerNodePos = min(playerNodePos,FLOORS);
-
-	DrawRotaGraph(GameConfig::GetWindowWidth() / 2,GameConfig::GetWindowHeight() / 2 - 2,1.0f,0.0,backGroundImg,true);
-
-	for ( int32_t i = 0; i < playerNodePos; ++i )
+	if ( !GetJoypadNum() )
 	{
-		for ( int32_t j = 0; j < MAP_WIDTH; ++j )
+		selectNode_ = startNodes_[ 0 ];
+		playerNodePos = selectNode_->row + 3;
+		playerNodePos = min(playerNodePos,FLOORS);
+
+		DrawRotaGraph(GameConfig::GetWindowWidth() / 2,GameConfig::GetWindowHeight() / 2 - 2,1.0f,0.0,backGroundImg,true);
+
+		for ( int32_t i = 0; i < playerNodePos; ++i )
 		{
-			if ( selectNodeX == j && selectNodeY == i )
+			for ( int32_t j = 0; j < MAP_WIDTH; ++j )
 			{
-				DrawCircle(leftBottomX + nodes_[ i ][ j ].position.x,leftBottomY + nodes_[ i ][ j ].position.y,20,GetColor(255,0,0));
+				if ( selectNodeX == j && selectNodeY == i )
+				{
+					DrawCircle(leftBottomX + nodes_[ i ][ j ].position.x,leftBottomY + nodes_[ i ][ j ].position.y,20,GetColor(255,0,0));
+				}
+
+				NodeDrew(leftBottomX,leftBottomY,nodes_[ i ][ j ],true);
+
+				if ( playerNodePos == FLOORS )
+				{
+					NodeDrew(leftBottomX,leftBottomY,bossNode_,true);
+				}
 			}
+		}
+	}
+	else
+	{
+		selectNode_ = startNodes_[ 0 ];
+		playerNodePos = selectNode_->row + 3;
+		playerNodePos = min(playerNodePos,FLOORS);
 
-			NodeDrew(leftBottomX,leftBottomY,nodes_[ i ][ j ],true);
+		DrawRotaGraph(GameConfig::GetWindowWidth() / 2,GameConfig::GetWindowHeight() / 2 - 2,1.0f,0.0,backGroundImg,true);
 
-			if ( playerNodePos == FLOORS )
+		for ( int32_t i = 0; i < playerNodePos; ++i )
+		{
+			for ( int32_t j = 0; j < MAP_WIDTH; ++j )
 			{
-				NodeDrew(leftBottomX,leftBottomY,bossNode_,true);
+				if ( startNodes_[ selectNodeX ]->column == j && startNodes_[ selectNodeX ]->row == i )
+				{
+					DrawCircle(leftBottomX + nodes_[ i ][ j ].position.x,leftBottomY + nodes_[ i ][ j ].position.y,20,GetColor(255,0,0));
+				}
+
+				NodeDrew(leftBottomX,leftBottomY,nodes_[ i ][ j ],true);
+
+				if ( playerNodePos == FLOORS )
+					NodeDrew(leftBottomX,leftBottomY,bossNode_,true);
+
 			}
 		}
 	}
