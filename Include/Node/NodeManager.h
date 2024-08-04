@@ -111,6 +111,8 @@ public:
 	bool IsNodeReset();
 	void End();
 
+	void MapDraw();
+
 private:
 
 	void GenerateInitialGrid();
