@@ -44,8 +44,8 @@ void WalkEnemy::Initialize()
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
 	CollisionManager::GetInstance()->AddObject(this);
 	attackPower_ = 90;
-	attackInterval_ = 60;
-	beforeAttackFrame_ = 5;
+	attackInterval_ = 120;
+	beforeAttackFrame_ = 10;
 	attackFrame_ = 25;
 	maxHp_ = 150;
 	hp_ = 150;

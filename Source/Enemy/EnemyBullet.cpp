@@ -13,7 +13,7 @@ void EnemyBullet::SetVelocity(Vector2 velocity)
 
 void EnemyBullet::Initialize()
 {
-	speed_ = 3;
+	speed_ = 6;
 	drawSize_ = {32,32};
 	islive_ = true;
 	shape_ = new RectShape();

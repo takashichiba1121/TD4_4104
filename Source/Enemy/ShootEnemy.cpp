@@ -48,7 +48,7 @@ void ShootEnemy::Initialize()
 	CollisionManager::GetInstance()->AddObject(this);
 	attackPower_ = 85;
 
-	attackInterval_ = 45;
+	attackInterval_ = 90;
 	beforeAttackFrame_ = 10;
 	attackFrame_ = 25;
 	maxHp_ = hp_;
