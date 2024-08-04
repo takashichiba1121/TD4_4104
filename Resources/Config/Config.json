@@ -38,7 +38,7 @@
     },
     "Boss":{
         "Name": "Boss",
-        "Hp":10,
+        "Hp":3600,
         "AttackInterval":1.5,
         "AttackApproachHitBox":[
                 40,
@@ -58,7 +58,7 @@
                 70, 
                 64
             ],
-            "Power":1,
+            "Power":100,
             "Offset":[
                 0, 
                 0
@@ -72,7 +72,7 @@
                 184, 
                 184
             ],
-            "Power":1,
+            "Power":120,
             "AnimeFrame": 11,
             "Anime2Frame": 2
         },
@@ -87,7 +87,7 @@
                     48, 
                     48
                 ],
-                "Power":1,
+                "Power":150,
                 "RotateSpeed":25
             }
             
