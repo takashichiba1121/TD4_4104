@@ -45,7 +45,26 @@ void PlayerBullet::Update()
 
 void PlayerBullet::Draw(Vector2 scroll)
 {
-	DrawBox(scroll.x+position_.x - SIZE_.x,scroll.y+position_.y - SIZE_.y,scroll.x+position_.x + SIZE_.x,scroll.y+position_.y + SIZE_.y,GetColor(255,0,0),true);
+	switch ( type_ )
+	{
+	case PlayerBullet::Type::Normal:
+		DrawBox(scroll.x + position_.x - SIZE_.x,scroll.y + position_.y - SIZE_.y,
+			scroll.x + position_.x + SIZE_.x,scroll.y + position_.y + SIZE_.y,
+			GetColor(255,0,0),true);
+		break;
+	case PlayerBullet::Type::ICED:
+		DrawBox(scroll.x + position_.x - ORBIT_SIZE_.x,scroll.y + position_.y - ORBIT_SIZE_.y,
+	scroll.x + position_.x + ORBIT_SIZE_.x,scroll.y + position_.y + ORBIT_SIZE_.y,
+	GetColor(255,0,0),true);
+		break;
+	case PlayerBullet::Type::BURN:
+		DrawBox(scroll.x + position_.x - ORBIT_SIZE_.x,scroll.y + position_.y - ORBIT_SIZE_.y,
+	scroll.x + position_.x + ORBIT_SIZE_.x,scroll.y + position_.y + ORBIT_SIZE_.y,
+	GetColor(255,0,0),true);
+		break;
+	default:
+		break;
+	}
 }
 
 void PlayerBullet::OnCollision()
