@@ -8,6 +8,7 @@ class GameOverScene : public BaseScene
 private:
 
 	Input* input_ = nullptr;
+	int32_t backGround_;
 
 public:
 	GameOverScene() = default;
