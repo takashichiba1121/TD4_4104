@@ -32,7 +32,7 @@ void FlyEnemy::Initialize()
 
 	moveTimer_.SetEndCount(20);
 	beforeAttackFrame_ = 40;
-	attackInterval_ = 120;
+	attackInterval_ = 240;
 	attackFrame_ = 5;
 
 	tag.tag = "Enemy";
