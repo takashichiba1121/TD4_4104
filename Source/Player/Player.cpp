@@ -511,7 +511,7 @@ bool Player::SubMaxHp(int32_t maxHp)
 
 bool Player::SubCrit(int32_t Crit)
 {
-	changeCrit_ -= Crit;
+	changeCrit_ -= Crit/100.0;
 
 	return true;
 }
