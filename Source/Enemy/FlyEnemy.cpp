@@ -23,7 +23,7 @@ void FlyEnemy::Initialize()
 
 	targetCheckPoint_ = 0;
 	searchArea_ = make_unique<CircleShape>();
-	searchArea_->SetRadius({ ( drawSize_.x * 3 / 2 )});
+	searchArea_->SetRadius({ ( drawSize_.x * 5 / 2 )});
 	SetShape(shape_);
 	SetCollisionAttribute(COLLISION_ATTRIBUTE_ENEMY);
 	SetCollisionMask(~COLLISION_ATTRIBUTE_ENEMY);
@@ -56,12 +56,9 @@ void FlyEnemy::Update()
 			beforeAttackCounter_.SetEndCount(beforeAttackFrame_);
 			attackCounter_.SetEndCount(attackFrame_);
 			PlaySoundMem(EnemyManager::GetSoundHandle("flyBeforeAttack"),DX_PLAYTYPE_BACK);
+			targetPos_ = playerPtr_->GetPos();
 		}
 		actionMode = ATTACK;
-	}
-	else if(actionMode != ATTACK)
-	{
-		targetPos_ = playerPtr_->GetPos();
 	}
 
 	if ( immortalTime_ <= 0 )

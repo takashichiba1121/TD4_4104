@@ -250,11 +250,6 @@ void NodeManager::Update()
 
 void NodeManager::Draw()
 {
-	if ( isNodeDraw )
-	{
-		NodeMapDraw();
-	}
-
 	node_->Draw();
 }
 
@@ -474,6 +469,11 @@ void NodeManager::SetEnemys(EnemyManager* enemys)
 	enemys_ = enemys;
 }
 
+void NodeManager::SetScrollStop(bool* scrollStop)
+{
+	rooms_[ NodeType::BATTLE ]->SetScrollStop(scrollStop);
+}
+
 bool NodeManager::IsMapDraw()
 {
 	return isNodeDraw;
@@ -492,6 +492,14 @@ bool NodeManager::IsNodeReset()
 void NodeManager::End()
 {
 	isGameEnd_ = true;
+}
+
+void NodeManager::MapDraw()
+{
+	if ( isNodeDraw )
+	{
+		NodeMapDraw();
+	}
 }
 
 void NodeManager::GenerateInitialGrid()

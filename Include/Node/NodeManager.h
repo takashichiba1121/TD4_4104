@@ -104,11 +104,14 @@ public:
 	void SetPowerUp(PowerUpCave* powerUp);
 	void SetDealer (DealDaemon* dealer );
 	void SetEnemys (EnemyManager* enemys_);
+	void SetScrollStop(bool* scrollStop);
 
 	bool IsMapDraw();
 	bool GameEnd();
 	bool IsNodeReset();
 	void End();
+
+	void MapDraw();
 
 private:
 

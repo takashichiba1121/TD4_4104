@@ -27,6 +27,7 @@ protected:
 	PowerUpCave* powerUp_;
 	DealDaemon* dealer_;
 	EnemyManager* enemys_;
+	bool* isScrollStop_;
 
 	struct NextDoor
 	{
@@ -52,6 +53,7 @@ public:
 	void SetDealer(DealDaemon* dealer);
 	void SetNodeManagerr(NodeManager* nodeManager);
 	void SetEnemyManager(EnemyManager* enemyManager);
+	void SetScrollStop(bool* scrollStop);
 
 	void PlayerNodeMove();
 

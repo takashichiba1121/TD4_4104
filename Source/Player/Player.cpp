@@ -82,7 +82,6 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	hp_ = 100;
 	if (isPowerUp_)
 	{
 		PowerUp();
