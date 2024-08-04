@@ -23,6 +23,12 @@ void PlayerLegFenrir::Initialize(Vector2* playerVelocity,bool* direction,float* 
 	PlayerDownTexture_ = LoadGraph(std::string("Resources\\Player\\Parts\\fenrirJumpDown.png"));
 
 	PlayerDushTexture_ = LoadGraph(std::string("Resources\\Player\\Parts\\fenrirDush.png"));
+
+	evasionRollSoundId_ = LoadSoundMem(std::string("Resources\\Sound\\Player\\SFX_player_DodgeRoll.mp3"));
+
+	cerberusJumpSoundId_ = LoadSoundMem(std::string("Resources\\Sound\\Player\\SFX_player_leg_cerberus_Jump.mp3"));
+
+	landingSoundId_ = LoadSoundMem(std::string("Resources\\Sound\\Player\\SFX_player_Landing.mp3"));
 }
 
 void PlayerLegFenrir::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const float pow)
@@ -177,6 +183,9 @@ void PlayerLegFenrir::JumpStart()
 	{
 		playerVelocity_->x += -evasionRollSpeed_;
 	}
+
+	PlaySoundMem(cerberusJumpSoundId_,DX_PLAYTYPE_BACK);
+
 }
 
 void PlayerLegFenrir::Jump()
@@ -215,6 +224,8 @@ void PlayerLegFenrir::EvasionRoll()
 		{
 			*playerVelocity_ = { -evasionRollSpeed_,0 };
 		}
+
+		PlaySoundMem(evasionRollSoundId_,DX_PLAYTYPE_BACK);
 	}
 	if ( isEvasionRoll_ )
 	{
@@ -263,7 +274,9 @@ void PlayerLegFenrir::Falling()
 
 		isBullet = false;
 
+		//PlaySoundMem(landingSoundId_,DX_PLAYTYPE_BACK);
 	}
+
 }
 
 void PlayerLegFenrir::Draw(const Vector2& pos,const Vector2& size,Vector2 scroll)

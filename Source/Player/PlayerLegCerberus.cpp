@@ -23,6 +23,12 @@ void PlayerLegCerberus::Initialize(Vector2* playerVelocity,bool* direction,float
 	PlayerDownTexture_ = LoadGraph(std::string("Resources\\Player\\Parts\\cerberusJumpDown.png"));
 
 	PlayerDushTexture_ = LoadGraph(std::string("Resources\\Player\\Parts\\cerberusDush.png"));
+
+	evasionRollSoundId_ = LoadSoundMem(std::string("Resources\\Sound\\Player\\SFX_player_DodgeRoll.mp3"));
+
+	cerberusJumpSoundId_ = LoadSoundMem(std::string("Resources\\Sound\\Player\\SFX_player_leg_cerberus_Jump.mp3"));
+
+	landingSoundId_ = LoadSoundMem(std::string("Resources\\Sound\\Player\\SFX_player_Landing.mp3"));
 }
 
 void PlayerLegCerberus::Move(bool DirBOTTOM,bool isAttack,const Vector2& pos,const float pow)
@@ -177,6 +183,7 @@ void PlayerLegCerberus::JumpStart()
 	{
 		playerVelocity_->x += -evasionRollSpeed_ * 1.5f;
 	}
+	PlaySoundMem(cerberusJumpSoundId_,DX_PLAYTYPE_BACK);
 }
 
 void PlayerLegCerberus::Jump()
@@ -217,6 +224,7 @@ void PlayerLegCerberus::EvasionRoll()
 		{
 			*playerVelocity_ = { -evasionRollSpeed_,0 };
 		}
+		PlaySoundMem(evasionRollSoundId_,DX_PLAYTYPE_BACK);
 	}
 	if ( isEvasionRoll_ )
 	{
@@ -263,6 +271,7 @@ void PlayerLegCerberus::Falling()
 
 		PlayerDownTextureCount_ = 0;
 
+		//PlaySoundMem(landingSoundId_,DX_PLAYTYPE_BACK);
 	}
 }
 

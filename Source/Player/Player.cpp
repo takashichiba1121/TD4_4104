@@ -73,16 +73,15 @@ void Player::Initialize()
 
 	circelShape_->SetRadius(hitboxSize_.y);
 
-	ChangeLeg("Fenrir",0);
+	//ChangeLeg("Fenrir",0);
 
-	//ChangeLeftArm("Vine",0);
+	//ChangeLeftArm("Cerberus",0);
 
 	//ChangeRightArm("Gun",0);
 }
 
 void Player::Update()
 {
-	powerUpText_ = false;
 	if (isPowerUp_)
 	{
 		PowerUp();
@@ -125,6 +124,8 @@ void Player::Update()
 		circelShape_->SetCenter(pos_);
 	}
 
+	powerUpText_ = false;
+
 #ifdef _DEBUG
 
 	ImGui::Begin("PlayerSituation");
@@ -154,24 +155,27 @@ void Player::Update()
 
 void Player::Attack()
 {
-	if (Input::Instance()->TriggerKey(KEY_INPUT_Z) && leftArm_ != nullptr && !rightArm_->IsAttack())
+	if ( !powerUpText_ )
 	{
-		leftArm_->AttackInit(changePow_, changeCrit_, changeCdmg_);
-	}
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_Z) && leftArm_ != nullptr && !rightArm_->IsAttack() )
+		{
+			leftArm_->AttackInit(changePow_,changeCrit_,changeCdmg_);
+		}
 
-	if (Input::Instance()->TriggerKey(KEY_INPUT_X) && rightArm_ != nullptr && !leftArm_->IsAttack())
-	{
-		rightArm_->AttackInit(changePow_, changeCrit_, changeCdmg_);
-	}
+		if ( Input::Instance()->TriggerKey(KEY_INPUT_X) && rightArm_ != nullptr && !leftArm_->IsAttack() )
+		{
+			rightArm_->AttackInit(changePow_,changeCrit_,changeCdmg_);
+		}
 
-	if (leftArm_ != nullptr)
-	{
-		leftArm_->Attack();
-	}
+		if ( leftArm_ != nullptr )
+		{
+			leftArm_->Attack();
+		}
 
-	if (rightArm_ != nullptr)
-	{
-		rightArm_->Attack();
+		if ( rightArm_ != nullptr )
+		{
+			rightArm_->Attack();
+		}
 	}
 }
 void Player::Damage(int32_t damage)
@@ -557,11 +561,11 @@ void Player::Draw(Vector2 scroll)
 		rightArm_->Draw(scroll);
 	}
 
-	DrawFormatString(0, GameConfig::GetWindowHeight() - 20, 0xffffff, "PlayerHP:%d/%d", hp_, MAX_HP_);
+	DrawFormatString(0, GameConfig::GetWindowHeight() - 20, 0xffffff, "PlayerHP:%d/%d", hp_, MAX_HP_*changeMaxHp_);
 
 	if (powerUpText_ && isPowerUp_ == false)
 	{
-		DrawFormatString(pos_.x, pos_.y - drawSize_.y + 40, 0xffffff, "Push to KEY Z", hp_, MAX_HP_);
+		DrawFormatString(pos_.x, pos_.y - drawSize_.y + 40, 0xffffff, "Push to KEY Z");
 	}
 }
 

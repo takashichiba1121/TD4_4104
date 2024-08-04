@@ -42,7 +42,9 @@ private:
 
 	int textureId_;
 
+	int attackSoundId_;
 
+	int hitSoundId_;
 public:
 
 	static const uint32_t ArmCost = 0;

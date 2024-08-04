@@ -73,6 +73,12 @@ private:
 
 	const uint32_t MAX_BULLET_INTERVAL_=5;
 
+	int evasionRollSoundId_;
+
+	int cerberusJumpSoundId_;
+
+	int landingSoundId_;
+
 #pragma endregion
 
 public:

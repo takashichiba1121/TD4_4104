@@ -39,7 +39,11 @@ private:
 
 	const uint32_t DEF_ = 80;
 
+	int evasionRollSoundId_;
 
+	int cerberusJumpSoundId_;
+
+	int landingSoundId_;
 #pragma region ステータス
 
 //移動

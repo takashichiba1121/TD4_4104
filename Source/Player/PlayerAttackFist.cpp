@@ -23,6 +23,10 @@ void PlayerAttackFist::Initialize(Vector2* playerPos,Vector2* velocity,bool* dir
 	CollisionDisable();
 
 	textureId_ = LoadGraph(std::string("Resources\\Player\\Parts\\normalPunch.png"));
+
+	attackSoundId_ = LoadSoundMem(std::string("Resources\\Sound\\Player\\SFX_player_arm_punch_Attack.mp3"));
+
+	hitSoundId_ = LoadSoundMem(std::string("Resources\\Sound\\Player\\SFX_player_arm_punch_Hit.mp3"));
 }
 void PlayerAttackFist::AttackInit(float pow,float changeCrit,float changeCdmg)
 {
@@ -48,6 +52,8 @@ void PlayerAttackFist::AttackInit(float pow,float changeCrit,float changeCdmg)
 		}
 
 		CollisionEnable();
+
+		PlaySoundMem(attackSoundId_,DX_PLAYTYPE_BACK);
 	}
 }
 
@@ -117,6 +123,8 @@ void PlayerAttackFist::OnCollision()
 				dynamic_cast< BaseEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_);
 			}
 			isGiveDamage_ = true;
+
+			PlaySoundMem(hitSoundId_,DX_PLAYTYPE_BACK);
 		}
 		if ( static_cast< ObjectUserData* >( GetCollisionInfo().userData )->tag == "BossEnemy" )
 		{
@@ -129,6 +137,8 @@ void PlayerAttackFist::OnCollision()
 				dynamic_cast< BossEnemy* >( GetCollisionInfo().object )->Damage(playerPow_ * POW_);
 			}
 			isGiveDamage_ = true;
+
+			PlaySoundMem(hitSoundId_,DX_PLAYTYPE_BACK);
 		}
 	}
 }
