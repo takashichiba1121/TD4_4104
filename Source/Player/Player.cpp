@@ -562,11 +562,11 @@ void Player::Draw(Vector2 scroll)
 		rightArm_->Draw(scroll);
 	}
 
-	DrawFormatString(0, GameConfig::GetWindowHeight() - 20, 0xffffff, "PlayerHP:%d/%d", hp_, MAX_HP_);
+	DrawFormatString(0, GameConfig::GetWindowHeight() - 20, 0xffffff, "PlayerHP:%d/%d", hp_, MAX_HP_*changeMaxHp_);
 
 	if (powerUpText_ && isPowerUp_ == false)
 	{
-		DrawFormatString(pos_.x, pos_.y - drawSize_.y + 40, 0xffffff, "Push to KEY Z", hp_, MAX_HP_);
+		DrawFormatString(pos_.x, pos_.y - drawSize_.y + 40, 0xffffff, "Push to KEY Z");
 	}
 }
 
