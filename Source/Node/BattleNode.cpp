@@ -10,8 +10,13 @@ void BattleNode::Initialize()
 
 void BattleNode::Update()
 {
-	if ( *isScrollStop_ )
+	if ( *isScrollStop_ && enemys_->IsScreenEnemyEmpty())
 	{
+		for ( auto& door : nextdoors_ )
+		{
+			mapChip_->MapWrite(door.pos.x,door.pos.y,ChipIndex::NEXT);
+		}
+
 		PlayerNodeMove();
 	}
 	else

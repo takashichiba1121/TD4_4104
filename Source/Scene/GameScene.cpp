@@ -46,6 +46,7 @@ void GameScene::Initialize()
 	nodeManager_->SetDealer(dealer_.get());
 	nodeManager_->SetEnemys(enemys_.get());
 	nodeManager_->Initialize();
+	nodeManager_->SetScrollStop(&scrollStop);
 	nodeManager_->StartNodeSet(0);
 	backGround_ = LoadGraph(std::string("Resources/BackGround/BackGround.png"));
 

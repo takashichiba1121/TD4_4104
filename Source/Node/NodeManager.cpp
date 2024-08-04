@@ -474,6 +474,11 @@ void NodeManager::SetEnemys(EnemyManager* enemys)
 	enemys_ = enemys;
 }
 
+void NodeManager::SetScrollStop(bool* scrollStop)
+{
+	rooms_[ NodeType::BATTLE ]->SetScrollStop(scrollStop);
+}
+
 bool NodeManager::IsMapDraw()
 {
 	return isNodeDraw;
