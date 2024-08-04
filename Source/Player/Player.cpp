@@ -468,11 +468,6 @@ bool Player::AddCdmg(int32_t Cdmg)
 	return true;
 }
 
-bool Player::AddCost(int32_t cost)
-{
-	return false;
-}
-
 void Player::AddMaxCost(int32_t AddMaxCost)
 {
 	changeMaxCost_ += AddMaxCost;
@@ -665,8 +660,6 @@ void Player::EndChangeParts()
 
 void Player::Reset()
 {
-	pos_.x = GameConfig::GetGameConfig()->windowWidth / 2;
-	pos_.y = GameConfig::GetGameConfig()->windowHeight / 2;
 	isDealed_ = false;
 }
 

@@ -55,6 +55,8 @@ public:
 
 	void PlayerNodeMove();
 
+	void GetNextDoors();
+
 	BaseNode() = default;
 	virtual ~BaseNode() = default;
 };

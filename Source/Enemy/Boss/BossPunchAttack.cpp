@@ -128,3 +128,7 @@ void BossPunchAttack::OnCollision()
 		}
 	}
 }
+
+BossPunchAttack::~BossPunchAttack()
+{
+}

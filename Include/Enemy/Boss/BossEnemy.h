@@ -53,13 +53,15 @@ private:
 
 	int8_t longRangeAttackCount_ = 0;
 
+
 public:
 
 	void Initialize() override;
 	void Update() override;
 	void Move() override;
-	void Draw() override;
+	void Draw(Vector2 scrool) override;
 	void OnCollision() override;
+	~BossEnemy();
 
 private:
 

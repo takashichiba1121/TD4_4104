@@ -130,7 +130,7 @@ void CollisionManager::Update()
 	for ( auto& itr : mapChipObjects_ )
 	{
 
-		if (! itr->mapChipObject_ )
+		if (! itr->isMapChipCollision_ )
 		{
 			continue;
 		}
@@ -234,6 +234,10 @@ bool CollisionManager::DownCollision(IObject* object)
 
 		downLeftY = static_cast< int32_t >( ( objectY + object->r_.y - 1 ) / BLOCK_SIZE );
 		downRightY = static_cast< int32_t >( ( objectY + object->r_.y - 1 ) / BLOCK_SIZE );
+
+		downLeftY = std::min(downLeftY,mapChip_->size() - 1);
+		downRightY = std::min(downLeftY,mapChip_->size() - 1);
+
 		on = false;
 
 		if ( mapChip_->data()[ downLeftY ][ downLeftX ] != ChipIndex::NONE && mapChip_->data()[ downLeftY ][ downLeftX ] != ChipIndex::NEXT ||
@@ -248,7 +252,15 @@ bool CollisionManager::DownCollision(IObject* object)
 			{
 				downLeftY = static_cast< int32_t >( ( ( objectY + object->r_.y  - 1 ) + 1 ) / BLOCK_SIZE );
 				downRightY = static_cast< int32_t >( ( ( objectY + object->r_.y  - 1 ) + 1 ) / BLOCK_SIZE );
+				downLeftY = std::min(downLeftY,mapChip_->size() - 1);
+				downRightY = std::min(downLeftY,mapChip_->size() - 1);
+
 				on = false;
+
+				if ( downLeftY == downLeftY,mapChip_->size() - 1 || downRightY == mapChip_->size() - 1 )
+				{
+					break;
+				}
 
 				if ( mapChip_->data()[ downLeftY ][ downLeftX ] != ChipIndex::NONE && mapChip_->data()[ downLeftY ][ downLeftX ] != ChipIndex::NEXT ||
 					 mapChip_->data()[ downRightY ][ downRightX ] != ChipIndex::NONE && mapChip_->data()[ downRightY ][ downRightX ] != ChipIndex::NEXT )

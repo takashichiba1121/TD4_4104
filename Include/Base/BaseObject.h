@@ -42,5 +42,6 @@ public:
 	int32_t GetHp();
 	Vector2 GetPos();
 	void SetPos(const Vector2& pos);
+	virtual ~BaseObject() = default;
 };
 
