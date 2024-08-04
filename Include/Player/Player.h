@@ -142,6 +142,12 @@ private:
 	uint32_t nowMouthCost_ = 0;
 
 	int soundId_;
+
+	uint32_t hpBerTextureId_;
+
+	uint32_t hpBerBackgroundTextureId_;
+
+	uint32_t statusFrameTextureId_;
 public:
 	void Initialize() override;
 

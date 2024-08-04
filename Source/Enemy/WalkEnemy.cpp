@@ -305,11 +305,12 @@ void WalkEnemy::Draw(Vector2 scroll)
 
 	if ( playerPtr_->GetEyeTag() == PlayerEyeTags::Clairvoyance )
 	{
-		DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2 - hpBerOffSet_,
-		pos_.x + drawSize_.x / 2,pos_.y - drawSize_.x / 2 - hpBerOffSetUnder_,GetColor(155,0,155),false);
-		int32_t r = pos_.x + drawSize_.x / 2;
-		DrawBox(pos_.x - drawSize_.x / 2,pos_.y - drawSize_.x / 2 - hpBerOffSet_,
-		 r * ( hp_ / maxHp_ ),pos_.y - drawSize_.x / 2 - hpBerOffSetUnder_,GetColor(155,0,155),true);
+		DrawBox(pos_.x - drawSize_.x / 2 + scroll.x,pos_.y - drawSize_.x / 2 - hpBerOffSet_ + scroll.y,
+		pos_.x + drawSize_.x / 2 + scroll.x,pos_.y - drawSize_.x / 2 - hpBerOffSetUnder_ + scroll.y,GetColor(155,0,155),false);
+		int32_t r = pos_.x + drawSize_.x / 2+scroll.x;
+		int32_t r2 = pos_.x - drawSize_.x / 2 + scroll.x;
+		DrawBox(r2,pos_.y - drawSize_.x / 2 - hpBerOffSet_ + scroll.y,
+		 r2+(r-r2) * ( float(hp_) /maxHp_ ),pos_.y - drawSize_.x / 2 - hpBerOffSetUnder_ + scroll.y,GetColor(155,0,155),true);
 	}
 
 }

@@ -41,6 +41,7 @@ protected:
 
 	Type type_;
 
+	uint32_t bulletTexId_;
 public:
 
 	///<summary>
