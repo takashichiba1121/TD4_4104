@@ -246,7 +246,7 @@ void WalkEnemy::Attack()
 	{
 		if ( !attackSoundPlayed_ )
 		{
-			PlaySoundMem(EnemyManager::GetSoundHandle("shootAttack"),DX_PLAYTYPE_BACK);
+			PlaySoundMem(EnemyManager::GetSoundHandle("meleeAttack"),DX_PLAYTYPE_BACK);
 			attackSoundPlayed_ = true;
 		}
 		attackCounter_.CountUp();
