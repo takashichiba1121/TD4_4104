@@ -151,10 +151,9 @@ void GameScene::Draw()
 	mapChip_->Draw(s);
 	nodeManager_->Draw();
 	player_->Draw(s);
-
+	nodeManager_->MapDraw();
 	//if (!chenged) powerUp_->Draw();
 
-	nodeManager_->Draw();
 
 	DrawFormatString(0,0,0xffffff,"MOVE:ARROWKEYorAD");
 	DrawFormatString(0,20,0xffffff,"JUMP:SPACE");

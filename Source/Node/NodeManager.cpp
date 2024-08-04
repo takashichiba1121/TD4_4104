@@ -250,11 +250,6 @@ void NodeManager::Update()
 
 void NodeManager::Draw()
 {
-	if ( isNodeDraw )
-	{
-		NodeMapDraw();
-	}
-
 	node_->Draw();
 }
 
@@ -497,6 +492,14 @@ bool NodeManager::IsNodeReset()
 void NodeManager::End()
 {
 	isGameEnd_ = true;
+}
+
+void NodeManager::MapDraw()
+{
+	if ( isNodeDraw )
+	{
+		NodeMapDraw();
+	}
 }
 
 void NodeManager::GenerateInitialGrid()
