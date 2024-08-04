@@ -251,7 +251,7 @@ bool EnemyManager::GameEnd()
 	return false;
 }
 
-bool EnemyManager::IsEnemyEmpty()
+bool EnemyManager::IsScreenEnemyEmpty()
 {
 	return screenEnemy_ <= 0;
 }
@@ -278,17 +278,17 @@ int32_t EnemyManager::GetSoundHandle(std::string name)
 
 void EnemyManager::TexLoad()
 {
-	texs_[ "fly" ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));
+	texs_[ "fly" ] = LoadGraph(string("Resources\\Enemy\\enemyFly.png"));//飛行
 
-	texs_[ "shootMove" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));
+	texs_[ "shootMove" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));//遠距離移動
 
-	texs_[ "shootAttack" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));
+	texs_[ "shootAttack" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));//遠距離攻撃
 
-	texs_[ "adjacentMove" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));
+	texs_[ "adjacentMove" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));//近距離移動
 
-	texs_[ "adjacentAttack" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));
+	texs_[ "adjacentAttack" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));//近距離攻撃
 
-	texs_[ "adjacentDash" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));
+	texs_[ "adjacentDash" ] = LoadGraph(string("Resources\\Player\\PlayerDush.png"));//近距離ダッシュ(プレイヤーに接近)
 
 
 }
