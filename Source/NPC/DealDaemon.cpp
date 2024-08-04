@@ -207,10 +207,15 @@ void DealDaemon::Draw()
 			int64_t color = 0x000000;
 			if ( i == selectNum_ )
 			{
-				color = 0xf00f00;
+				SetDrawBright(0xf1,0x00,0x00);
+			}
+			else
+			{
+				SetDrawBright(0xff,0xff,0xff);
 			}
 
 			DrawExtendGraph(( boxLeftTop_.x + i * boxDist_ ),boxLeftTop_.y,( boxLeftTop_.x + i * boxDist_ ) + boxSize_.x,boxLeftTop_.y + boxSize_.y,dealBGImg_,true);
+			SetDrawBright(0xff,0xff,0xff);
 
 			string nameTemp = selectProducts_[ i ]->uiPartsName;
 
@@ -240,6 +245,7 @@ void DealDaemon::Draw()
 		}
 	}
 
+	SetDrawBright(0xff,0xff,0xff);
 	if ( !dealed_ )
 	{
 		DrawRectRotaGraph(pos_.x,pos_.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,textureId_,true);

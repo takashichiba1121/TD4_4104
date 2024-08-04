@@ -234,7 +234,10 @@ void ShootEnemy::Draw(Vector2 scroll)
 	}
 	if ( immortalTime_ <= 0 || immortalTime_ % 3 != 0 )
 	{
-		DrawRectRotaGraph(pos_.x + scroll.x,pos_.y + scroll.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,tex_,true,flag);
+		if ( immortalTime_ <= 0 || immortalTime_ % 3 != 0 )
+		{
+			DrawRectRotaGraph(pos_.x + scroll.x,pos_.y + scroll.y,drawSize_.x * anime_,0,drawSize_.x,drawSize_.y,1,0,tex_,true,flag);
+		}
 	}
 	for ( auto& itr : bullets )
 	{
