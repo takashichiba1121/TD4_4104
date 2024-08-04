@@ -36,9 +36,38 @@ public:
 	/// </summary>
 	bool ReleaseKey(uint16_t keyNumber);
 
+		/// <summary>
+	/// キーを押しているか
+	/// </summary>
+	bool PushPadKey(uint16_t keyNumber);
+
+	/// <summary>
+	/// キーを押した瞬間
+	/// </summary>
+	bool TriggerPadKey(uint16_t keyNumber);
+
+	/// <summary>
+	/// キーを離した瞬間
+	/// </summary>
+	bool ReleasePadKey(uint16_t keyNumber);
+
+	uint32_t PadX();
+
+	uint32_t PadY();
+
+
+
 private:
 	char key_[ 256 ] = { 0 };
 
 	char oldKey_[ 256 ] = { 0 };
+
+	int PadKey=0;
+
+	int oldPadkey = 0;
+
+	int padX=0;
+
+	int padY = 0;
 };
 

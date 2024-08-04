@@ -231,7 +231,7 @@ void NodeManager::Update()
 		isNodeReset_ = true;
 	}
 
-	if ( Input::Instance()->TriggerKey(KEY_INPUT_M) )
+	if ( Input::Instance()->TriggerKey(KEY_INPUT_M)||Input::Instance()->TriggerPadKey(PAD_INPUT_8) )
 	{
 		if ( isNodeDraw )
 		{
