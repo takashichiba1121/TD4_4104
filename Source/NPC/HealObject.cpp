@@ -54,3 +54,8 @@ void HealObject::OnCollision()
 		}
 	}
 }
+
+void HealObject::Reset()
+{
+	heal = true;
+}
