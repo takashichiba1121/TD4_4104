@@ -78,6 +78,7 @@ void Player::Initialize()
 	//ChangeLeftArm("Cerberus",0);
 
 	//ChangeRightArm("Gun",0);
+	//ChangeEye("Clairvoyance",0);
 
 	hpBerTextureId_ = LoadGraph(std::string("Resources\\UI\\UI_HP_Bar.png"));
 

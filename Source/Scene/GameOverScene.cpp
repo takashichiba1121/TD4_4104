@@ -23,7 +23,7 @@ void GameOverScene::Draw()
 {
 	DrawGraph(0,0,backGround_,true);
 
-	DrawFormatString(470,450,GetColor(255,255,255),"Title To EnterKye or A");
+	DrawFormatString(380,450,GetColor(255,255,255),"Title To EnterKey or A");
 }
 
 void GameOverScene::SpriteDraw()
